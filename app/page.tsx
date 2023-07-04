@@ -1,5 +1,4 @@
 import { Card, Title, Text } from '@tremor/react';
-import { queryBuilder } from '../lib/planetscale';
 import Search from './search';
 import UsersTable from './table';
 
@@ -20,3 +19,39 @@ export default async function IndexPage() {;
     </main>
   );
 }
+
+
+import { useState } from 'react';
+
+export default function LoginForm() {
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const response = await fetch(`${process.env.PROXY_URL}/auth`, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ username, password })
+    });
+    const data = await response.json();
+    console.log(data);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <label>
+        Username:
+        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} />
+      </label>
+      <label>
+        Password:
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} />
+      </label>
+      <button type="submit">Submit</button>
+    </form>
+  );
+}
+
