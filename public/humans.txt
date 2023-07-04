@@ -1,0 +1,31 @@
+The humans.txt file explains the team, technology,
+and graphic assets behind this site humanstxt.org.
+
+_______________________________________________________________________________
+
+DESIGNER
+
+Dominic Stilma
+Game & Web developer as a Freelancer
+
+Design tools:
+Figma
+Photoshop
+
+twitter.com/fayeofficial_
+github.com/docimin
+
+_______________________________________________________________________________
+
+TECHNOLOGY
+
+React
+Three js
+Popmotion
+
+_______________________________________________________________________________
+
+FONTS
+
+Gotham
+Hiragino Kaku Gothic

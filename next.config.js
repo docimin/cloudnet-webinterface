@@ -1,11 +1,8 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-    images: {
-      domains: ['cdn.discordapp.com', 'fayevr.dev', 'fayevr-dev.pages.dev'],
-    },
-    experimental: {
-      appDir: true,
-    },
+    // light mode by default
+    darkMode: 'class',
+    poweredByHeader: true,
 }
 
 module.exports = nextConfig
