@@ -5,24 +5,26 @@ export default function Nodes() {
   const [nodes, setNodes] = useState([]);
   const [error, setError] = useState('');
 
-useEffect(() => {
-  const token = getCookie('token');
-  if (token) {
-    fetch('https://cors.fayevr.dev/proxy-api.fayevr.dev/api/v2/nodes', {
-      headers: {
-        'Authorization': `Bearer ${token}`
-      }
-    })
-      .then(response => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
+  useEffect(() => {
+    const token = getCookie('token');
+    if (token) {
+      fetch('https://cors.fayevr.dev/proxy-api.fayevr.dev/api/v2/cluster', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
-        return response.json();
       })
-      .then(data => setNodes(data))
-      .catch(error => setError(error.message));
-  }
-}, []);
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+          console.log(response);
+          return response.json();
+        })
+        .then((data) => setNodes(data.nodes))
+        .catch((error) => setError(error.message));
+    }
+  }, []);
 
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -39,13 +41,59 @@ useEffect(() => {
   }
 
   return (
-    <main className="flex flex-col items-center justify-between p-24">
-      <h1>Nodes:</h1>
-      <ul>
-        {nodes.map(node => (
-          <li key={node.id}>{node.name}</li>
-        ))}
-      </ul>
-    </main>
+<div className="px-4 sm:px-6 lg:px-8">
+<div className="sm:flex sm:items-center">
+  <div className="sm:flex-auto">
+    <h1 className="text-base font-semibold leading-6 text-gray-900">Users</h1>
+    <p className="mt-2 text-sm text-gray-700">
+      A list of all the users in your account including their name, title, email and role.
+    </p>
+  </div>
+</div>
+<div className="mt-8 flow-root">
+  <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
+    <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
+      <table className="min-w-full divide-y divide-gray-300">
+        <thead>
+          <tr>
+            <th scope="col" className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0">
+              Name
+            </th>
+            <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+              Status
+            </th>
+            <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+              Version
+            </th>
+            <th scope="col" className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900">
+              Version Type
+            </th>
+            <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
+              <span className="sr-only">Edit</span>
+            </th>
+          </tr>
+        </thead>
+        <tbody className="divide-y divide-gray-200">
+          {nodes.map((node) => (
+            <tr key={node.node.uniqueId}>
+              <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
+                {node.node.uniqueId}
+              </td>
+              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{node.state}</td>
+              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{node.nodeInfoSnapshot.version.major}</td>
+              <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">{node.nodeInfoSnapshot.version.versionType}</td>
+              <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                <a href="#" className="text-indigo-600 hover:text-indigo-900">
+                  Edit<span className="sr-only">, {node.node.uniqueId}</span>
+                </a>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+</div>
   );
 }
