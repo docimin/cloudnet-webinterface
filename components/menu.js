@@ -12,6 +12,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import Link from 'next/link';
+import Image from 'next/image';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon, current: false },
@@ -81,10 +82,12 @@ export default function Example() {
                   {/* Sidebar component, swap this element with another sidebar if you like */}
                   <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2">
                     <div className="flex h-16 shrink-0 items-center">
-                      <img
+                      <Image
                         className="h-8 w-auto"
                         src="/icon-256.png"
                         alt="Your Company"
+                        width={32}
+                        height={32}
                       />
                     </div>
                     <nav className="flex flex-1 flex-col">
@@ -159,10 +162,12 @@ export default function Example() {
           {/* Sidebar component, swap this element with another sidebar if you like */}
           <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
             <div className="flex h-16 shrink-0 items-center">
-              <img
+              <Image
                 className="h-8 w-auto"
                 src="/icon-256.png"
                 alt="Your Company"
+                width={32}
+                height={32}
               />
             </div>
             <nav className="flex flex-1 flex-col">
@@ -228,10 +233,12 @@ export default function Example() {
                     href="#"
                     className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
                   >
-                    <img
+                    <Image
                       className="h-8 w-8 rounded-full bg-gray-50"
                       src="/icon-256.png"
                       alt=""
+                      width={32}
+                      height={32}
                     />
                     <span className="sr-only">Your profile</span>
                     <span aria-hidden="true">Some Name</span>
@@ -250,10 +257,12 @@ export default function Example() {
           <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">Dashboard</div>
           <Link href="#">
             <span className="sr-only">Your profile</span>
-            <img
+            <Image
               className="h-8 w-8 rounded-full bg-gray-50"
-              src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=facearea&facepad=2&w=256&h=256&q=80"
+              src="/icon-256.png"
               alt=""
+              width={32}
+              height={32}
             />
           </Link>
         </div>

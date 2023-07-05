@@ -1,15 +1,20 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Auth() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
   const [error, setError] = useState('');
+  const [token, setToken] = useState('');
+
+  useEffect(() => {
+    setToken(document.cookie.includes('token'));
+  }, []);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const response = await fetch('https://cors.fayevr.dev/proxy-api.fayevr.dev/api/v2/auth', {
+    const response = await fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + "/auth", {
       method: 'POST',
       headers: {
         'Authorization': `Basic ${btoa(`${username}:${password}`)}`,
@@ -22,15 +27,12 @@ export default function Auth() {
       setError('Invalid username or password');
     } else {
       document.cookie = `token=${data.token}; path=/`;
+      setToken(data.token);
       setLoggedIn(true);
     }
   };
 
-  if (typeof document !== 'undefined') {
-    <h3>Please log in.</h3>
-  }
-
-  if (document.cookie.includes('token')) {
+  if (token) {
     return (
       <main className="flex flex-col items-center justify-between p-24">
         <h1>Logged in!</h1>
