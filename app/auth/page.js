@@ -26,7 +26,7 @@ export default function Auth() {
     if (data.token === undefined) {
       setError('Invalid username or password');
     } else {
-      const expirationTime = new Date(Date.now() + 4 * 60 * 60 * 1000); // 4 hours from now
+      const expirationTime = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 hours from now
       document.cookie = `token=${data.token}; path=/; expires=${expirationTime.toUTCString()}`;
       setToken(data.token);
       setLoggedIn(true);
