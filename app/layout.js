@@ -148,6 +148,12 @@ export default function RootLayout({ children }) {
                             className="h-6 w-6 text-white"
                             aria-hidden="true"
                           />
+                        ) : colorTheme === 'dark' ? (
+                          <MoonIcon
+                            onClick={() => setTheme('dark')}
+                            className="h-6 w-6 text-black"
+                            aria-hidden="true"
+                          />
                         ) : (
                           <MoonIcon
                             onClick={() => setTheme('dark')}
@@ -155,6 +161,7 @@ export default function RootLayout({ children }) {
                             aria-hidden="true"
                           />
                         )}
+
                         <nav className="flex flex-1 flex-col">
                           <ul
                             role="list"
@@ -242,6 +249,12 @@ export default function RootLayout({ children }) {
                   <SunIcon
                     onClick={() => setTheme('light')}
                     className="h-6 w-6 text-white"
+                    aria-hidden="true"
+                  />
+                ) : colorTheme === 'dark' ? (
+                  <MoonIcon
+                    onClick={() => setTheme('dark')}
+                    className="h-6 w-6 text-black"
                     aria-hidden="true"
                   />
                 ) : (
