@@ -8,6 +8,10 @@ export default function Nodes() {
 
   useEffect(() => {
     const token = getCookie('token');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
     if (token) {
       fetch('https://cors.fayevr.dev/proxy-api.fayevr.dev/api/v2/cluster', {
         headers: {
@@ -104,8 +108,8 @@ export default function Nodes() {
                       {node.state}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {node.nodeInfoSnapshot.usedMemory} /{' '}
-                      {node.nodeInfoSnapshot.maxMemory}
+                      {node.nodeInfoSnapshot.usedMemory} MB /{' '}
+                      {node.nodeInfoSnapshot.maxMemory} MB
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
                       {node.nodeInfoSnapshot.version.major}

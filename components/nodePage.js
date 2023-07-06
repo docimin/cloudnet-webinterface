@@ -10,6 +10,10 @@ export default function Node() {
   useEffect(() => {
     const token = getCookie('token');
     const uniqueId = window.location.pathname.split('/').pop();
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
     if (token) {
       fetch(`https://cors.fayevr.dev/proxy-api.fayevr.dev/api/v2/cluster/${uniqueId}`, {
         headers: {
@@ -48,10 +52,10 @@ export default function Node() {
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
-          Node: Node: {node && node.node && node.node.uniqueId}
+          Node: <span className="text-blurple">{node && node.node && node.node.uniqueId}</span>
           </h1>
           <p className="mt-2 text-sm text-gray-700">
-            IP: {node && node.node && node.node.listeners.host}
+            IP: {node && node.node && node.node.listeners[0].host}
           </p>
         </div>
       </div>

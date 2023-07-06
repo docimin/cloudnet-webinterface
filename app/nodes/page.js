@@ -1,4 +1,4 @@
-import NodeInfo from "@/components/nodeInfo"
+import NodeInfo from "@/components/nodesInfo"
 
 export default function Nodes() {
 
