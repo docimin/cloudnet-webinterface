@@ -54,7 +54,7 @@ export default function Service() {
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
-            service:{' '}
+            Service name:{' '}
             <span className="text-blurple">
               {services?.[0]?.configuration?.serviceId?.taskName}
               {services?.[0]?.configuration?.serviceId?.nameSplitter}
