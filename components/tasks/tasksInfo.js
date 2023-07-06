@@ -3,33 +3,33 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function Nodes() {
-  const [nodes, setNodes] = useState([]);
-  const [error, setError] = useState('');
+const [services, setServices] = useState([]);
+const [error, setError] = useState('');
 
-  useEffect(() => {
-    const token = getCookie('token');
-    if (!token) {
-      window.location.href = '/auth';
-      return;
-    }
-    if (token) {
-      fetch('https://cors.fayevr.dev/proxy-api.fayevr.dev/api/v2/cluster', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+useEffect(() => {
+  const token = getCookie('token');
+  if (!token) {
+    window.location.href = '/auth';
+    return;
+  }
+  if (token) {
+    fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + "/service", {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
         }
+        console.log(response);
+        return response.json();
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(response.statusText);
-          }
-          console.log(response);
-          return response.json();
-        })
-        .then((data) => setNodes(data.nodes))
-        .catch((error) => setError(error.message));
-    }
-  }, []);
+      .then((data) => setServices(data.services))
+      .catch((error) => setError(error.message));
+  }
+}, []);
 
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -67,13 +67,13 @@ export default function Nodes() {
                     scope="col"
                     className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                   >
-                    Name
+                    ID
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Status
+                    CPU Usage
                   </th>
                   <th
                     scope="col"
@@ -99,26 +99,26 @@ export default function Nodes() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {nodes.map((node) => (
-                  <tr key={node.node.uniqueId}>
+                {services.map((service) => (
+                  <tr key={service.processSnapshot.pid}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                      {node.node.uniqueId}
+                        {service.processSnapshot.pid}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {node.state}
+                        {service.processSnapshot.cpuUsage}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {node.nodeInfoSnapshot.usedMemory} MB /{' '}
-                      {node.nodeInfoSnapshot.maxMemory} MB
+                        some memory /{' '}
+                        {service.configuration.processConfig.maxHeapMemorySize}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {node.nodeInfoSnapshot.version.major}
+                      test
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      {node.nodeInfoSnapshot.version.versionType}
+                      test
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <Link href={`/node/${node.node.uniqueId}`}>
+                      <Link href={`/services/test`}>
                         Edit
                       </Link>
                     </td>

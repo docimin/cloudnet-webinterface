@@ -1,10 +1,10 @@
-import NodeInfo from "@/components/nodes/nodesInfo"
+import TasksInfo from "@/components/tasks/tasksInfo"
 
 export default function Nodes() {
 
   return (
     <div>
-      <NodeInfo />
+      <TasksInfo />
     </div>
   );
 }

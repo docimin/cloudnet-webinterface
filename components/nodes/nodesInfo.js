@@ -1,21 +1,19 @@
-
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-export default function Node() {
-  const [node, setNode] = useState({});
+export default function Nodes() {
+  const [nodes, setNodes] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
     const token = getCookie('token');
-    const uniqueId = window.location.pathname.split('/').pop();
     if (!token) {
       window.location.href = '/auth';
       return;
     }
     if (token) {
-      fetch(`https://cors.fayevr.dev/proxy-api.fayevr.dev/api/v2/cluster/${uniqueId}`, {
+      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + "/cluster", {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -28,7 +26,7 @@ export default function Node() {
           console.log(response);
           return response.json();
         })
-        .then((data) => setNode(data.node))
+        .then((data) => setNodes(data.nodes))
         .catch((error) => setError(error.message));
     }
   }, []);
@@ -48,14 +46,14 @@ export default function Node() {
   }
 
   return (
-<div className="px-4 sm:px-6 lg:px-8">
+    <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
-          Node: <span className="text-blurple">{node && node.node && node.node.uniqueId}</span>
+            Nodes
           </h1>
           <p className="mt-2 text-sm text-gray-700">
-            IP: {node && node.node && node.node.listeners[0].host}
+            A list of all the nodes and their info about them.
           </p>
         </div>
       </div>
@@ -69,7 +67,7 @@ export default function Node() {
                     scope="col"
                     className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
                   >
-                    currentServicesCount
+                    Name
                   </th>
                   <th
                     scope="col"
@@ -101,29 +99,31 @@ export default function Node() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                  <tr key="test">
+                {nodes.map((node) => (
+                  <tr key={node.node.uniqueId}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                    {node && node.node && node.nodeInfoSnapshot.currentServicesCount}
+                      {node.node.uniqueId}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      test
+                      {node.state}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      test /{' '}
-                      test
+                      {node.nodeInfoSnapshot.usedMemory} MB /{' '}
+                      {node.nodeInfoSnapshot.maxMemory} MB
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      test
+                      {node.nodeInfoSnapshot.version.major}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      test
+                      {node.nodeInfoSnapshot.version.versionType}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <Link href="">
+                      <Link href={`/nodes/${node.node.uniqueId}`}>
                         Edit
                       </Link>
                     </td>
                   </tr>
+                ))}
               </tbody>
             </table>
           </div>

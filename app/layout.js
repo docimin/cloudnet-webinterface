@@ -6,7 +6,6 @@ import { Dialog, Transition } from '@headlessui/react'
 import {
   Bars3Icon,
   CalendarIcon,
-  ChartPieIcon,
   DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
@@ -20,9 +19,8 @@ const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon, current: false },
   { name: 'Auth', href: '/auth', icon: UsersIcon, current: false },
   { name: 'Nodes', href: '/nodes', icon: FolderIcon, current: false },
-  { name: 'Calendar', href: '/', icon: CalendarIcon, current: false },
-  { name: 'Documents', href: '/', icon: DocumentDuplicateIcon, current: false },
-  { name: 'Reports', href: '/', icon: ChartPieIcon, current: false },
+  { name: 'Tasks', href: '/tasks', icon: CalendarIcon, current: false },
+  { name: 'Services', href: '/services', icon: DocumentDuplicateIcon, current: false },
 ]
 const teams = [
   { id: 1, name: 'Profile', href: '/profile/me', initial: 'P', current: false },
