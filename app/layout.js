@@ -12,6 +12,7 @@ import {
   UsersIcon,
   XMarkIcon,
 } from '@heroicons/react/24/outline'
+import { metadata } from '@/components/metaData';
 import Link from 'next/link';
 import Image from 'next/image';
 
@@ -32,27 +33,7 @@ function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-const inter = Inter({ subsets: ['latin'] });
-
-export const metadata = {
-  title: 'Fyfu Webinterface',
-  description: 'Automatic build using Next.js and Tailwind CSS',
-  url: 'https://fayevr.dev',
-  image: 'icon-512.png',
-  icon: 'icon-512.png',
-  keywords: [
-    'faye',
-    'fayevr',
-    'fayevr.dev',
-    'faye vr',
-    'portfolio',
-    'website',
-    'personal',
-    'personal website',
-    'personal portfolio'
-  ],
-  theme: '#ff4f00'
-};
+<metadata />
 
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false)
