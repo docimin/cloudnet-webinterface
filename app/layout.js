@@ -134,7 +134,7 @@ export default function RootLayout({ children }) {
                         </div>
                       </Transition.Child>
                       {/* Sidebar component, swap this element with another sidebar if you like */}
-                      <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white px-6 pb-2">
+                      <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-white dark:bg-gray-900 px-6 pb-2">
                         <div className="flex h-16 shrink-0 items-center">
                           <img
                             className="h-8 w-auto"
@@ -142,6 +142,19 @@ export default function RootLayout({ children }) {
                             alt="image"
                           />
                         </div>
+                        {colorTheme === 'light' ? (
+                          <SunIcon
+                            onClick={() => setTheme('light')}
+                            className="h-6 w-6 text-white"
+                            aria-hidden="true"
+                          />
+                        ) : (
+                          <MoonIcon
+                            onClick={() => setTheme('dark')}
+                            className="h-6 w-6 text-black"
+                            aria-hidden="true"
+                          />
+                        )}
                         <nav className="flex flex-1 flex-col">
                           <ul
                             role="list"
@@ -156,7 +169,7 @@ export default function RootLayout({ children }) {
                                       className={classNames(
                                         item.current
                                           ? 'bg-gray-50 text-indigo-600'
-                                          : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                                          : 'text-gray-700 dark:text-gray-100 dark:hover:text-gray-700 hover:text-indigo-600 hover:bg-gray-100',
                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                       )}
                                     >
@@ -164,7 +177,7 @@ export default function RootLayout({ children }) {
                                         className={classNames(
                                           item.current
                                             ? 'text-indigo-600'
-                                            : 'text-gray-400 group-hover:text-indigo-600',
+                                            : 'text-gray-700 dark:text-gray-300 group-hover:text-indigo-600',
                                           'h-6 w-6 shrink-0'
                                         )}
                                         aria-hidden="true"
@@ -187,7 +200,7 @@ export default function RootLayout({ children }) {
                                       className={classNames(
                                         team.current
                                           ? 'bg-gray-50 text-indigo-600'
-                                          : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                                          : 'text-gray-700 dark:text-gray-100 dark:hover:text-gray-700 hover:text-indigo-600 hover:bg-gray-100',
                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                       )}
                                     >
@@ -195,8 +208,8 @@ export default function RootLayout({ children }) {
                                         className={classNames(
                                           team.current
                                             ? 'text-indigo-600 border-indigo-600'
-                                            : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
-                                          'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
+                                            : 'text-gray-400 dark:text-white border-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600',
+                                          'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white dark:bg-transparent'
                                         )}
                                       >
                                         {team.initial}
@@ -226,17 +239,17 @@ export default function RootLayout({ children }) {
                   <img className="h-8 w-auto" src="/icon-256.png" alt="image" />
                 </div>
                 {colorTheme === 'light' ? (
-                    <><SunIcon
+                  <SunIcon
                     onClick={() => setTheme('light')}
                     className="h-6 w-6 text-white"
-                    aria-hidden="true" />
-                    </>
+                    aria-hidden="true"
+                  />
                 ) : (
-                  <><MoonIcon
+                  <MoonIcon
                     onClick={() => setTheme('dark')}
                     className="h-6 w-6 text-black"
-                    aria-hidden="true" />
-                    </>
+                    aria-hidden="true"
+                  />
                 )}
                 <nav className="flex flex-1 flex-col">
                   <ul role="list" className="flex flex-1 flex-col gap-y-7">
@@ -249,7 +262,7 @@ export default function RootLayout({ children }) {
                               className={classNames(
                                 item.current
                                   ? 'bg-gray-50 text-indigo-600'
-                                  : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                                  : 'text-gray-700 dark:text-gray-100 dark:hover:text-gray-700 hover:text-indigo-600 hover:bg-gray-100',
                                 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                               )}
                             >
@@ -257,7 +270,7 @@ export default function RootLayout({ children }) {
                                 className={classNames(
                                   item.current
                                     ? 'text-indigo-600'
-                                    : 'text-gray-400 group-hover:text-indigo-600',
+                                    : 'text-gray-700 dark:text-gray-300 group-hover:text-indigo-600',
                                   'h-6 w-6 shrink-0'
                                 )}
                                 aria-hidden="true"
@@ -280,7 +293,7 @@ export default function RootLayout({ children }) {
                               className={classNames(
                                 team.current
                                   ? 'bg-gray-50 text-indigo-600'
-                                  : 'text-gray-700 hover:text-indigo-600 hover:bg-gray-50',
+                                  : 'text-gray-700 dark:text-gray-100 dark:hover:text-gray-700 hover:text-indigo-600 hover:bg-gray-100',
                                 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                               )}
                             >
@@ -288,8 +301,8 @@ export default function RootLayout({ children }) {
                                 className={classNames(
                                   team.current
                                     ? 'text-indigo-600 border-indigo-600'
-                                    : 'text-gray-400 border-gray-200 group-hover:border-indigo-600 group-hover:text-indigo-600',
-                                  'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white'
+                                    : 'text-gray-400 dark:text-white border-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600',
+                                  'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white dark:bg-transparent'
                                 )}
                               >
                                 {team.initial}
@@ -303,7 +316,7 @@ export default function RootLayout({ children }) {
                     <li className="-mx-6 mt-auto">
                       <a
                         href="#"
-                        className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-50"
+                        className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
                       >
                         <img
                           className="h-8 w-8 rounded-full bg-gray-50"
@@ -319,22 +332,25 @@ export default function RootLayout({ children }) {
               </div>
             </div>
 
-            <div className="sticky top-0 z-40 flex items-center gap-x-6 bg-white px-4 py-4 shadow-sm sm:px-6 lg:hidden">
+            <div className="sticky top-0 z-40 flex items-center gap-x-6 dark:bg-gray-900 px-4 py-4 shadow-sm sm:px-6 lg:hidden">
               <button
                 type="button"
                 className="-m-2.5 p-2.5 text-gray-700 lg:hidden"
                 onClick={() => setSidebarOpen(true)}
               >
                 <span className="sr-only">Open sidebar</span>
-                <Bars3Icon className="h-6 w-6" aria-hidden="true" />
+                <Bars3Icon
+                  className="h-6 w-6 dark:text-white text-gray-900"
+                  aria-hidden="true"
+                />
               </button>
-              <div className="flex-1 text-sm font-semibold leading-6 text-gray-900">
+              <div className="flex-1 text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                 Dashboard
               </div>
               <Link href="#">
                 <span className="sr-only">Your profile</span>
                 <img
-                  className="h-8 w-8 rounded-full bg-gray-50"
+                  className="h-8 w-8 rounded-full"
                   src="/icon-256.png"
                   alt="image"
                 />
