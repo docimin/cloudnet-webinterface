@@ -1,8 +1,8 @@
 'use client';
 import './globals.css';
 import { Inter } from 'next/font/google';
-import { Fragment, useState } from 'react'
-import { Dialog, Transition } from '@headlessui/react'
+import { Fragment, useState } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
   CalendarIcon,
@@ -10,37 +10,73 @@ import {
   FolderIcon,
   HomeIcon,
   UsersIcon,
-  XMarkIcon,
-} from '@heroicons/react/24/outline'
-import { metadata } from '@/components/metadata';
+  XMarkIcon
+} from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
+import Head from 'next/head';
+import useDarkMode from '@/components/useDarkMode';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon, current: false },
   { name: 'Auth', href: '/auth', icon: UsersIcon, current: false },
   { name: 'Nodes', href: '/nodes', icon: FolderIcon, current: false },
   { name: 'Tasks', href: '/tasks', icon: CalendarIcon, current: false },
-  { name: 'Services', href: '/services', icon: DocumentDuplicateIcon, current: false },
-]
+  {
+    name: 'Services',
+    href: '/services',
+    icon: DocumentDuplicateIcon,
+    current: false
+  }
+];
 const teams = [
   { id: 1, name: 'Profile', href: '/profile/me', initial: 'P', current: false },
   { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false },
-]
+  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false }
+];
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
-<metadata />
-
 export default function RootLayout({ children }) {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [colorTheme, setTheme] = useDarkMode();
+  const metadata = {
+    title: 'Fyfu Webinterface',
+    description: 'Automatic build using Next.js and Tailwind CSS',
+    url: 'https://fayevr.dev',
+    image: 'icon-512.png',
+    icon: 'icon-512.png',
+    keywords: [
+      'faye',
+      'fayevr',
+      'fayevr.dev',
+      'faye vr',
+      'portfolio',
+      'website',
+      'personal',
+      'personal website',
+      'personal portfolio'
+    ],
+    theme: '#ff4f00'
+  };
 
   return (
-    <html className="h-full" lang="en">
-      <body className="h-full">
+    <html className="h-full" lang="en" suppressHydrationWarning>
+      <Head>
+        <title>{metadata.title}</title>
+        <meta name="description" content={metadata.description} />
+        <meta name="keywords" content={metadata.keywords.join(', ')} />
+        <meta name="theme-color" content={metadata.theme} />
+        <meta name="color-scheme" content="dark light" />
+        <meta name="viewport" content="width=device-width, initial-scale=1" />
+        <meta name="robots" content="index, follow" />
+      </Head>
+      <body
+        className="h-full bg-white
+        dark:bg-gray-900"
+      >
         <>
           <div>
             <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -183,10 +219,43 @@ export default function RootLayout({ children }) {
             {/* Static sidebar for desktop */}
             <div className="hidden lg:fixed lg:inset-y-0 lg:z-50 lg:flex lg:w-72 lg:flex-col">
               {/* Sidebar component, swap this element with another sidebar if you like */}
-              <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white px-6">
+              <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-white dark:bg-gray-900 px-6">
                 <div className="flex h-16 shrink-0 items-center">
                   <img className="h-8 w-auto" src="/icon-256.png" alt="image" />
                 </div>
+                {colorTheme === 'light' ? (
+                  <svg
+                    onClick={() => setTheme('light')}
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="white"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                    />
+                  </svg>
+                ) : (
+                  <svg
+                    onClick={() => setTheme('dark')}
+                    xmlns="http://www.w3.org/2000/svg"
+                    className="h-6 w-6"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="black"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      strokeWidth={2}
+                      d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"
+                    />
+                  </svg>
+                )}
                 <nav className="flex flex-1 flex-col">
                   <ul role="list" className="flex flex-1 flex-col gap-y-7">
                     <li>

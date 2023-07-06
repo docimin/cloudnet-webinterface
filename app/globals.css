@@ -3,9 +3,10 @@
 @tailwind utilities;
 
 html {
-    font-family: 'Inter', sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
-textarea, select {
-    @apply rounded;
+textarea,
+select {
+  @apply rounded;
 }
