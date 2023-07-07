@@ -13,7 +13,7 @@ export default function Nodes() {
       return;
     }
     if (token) {
-      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + "/cluster", {
+      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/cluster', {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -27,7 +27,12 @@ export default function Nodes() {
           return response.json();
         })
         .then((data) => setNodes(data.nodes))
-        .catch((error) => setError(error.message));
+        .catch((error) => {
+          deleteCookie('token');
+          deleteCookie('username');
+          window.location.href = '/auth';
+          setError(error.message);
+        });
     }
   }, []);
 
@@ -49,10 +54,10 @@ export default function Nodes() {
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 dark:text-gray-100">
+          <h1 className="text-base font-semibold leading-6 dark:text-light-color">
             Nodes
           </h1>
-          <p className="mt-2 text-sm dark:text-gray-100">
+          <p className="mt-2 text-sm dark:text-light-color">
             A list of all the nodes and their info about them.
           </p>
         </div>
@@ -60,7 +65,7 @@ export default function Nodes() {
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <table className="min-w-full divide-y divide-gray-300 dark:text-gray-100">
+            <table className="min-w-full divide-y divide-gray-300 dark:text-light-color">
               <thead>
                 <tr>
                   <th
@@ -98,7 +103,7 @@ export default function Nodes() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200 dark:text-gray-100">
+              <tbody className="divide-y divide-gray-200 dark:text-light-color">
                 {nodes.map((node) => (
                   <tr key={node.node.uniqueId}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
@@ -118,9 +123,7 @@ export default function Nodes() {
                       {node.nodeInfoSnapshot.version.versionType}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <Link href={`/nodes/${node.node.uniqueId}`}>
-                        Edit
-                      </Link>
+                      <Link href={`/nodes/${node.node.uniqueId}`}>Edit</Link>
                     </td>
                   </tr>
                 ))}

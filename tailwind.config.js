@@ -18,6 +18,7 @@ module.exports = {
         current: 'currentColor',
         'black': '#000',
         'white': '#fff',
+        'light-color': 'rgb(243 244 246)',
         'blurple': '#5865F2',
         'darkwhite': '#424549',
       },

@@ -30,18 +30,18 @@ export default function Auth() {
       setError('Invalid username or password');
     } else {
       const expirationTime = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 hours from now
-      document.cookie = `token=${
-        data.token
-      }; path=/; expires=${expirationTime.toUTCString()}`;
+      document.cookie = `token=${data.token}; path=/; expires=${expirationTime}`;
+      document.cookie = `username=${username}; path=/; expires=${expirationTime}`;
       setToken(data.token);
       setLoggedIn(true);
+      window.location.reload();
     }
   };
 
   if (token) {
     return (
       <main className="flex flex-col items-center justify-between p-24">
-        <h1>Logged in!</h1>
+        <h1 className="dark:text-light-color">Logged in!</h1>
       </main>
     );
   }
@@ -56,7 +56,7 @@ export default function Auth() {
             src="/icon-256.png"
             alt="Sushi Roll"
           />
-          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900">
+          <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight dark:text-light-color">
             Sign in to your account
           </h2>
         </div>
@@ -66,7 +66,7 @@ export default function Auth() {
             <div>
               <label
                 htmlFor="email"
-                className="block text-sm font-medium leading-6 text-gray-900"
+                className="block text-sm font-medium leading-6 dark:text-light-color"
               >
                 Username
               </label>
@@ -88,7 +88,7 @@ export default function Auth() {
               <div className="flex items-center justify-between">
                 <label
                   htmlFor="password"
-                  className="block text-sm font-medium leading-6 text-gray-900"
+                  className="block text-sm font-medium leading-6 dark:text-light-color"
                 >
                   Password
                 </label>

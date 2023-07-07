@@ -27,7 +27,12 @@ export default function Services() {
           return response.json();
         })
         .then((data) => setServices(data.services))
-        .catch((error) => setError(error.message));
+        .catch((error) => {
+            deleteCookie('token');
+            deleteCookie('username');
+            window.location.href = '/auth';
+          setError(error.message);
+        });
     }
   }, []);
 
@@ -35,6 +40,10 @@ export default function Services() {
     const value = `; ${document.cookie}`;
     const parts = value.split(`; ${name}=`);
     if (parts.length === 2) return parts.pop().split(';').shift();
+  };
+
+  const deleteCookie = (name) => {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   };
 
   if (error) {
@@ -61,7 +70,7 @@ export default function Services() {
         <div className="mt-8 flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <table className="min-w-full divide-y divide-gray-300 dark:text-gray-100">
+              <table className="min-w-full divide-y divide-gray-300 dark:text-light-color">
                 <thead>
                   <tr>
                     <th
@@ -116,7 +125,10 @@ export default function Services() {
                 </thead>
                 <tbody className="divide-y divide-gray-200">
                   {services.map((service) => (
-                    <tr key={service.processSnapshot.pid} className="dark:text-gray-100">
+                    <tr
+                      key={service.processSnapshot.pid}
+                      className="dark:text-light-color"
+                    >
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
                         {service.configuration.serviceId.taskName}
                         {service.configuration.serviceId.nameSplitter}

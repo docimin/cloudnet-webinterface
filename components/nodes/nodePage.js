@@ -1,4 +1,3 @@
-
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
@@ -29,7 +28,12 @@ export default function Node() {
           return response.json();
         })
         .then((data) => setNode(data.node))
-        .catch((error) => setError(error.message));
+        .catch((error) => {
+          deleteCookie('token');
+          deleteCookie('username');
+          window.location.href = '/auth';
+          setError(error.message);
+        });
     }
   }, []);
 
@@ -48,11 +52,14 @@ export default function Node() {
   }
 
   return (
-<div className="px-4 sm:px-6 lg:px-8">
+    <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
-          Node: <span className="text-blurple">{node && node.node && node.node.uniqueId}</span>
+            Node:{' '}
+            <span className="text-blurple">
+              {node && node.node && node.node.uniqueId}
+            </span>
           </h1>
           <p className="mt-2 text-sm text-gray-700">
             IP: {node && node.node && node.node.listeners[0].host}
@@ -62,36 +69,36 @@ export default function Node() {
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <table className="min-w-full divide-y divide-gray-300">
+            <table className="min-w-full divide-y divide-gray-300 dark:text-light-color">
               <thead>
                 <tr>
                   <th
                     scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-gray-900 sm:pl-0"
+                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold sm:pl-0"
                   >
                     currentServicesCount
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-sm font-semibold"
                   >
                     Status
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-sm font-semibold"
                   >
                     Memory
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-sm font-semibold"
                   >
                     Version
                   </th>
                   <th
                     scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                    className="px-3 py-3.5 text-left text-sm font-semibold"
                   >
                     Version Type
                   </th>
@@ -100,30 +107,23 @@ export default function Node() {
                   </th>
                 </tr>
               </thead>
-              <tbody className="divide-y divide-gray-200">
-                  <tr key="test">
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                    {node && node.node && node.nodeInfoSnapshot.currentServicesCount}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      test
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      test /{' '}
-                      test
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      test
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      test
-                    </td>
-                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <Link href="">
-                        Edit
-                      </Link>
-                    </td>
-                  </tr>
+              <tbody className="divide-y divide-gray-200 dark:text-light-color">
+                <tr key="test">
+                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
+                    {node &&
+                      node.node &&
+                      node.nodeInfoSnapshot.currentServicesCount}
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm">test</td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm">
+                    test / test
+                  </td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm">test</td>
+                  <td className="whitespace-nowrap px-3 py-4 text-sm">test</td>
+                  <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                    <Link href="">Edit</Link>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>

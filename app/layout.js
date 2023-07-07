@@ -12,7 +12,8 @@ import {
   UsersIcon,
   XMarkIcon,
   MoonIcon,
-  SunIcon
+  SunIcon,
+  UserCircleIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -37,6 +38,12 @@ const teams = [
   { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false }
 ];
 
+const getCookie = (name) => {
+  const value = `; ${document.cookie}`;
+  const parts = value.split(`; ${name}=`);
+  if (parts.length === 2) return parts.pop().split(';').shift();
+};
+
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
 }
@@ -44,33 +51,13 @@ function classNames(...classes) {
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [colorTheme, setTheme] = useDarkMode();
-  const metadata = {
-    title: 'Fyfu Webinterface',
-    description: 'Automatic build using Next.js and Tailwind CSS',
-    url: 'https://fayevr.dev',
-    image: 'icon-512.png',
-    icon: 'icon-512.png',
-    keywords: [
-      'faye',
-      'fayevr',
-      'fayevr.dev',
-      'faye vr',
-      'portfolio',
-      'website',
-      'personal',
-      'personal website',
-      'personal portfolio'
-    ],
-    theme: '#ff4f00'
-  };
+  const username = getCookie('username');
 
   return (
     <html className="h-full" lang="en" suppressHydrationWarning>
       <Head>
-        <title>{metadata.title}</title>
-        <meta name="description" content={metadata.description} />
-        <meta name="keywords" content={metadata.keywords.join(', ')} />
-        <meta name="theme-color" content={metadata.theme} />
+        <title>CloudNet Dashboard</title>
+        <meta name="description" content="Some description" />
         <meta name="color-scheme" content="dark light" />
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="robots" content="index, follow" />
@@ -176,7 +163,7 @@ export default function RootLayout({ children }) {
                                       className={classNames(
                                         item.current
                                           ? 'bg-gray-50 text-indigo-600'
-                                          : 'text-gray-700 dark:text-gray-100 dark:hover:text-gray-700 hover:text-indigo-600 hover:bg-gray-100',
+                                          : 'text-gray-700 dark:text-light-color dark:hover:text-gray-700 hover:text-indigo-600 hover:bg-gray-100',
                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                       )}
                                     >
@@ -207,7 +194,7 @@ export default function RootLayout({ children }) {
                                       className={classNames(
                                         team.current
                                           ? 'bg-gray-50 text-indigo-600'
-                                          : 'text-gray-700 dark:text-gray-100 dark:hover:text-gray-700 hover:text-indigo-600 hover:bg-gray-100',
+                                          : 'text-gray-700 dark:text-light-color dark:hover:text-gray-700 hover:text-indigo-600 hover:bg-gray-100',
                                         'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                       )}
                                     >
@@ -275,7 +262,7 @@ export default function RootLayout({ children }) {
                               className={classNames(
                                 item.current
                                   ? 'bg-gray-50 text-indigo-600'
-                                  : 'text-gray-700 dark:text-gray-100 dark:hover:text-gray-700 hover:text-indigo-600 hover:bg-gray-100',
+                                  : 'text-gray-700 dark:text-light-color dark:hover:text-gray-700 hover:text-indigo-600 hover:bg-gray-100',
                                 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                               )}
                             >
@@ -306,7 +293,7 @@ export default function RootLayout({ children }) {
                               className={classNames(
                                 team.current
                                   ? 'bg-gray-50 text-indigo-600'
-                                  : 'text-gray-700 dark:text-gray-100 dark:hover:text-gray-700 hover:text-indigo-600 hover:bg-gray-100',
+                                  : 'text-gray-700 dark:text-light-color dark:hover:text-gray-700 hover:text-indigo-600 hover:bg-gray-100',
                                 'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                               )}
                             >
@@ -314,7 +301,7 @@ export default function RootLayout({ children }) {
                                 className={classNames(
                                   team.current
                                     ? 'text-indigo-600 border-indigo-600'
-                                    : 'text-gray-400 dark:text-white border-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600',
+                                    : 'text-gray-400 dark:text-light-color border-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600',
                                   'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-white dark:bg-transparent'
                                 )}
                               >
@@ -329,15 +316,17 @@ export default function RootLayout({ children }) {
                     <li className="-mx-6 mt-auto">
                       <a
                         href="#"
-                        className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 text-gray-900 hover:bg-gray-100"
+                        className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 dark:text-light-color hover:bg-gray-100 dark:hover:text-black"
                       >
                         <img
-                          className="h-8 w-8 rounded-full bg-gray-50"
+                          className="h-8 w-8 rounded-full"
                           src="/icon-256.png"
                           alt=""
                         />
                         <span className="sr-only">Your profile</span>
-                        <span aria-hidden="true">Some Name</span>
+                        <span aria-hidden="true">
+                          {username || 'Not logged in'}
+                        </span>
                       </a>
                     </li>
                   </ul>
@@ -360,14 +349,11 @@ export default function RootLayout({ children }) {
               <div className="flex-1 text-sm font-semibold leading-6 text-gray-900 dark:text-white">
                 Dashboard
               </div>
-              <Link href="#">
-                <span className="sr-only">Your profile</span>
-                <img
-                  className="h-8 w-8 rounded-full"
-                  src="/icon-256.png"
-                  alt="image"
-                />
-              </Link>
+              <span className="sr-only">Your profile</span>
+              <UserCircleIcon
+                className="h-8 w-8 dark:text-white text-gray-900"
+                aria-hidden="true"
+              />
             </div>
 
             <main className="py-10 lg:pl-72">
