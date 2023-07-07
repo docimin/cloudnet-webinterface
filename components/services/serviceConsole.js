@@ -4,7 +4,7 @@ import io from 'socket.io-client';
 
 const WebSocketClient = ({ onDataReceived }) => {
   useEffect(() => {
-    const socket = io('ws://217.160.104.158:2812/api/v2/service/test-1/liveLog');
+    const socket = io('https://proxy-api.fayevr.dev/api/v2/service/test-1/liveLog/socket.io/?EIO=4&transport=polling&t=OalTqQ5');
 
     socket.on('connect', () => {
       console.log('WebSocket connected');
