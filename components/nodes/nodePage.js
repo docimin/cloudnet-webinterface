@@ -43,6 +43,10 @@ export default function Node() {
     if (parts.length === 2) return parts.pop().split(';').shift();
   };
 
+  const deleteCookie = (name) => {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  };
+
   if (error) {
     return (
       <main className="flex flex-col items-center justify-between p-24">
