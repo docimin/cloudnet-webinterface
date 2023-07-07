@@ -3,33 +3,33 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 export default function Nodes() {
-const [services, setServices] = useState([]);
-const [error, setError] = useState('');
+  const [tasks, setTasks] = useState([]);
+  const [error, setError] = useState('');
 
-useEffect(() => {
-  const token = getCookie('token');
-  if (!token) {
-    window.location.href = '/auth';
-    return;
-  }
-  if (token) {
-    fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + "/service", {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
+  useEffect(() => {
+    const token = getCookie('token');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
+    if (token) {
+      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/task', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
-        console.log(response);
-        return response.json();
       })
-      .then((data) => setServices(data.services))
-      .catch((error) => setError(error.message));
-  }
-}, []);
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+          console.log(response);
+          return response.json();
+        })
+        .then((data) => setTasks(data.tasks))
+        .catch((error) => setError(error.message));
+    }
+  }, []);
 
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -50,10 +50,10 @@ useEffect(() => {
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Nodes
+            Tasks
           </h1>
           <p className="mt-2 text-sm text-gray-700">
-            A list of all the nodes and their info about them.
+            A list of all the tasks and their info about them.
           </p>
         </div>
       </div>
@@ -73,25 +73,31 @@ useEffect(() => {
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    CPU Usage
+                    Splitter
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Memory
+                    Smart
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Version
+                    Min. Count
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
                   >
-                    Version Type
+                    Start port
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold text-gray-900"
+                  >
+                    Static
                   </th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                     <span className="sr-only">Edit</span>
@@ -99,28 +105,28 @@ useEffect(() => {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {services.map((service) => (
-                  <tr key={service.processSnapshot.pid}>
+                {tasks.map((task) => (
+                  <tr key="test">
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-gray-900 sm:pl-0">
-                        {service.processSnapshot.pid}
+                      {task.name}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        {service.processSnapshot.cpuUsage}
+                    <td className="whitespace-nowrap px-3 py-4 text-sm">
+                      {task.nameSplitter}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                        some memory /{' '}
-                        {service.configuration.processConfig.maxHeapMemorySize}
+                    <td className="whitespace-nowrap px-3 py-4 text-sm">
+                      {task.properties.smartConfig.enabled ? 'Enabled' : 'Disabled'}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
-                      test
+                    <td className="whitespace-nowrap px-3 py-4 text-sm">
+                    {task.minServiceCount}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-gray-500">
+                    <td className="whitespace-nowrap px-3 py-4 text-sm">
+                    {task.startPort}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 ">
                       test
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <Link href={`/services/test`}>
-                        Edit
-                      </Link>
+                      <Link href={`/tasks/${task.name}`}>Edit</Link>
                     </td>
                   </tr>
                 ))}
