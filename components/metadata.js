@@ -1,6 +1,6 @@
 export const metadata = {
-  title: 'Fyfu Webinterface',
-  description: 'Automatic build using Next.js and Tailwind CSS',
+  title: 'Webinterface',
+  description: 'Webinterface for CloudNet',
   url: 'https://fayevr.dev',
   image: 'icon-512.png',
   icon: 'icon-512.png',
