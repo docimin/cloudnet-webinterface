@@ -13,7 +13,11 @@ function useDarkMode() {
     root.classList.add(theme);
 
     if (typeof window !== "undefined") {
-      localStorage.setItem("theme", theme);
+      if (localStorage.theme === undefined) {
+        localStorage.setItem("theme", "light");
+      } else {
+        localStorage.setItem("theme", theme);
+      }
     }
 
     if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
