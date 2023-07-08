@@ -1,10 +1,9 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
-import ServiceConsole from '@/components/services/serviceConsole';
 
-export default function Service() {
-  const [service, setService] = useState([]);
+export default function Task() {
+  const [task, setTask] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -15,7 +14,7 @@ export default function Service() {
       return;
     }
     if (token) {
-      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + `/service/${uniqueId}`, {
+      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + `/task/${uniqueId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -25,17 +24,17 @@ export default function Service() {
           if (!response.ok) {
             throw new Error(response.statusText);
           }
-          //console.log(response);
+          console.log(response);
           return response.json();
         })
         .then((data) => {
-          console.log(data);
-          setService(data.snapshot);
+          console.log('data:', data); // log the value of the data object
+          setTask(data.task); // update the task state with the fetched data
         })
         .catch((error) => {
-          deleteCookie('token');
-          deleteCookie('username');
-          window.location.href = '/auth';
+          //deleteCookie('token');
+          //deleteCookie('username');
+          //window.location.href = '/auth';
           setError(error.message);
         });
     }
@@ -65,11 +64,9 @@ export default function Service() {
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
             <h1 className="text-base font-semibold leading-6 text-gray-900">
-              Service name:{' '}
+              Task name:{' '}
               <span className="text-blurple">
-                {service.configuration.serviceId.taskName}
-                {service.configuration.serviceId.nameSplitter}
-                {service.configuration.serviceId.taskServiceId}
+                {task.name}
               </span>
             </h1>
             <p className="mt-2 text-sm text-gray-700">IP: test</p>
@@ -122,12 +119,10 @@ export default function Service() {
                 <tbody className="divide-y divide-gray-200 dark:text-light-color">
                   <tr key="test">
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
-                      {service.configuration.serviceId.nodeUniqueId}
+                      test
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm">
-                      {
-                        service.configuration.serviceId.environment.name
-                      }
+                      test
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm">
                       test / test
@@ -148,7 +143,6 @@ export default function Service() {
           </div>
         </div>
       </div>
-      {/*<ServiceConsole />*/}
     </>
   );
 }

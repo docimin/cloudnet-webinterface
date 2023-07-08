@@ -28,9 +28,9 @@ export default function Services() {
         })
         .then((data) => setServices(data.services))
         .catch((error) => {
-            deleteCookie('token');
-            deleteCookie('username');
-            window.location.href = '/auth';
+          deleteCookie('token');
+          deleteCookie('username');
+          window.location.href = '/auth';
           setError(error.message);
         });
     }
@@ -59,10 +59,10 @@ export default function Services() {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
-            <h1 className="text-base font-semibold leading-6 text-gray-900">
+            <h1 className="text-base font-semibold leading-6 dark:text-light-color">
               Services
             </h1>
-            <p className="mt-2 text-sm text-gray-700">
+            <p className="mt-2 text-sm dark:text-light-color">
               A list of all the services and their info about them.
             </p>
           </div>

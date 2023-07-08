@@ -1,6 +1,8 @@
 'use client';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import Link from 'next/link';
+import { Menu, Transition } from '@headlessui/react';
+import { EllipsisHorizontalIcon } from '@heroicons/react/24/outline';
 
 export default function Node() {
   const [node, setNode] = useState({});
@@ -8,11 +10,11 @@ export default function Node() {
 
   useEffect(() => {
     const token = getCookie('token');
-    const uniqueId = window.location.pathname.split('/').pop();
     if (!token) {
       window.location.href = '/auth';
       return;
     }
+    const uniqueId = window.location.pathname.split('/').pop();
     if (token) {
       fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + `/cluster/${uniqueId}`, {
         headers: {
@@ -27,11 +29,14 @@ export default function Node() {
           console.log(response);
           return response.json();
         })
-        .then((data) => setNode(data.node))
+        .then((data) => {
+          console.log(data);
+          setNode(data.node);
+        })
         .catch((error) => {
-          deleteCookie('token');
-          deleteCookie('username');
-          window.location.href = '/auth';
+          //deleteCookie('token');
+          //deleteCookie('username');
+          //window.location.href = '/auth';
           setError(error.message);
         });
     }
@@ -55,84 +60,63 @@ export default function Node() {
     );
   }
 
+  const stats = [
+    {
+      id: 1,
+      name: 'Memory',
+      imageUrl: 'https://tailwindui.com/img/logos/48x48/tuple.svg',
+      value1: node?.nodeInfoSnapshot?.usedMemory,
+      value2: node?.nodeInfoSnapshot?.maxMemory
+    },
+    {
+      id: 2,
+      name: 'SavvyCal',
+      imageUrl: 'https://tailwindui.com/img/logos/48x48/savvycal.svg',
+      value1: '',
+      value2: ''
+    }
+  ];
+
   return (
-    <div className="px-4 sm:px-6 lg:px-8">
-      <div className="sm:flex sm:items-center">
-        <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 text-gray-900">
-            Node:{' '}
-            <span className="text-blurple">
-              {node && node.node && node.node.uniqueId}
-            </span>
-          </h1>
-          <p className="mt-2 text-sm text-gray-700">
-            IP: {node && node.node && node.node.listeners[0].host}
-          </p>
-        </div>
-      </div>
-      <div className="mt-8 flow-root">
-        <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
-          <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <table className="min-w-full divide-y divide-gray-300 dark:text-light-color">
-              <thead>
-                <tr>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold sm:pl-0"
-                  >
-                    currentServicesCount
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold"
-                  >
-                    Status
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold"
-                  >
-                    Memory
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold"
-                  >
-                    Version
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold"
-                  >
-                    Version Type
-                  </th>
-                  <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
-                    <span className="sr-only">Edit</span>
-                  </th>
-                </tr>
-              </thead>
-              <tbody className="divide-y divide-gray-200 dark:text-light-color">
-                <tr key="test">
-                  <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
-                    {node &&
-                      node.node &&
-                      node.nodeInfoSnapshot.currentServicesCount}
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm">test</td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm">
-                    test / test
-                  </td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm">test</td>
-                  <td className="whitespace-nowrap px-3 py-4 text-sm">test</td>
-                  <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                    <Link href="">Edit</Link>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
+    <ul
+      role="list"
+      className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
+    >
+      {stats.map((stats) => (
+        <li
+          key={stats.id}
+          className="overflow-hidden rounded-xl border border-gray-200"
+        >
+          <div className="flex items-center gap-x-4 border-b border-gray-900/5 bg-gray-50 p-6">
+            <img
+              src={stats.imageUrl}
+              alt={stats.name}
+              className="h-12 w-12 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10"
+            />
+            <div className="text-sm font-medium leading-6 text-gray-900">
+              {stats.name}
+            </div>
           </div>
-        </div>
-      </div>
-    </div>
+          <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
+            <div className="flex justify-between gap-x-4 py-3">
+              <dt className="text-gray-500">Last invoice</dt>
+              <dd className="text-gray-700">
+                <span>
+                <input type="text" className="text-sm" defaultValue={stats.value1} disabled={!stats.value1} hidden={!stats.value1} />
+                </span>
+              </dd>
+            </div>
+            <div className="flex justify-between gap-x-4 py-3">
+              <dt className="text-gray-500">Amount</dt>
+              <dd className="flex items-start gap-x-2">
+                <div className="text-gray-900">
+                <input type="text" className="text-sm" defaultValue={stats.value2} disabled={!stats.value2} hidden={!stats.value2} />
+                </div>
+              </dd>
+            </div>
+          </dl>
+        </li>
+      ))}
+    </ul>
   );
 }

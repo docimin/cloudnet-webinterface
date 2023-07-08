@@ -50,8 +50,8 @@ const WebSocketClient = ({ onDataReceived, token }) => {
 
   return (
     <main>
-      <h1>Console</h1>
-      <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-white shadow">
+      <h1 className="dark:text-light-color">Console</h1>
+      <div className="divide-y divide-gray-200 overflow-hidden rounded-lg  bg-white dark:bg-gray-800 shadow">
         <div className="px-4 py-5 sm:px-6 min-h-[600px]">
           {/* Content goes here */}
           {/* We use less vertical padding on card headers on desktop than on body sections */}
