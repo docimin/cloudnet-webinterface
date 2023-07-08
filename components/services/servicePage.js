@@ -67,9 +67,9 @@ export default function Service() {
             <h1 className="text-base font-semibold leading-6 text-gray-900">
               Service name:{' '}
               <span className="text-blurple">
-                {service.configuration.serviceId.taskName}
-                {service.configuration.serviceId.nameSplitter}
-                {service.configuration.serviceId.taskServiceId}
+                {service?.configuration?.serviceId?.taskName}
+                {service?.configuration?.serviceId?.nameSplitter}
+                {service?.configuration?.serviceId?.taskServiceId}
               </span>
             </h1>
             <p className="mt-2 text-sm text-gray-700">IP: test</p>
@@ -122,11 +122,11 @@ export default function Service() {
                 <tbody className="divide-y divide-gray-200 dark:text-light-color">
                   <tr key="test">
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
-                      {service.configuration.serviceId.nodeUniqueId}
+                      {service?.configuration?.serviceId?.nodeUniqueId}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm">
                       {
-                        service.configuration.serviceId.environment.name
+                        service?.configuration?.serviceId?.environment?.name
                       }
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm">
