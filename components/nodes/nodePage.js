@@ -1,7 +1,12 @@
 'use client';
 import { useState, useEffect } from 'react';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome'
-import { faMemory, faCoffee, faCodeBranch, faCircleExclamation } from '@fortawesome/free-solid-svg-icons'
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import {
+  faMemory,
+  faCoffee,
+  faCodeBranch,
+  faCircleExclamation
+} from '@fortawesome/free-solid-svg-icons';
 
 export default function Node() {
   const [node, setNode] = useState({});
@@ -74,7 +79,7 @@ export default function Node() {
       id: 2,
       name: 'Amount of services',
       icon: faCoffee,
-      canEdit: true,
+      canEdit: false,
       value1: node?.nodeInfoSnapshot?.currentServicesCount,
       value2: '',
       value1Name: 'Current Services Count',
@@ -84,7 +89,7 @@ export default function Node() {
       id: 3,
       name: 'Drain Status',
       icon: faCircleExclamation,
-      canEdit: true,
+      canEdit: false,
       value1: node?.nodeInfoSnapshot?.drain ? 'Draining' : 'Not Draining',
       value2: '',
       value1Name: 'Drain status',
@@ -94,11 +99,21 @@ export default function Node() {
       id: 4,
       name: 'Version',
       icon: faCodeBranch,
-      canEdit: true,
+      canEdit: false,
       value1: node?.nodeInfoSnapshot?.version?.major,
       value2: node?.nodeInfoSnapshot?.version?.versionType,
       value1Name: 'Major version',
       value2Name: 'Type'
+    },
+    {
+      id: 5,
+      name: 'Connection details',
+      icon: faCodeBranch,
+      canEdit: true,
+      value1: node?.node?.listeners?.[0].host,
+      value2: node?.node?.listeners?.[0].port,
+      value1Name: 'IP',
+      value2Name: 'Port'
     }
   ];
 
@@ -112,11 +127,15 @@ export default function Node() {
           key={stats.id}
           className="overflow-hidden rounded-xl border border-gray-200"
         >
-          <div className="flex items-center gap-x-4 border-b bg-gray-50 dark:bg-transparent p-6 divider">
-          <FontAwesomeIcon icon={stats.icon} className="h-4 w-4 p-2 flex-none rounded-lg bg-white object-cover ring-1 ring-gray-900/10" />
+          <div className="flex items-center gap-x-4 border-b bg-gray-50 dark:bg-transparent p-6 divider dark:text-light-color">
+            <FontAwesomeIcon
+              icon={stats.icon}
+              className="h-4 w-4 p-2 flex-none rounded-lg bg-white dark:bg-transparent object-cover ring-1 ring-gray-900/10 dark:ring-white"
+            />
             <div className="text-sm font-medium leading-6 dark:text-light-color">
               {stats.name}
             </div>
+            <div className="ml-auto">{stats.canEdit ? 'Can edit' : 'View only'}</div>
           </div>
           <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
             <div className="flex justify-between gap-x-4 py-3">

@@ -1,6 +1,6 @@
 'use client';
 import './globals.css';
-import { Fragment, useState } from 'react';
+import { Fragment, useState, useEffect } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import {
   Bars3Icon,
@@ -52,8 +52,12 @@ function classNames(...classes) {
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [colorTheme, setTheme] = useDarkMode();
-  const username = getCookie('username');
-  const notLoggedIn = "Not logged in!";
+  const [username, setUsername] = useState('');
+
+  useEffect(() => {
+    setUsername(getCookie('username'));
+  }, []);
+  const notLoggedIn = 'Not logged in!';
 
   return (
     <html className="h-full" lang="en" suppressHydrationWarning>
@@ -315,22 +319,24 @@ export default function RootLayout({ children }) {
                         ))}
                       </ul>
                     </li>
-                    <li className="-mx-6 mt-auto">
-                      <a
-                        href="#"
-                        className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 dark:text-light-color hover:bg-gray-100 dark:hover:text-black"
-                      >
-                        <img
-                          className="h-8 w-8 rounded-full"
-                          src="/icon-256.png"
-                          alt=""
-                        />
-                        <span className="sr-only">Your profile</span>
-                        <span aria-hidden="true">
-                          {username || notLoggedIn}
-                        </span>
-                      </a>
-                    </li>
+                    {
+                      <li className="-mx-6 mt-auto">
+                        <a
+                          href="#"
+                          className="flex items-center gap-x-4 px-6 py-3 text-sm font-semibold leading-6 dark:text-light-color hover:bg-gray-100 dark:hover:text-black"
+                        >
+                          <img
+                            className="h-8 w-8 rounded-full"
+                            src="/icon-256.png"
+                            alt=""
+                          />
+                          <span className="sr-only">Your profile</span>
+                          <span aria-hidden="true">
+                            {username || notLoggedIn}
+                          </span>
+                        </a>
+                      </li>
+                    }
                   </ul>
                 </nav>
               </div>
