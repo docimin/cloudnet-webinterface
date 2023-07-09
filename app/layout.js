@@ -1,6 +1,5 @@
 'use client';
 import './globals.css';
-import { Inter } from 'next/font/google';
 import { Fragment, useState } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import {
@@ -16,7 +15,6 @@ import {
   UserCircleIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import Image from 'next/image';
 import Head from 'next/head';
 import useDarkMode from '@/components/useDarkMode';
 
@@ -55,6 +53,7 @@ export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [colorTheme, setTheme] = useDarkMode();
   const username = getCookie('username');
+  const notLoggedIn = "Not logged in!";
 
   return (
     <html className="h-full" lang="en" suppressHydrationWarning>
@@ -328,7 +327,7 @@ export default function RootLayout({ children }) {
                         />
                         <span className="sr-only">Your profile</span>
                         <span aria-hidden="true">
-                          {username || 'Not logged in'}
+                          {username || notLoggedIn}
                         </span>
                       </a>
                     </li>
