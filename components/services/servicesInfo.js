@@ -8,12 +8,14 @@ export default function Services() {
 
   useEffect(() => {
     const token = getCookie('token');
+    const address = getCookie('address');
     if (!token) {
       window.location.href = '/auth';
       return;
     }
     if (token) {
       fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/service', {
+      //fetch(`${address}/service`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -23,14 +25,14 @@ export default function Services() {
           if (!response.ok) {
             throw new Error(response.statusText);
           }
-          console.log(response);
+          //console.log(response);
           return response.json();
         })
         .then((data) => setServices(data.services))
         .catch((error) => {
-          deleteCookie('token');
-          deleteCookie('username');
-          window.location.href = '/auth';
+          //deleteCookie('token');
+          //deleteCookie('username');
+          //window.location.href = '/auth';
           setError(error.message);
         });
     }

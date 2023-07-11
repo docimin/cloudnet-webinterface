@@ -4,6 +4,7 @@ import { useState, useEffect } from 'react';
 export default function Auth() {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [address, setAddress] = useState('');
   const [loggedIn, setLoggedIn] = useState(false);
   const [error, setError] = useState('');
   const [token, setToken] = useState('');
@@ -12,18 +13,18 @@ export default function Auth() {
     setToken(document.cookie.includes('token'));
   }, []);
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+const handleSubmit = async (event) => {
+  event.preventDefault();
+  try {
     const response = await fetch(
-      process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/auth',
-      {
-        method: 'POST',
-        headers: {
-          Authorization: `Basic ${btoa(`${username}:${password}`)}`,
-          'Content-Type': 'application/json'
-        }
+    process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/auth', {
+    //`${address}/auth`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+        'Content-Type': 'application/json'
       }
-    );
+    });
     const data = await response.json();
     console.log(data);
     if (data.token === undefined) {
@@ -32,11 +33,15 @@ export default function Auth() {
       const expirationTime = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 hours from now
       document.cookie = `token=${data.token}; path=/; expires=${expirationTime}`;
       document.cookie = `username=${username}; path=/; expires=${expirationTime}`;
+      //document.cookie = `address=${address}; path=/; expires=${expirationTime}`;
       setToken(data.token);
       setLoggedIn(true);
       window.location.reload();
     }
-  };
+  } catch (error) {
+    console.error(error);
+  }
+};
 
   if (token) {
     return (
@@ -64,6 +69,25 @@ export default function Auth() {
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form className="space-y-6" onSubmit={handleSubmit}>
+            <div>
+                <label
+                  htmlFor="email"
+                  className="block text-sm font-medium leading-6 dark:text-light-color"
+                >
+                  Address
+                </label>
+                <div className="mt-2">
+                  <input
+                    id="address"
+                    name="address"
+                    type="text"
+                    value={address}
+                    onChange={(event) => setAddress(event.target.value)}
+                    //required
+                    className="block w-full rounded-md border-0 py-1.5 pl-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  />
+                </div>
+              </div>
               <div>
                 <label
                   htmlFor="email"
@@ -93,14 +117,6 @@ export default function Auth() {
                   >
                     Password
                   </label>
-                  <div className="text-sm">
-                    <a
-                      href="#"
-                      className="font-semibold text-indigo-600 hover:text-indigo-500"
-                    >
-                      Forgot password?
-                    </a>
-                  </div>
                 </div>
                 <div className="mt-2">
                   <input

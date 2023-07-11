@@ -117,14 +117,14 @@ export default function Nodes() {
                       {node.state}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm">
-                      {node.nodeInfoSnapshot.usedMemory} MB /{' '}
-                      {node.nodeInfoSnapshot.maxMemory} MB
+                      {(node.nodeInfoSnapshot && node.nodeInfoSnapshot.usedMemory) || 0} MB /{' '}
+                      {(node.nodeInfoSnapshot && node.nodeInfoSnapshot.maxMemory) || 0} MB
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm">
-                      {node.nodeInfoSnapshot.version.major}
+                      {(node.nodeInfoSnapshot && node.nodeInfoSnapshot.version.major) || 0}
                     </td>
                     <td className="whitespace-nowrap px-3 py-4 text-sm">
-                      {node.nodeInfoSnapshot.version.versionType}
+                      { (node.nodeInfoSnapshot && node.nodeInfoSnapshot.version.versionType) || 0}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                       <Link href={`/nodes/${node.node.uniqueId}`}>Edit</Link>

@@ -115,7 +115,7 @@ export default function Nodes() {
               </thead>
               <tbody className="divide-y divide-gray-200">
                 {tasks.map((task) => (
-                  <tr key="test">
+                  <tr key={task.name}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium dark:text-light-color sm:pl-0">
                       {task.name}
                     </td>

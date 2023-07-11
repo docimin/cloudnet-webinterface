@@ -11,6 +11,8 @@ import {
 export default function Node() {
   const [node, setNode] = useState({});
   const [error, setError] = useState('');
+  const [editedFields, setEditedFields] = useState({});
+  const uniqueId = window.location.pathname.split('/').pop();
 
   useEffect(() => {
     const token = getCookie('token');
@@ -38,9 +40,9 @@ export default function Node() {
           setNode(data.node);
         })
         .catch((error) => {
-          //deleteCookie('token');
-          //deleteCookie('username');
-          //window.location.href = '/auth';
+          deleteCookie('token');
+          deleteCookie('username');
+          window.location.href = '/auth';
           setError(error.message);
         });
     }
@@ -56,13 +58,53 @@ export default function Node() {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   };
 
-  if (error) {
-    return (
-      <main className="flex flex-col items-center justify-between p-24">
-        <h1>Error: {error}</h1>
-      </main>
-    );
-  }
+  const handleSave = () => {
+    const token = getCookie('token');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
+
+    const uniqueId = window.location.pathname.split('/').pop();
+    const { IP, Port } = connectionDetailsObj;
+
+    const updatedNode = {
+      properties: {},
+      uniqueId: `${uniqueId}`,
+      listeners: [
+        {
+          host: editedFields.IP || IP,
+          port: editedFields.Port || Port
+        }
+      ]
+    };
+
+    fetch(`${process.env.NEXT_PUBLIC_DEV_PROXY_URL}/cluster`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedNode)
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        //console.log('response', response);
+        return response.json();
+      })
+      .then((data) => {
+        setNode(data.node);
+        window.location.reload();
+        //console.log('data', data);
+      })
+      .catch((error) => {
+        setError(error.message);
+        //console.log('error', error);
+      });
+    //console.log('updatedNode', updatedNode);
+  };
 
   const stats = [
     {
@@ -70,8 +112,9 @@ export default function Node() {
       name: 'Memory',
       icon: faMemory,
       canEdit: false,
-      value1: node?.nodeInfoSnapshot?.usedMemory,
-      value2: node?.nodeInfoSnapshot?.maxMemory,
+      value1:
+        (node?.nodeInfoSnapshot && node?.nodeInfoSnapshot?.usedMemory) || 0,
+      value2: node?.nodeInfoSnapshot && node?.nodeInfoSnapshot?.maxMemory,
       value1Name: 'Used Memory',
       value2Name: 'Max Memory'
     },
@@ -117,60 +160,130 @@ export default function Node() {
     }
   ];
 
-  return (
-    <ul
-      role="list"
-      className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
-    >
-      {stats.map((stats) => (
-        <li
-          key={stats.id}
-          className="overflow-hidden rounded-xl border border-gray-200"
-        >
-          <div className="flex items-center gap-x-4 border-b bg-gray-50 dark:bg-transparent p-6 divider dark:text-light-color">
-            <FontAwesomeIcon
-              icon={stats.icon}
-              className="h-4 w-4 p-2 flex-none rounded-lg bg-white dark:bg-transparent object-cover ring-1 ring-gray-900/10 dark:ring-white"
-            />
-            <div className="text-sm font-medium leading-6 dark:text-light-color">
-              {stats.name}
-            </div>
-            <div className="ml-auto">{stats.canEdit ? 'Can edit' : 'View only'}</div>
-          </div>
-          <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
-            <div className="flex justify-between gap-x-4 py-3">
-              <dt className="dark:text-light-color">{stats.value1Name}</dt>
-              <dd className="dark:text-light-color">
-                <span>
-                  <input
-                    type="text"
-                    className="text-sm rounded dark:bg-transparent"
-                    defaultValue={stats.value1}
-                    disabled={stats.canEdit === false}
-                    hidden={!stats.value1}
-                  />
-                </span>
-              </dd>
-            </div>
+  const connectionDetails = stats.find(
+    (stat) => stat.name === 'Connection details'
+  );
+  const connectionDetailsObj = {
+    IP: connectionDetails.value1,
+    Port: connectionDetails.value2
+  };
 
-            {stats.value2 && (
+  const tabs = [{ name: 'Configuration', href: '#', current: false }];
+
+  return (
+    <div>
+      <div className="relative border-b border-gray-200 pb-5 sm:pb-0">
+        <div className="md:flex md:items-center md:justify-between">
+          <h3 className="text-base font-semibold leading-6 text-gray-900">
+            {uniqueId}
+          </h3>
+          <div className="mt-3 flex md:absolute md:right-0 md:top-3 md:mt-0">
+            <button
+              type="button"
+              className="ml-3 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={handleSave}
+            >
+              Save
+            </button>
+          </div>
+        </div>
+        <div className="mt-4">
+          <div className="sm:hidden">
+            <label htmlFor="current-tab" className="sr-only">
+              Select a tab
+            </label>
+            <select
+              id="current-tab"
+              name="current-tab"
+              className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+            ></select>
+          </div>
+          <div className="hidden sm:block">
+            <nav className="-mb-px flex space-x-8">
+              {tabs.map((tab) => (
+                <a
+                  key={tab.name}
+                  href={tab.href}
+                  className={
+                    'hover:border-indigo-500 hover:text-indigo-600 whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium'
+                  }
+                  aria-current={tab.current ? 'page' : undefined}
+                >
+                  {tab.name}
+                </a>
+              ))}
+            </nav>
+          </div>
+        </div>
+      </div>
+      <ul
+        role="list"
+        className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
+      >
+        {stats.map((stats) => (
+          <li
+            key={stats.id}
+            className="overflow-hidden rounded-xl border border-gray-200"
+          >
+            <div className="flex items-center gap-x-4 border-b bg-gray-50 dark:bg-transparent p-6 divider dark:text-light-color">
+              <FontAwesomeIcon
+                icon={stats.icon}
+                className="h-4 w-4 p-2 flex-none rounded-lg bg-white dark:bg-transparent object-cover ring-1 ring-gray-900/10 dark:ring-white"
+              />
+              <div className="text-sm font-medium leading-6 dark:text-light-color">
+                {stats.name}
+              </div>
+              <div className="ml-auto">
+                {stats.canEdit ? 'Can edit' : 'View only'}
+              </div>
+            </div>
+            <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
               <div className="flex justify-between gap-x-4 py-3">
-                <dt className="dark:text-light-color">{stats.value2Name}</dt>
-                <dd className="flex items-start gap-x-2">
-                  <div className="dark:text-light-color">
+                <dt className="dark:text-light-color">{stats.value1Name}</dt>
+                <dd className="dark:text-light-color flex items-center">
+                  <div className="">
                     <input
                       type="text"
-                      className="text-sm rounded dark:bg-transparent"
-                      defaultValue={stats.value2}
+                      className="text-sm rounded dark:bg-transparent w-36"
+                      defaultValue={stats.value1}
                       disabled={stats.canEdit === false}
+                      hidden={!stats.value1}
+                      onChange={(e) =>
+                        setEditedFields({
+                          ...editedFields,
+                          [stats.value1Name]: e.target.value
+                        })
+                      }
                     />
                   </div>
                 </dd>
               </div>
-            )}
-          </dl>
-        </li>
-      ))}
-    </ul>
+
+              {stats.value2 && (
+                <div className="flex justify-between gap-x-4 py-3">
+                  <dt className="dark:text-light-color">{stats.value2Name}</dt>
+                  <dd className="flex items-start gap-x-2">
+                    <div className="dark:text-light-color">
+                      <input
+                        type="text"
+                        className="text-sm rounded dark:bg-transparent w-36"
+                        defaultValue={stats.value2}
+                        disabled={stats.canEdit === false}
+                        onChange={(e) =>
+                          setEditedFields({
+                            ...editedFields,
+                            [stats.value2Name]: e.target.value
+                          })
+                        }
+                      />
+                    </div>
+                  </dd>
+                </div>
+              )}
+            </dl>
+          </li>
+        ))}
+      </ul>
+    </div>
   );
 }
