@@ -113,7 +113,7 @@ export default function Node() {
       icon: faMemory,
       canEdit: false,
       value1:
-        (node?.nodeInfoSnapshot && node?.nodeInfoSnapshot?.usedMemory) || 0,
+        (node?.nodeInfoSnapshot && node?.nodeInfoSnapshot?.usedMemory),
       value2: node?.nodeInfoSnapshot && node?.nodeInfoSnapshot?.maxMemory,
       value1Name: 'Used Memory',
       value2Name: 'Max Memory'
@@ -218,7 +218,7 @@ export default function Node() {
       </div>
       <ul
         role="list"
-        className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
+        className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8 pt-4"
       >
         {stats.map((stats) => (
           <li

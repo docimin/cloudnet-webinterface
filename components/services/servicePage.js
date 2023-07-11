@@ -7,44 +7,46 @@ import {
   faCodeBranch,
   faCircleExclamation
 } from '@fortawesome/free-solid-svg-icons';
-import ServiceConsole from '@/components/services/serviceConsole';
 
 export default function Service() {
-  const [service, setService] = useState([]);
+  const [service, setService] = useState({});
   const [error, setError] = useState('');
+  const [editedFields, setEditedFields] = useState({});
   const uniqueId = window.location.pathname.split('/').pop();
 
   useEffect(() => {
-    const token = getCookie('token');
-    if (!token) {
-      window.location.href = '/auth';
-      return;
-    }
-    const uniqueId = window.location.pathname.split('/').pop();
-    if (token) {
-      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + `/service/${uniqueId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        }
-      })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(response.statusText);
+    if (typeof window !== 'undefined') {
+      const token = getCookie('token');
+      if (!token) {
+        window.location.href = '/auth';
+        return;
+      }
+      const uniqueId = window.location.pathname.split('/').pop();
+      if (token) {
+        fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + `/service/${uniqueId}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
           }
-          //console.log(response);
-          return response.json();
         })
-        .then((data) => {
-          //console.log(data);
-          setService(data.snapshot);
-        })
-        .catch((error) => {
-          deleteCookie('token');
-          deleteCookie('username');
-          window.location.href = '/auth';
-          setError(error.message);
-        });
+          .then((response) => {
+            if (!response.ok) {
+              throw new Error(response.statusText);
+            }
+            //console.log(response);
+            return response.json();
+          })
+          .then((data) => {
+            //console.log(data);
+            setService(data.snapshot);
+          })
+          .catch((error) => {
+            deleteCookie('token');
+            deleteCookie('username');
+            window.location.href = '/auth';
+            setError(error.message);
+          });
+      }
     }
   }, []);
 
@@ -64,43 +66,46 @@ export default function Service() {
       window.location.href = '/auth';
       return;
     }
-    if (token) {
-      const updatedNode = {
-        properties: {},
-        uniqueId: uniqueId,
-        listeners: [
-          {
-            host: editedFields['IP'],
-            port: editedFields['Port']
-          }
-        ]
-      };
-      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + `/cluster/`, {
-        method: 'PUT',
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(updatedNode)
+
+    const uniqueId = window.location.pathname.split('/').pop();
+    const { IP, Port } = connectionDetailsObj;
+
+    const updatedNode = {
+      properties: {},
+      uniqueId: `${uniqueId}`,
+      listeners: [
+        {
+          host: editedFields.IP || IP,
+          port: editedFields.Port || Port
+        }
+      ]
+    };
+
+    fetch(`${process.env.NEXT_PUBLIC_DEV_PROXY_URL}/service`, {
+      method: 'PUT',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedNode)
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        //console.log('response', response);
+        return response.json();
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(response.statusText);
-          }
-          //console.log(response);
-          return response.json();
-        })
-        .then((data) => {
-          //console.log(data);
-          setNode(data.node);
-        })
-        .catch((error) => {
-          //deleteCookie('token');
-          //deleteCookie('username');
-          //window.location.href = '/auth';
-          setError(error.message);
-        });
-    }
+      .then((data) => {
+        setService(data.service);
+        window.location.reload();
+        //console.log('data', data);
+      })
+      .catch((error) => {
+        setError(error.message);
+        //console.log('error', error);
+      });
+    //console.log('updatedNode', updatedNode);
   };
 
   const stats = [
@@ -156,20 +161,24 @@ export default function Service() {
     }
   ];
 
-  const tabs = [
-    { name: 'Configuration', href: '#', current: false },
-    { name: 'Console', href: '#', current: false }
-  ];
+  console.log(stats.find((stat) => stat.name === 'Memory'));
 
-  const creationTime = new Date(service?.creationTime);
-  const formattedCreationTime = creationTime.toLocaleString();
+  const connectionDetails = stats.find(
+    (stat) => stat.name === 'Connection details'
+  );
+  const connectionDetailsObj = {
+    IP: connectionDetails.value1,
+    Port: connectionDetails.value2
+  };
+
+  const tabs = [{ name: 'Configuration', href: '#', current: false }];
 
   return (
     <div>
       <div className="relative border-b border-gray-200 pb-5 sm:pb-0">
         <div className="md:flex md:items-center md:justify-between">
           <h3 className="text-base font-semibold leading-6 text-gray-900">
-            {uniqueId} - Created at {formattedCreationTime}
+            {uniqueId}
           </h3>
           <div className="mt-3 flex md:absolute md:right-0 md:top-3 md:mt-0">
             <button
@@ -212,7 +221,7 @@ export default function Service() {
       </div>
       <ul
         role="list"
-        className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8"
+        className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8 pt-4"
       >
         {stats.map((stats) => (
           <li
