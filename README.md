@@ -8,18 +8,6 @@ First, edit the .env file to include your URL.
 
 Make sure to rename `.env.example` to `.env` !
 
-If your CloudNet API is running on http, you can use the following URL:
-
-```bash
-NEXT_PUBLIC_DEV_PROXY_URL=http://localhost:2812
-```
-
-if you are running the CloudNet API on a different server with reverse proxy (https) and you get cors issues, you can use the following URL:
-
-```bash
-NEXT_PUBLIC_DEV_PROXY_URL=https://cors.fayevr.dev/your-cloudnet-api-url.com
-```
-
 To start the server, use the following command:
 
 ```bash
