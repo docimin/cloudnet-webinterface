@@ -190,7 +190,7 @@ export default function RootLayout({ children }) {
                                 ))}
                               </ul>
                             </li>
-                            <li>
+                            {/*<li>
                               <div className="text-xs font-semibold leading-6 text-gray-400">
                                 Your teams
                               </div>
@@ -223,7 +223,7 @@ export default function RootLayout({ children }) {
                                   </li>
                                 ))}
                               </ul>
-                            </li>
+                            </li>*/}
                           </ul>
                         </nav>
                       </div>
@@ -289,7 +289,7 @@ export default function RootLayout({ children }) {
                         ))}
                       </ul>
                     </li>
-                    <li>
+                    {/*<li>
                       <div className="text-xs font-semibold leading-6 text-gray-400">
                         Your teams
                       </div>
@@ -320,7 +320,7 @@ export default function RootLayout({ children }) {
                           </li>
                         ))}
                       </ul>
-                    </li>
+                    </li>*/}
                     {
                       <li className="-mx-6 mt-auto">
                         <a
