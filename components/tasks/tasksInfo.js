@@ -15,16 +15,13 @@ export default function Nodes() {
     }
     if (token) {
       //fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/service', {
-      const apiUrl = address.includes('/api/v2')
-        ? ''
-        : process.env.NEXT_PUBLIC_API_URL;
 
         const domainurl = address.includes('localhost' || '127.0.0.1')
         ? ''
         : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
 
       fetch(
-        `${domainurl}${address}${apiUrl}/task`, {
+        `${domainurl}${address}/task`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -39,9 +36,9 @@ export default function Nodes() {
         })
         .then((data) => setTasks(data.tasks))
         .catch((error) => {
-          deleteCookie('token');
-          deleteCookie('username');
-          window.location.href = '/auth';
+          //deleteCookie('token');
+          //deleteCookie('username');
+          //window.location.href = '/auth';
           setError(error.message);
         });
     }

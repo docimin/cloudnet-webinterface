@@ -21,6 +21,9 @@ export default function Auth() {
     } else if (address.includes('https://')) {
       newAddress = address.replace('https://', '');
     }
+    if (!newAddress.includes('/api/v2')) {
+      newAddress += '/api/v2';
+    }
     setModifiedAddress(newAddress);
   }, [address]);
 
@@ -28,7 +31,7 @@ export default function Auth() {
     event.preventDefault();
     try {
       const response = await fetch(
-        `https://cors.fayevr.dev/${modifiedAddress}/api/v2/auth`,
+        `https://cors.fayevr.dev/${modifiedAddress}/auth`,
         {
           method: 'POST',
           headers: {

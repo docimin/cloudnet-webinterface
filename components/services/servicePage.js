@@ -24,15 +24,12 @@ export default function Service() {
     const uniqueId = window.location.pathname.split('/').pop();
     if (token) {
       //fetch(`process.env.NEXT_PUBLIC_DEV_PROXY_URL + /cluster/${uniqueId}`, {
-      const apiUrl = address.includes('/api/v2')
-        ? ''
-        : process.env.NEXT_PUBLIC_API_URL;
 
       const domainurl = address.includes('localhost' || '127.0.0.1')
         ? ''
         : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
 
-      fetch(`${domainurl}${address}${apiUrl}/service/${uniqueId}`, {
+      fetch(`${domainurl}${address}/service/${uniqueId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
