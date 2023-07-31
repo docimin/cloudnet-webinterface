@@ -45,9 +45,9 @@ export default function Node() {
           setNode(data.node);
         })
         .catch((error) => {
-          //deleteCookie('token');
-          //deleteCookie('username');
-          //redirectToAuth();
+          deleteCookie('token');
+          deleteCookie('username');
+          redirectToAuth();
           setError(error.message);
         });
     }
@@ -108,7 +108,6 @@ export default function Node() {
         setError(error.message);
         //console.log('error', error);
       });
-    //console.log('updatedNode', updatedNode);
   };
 
   const stats = [

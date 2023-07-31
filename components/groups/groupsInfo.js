@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-export default function Nodes() {
-  const [nodes, setNodes] = useState([]);
+export default function Groups() {
+  const [groups, setGroups] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -21,7 +21,7 @@ export default function Nodes() {
         : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
 
       fetch(
-        `${domainurl}${address}/cluster`, {
+        `${domainurl}${address}/group`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -34,7 +34,7 @@ export default function Nodes() {
           //console.log(response);
           return response.json();
         })
-        .then((data) => setNodes(data.nodes))
+        .then((data) => setGroups(data.groups))
         .catch((error) => {
           deleteCookie('token');
           deleteCookie('username');
@@ -67,10 +67,10 @@ export default function Nodes() {
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-light-color">
-            Nodes
+            Groups
           </h1>
           <p className="mt-2 text-sm text-light-color">
-            A list of all the nodes and their info about them.
+            A list of all the groups and their info about them.
           </p>
         </div>
       </div>
@@ -86,56 +86,16 @@ export default function Nodes() {
                   >
                     Name
                   </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold"
-                  >
-                    Status
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold"
-                  >
-                    Memory
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold"
-                  >
-                    Version
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold"
-                  >
-                    Version Type
-                  </th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                     <span className="sr-only">Edit</span>
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 text-light-color">
-                {nodes.map((node) => (
-                  <tr key={node.node.uniqueId}>
+                {groups.map((group) => (
+                  <tr key="{node.node.uniqueId}">
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
-                      {node.node.uniqueId}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm">
-                      {node.state}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm">
-                      {(node.nodeInfoSnapshot && node.nodeInfoSnapshot.usedMemory) || 0} MB /{' '}
-                      {(node.nodeInfoSnapshot && node.nodeInfoSnapshot.maxMemory) || 0} MB
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm">
-                      {(node.nodeInfoSnapshot && node.nodeInfoSnapshot.version.major) || 0}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm">
-                      { (node.nodeInfoSnapshot && node.nodeInfoSnapshot.version.versionType) || 0}
-                    </td>
-                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <Link className="hover:text-blurple" href={`/nodes/${node.node.uniqueId}`}>Edit</Link>
+                      {group.name}
                     </td>
                   </tr>
                 ))}

@@ -47,9 +47,9 @@ export default function Service() {
           setService(data.snapshot);
         })
         .catch((error) => {
-          //deleteCookie('token');
-          //deleteCookie('username');
-          //window.location.href = '/auth';
+          deleteCookie('token');
+          deleteCookie('username');
+          window.location.href = '/auth';
           setError(error.message);
         });
     }

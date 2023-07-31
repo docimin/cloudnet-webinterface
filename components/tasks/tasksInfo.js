@@ -31,14 +31,14 @@ export default function Nodes() {
           if (!response.ok) {
             throw new Error(response.statusText);
           }
-          console.log(response);
+          //console.log(response);
           return response.json();
         })
         .then((data) => setTasks(data.tasks))
         .catch((error) => {
-          //deleteCookie('token');
-          //deleteCookie('username');
-          //window.location.href = '/auth';
+          deleteCookie('token');
+          deleteCookie('username');
+          window.location.href = '/auth';
           setError(error.message);
         });
     }
