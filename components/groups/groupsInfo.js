@@ -94,7 +94,7 @@ export default function Groups() {
               </thead>
               <tbody className="divide-y divide-gray-200 text-light-color">
                 {groups.map((group) => (
-                  <tr key="{node.node.uniqueId}">
+                  <tr key={group.name}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
                       {group.name}
                     </td>
