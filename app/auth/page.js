@@ -46,7 +46,7 @@ const handleSubmit = async (event) => {
   if (token) {
     return (
       <main className="flex flex-col items-center justify-between p-24">
-        <h1 className="dark:text-light-color">Logged in!</h1>
+        <h1 className="text-light-color">Logged in!</h1>
       </main>
     );
   }
@@ -62,7 +62,7 @@ const handleSubmit = async (event) => {
               src="/icon-256.png"
               alt="Sushi Roll"
             />
-            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight dark:text-light-color">
+            <h2 className="mt-10 text-center text-2xl font-bold leading-9 tracking-tight text-light-color">
               Sign in to your account
             </h2>
           </div>
@@ -72,7 +72,7 @@ const handleSubmit = async (event) => {
             <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium leading-6 dark:text-light-color"
+                  className="block text-sm font-medium leading-6 text-light-color"
                 >
                   Address
                 </label>
@@ -91,7 +91,7 @@ const handleSubmit = async (event) => {
               <div>
                 <label
                   htmlFor="email"
-                  className="block text-sm font-medium leading-6 dark:text-light-color"
+                  className="block text-sm font-medium leading-6 text-light-color"
                 >
                   Username
                 </label>
@@ -113,7 +113,7 @@ const handleSubmit = async (event) => {
                 <div className="flex items-center justify-between">
                   <label
                     htmlFor="password"
-                    className="block text-sm font-medium leading-6 dark:text-light-color"
+                    className="block text-sm font-medium leading-6 text-light-color"
                   >
                     Password
                   </label>
@@ -149,7 +149,7 @@ const handleSubmit = async (event) => {
 
   return (
     <main className="flex flex-col items-center justify-between p-24">
-      <h1 className="dark:text-light-color">Please wait...</h1>
+      <h1 className="text-light-color">Please wait...</h1>
     </main>
   );
 }

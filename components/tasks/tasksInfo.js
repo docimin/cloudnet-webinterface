@@ -58,10 +58,10 @@ export default function Nodes() {
     <div className="px-4 sm:px-6 lg:px-8">
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
-          <h1 className="text-base font-semibold leading-6 dark:text-light-color">
+          <h1 className="text-base font-semibold leading-6 text-light-color">
             Tasks
           </h1>
-          <p className="mt-2 text-sm dark:text-light-color">
+          <p className="mt-2 text-sm text-light-color">
             A list of all the tasks and their info about them.
           </p>
         </div>
@@ -69,7 +69,7 @@ export default function Nodes() {
       <div className="mt-8 flow-root">
         <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
           <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-            <table className="min-w-full divide-y divide-gray-300 dark:text-light-color">
+            <table className="min-w-full divide-y divide-gray-300 text-light-color">
               <thead>
                 <tr>
                   <th
@@ -116,24 +116,24 @@ export default function Nodes() {
               <tbody className="divide-y divide-gray-200">
                 {tasks.map((task) => (
                   <tr key={task.name}>
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium dark:text-light-color sm:pl-0">
+                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-color sm:pl-0">
                       {task.name}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-light-color">
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
                       {task.nameSplitter}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-light-color">
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
                       {task.properties.smartConfig.enabled
                         ? 'Enabled'
                         : 'Disabled'}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-light-color">
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
                       {task.minServiceCount}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm dark:text-light-color">
+                    <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
                       {task.startPort}
                     </td>
-                    <td className="whitespace-nowrap px-3 py-4 dark:text-light-color">
+                    <td className="whitespace-nowrap px-3 py-4 text-light-color">
                       {task.staticConfig ? 'Enabled' : 'Disabled'}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">

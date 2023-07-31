@@ -61,10 +61,10 @@ export default function Services() {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
-            <h1 className="text-base font-semibold leading-6 dark:text-light-color">
+            <h1 className="text-base font-semibold leading-6 text-light-color">
               Services
             </h1>
-            <p className="mt-2 text-sm dark:text-light-color">
+            <p className="mt-2 text-sm text-light-color">
               A list of all the services and their info about them.
             </p>
           </div>
@@ -72,7 +72,7 @@ export default function Services() {
         <div className="mt-8 flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <table className="min-w-full divide-y divide-gray-300 dark:text-light-color">
+              <table className="min-w-full divide-y divide-gray-300 text-light-color">
                 <thead>
                   <tr>
                     <th
@@ -129,7 +129,7 @@ export default function Services() {
                   {services.map((service) => (
                     <tr
                       key={service.processSnapshot.pid}
-                      className="dark:text-light-color"
+                      className="text-light-color"
                     >
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
                         {service.configuration.serviceId.taskName}

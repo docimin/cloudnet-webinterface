@@ -75,7 +75,7 @@ export default function Task() {
         <div className="mt-8 flow-root">
           <div className="-mx-4 -my-2 overflow-x-auto sm:-mx-6 lg:-mx-8">
             <div className="inline-block min-w-full py-2 align-middle sm:px-6 lg:px-8">
-              <table className="min-w-full divide-y divide-gray-300 dark:text-light-color">
+              <table className="min-w-full divide-y divide-gray-300 text-light-color">
                 <thead>
                   <tr>
                     <th
@@ -116,7 +116,7 @@ export default function Task() {
                     </th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-gray-200 dark:text-light-color">
+                <tbody className="divide-y divide-gray-200 text-light-color">
                   <tr key="test">
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
                       test

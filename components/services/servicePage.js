@@ -14,41 +14,44 @@ export default function Service() {
   const [editedFields, setEditedFields] = useState({});
   const uniqueId = window.location.pathname.split('/').pop();
 
-  useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const token = getCookie('token');
-      if (!token) {
-        window.location.href = '/auth';
-        return;
-      }
-      const uniqueId = window.location.pathname.split('/').pop();
-      if (token) {
-        fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + `/service/${uniqueId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
-        })
-          .then((response) => {
-            if (!response.ok) {
-              throw new Error(response.statusText);
-            }
-            //console.log(response);
-            return response.json();
-          })
-          .then((data) => {
-            //console.log(data);
-            setService(data.snapshot);
-          })
-          .catch((error) => {
-            deleteCookie('token');
-            deleteCookie('username');
-            window.location.href = '/auth';
-            setError(error.message);
-          });
-      }
+useEffect(() => {
+  const fetchData = () => {
+    const token = getCookie('token');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
     }
-  }, []);
+    const uniqueId = window.location.pathname.split('/').pop();
+    if (token) {
+      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + `/service/${uniqueId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
+        }
+      })
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setService(data.snapshot);
+        })
+        .catch((error) => {
+          deleteCookie('token');
+          deleteCookie('username');
+          window.location.href = '/auth';
+          setError(error.message);
+        });
+    }
+  };
+  fetchData();
+
+  const intervalId = setInterval(fetchData, 30000);
+
+  return () => clearInterval(intervalId);
+}, []);
 
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -93,19 +96,19 @@ export default function Service() {
         if (!response.ok) {
           throw new Error(response.statusText);
         }
-        //console.log('response', response);
+        console.log('response', response);
         return response.json();
       })
       .then((data) => {
         setService(data.service);
         window.location.reload();
-        //console.log('data', data);
+        console.log('data', data);
       })
       .catch((error) => {
         setError(error.message);
-        //console.log('error', error);
+        console.log('error', error);
       });
-    //console.log('updatedNode', updatedNode);
+    console.log('updatedNode', updatedNode);
   };
 
   const stats = [
@@ -114,17 +117,17 @@ export default function Service() {
       name: 'Memory',
       icon: faMemory,
       canEdit: false,
-      value1: Math.floor(service?.processSnapshot?.heapUsageMemory / 1000000),
+      value1: Math.floor(service?.processSnapshot?.heapUsageMemory / 100000),
       value2: Math.floor(service?.processSnapshot?.maxHeapMemory / 1000000),
       value1Name: 'Used Memory',
       value2Name: 'Max Memory'
     },
     {
       id: 2,
-      name: 'Amount of services',
+      name: 'Task',
       icon: faCoffee,
       canEdit: false,
-      value1: 'node?.nodeInfoSnapshot?.currentServicesCount',
+      value1: (service?.processSnapshot?.heapUsageMemory),
       value2: '',
       value1Name: 'Current Services Count',
       value2Name: ''
@@ -177,7 +180,7 @@ export default function Service() {
     <div>
       <div className="relative border-b border-gray-200 pb-5 sm:pb-0">
         <div className="md:flex md:items-center md:justify-between">
-          <h3 className="text-base font-semibold leading-6 text-gray-900">
+          <h3 className="text-base font-semibold leading-6 text-white">
             {uniqueId}
           </h3>
           <div className="mt-3 flex md:absolute md:right-0 md:top-3 md:mt-0">
@@ -208,11 +211,11 @@ export default function Service() {
                   key={tab.name}
                   href={tab.href}
                   className={
-                    'hover:border-indigo-500 hover:text-indigo-600 whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium'
+                    'text-white hover:border-indigo-500 whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium'
                   }
                   aria-current={tab.current ? 'page' : undefined}
                 >
-                  {tab.name}
+                  <span className="">{tab.name}</span>
                 </a>
               ))}
             </nav>
@@ -228,12 +231,12 @@ export default function Service() {
             key={stats.id}
             className="overflow-hidden rounded-xl border border-gray-200"
           >
-            <div className="flex items-center gap-x-4 border-b bg-gray-50 dark:bg-transparent p-6 divider dark:text-light-color">
+            <div className="flex items-center gap-x-4 border-b bg-transparent p-6 divider text-light-color">
               <FontAwesomeIcon
                 icon={stats.icon}
-                className="h-4 w-4 p-2 flex-none rounded-lg bg-white dark:bg-transparent object-cover ring-1 ring-gray-900/10 dark:ring-white"
+                className="h-4 w-4 p-2 flex-none rounded-lg bg-transparent object-cover ring-1 ring-white"
               />
-              <div className="text-sm font-medium leading-6 dark:text-light-color">
+              <div className="text-sm font-medium leading-6 text-light-color">
                 {stats.name}
               </div>
               <div className="ml-auto">
@@ -242,12 +245,12 @@ export default function Service() {
             </div>
             <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
               <div className="flex justify-between gap-x-4 py-3">
-                <dt className="dark:text-light-color">{stats.value1Name}</dt>
-                <dd className="dark:text-light-color flex items-center">
+                <dt className="text-light-color">{stats.value1Name}</dt>
+                <dd className="text-light-color flex items-center">
                   <div className="">
                     <input
                       type="text"
-                      className="text-sm rounded dark:bg-transparent w-36"
+                      className="text-sm rounded bg-transparent w-36"
                       defaultValue={stats.value1}
                       disabled={stats.canEdit === false}
                       hidden={!stats.value1}
@@ -264,12 +267,12 @@ export default function Service() {
 
               {stats.value2 && (
                 <div className="flex justify-between gap-x-4 py-3">
-                  <dt className="dark:text-light-color">{stats.value2Name}</dt>
+                  <dt className="text-light-color">{stats.value2Name}</dt>
                   <dd className="flex items-start gap-x-2">
-                    <div className="dark:text-light-color">
+                    <div className="text-light-color">
                       <input
                         type="text"
-                        className="text-sm rounded dark:bg-transparent w-36"
+                        className="text-sm rounded bg-transparent w-36"
                         defaultValue={stats.value2}
                         disabled={stats.canEdit === false}
                         onChange={(e) =>
