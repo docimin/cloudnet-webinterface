@@ -189,7 +189,7 @@ export default function Service() {
             <p className="mt-2 text-sm text-white">
               IP:{' '}
               <span className="text-blurple">
-                {service?.address.host}:{service?.address.port}
+                {service?.address?.host}:{service?.address?.port}
               </span>
             </p>
           </h3>
