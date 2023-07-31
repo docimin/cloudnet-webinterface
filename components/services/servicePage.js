@@ -46,7 +46,7 @@ export default function Service() {
           return response.json();
         })
         .then((data) => {
-          console.log(data);
+          //console.log(data);
           setService(data.snapshot);
         })
         .catch((error) => {
@@ -116,67 +116,68 @@ export default function Service() {
     //console.log('updatedService', updatedService);
   };
 
+  // This only exists so heapUsageMemory does not give NaN, whatever this is.
+  const heapUsageMemory = service?.processSnapshot?.heapUsageMemory;
+  let heapUsageMemoryFix;
+  if (heapUsageMemory !== undefined) {
+    heapUsageMemoryFix = Math.round(heapUsageMemory / 1000000);
+  }
+
   const stats = [
     {
       id: 1,
       name: 'Memory',
       icon: faMemory,
       canEdit: false,
-      value1: service?.processSnapshot?.heapUsageMemory / 100000 || 0,
-      value2: 'node?.nodeInfoSnapshot && node?.nodeInfoSnapshot?.maxMemory',
+      value1: heapUsageMemoryFix,
+      value2: service?.configuration?.processConfig?.maxHeapMemorySize,
       value1Name: 'Used Memory',
       value2Name: 'Max Memory'
     },
     {
       id: 2,
-      name: 'Amount of services',
+      name: 'Backend',
       icon: faCoffee,
       canEdit: false,
-      value1: 'node?.nodeInfoSnapshot?.currentServicesCount',
-      value2: '',
+      value1: service?.configuration?.serviceId?.nodeUniqueId,
+      value2: service?.configuration?.serviceId?.taskName,
       value1Name: 'Current Services Count',
-      value2Name: ''
+      value2Name: 'Task Name'
     },
     {
       id: 3,
-      name: 'Drain Status',
+      name: 'Networking',
       icon: faCircleExclamation,
       canEdit: false,
-      value1: "node?.nodeInfoSnapshot?.drain ? 'Draining' : 'Not Draining'",
-      value2: '',
-      value1Name: 'Drain status',
-      value2Name: ''
+      value1: service?.configuration?.serviceId?.environment?.defaultServiceStartPort,
+      value2: service?.lifeCycle,
+      value1Name: 'Starting Port',
+      value2Name: 'Life Cycle'
     },
     {
       id: 4,
       name: 'Version',
       icon: faCodeBranch,
       canEdit: false,
-      value1: 'node?.nodeInfoSnapshot?.version?.major',
-      value2: 'node?.nodeInfoSnapshot?.version?.versionType',
-      value1Name: 'Major version',
-      value2Name: 'Type'
+      value1: service?.properties?.Version,
+      value2: '',
+      value1Name: 'Server Version',
+      value2Name: ''
     },
     {
       id: 5,
-      name: 'Connection details',
+      name: 'Player details',
       icon: faCodeBranch,
-      canEdit: true,
-      value1: 'node?.node?.listeners?.[0].host',
-      value2: 'node?.node?.listeners?.[0].port',
-      value1Name: 'IP',
-      value2Name: 'Port'
+      canEdit: false,
+      value1: service?.properties?.['Online-Count'] ? service.properties['Online-Count'] : 0,
+      value2: service?.properties?.['Max-Players'],
+      value1Name: 'Online Count',
+      value2Name: 'Max Players'
     }
   ];
-  console.log(stats.find((stat) => stat.name === 'Memory'));
+  //console.log(stats.find((stat) => stat.name === 'Memory'));
 
-  const connectionDetails = stats.find(
-    (stat) => stat.name === 'Connection details'
-  );
-  const connectionDetailsObj = {
-    IP: connectionDetails.value1,
-    Port: connectionDetails.value2
-  };
+
 
   const tabs = [{ name: 'Configuration', href: '#', current: false }];
 
