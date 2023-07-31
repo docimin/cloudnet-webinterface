@@ -114,33 +114,35 @@ export default function Nodes() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200">
-                {tasks.map((task) => (
-                  <tr key={task.name}>
-                    <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-color sm:pl-0">
-                      {task.name}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
-                      {task.nameSplitter}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
-                      {task.properties.smartConfig.enabled
-                        ? 'Enabled'
-                        : 'Disabled'}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
-                      {task.minServiceCount}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
-                      {task.startPort}
-                    </td>
-                    <td className="whitespace-nowrap px-3 py-4 text-light-color">
-                      {task.staticConfig ? 'Enabled' : 'Disabled'}
-                    </td>
-                    <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <Link href={`/tasks/${task.name}`}>Edit</Link>
-                    </td>
-                  </tr>
-                ))}
+                {tasks
+                  .sort((a, b) => a.name.localeCompare(b.name))
+                  .map((task) => (
+                    <tr key={task.name}>
+                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-color sm:pl-0">
+                        {task.name}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
+                        {task.nameSplitter}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
+                        {task.properties.smartConfig.enabled
+                          ? 'Enabled'
+                          : 'Disabled'}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
+                        {task.minServiceCount}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
+                        {task.startPort}
+                      </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-light-color">
+                        {task.staticServices ? 'Enabled' : 'Disabled'}
+                      </td>
+                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                        <Link href={`/tasks/${task.name}`}>Edit</Link>
+                      </td>
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

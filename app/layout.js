@@ -31,7 +31,7 @@ const navigation = [
   }
 ];
 const teams = [
-  { id: 1, name: 'Profile', href: '/profile/me', initial: 'P', current: false },
+  { id: 1, name: 'Profile', href: '#', initial: 'P', current: false },
   { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
   { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false }
 ];
@@ -68,9 +68,7 @@ export default function RootLayout({ children }) {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <meta name="robots" content="index, follow" />
       </Head>
-      <body
-        className="h-full bg-gray-800"
-      >
+      <body className="h-full bg-gray-800">
         <>
           <div>
             <Transition.Root show={sidebarOpen} as={Fragment}>
@@ -348,10 +346,7 @@ export default function RootLayout({ children }) {
                 onClick={() => setSidebarOpen(true)}
               >
                 <span className="sr-only">Open sidebar</span>
-                <Bars3Icon
-                  className="h-6 w-6 text-white"
-                  aria-hidden="true"
-                />
+                <Bars3Icon className="h-6 w-6 text-white" aria-hidden="true" />
               </button>
               <div className="flex-1 text-sm font-semibold leading-6 text-white">
                 Dashboard

@@ -14,39 +14,37 @@ export default function Node() {
   const [editedFields, setEditedFields] = useState({});
   const uniqueId = window.location.pathname.split('/').pop();
 
-  useEffect(() => {
-    const token = getCookie('token');
-    if (!token) {
-      window.location.href = '/auth';
-      return;
-    }
-    const uniqueId = window.location.pathname.split('/').pop();
-    if (token) {
-      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + `/cluster/${uniqueId}`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+useEffect(() => {
+  const token = getCookie('token');
+  if (!token) {
+    redirectToAuth();
+    return;
+  }
+  const uniqueId = window.location.pathname.split('/').pop();
+  if (typeof window !== 'undefined') {
+    fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + `/cluster/${uniqueId}`, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
         }
+        return response.json();
       })
-        .then((response) => {
-          if (!response.ok) {
-            throw new Error(response.statusText);
-          }
-          //console.log(response);
-          return response.json();
-        })
-        .then((data) => {
-          //console.log(data);
-          setNode(data.node);
-        })
-        .catch((error) => {
-          deleteCookie('token');
-          deleteCookie('username');
-          window.location.href = '/auth';
-          setError(error.message);
-        });
-    }
-  }, []);
+      .then((data) => {
+        setNode(data.node);
+      })
+      .catch((error) => {
+        deleteCookie('token');
+        deleteCookie('username');
+        redirectToAuth();
+        setError(error.message);
+      });
+  }
+}, []);
 
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;

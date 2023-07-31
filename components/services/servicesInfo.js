@@ -15,7 +15,7 @@ export default function Services() {
     }
     if (token) {
       fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/service', {
-      //fetch(`${address}/service`, {
+        //fetch(`${address}/service`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -126,50 +126,56 @@ export default function Services() {
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-gray-200">
-                  {services.map((service) => (
-                    <tr
-                      key={service.processSnapshot.pid}
-                      className="text-light-color"
-                    >
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
-                        {service.configuration.serviceId.taskName}
-                        {service.configuration.serviceId.nameSplitter}
-                        {service.configuration.serviceId.taskServiceId}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm">
-                        {Math.floor(service.processSnapshot.cpuUsage)}%
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm">
-                        {Math.floor(
-                          service.processSnapshot.heapUsageMemory / 1000000
-                        )}{' '}
-                        MB /{' '}
-                        {Math.floor(
-                          service.processSnapshot.maxHeapMemory / 1000000
-                        )}{' '}
-                        MB
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm">
-                        {service.configuration.processConfig.environment}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm">
-                        {service.properties.Version}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm">
-                        {service.properties.Online ? 'Online' : 'Offline'}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-sm">
-                        {`${service.configuration.staticService}`}
-                      </td>
-                      <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                        <Link
-                          href={`/services/${service.configuration.serviceId.taskName}${service.configuration.serviceId.nameSplitter}${service.configuration.serviceId.taskServiceId}`}
-                        >
-                          Edit
-                        </Link>
-                      </td>
-                    </tr>
-                  ))}
+                  {services
+                    .sort((a, b) =>
+                      a.configuration.serviceId.taskName.localeCompare(
+                        b.configuration.serviceId.taskName
+                      )
+                    )
+                    .map((service) => (
+                      <tr
+                        key={service.processSnapshot.pid}
+                        className="text-light-color"
+                      >
+                        <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
+                          {service.configuration.serviceId.taskName}
+                          {service.configuration.serviceId.nameSplitter}
+                          {service.configuration.serviceId.taskServiceId}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm">
+                          {Math.floor(service.processSnapshot.cpuUsage)}%
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm">
+                          {Math.floor(
+                            service.processSnapshot.heapUsageMemory / 1000000
+                          )}{' '}
+                          MB /{' '}
+                          {Math.floor(
+                            service.processSnapshot.maxHeapMemory / 1000000
+                          )}{' '}
+                          MB
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm">
+                          {service.configuration.processConfig.environment}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm">
+                          {service.properties.Version}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm">
+                          {service.properties.Online ? 'Online' : 'Offline'}
+                        </td>
+                        <td className="whitespace-nowrap px-3 py-4 text-sm">
+                          {`${service.configuration.staticService}`}
+                        </td>
+                        <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                          <Link
+                            href={`/services/${service.configuration.serviceId.taskName}${service.configuration.serviceId.nameSplitter}${service.configuration.serviceId.taskServiceId}`}
+                          >
+                            Edit
+                          </Link>
+                        </td>
+                      </tr>
+                    ))}
                 </tbody>
               </table>
             </div>

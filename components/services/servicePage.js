@@ -14,8 +14,7 @@ export default function Service() {
   const [editedFields, setEditedFields] = useState({});
   const uniqueId = window.location.pathname.split('/').pop();
 
-useEffect(() => {
-  const fetchData = () => {
+  useEffect(() => {
     const token = getCookie('token');
     if (!token) {
       window.location.href = '/auth';
@@ -33,25 +32,21 @@ useEffect(() => {
           if (!response.ok) {
             throw new Error(response.statusText);
           }
+          //console.log(response);
           return response.json();
         })
         .then((data) => {
+          console.log(data);
           setService(data.snapshot);
         })
         .catch((error) => {
-          deleteCookie('token');
-          deleteCookie('username');
-          window.location.href = '/auth';
+          //deleteCookie('token');
+          //deleteCookie('username');
+          //window.location.href = '/auth';
           setError(error.message);
         });
     }
-  };
-  fetchData();
-
-  const intervalId = setInterval(fetchData, 30000);
-
-  return () => clearInterval(intervalId);
-}, []);
+  }, []);
 
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -73,7 +68,7 @@ useEffect(() => {
     const uniqueId = window.location.pathname.split('/').pop();
     const { IP, Port } = connectionDetailsObj;
 
-    const updatedNode = {
+    const updatedService = {
       properties: {},
       uniqueId: `${uniqueId}`,
       listeners: [
@@ -90,25 +85,25 @@ useEffect(() => {
         Authorization: `Bearer ${token}`,
         'Content-Type': 'application/json'
       },
-      body: JSON.stringify(updatedNode)
+      body: JSON.stringify(updatedService)
     })
       .then((response) => {
         if (!response.ok) {
           throw new Error(response.statusText);
         }
-        console.log('response', response);
+        //console.log('response', response);
         return response.json();
       })
       .then((data) => {
         setService(data.service);
         window.location.reload();
-        console.log('data', data);
+        //console.log('data', data);
       })
       .catch((error) => {
         setError(error.message);
-        console.log('error', error);
+        //console.log('error', error);
       });
-    console.log('updatedNode', updatedNode);
+    //console.log('updatedService', updatedService);
   };
 
   const stats = [
@@ -117,17 +112,17 @@ useEffect(() => {
       name: 'Memory',
       icon: faMemory,
       canEdit: false,
-      value1: Math.floor(service?.processSnapshot?.heapUsageMemory / 100000),
-      value2: Math.floor(service?.processSnapshot?.maxHeapMemory / 1000000),
+      value1: service?.processSnapshot?.heapUsageMemory / 100000 || 0,
+      value2: 'node?.nodeInfoSnapshot && node?.nodeInfoSnapshot?.maxMemory',
       value1Name: 'Used Memory',
       value2Name: 'Max Memory'
     },
     {
       id: 2,
-      name: 'Task',
+      name: 'Amount of services',
       icon: faCoffee,
       canEdit: false,
-      value1: (service?.processSnapshot?.heapUsageMemory),
+      value1: 'node?.nodeInfoSnapshot?.currentServicesCount',
       value2: '',
       value1Name: 'Current Services Count',
       value2Name: ''
@@ -163,7 +158,6 @@ useEffect(() => {
       value2Name: 'Port'
     }
   ];
-
   console.log(stats.find((stat) => stat.name === 'Memory'));
 
   const connectionDetails = stats.find(

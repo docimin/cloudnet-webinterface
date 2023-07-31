@@ -1,4 +1,8 @@
-import NodePage from '@/components/nodes/nodePage';
+import dynamic from 'next/dynamic'
+
+const NodePage = dynamic(() => import('@/components/nodes/nodePage'), {
+  ssr: false,
+})
 
 export const runtime = 'edge';
 

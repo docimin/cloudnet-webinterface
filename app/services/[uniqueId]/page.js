@@ -1,4 +1,8 @@
-import ServicePage from '@/components/services/servicePage';
+import dynamic from 'next/dynamic'
+
+const ServicePage = dynamic(() => import('@/components/services/servicePage'), {
+  ssr: false,
+})
 
 export const runtime = 'edge';
 
