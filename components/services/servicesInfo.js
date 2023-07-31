@@ -161,9 +161,7 @@ export default function Services() {
                             service.processSnapshot.heapUsageMemory / 1000000
                           )}{' '}
                           MB /{' '}
-                          {Math.floor(
-                            service.processSnapshot.maxHeapMemory / 1000000
-                          )}{' '}
+                          {service?.configuration?.processConfig?.maxHeapMemorySize}{' '}
                           MB
                         </td>
                         <td className="whitespace-nowrap px-3 py-4 text-sm">
