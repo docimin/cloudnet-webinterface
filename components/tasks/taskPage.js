@@ -58,6 +58,58 @@ export default function Task() {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   };
 
+  const handleSave = () => {
+    const token = getCookie('token');
+    const address = getCookie('address');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
+
+    const domainurl = address.includes('localhost' || '127.0.0.1')
+    ? ''
+    : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
+
+    const uniqueId = window.location.pathname.split('/').pop();
+    const { IP, Port } = connectionDetailsObj;
+
+    const updatedNode = {
+      properties: {},
+      uniqueId: `${uniqueId}`,
+      listeners: [
+        {
+          host: editedFields.IP || IP,
+          port: editedFields.Port || Port
+        }
+      ]
+    };
+
+    fetch(`${domainurl}${address}/task`, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(updatedNode)
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        console.log('response', response);
+        return response.json();
+      })
+      .then((data) => {
+        setNode(data.node);
+        window.location.reload();
+        console.log('data', data);
+      })
+      .catch((error) => {
+        setError(error.message);
+        console.log('error', error);
+      });
+  };
+
   if (error) {
     return (
       <main className="flex flex-col items-center justify-between p-24">
