@@ -39,9 +39,10 @@ export default function Task() {
           setTask(data.task); // update the task state with the fetched data
         })
         .catch((error) => {
-          //deleteCookie('token');
-          //deleteCookie('username');
-          //window.location.href = '/auth';
+          deleteCookie('token');
+          deleteCookie('username');
+          deleteCookie('address');
+          window.location.href = '/auth';
           setError(error.message);
         });
     }

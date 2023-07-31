@@ -49,6 +49,7 @@ export default function Service() {
         .catch((error) => {
           deleteCookie('token');
           deleteCookie('username');
+          deleteCookie('address');
           window.location.href = '/auth';
           setError(error.message);
         });

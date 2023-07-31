@@ -47,7 +47,8 @@ export default function Node() {
         .catch((error) => {
           deleteCookie('token');
           deleteCookie('username');
-          redirectToAuth();
+          deleteCookie('address');
+          window.location.href = '/auth';
           setError(error.message);
         });
     }
