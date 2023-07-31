@@ -128,7 +128,7 @@ export default function RootLayout({ children }) {
                         <div className="flex h-16 shrink-0 items-center">
                           <img
                             className="h-8 w-auto"
-                            src="icon-256.png"
+                            src="logo.svg"
                             alt="image"
                           />
                         </div>
@@ -233,7 +233,7 @@ export default function RootLayout({ children }) {
               {/* Sidebar component, swap this element with another sidebar if you like */}
               <div className="flex grow flex-col gap-y-5 overflow-y-auto border-r border-gray-200 bg-gray-800 px-6">
                 <div className="flex h-16 shrink-0 items-center">
-                  <img className="h-8 w-auto" src="/icon-256.png" alt="image" />
+                  <img className="h-8 w-auto" src="/logo.svg" alt="image" />
                 </div>
                 {/*colorTheme === 'light' ? (
                   <SunIcon
@@ -324,7 +324,7 @@ export default function RootLayout({ children }) {
                         >
                           <img
                             className="h-8 w-8 rounded-full"
-                            src="/icon-256.png"
+                            src="/logo.svg"
                             alt=""
                           />
                           <span className="sr-only">Your profile</span>
