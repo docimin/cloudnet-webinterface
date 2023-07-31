@@ -21,6 +21,9 @@ export default function Auth() {
     } else if (address.includes('https://')) {
       newAddress = address.replace('https://', '');
     }
+    if (newAddress.includes('www.')) {
+      newAddress = newAddress.replace('www.', '');
+    }
     if (!newAddress.includes('/api/v2')) {
       newAddress += '/api/v2';
     }
