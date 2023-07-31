@@ -108,6 +108,12 @@ export default function Nodes() {
                   >
                     Static
                   </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold"
+                  >
+                    Maintenance
+                  </th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                     <span className="sr-only">Edit</span>
                   </th>
@@ -138,8 +144,11 @@ export default function Nodes() {
                       <td className="whitespace-nowrap px-3 py-4 text-light-color">
                         {task.staticServices ? 'Enabled' : 'Disabled'}
                       </td>
+                      <td className="whitespace-nowrap px-3 py-4 text-light-color">
+                        {task.maintenance ? 'Enabled' : 'Disabled'}
+                      </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                        <Link href={`/tasks/${task.name}`}>Edit</Link>
+                        <Link className="hover:text-blurple" href={`/tasks/${task.name}`}>Edit</Link>
                       </td>
                     </tr>
                   ))}

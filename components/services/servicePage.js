@@ -16,13 +16,23 @@ export default function Service() {
 
   useEffect(() => {
     const token = getCookie('token');
+    const address = getCookie('address');
     if (!token) {
       window.location.href = '/auth';
       return;
     }
     const uniqueId = window.location.pathname.split('/').pop();
     if (token) {
-      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + `/service/${uniqueId}`, {
+      //fetch(`process.env.NEXT_PUBLIC_DEV_PROXY_URL + /cluster/${uniqueId}`, {
+      const apiUrl = address.includes('/api/v2')
+        ? ''
+        : process.env.NEXT_PUBLIC_API_URL;
+
+      const domainurl = address.includes('localhost' || '127.0.0.1')
+        ? ''
+        : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
+
+      fetch(`${domainurl}${address}${apiUrl}/service/${uniqueId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -175,7 +185,13 @@ export default function Service() {
       <div className="relative border-b border-gray-200 pb-5 sm:pb-0">
         <div className="md:flex md:items-center md:justify-between">
           <h3 className="text-base font-semibold leading-6 text-white">
-            {uniqueId}
+            Service: <span className="text-blurple">{uniqueId}</span>
+            <p className="mt-2 text-sm text-white">
+              IP:{' '}
+              <span className="text-blurple">
+                {service?.address.host}:{service?.address.port}
+              </span>
+            </p>
           </h3>
           <div className="mt-3 flex md:absolute md:right-0 md:top-3 md:mt-0">
             <button

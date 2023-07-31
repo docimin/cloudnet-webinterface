@@ -8,13 +8,23 @@ export default function Task() {
 
   useEffect(() => {
     const token = getCookie('token');
-    const uniqueId = window.location.pathname.split('/').pop();
+    const address = getCookie('address');
     if (!token) {
       window.location.href = '/auth';
       return;
     }
+    const uniqueId = window.location.pathname.split('/').pop();
     if (token) {
-      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + `/task/${uniqueId}`, {
+      //fetch(`process.env.NEXT_PUBLIC_DEV_PROXY_URL + /cluster/${uniqueId}`, {
+      const apiUrl = address.includes('/api/v2')
+        ? ''
+        : process.env.NEXT_PUBLIC_API_URL;
+
+      const domainurl = address.includes('localhost' || '127.0.0.1')
+        ? ''
+        : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
+
+      fetch(`${domainurl}${address}${apiUrl}/task/${uniqueId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -63,13 +73,12 @@ export default function Task() {
       <div className="px-4 sm:px-6 lg:px-8">
         <div className="sm:flex sm:items-center">
           <div className="sm:flex-auto">
-            <h1 className="text-base font-semibold leading-6 text-gray-900">
-              Task name:{' '}
-              <span className="text-blurple">
-                {task.name}
-              </span>
+            <h1 className="text-base font-semibold leading-6 text-white">
+              Task name: <span className="text-blurple">{task.name}</span>
             </h1>
-            <p className="mt-2 text-sm text-gray-700">IP: test</p>
+            <p className="mt-2 text-sm text-white">
+              IP: <span className="text-blurple">test</span>
+            </p>
           </div>
         </div>
         <div className="mt-8 flow-root">

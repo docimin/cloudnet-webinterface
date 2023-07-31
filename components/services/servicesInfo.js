@@ -14,13 +14,24 @@ export default function Services() {
       return;
     }
     if (token) {
-      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/service', {
-        //fetch(`${address}/service`, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+      //fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/service', {
+      const apiUrl = address.includes('/api/v2')
+        ? ''
+        : process.env.NEXT_PUBLIC_API_URL;
+
+        const domainurl = address.includes('localhost' || '127.0.0.1')
+        ? ''
+        : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
+
+      fetch(
+        `${domainurl}${address}${apiUrl}/service`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         }
-      })
+      )
         .then((response) => {
           if (!response.ok) {
             throw new Error(response.statusText);
@@ -169,6 +180,7 @@ export default function Services() {
                         </td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                           <Link
+                            className="hover:text-blurple"
                             href={`/services/${service.configuration.serviceId.taskName}${service.configuration.serviceId.nameSplitter}${service.configuration.serviceId.taskServiceId}`}
                           >
                             Edit

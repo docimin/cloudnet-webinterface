@@ -14,37 +14,47 @@ export default function Node() {
   const [editedFields, setEditedFields] = useState({});
   const uniqueId = window.location.pathname.split('/').pop();
 
-useEffect(() => {
-  const token = getCookie('token');
-  if (!token) {
-    redirectToAuth();
-    return;
-  }
-  const uniqueId = window.location.pathname.split('/').pop();
-  if (typeof window !== 'undefined') {
-    fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + `/cluster/${uniqueId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
+  useEffect(() => {
+    const token = getCookie('token');
+    const address = getCookie('address');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
+    const uniqueId = window.location.pathname.split('/').pop();
+    if (token) {
+      //fetch(`process.env.NEXT_PUBLIC_DEV_PROXY_URL + /cluster/${uniqueId}`, {
+      const apiUrl = address.includes('/api/v2')
+        ? ''
+        : process.env.NEXT_PUBLIC_API_URL;
+
+      const domainurl = address.includes('localhost' || '127.0.0.1')
+        ? ''
+        : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
+
+      fetch(`${domainurl}${address}${apiUrl}/cluster/${uniqueId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
-        return response.json();
       })
-      .then((data) => {
-        setNode(data.node);
-      })
-      .catch((error) => {
-        deleteCookie('token');
-        deleteCookie('username');
-        redirectToAuth();
-        setError(error.message);
-      });
-  }
-}, []);
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+          return response.json();
+        })
+        .then((data) => {
+          setNode(data.node);
+        })
+        .catch((error) => {
+          deleteCookie('token');
+          deleteCookie('username');
+          redirectToAuth();
+          setError(error.message);
+        });
+    }
+  }, []);
 
   const getCookie = (name) => {
     const value = `; ${document.cookie}`;
@@ -110,8 +120,7 @@ useEffect(() => {
       name: 'Memory',
       icon: faMemory,
       canEdit: false,
-      value1:
-        (node?.nodeInfoSnapshot && node?.nodeInfoSnapshot?.usedMemory),
+      value1: node?.nodeInfoSnapshot && node?.nodeInfoSnapshot?.usedMemory,
       value2: node?.nodeInfoSnapshot && node?.nodeInfoSnapshot?.maxMemory,
       value1Name: 'Used Memory',
       value2Name: 'Max Memory'

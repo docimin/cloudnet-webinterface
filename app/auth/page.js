@@ -17,8 +17,8 @@ const handleSubmit = async (event) => {
   event.preventDefault();
   try {
     const response = await fetch(
-    process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/auth', {
-    //`${address}/auth`, {
+    //process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/auth', {
+    `https://cors.fayevr.dev/${address}/api/v2/auth`, {
       method: 'POST',
       headers: {
         Authorization: `Basic ${btoa(`${username}:${password}`)}`,
@@ -33,7 +33,7 @@ const handleSubmit = async (event) => {
       const expirationTime = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 hours from now
       document.cookie = `token=${data.token}; path=/; expires=${expirationTime}`;
       document.cookie = `username=${username}; path=/; expires=${expirationTime}`;
-      //document.cookie = `address=${address}; path=/; expires=${expirationTime}`;
+      document.cookie = `address=${address}; path=/; expires=${expirationTime}`;
       setToken(data.token);
       setLoggedIn(true);
       window.location.reload();

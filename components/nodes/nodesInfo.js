@@ -8,12 +8,23 @@ export default function Nodes() {
 
   useEffect(() => {
     const token = getCookie('token');
+    const address = getCookie('address');
     if (!token) {
       window.location.href = '/auth';
       return;
     }
     if (token) {
-      fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/cluster', {
+      //fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/service', {
+      const apiUrl = address.includes('/api/v2')
+        ? ''
+        : process.env.NEXT_PUBLIC_API_URL;
+
+        const domainurl = address.includes('localhost' || '127.0.0.1')
+        ? ''
+        : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
+
+      fetch(
+        `${domainurl}${address}${apiUrl}/cluster`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -127,7 +138,7 @@ export default function Nodes() {
                       { (node.nodeInfoSnapshot && node.nodeInfoSnapshot.version.versionType) || 0}
                     </td>
                     <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                      <Link href={`/nodes/${node.node.uniqueId}`}>Edit</Link>
+                      <Link className="hover:text-blurple" href={`/nodes/${node.node.uniqueId}`}>Edit</Link>
                     </td>
                   </tr>
                 ))}
