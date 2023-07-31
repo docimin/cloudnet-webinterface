@@ -8,40 +8,52 @@ export default function Auth() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [error, setError] = useState('');
   const [token, setToken] = useState('');
+  const [modifiedAddress, setModifiedAddress] = useState('');
 
   useEffect(() => {
     setToken(document.cookie.includes('token'));
   }, []);
 
-const handleSubmit = async (event) => {
-  event.preventDefault();
-  try {
-    const response = await fetch(
-    //process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/auth', {
-    `https://cors.fayevr.dev/${address}/api/v2/auth`, {
-      method: 'POST',
-      headers: {
-        Authorization: `Basic ${btoa(`${username}:${password}`)}`,
-        'Content-Type': 'application/json'
-      }
-    });
-    const data = await response.json();
-    console.log(data);
-    if (data.token === undefined) {
-      setError('Invalid username or password');
-    } else {
-      const expirationTime = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 hours from now
-      document.cookie = `token=${data.token}; path=/; expires=${expirationTime}`;
-      document.cookie = `username=${username}; path=/; expires=${expirationTime}`;
-      document.cookie = `address=${address}; path=/; expires=${expirationTime}`;
-      setToken(data.token);
-      setLoggedIn(true);
-      window.location.reload();
+  useEffect(() => {
+    let newAddress = address;
+    if (address.includes('http://')) {
+      newAddress = address.replace('http://', '');
+    } else if (address.includes('https://')) {
+      newAddress = address.replace('https://', '');
     }
-  } catch (error) {
-    console.error(error);
-  }
-};
+    setModifiedAddress(newAddress);
+  }, [address]);
+
+  const handleSubmit = async (event) => {
+    event.preventDefault();
+    try {
+      const response = await fetch(
+        `https://cors.fayevr.dev/${modifiedAddress}/api/v2/auth`,
+        {
+          method: 'POST',
+          headers: {
+            Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+      const data = await response.json();
+      console.log(data);
+      if (data.token === undefined) {
+        setError('Invalid username or password');
+      } else {
+        const expirationTime = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 hours from now
+        document.cookie = `token=${data.token}; path=/; expires=${expirationTime}`;
+        document.cookie = `username=${username}; path=/; expires=${expirationTime}`;
+        document.cookie = `address=${modifiedAddress}; path=/; expires=${expirationTime}`;
+        setToken(data.token);
+        setLoggedIn(true);
+        window.location.reload();
+      }
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   if (token) {
     return (
@@ -69,7 +81,7 @@ const handleSubmit = async (event) => {
 
           <div className="mt-10 sm:mx-auto sm:w-full sm:max-w-sm">
             <form className="space-y-6" onSubmit={handleSubmit}>
-            <div>
+              <div>
                 <label
                   htmlFor="email"
                   className="block text-sm font-medium leading-6 text-light-color"
