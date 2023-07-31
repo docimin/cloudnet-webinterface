@@ -66,10 +66,15 @@ export default function Node() {
 
   const handleSave = () => {
     const token = getCookie('token');
+    const address = getCookie('address');
     if (!token) {
       window.location.href = '/auth';
       return;
     }
+
+    const domainurl = address.includes('localhost' || '127.0.0.1')
+    ? ''
+    : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
 
     const uniqueId = window.location.pathname.split('/').pop();
     const { IP, Port } = connectionDetailsObj;
@@ -85,7 +90,7 @@ export default function Node() {
       ]
     };
 
-    fetch(`${process.env.NEXT_PUBLIC_DEV_PROXY_URL}/cluster`, {
+    fetch(`${domainurl}${address}/cluster`, {
       method: 'PUT',
       headers: {
         Authorization: `Bearer ${token}`,
@@ -97,17 +102,17 @@ export default function Node() {
         if (!response.ok) {
           throw new Error(response.statusText);
         }
-        //console.log('response', response);
+        console.log('response', response);
         return response.json();
       })
       .then((data) => {
         setNode(data.node);
         window.location.reload();
-        //console.log('data', data);
+        console.log('data', data);
       })
       .catch((error) => {
         setError(error.message);
-        //console.log('error', error);
+        console.log('error', error);
       });
   };
 
