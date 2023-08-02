@@ -19,22 +19,19 @@ export default function TemplateList() {
     const name = pathParts[4];
 
     if (token) {
-      const address = router.asPath.replace(
-        `/templates/${uniqueId}/${prefix}/${name}`,
-        ''
-      );
       const domainurl = address.includes('localhost' || '127.0.0.1')
         ? ''
         : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
-      const directory = address.replace(/^\//, '');
-      const queryString = directory ? `?directory=${directory}` : '';
-      const url = `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/directory/list?deep=true${queryString}`;
-      fetch(url, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json'
+
+      fetch(
+        `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/directory/list?deep=true`,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json'
+          }
         }
-      })
+      )
         .then((response) => {
           if (!response.ok) {
             throw new Error(response.statusText);
@@ -124,6 +121,8 @@ export default function TemplateList() {
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
                         {files.directory
                           ? ''
+                          : files.size < 1000000
+                          ? `${(files.size / 1000).toFixed(2)} KB`
                           : `${(files.size / 1000000).toFixed(2)} MB`}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
@@ -131,11 +130,7 @@ export default function TemplateList() {
                           className="hover:text-blurple pr-4"
                           href={`/templates/${uniqueId}/${prefix}/${name}/${files.path}`}
                         >
-                          {files.directory
-                            ? 'Open'
-                            : /\.(txt|json|yml|properties)$/.test(files.name)
-                            ? 'Edit'
-                            : ''}
+                          {files.directory ? 'Open' : 'Edit'}
                         </Link>
                       </td>
                     </tr>

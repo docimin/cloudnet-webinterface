@@ -73,8 +73,8 @@ export default function Node() {
     }
 
     const domainurl = address.includes('localhost' || '127.0.0.1')
-    ? ''
-    : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
+      ? ''
+      : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
 
     const uniqueId = window.location.pathname.split('/').pop();
     const { IP, Port } = connectionDetailsObj;
@@ -100,6 +100,9 @@ export default function Node() {
     })
       .then((response) => {
         if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('Cannot edit master node');
+          }
           throw new Error(response.statusText);
         }
         console.log('response', response);
@@ -108,11 +111,11 @@ export default function Node() {
       .then((data) => {
         setNode(data.node);
         window.location.reload();
-        console.log('data', data);
+        //console.log('data', data);
       })
       .catch((error) => {
         setError(error.message);
-        console.log('error', error);
+        //console.log('error', error);
       });
   };
 
@@ -187,6 +190,7 @@ export default function Node() {
             {uniqueId}
           </h3>
           <div className="mt-3 flex md:absolute md:right-0 md:top-3 md:mt-0">
+            {error && <span className="text-red-500 pt-1.5">{error}</span>}
             <button
               type="button"
               className="ml-3 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
