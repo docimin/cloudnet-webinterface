@@ -19,7 +19,6 @@ import Head from 'next/head';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon, current: false },
-  { name: 'Auth', href: '/auth', icon: UsersIcon, current: false },
   { name: 'Nodes', href: '/nodes', icon: ServerStackIcon, current: false },
   { name: 'Tasks', href: '/tasks', icon: CalendarIcon, current: false },
   {

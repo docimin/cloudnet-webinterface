@@ -54,7 +54,7 @@ export default function Auth() {
         document.cookie = `address=${modifiedAddress}; path=/; expires=${expirationTime}`;
         setToken(data.token);
         setLoggedIn(true);
-        window.location.reload();
+        window.location.href = '/';
       }
     } catch (error) {
       console.error(error);
