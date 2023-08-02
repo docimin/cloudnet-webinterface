@@ -19,19 +19,22 @@ export default function TemplateList() {
     const name = pathParts[4];
 
     if (token) {
+      const address = router.asPath.replace(
+        `/templates/${uniqueId}/${prefix}/${name}`,
+        ''
+      );
       const domainurl = address.includes('localhost' || '127.0.0.1')
         ? ''
         : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
-
-      fetch(
-        `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/directory/list?deep=true`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+      const directory = address.replace(/^\//, '');
+      const queryString = directory ? `?directory=${directory}` : '';
+      const url = `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/directory/list?deep=true${queryString}`;
+      fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
-      )
+      })
         .then((response) => {
           if (!response.ok) {
             throw new Error(response.statusText);
@@ -128,7 +131,11 @@ export default function TemplateList() {
                           className="hover:text-blurple pr-4"
                           href={`/templates/${uniqueId}/${prefix}/${name}/${files.path}`}
                         >
-                          {files.directory ? 'Open' : 'Edit'}
+                          {files.directory
+                            ? 'Open'
+                            : /\.(txt|json|yml|properties)$/.test(files.name)
+                            ? 'Edit'
+                            : ''}
                         </Link>
                       </td>
                     </tr>
