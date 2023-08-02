@@ -42,10 +42,10 @@ export default function TemplateList() {
           setTemplateBrowser(data.files);
         })
         .catch((error) => {
-          //deleteCookie('token');
-          //deleteCookie('username');
-          //deleteCookie('address');
-          //window.location.href = '/auth';
+          deleteCookie('token');
+          deleteCookie('username');
+          deleteCookie('address');
+          window.location.href = '/auth';
           setError(error.message);
         });
     }

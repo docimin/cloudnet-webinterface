@@ -117,65 +117,15 @@ export default function Task() {
   const stats = [
     {
       id: 1,
-      name: 'Memory',
+      name: 'Templates',
       icon: faMemory,
       canEdit: false,
       value1: task?.templates?.[0]?.prefix,
       value2: "node?.nodeInfoSnapshot && node?.nodeInfoSnapshot?.maxMemory",
       value1Name: 'Used Memory',
       value2Name: 'Max Memory'
-    },
-    {
-      id: 2,
-      name: 'Amount of services',
-      icon: faCoffee,
-      canEdit: false,
-      value1: "node?.nodeInfoSnapshot?.currentServicesCount",
-      value2: '',
-      value1Name: 'Current Services Count',
-      value2Name: ''
-    },
-    {
-      id: 3,
-      name: 'Drain Status',
-      icon: faCircleExclamation,
-      canEdit: false,
-      value1: "node?.nodeInfoSnapshot?.drain ? 'Draining' : 'Not Draining'",
-      value2: '',
-      value1Name: 'Drain status',
-      value2Name: ''
-    },
-    {
-      id: 4,
-      name: 'Version',
-      icon: faCodeBranch,
-      canEdit: false,
-      value1: "node?.nodeInfoSnapshot?.version?.major",
-      value2: "node?.nodeInfoSnapshot?.version?.versionType",
-      value1Name: 'Major version',
-      value2Name: 'Type'
-    },
-    {
-      id: 5,
-      name: 'Connection details',
-      icon: faCodeBranch,
-      canEdit: true,
-      value1: "node?.node?.listeners?.[0].host",
-      value2: "node?.node?.listeners?.[0].port",
-      value1Name: 'IP',
-      value2Name: 'Port'
     }
   ];
-
-  const connectionDetails = stats.find(
-    (stat) => stat.name === 'Connection details'
-  );
-  const connectionDetailsObj = {
-    IP: connectionDetails.value1,
-    Port: connectionDetails.value2
-  };
-
-  const tabs = [{ name: 'Configuration', href: '#', current: false }];
 
   return (
     <div>
@@ -204,22 +154,6 @@ export default function Task() {
               name="current-tab"
               className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
             ></select>
-          </div>
-          <div className="hidden sm:block">
-            <nav className="-mb-px flex space-x-8">
-              {tabs.map((tab) => (
-                <a
-                  key={tab.name}
-                  href={tab.href}
-                  className={
-                    'text-white hover:border-indigo-500 whitespace-nowrap border-b-2 px-1 pb-4 text-sm font-medium'
-                  }
-                  aria-current={tab.current ? 'page' : undefined}
-                >
-                  <span className="">{tab.name}</span>
-                </a>
-              ))}
-            </nav>
           </div>
         </div>
       </div>

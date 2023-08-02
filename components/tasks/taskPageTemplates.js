@@ -13,13 +13,16 @@ export default function Nodes() {
       window.location.href = '/auth';
       return;
     }
+
+    const pathParts = window.location.pathname.split('/');
+    const uniqueId = pathParts[2];
+
     if (token) {
-        const domainurl = address.includes('localhost' || '127.0.0.1')
+      const domainurl = address.includes('localhost' || '127.0.0.1')
         ? ''
         : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
 
-      fetch(
-        `${domainurl}${address}/task`, {
+      fetch(`${domainurl}${address}/task/${uniqueId}`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -32,12 +35,12 @@ export default function Nodes() {
           //console.log(response);
           return response.json();
         })
-        .then((data) => setTasks(data.tasks))
+        .then((data) => setTasks([data.task]))
         .catch((error) => {
-          deleteCookie('token');
-          deleteCookie('username');
-          deleteCookie('address');
-          window.location.href = '/auth';
+          //deleteCookie('token');
+          //deleteCookie('username');
+          //deleteCookie('address');
+          //window.location.href = '/auth';
           setError(error.message);
         });
     }
@@ -66,10 +69,10 @@ export default function Nodes() {
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-light-color">
-            Tasks
+            Task templates
           </h1>
           <p className="mt-2 text-sm text-light-color">
-            A list of all the tasks and their info about them.
+            A list of all the templates in the task.
           </p>
         </div>
       </div>
@@ -83,43 +86,31 @@ export default function Nodes() {
                     scope="col"
                     className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold sm:pl-0"
                   >
-                    ID
+                    Storage location
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold"
                   >
-                    Splitter
+                    Prefix
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold"
                   >
-                    Smart
+                    Name
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold"
                   >
-                    Min. Count
+                    Priority
                   </th>
                   <th
                     scope="col"
                     className="px-3 py-3.5 text-left text-sm font-semibold"
                   >
-                    Start port
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold"
-                  >
-                    Static
-                  </th>
-                  <th
-                    scope="col"
-                    className="px-3 py-3.5 text-left text-sm font-semibold"
-                  >
-                    Maintenance
+                    Copy to Static Services
                   </th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                     <span className="sr-only">Edit</span>
@@ -130,32 +121,31 @@ export default function Nodes() {
                 {tasks
                   .sort((a, b) => a.name.localeCompare(b.name))
                   .map((task) => (
-                    <tr key={task.name}>
+                    <tr key={`${task.templates.mg}-${task.templates.name}`}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-light-color sm:pl-0">
-                        {task.name}
+                        {task.templates[0].storage}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
-                        {task.nameSplitter}
+                        {task.templates[0].prefix}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
-                        {task.properties.smartConfig.enabled
-                          ? 'Enabled'
-                          : 'Disabled'}
+                        {task.templates[0].name}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
-                        {task.minServiceCount}
+                        {task.templates[0].priority}
                       </td>
                       <td className="whitespace-nowrap px-3 py-4 text-sm text-light-color">
-                        {task.startPort}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-light-color">
-                        {task.staticServices ? 'Enabled' : 'Disabled'}
-                      </td>
-                      <td className="whitespace-nowrap px-3 py-4 text-light-color">
-                        {task.maintenance ? 'Enabled' : 'Disabled'}
+                        {task.templates[0].alwaysCopyToStaticServices
+                          ? 'True'
+                          : 'False'}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
-                        <Link className="hover:text-blurple" href={`/tasks/${task.name}`}>Edit</Link>
+                        <Link
+                          className="hover:text-blurple"
+                          href={`/tasks/${task.name}`}
+                        >
+                          Edit
+                        </Link>
                       </td>
                     </tr>
                   ))}
