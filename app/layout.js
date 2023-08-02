@@ -137,25 +137,6 @@ export default function RootLayout({ children }) {
                             alt="image"
                           />
                         </div>
-                        {/*colorTheme === 'light' ? (
-                          <SunIcon
-                            onClick={() => setTheme('light')}
-                            className="h-6 w-6 text-white"
-                            aria-hidden="true"
-                          />
-                        ) : colorTheme === 'dark' ? (
-                          <MoonIcon
-                            onClick={() => setTheme('dark')}
-                            className="h-6 w-6 text-black"
-                            aria-hidden="true"
-                          />
-                        ) : (
-                          <MoonIcon
-                            onClick={() => setTheme('dark')}
-                            className="h-6 w-6 text-black"
-                            aria-hidden="true"
-                          />
-                        )*/}
 
                         <nav className="flex flex-1 flex-col">
                           <ul
@@ -240,25 +221,6 @@ export default function RootLayout({ children }) {
                 <div className="flex h-16 shrink-0 items-center">
                   <img className="h-8 w-auto" src="/logo.svg" alt="image" />
                 </div>
-                {/*colorTheme === 'light' ? (
-                  <SunIcon
-                    onClick={() => setTheme('light')}
-                    className="h-6 w-6 text-white"
-                    aria-hidden="true"
-                  />
-                ) : colorTheme === 'dark' ? (
-                  <MoonIcon
-                    onClick={() => setTheme('dark')}
-                    className="h-6 w-6 text-black"
-                    aria-hidden="true"
-                  />
-                ) : (
-                  <MoonIcon
-                    onClick={() => setTheme('dark')}
-                    className="h-6 w-6 text-black"
-                    aria-hidden="true"
-                  />
-                )*/}
                 <nav className="flex flex-1 flex-col">
                   <ul role="list" className="flex flex-1 flex-col gap-y-7">
                     <li>
