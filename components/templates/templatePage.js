@@ -88,19 +88,13 @@ export default function TemplateList() {
                     scope="col"
                     className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold sm:pl-0"
                   >
-                    Prefix
-                  </th>
-                  <th
-                    scope="col"
-                    className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold sm:pl-0"
-                  >
                     Name
                   </th>
                   <th
                     scope="col"
                     className="py-3.5 pl-4 pr-3 text-left text-sm font-semibold sm:pl-0"
                   >
-                    Copy to Static Services
+                    Size
                   </th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                     <span className="sr-only">Edit</span>
@@ -108,25 +102,33 @@ export default function TemplateList() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 text-light-color">
-                {templateBrowser.map((files) => (
+                {templateBrowser
+                  .filter((files) => !files.path.includes('/'))
+                  .sort((a, b) => {
+                    if (a.directory && !b.directory) {
+                      return -1;
+                    } else if (!a.directory && b.directory) {
+                      return 1;
+                    } else {
+                      return a.name.localeCompare(b.name);
+                    }
+                  })
+                  .map((files) => (
                     <tr key={`${files.name}`}>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
                         {files.name}
                       </td>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
-                        {files.name}
-                      </td>
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
-                        {files.alwaysCopyToStaticServices
-                          ? 'True'
-                          : 'False'}{' '}
+                        {files.directory
+                          ? ''
+                          : `${(files.size / 1000000).toFixed(2)} MB`}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                         <Link
                           className="hover:text-blurple pr-4"
                           href={`/templates/${uniqueId}/${prefix}/${name}/${files.path}`}
                         >
-                          Edit
+                          {files.directory ? 'Open' : 'Edit'}
                         </Link>
                       </td>
                     </tr>
