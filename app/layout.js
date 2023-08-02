@@ -8,14 +8,12 @@ import {
   DocumentDuplicateIcon,
   FolderIcon,
   HomeIcon,
-  UsersIcon,
   XMarkIcon,
   UserCircleIcon,
-  ServerStackIcon
+  ServerStackIcon,
+  ServerIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
-import Head from 'next/head';
-//import useDarkMode from '@/components/useDarkMode';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon, current: false },
@@ -31,6 +29,12 @@ const navigation = [
     name: 'Groups',
     href: '/groups',
     icon: FolderIcon,
+    current: false
+  },
+  {
+    name: 'Templates',
+    href: '/templates',
+    icon: ServerIcon,
     current: false
   }
 ];
@@ -56,7 +60,6 @@ function classNames(...classes) {
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [username, setUsername] = useState('');
-  //const [colorTheme, setTheme] = useDarkMode();
 
   useEffect(() => {
     setUsername(getCookie('username'));
@@ -65,13 +68,6 @@ export default function RootLayout({ children }) {
 
   return (
     <html className="h-full" lang="en" suppressHydrationWarning>
-      <Head>
-        <title>CloudNet Dashboard</title>
-        <meta name="description" content="Some description" />
-        <meta name="color-scheme" content="dark light" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <meta name="robots" content="index, follow" />
-      </Head>
       <body className="h-full bg-gray-800">
         <>
           <div>

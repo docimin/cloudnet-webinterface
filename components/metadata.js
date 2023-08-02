@@ -1,4 +1,4 @@
-export const metadata = {
+export default metadata = {
   title: 'Webinterface',
   description: 'Webinterface for CloudNet',
   url: 'https://fayevr.dev',
@@ -17,5 +17,3 @@ export const metadata = {
   ],
   theme: '#ff4f00'
 };
-
-export default metadata;
