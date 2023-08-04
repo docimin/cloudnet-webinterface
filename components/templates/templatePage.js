@@ -2,7 +2,11 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
+import {
+  faArrowLeft,
+  faFolder,
+  faFileAlt
+} from '@fortawesome/free-solid-svg-icons';
 
 export default function TemplateList() {
   const [templateBrowser, setTemplateBrowser] = useState([]);
@@ -19,8 +23,10 @@ export default function TemplateList() {
     const uniqueId = pathParts[2];
     const prefix = pathParts[3];
     const name = pathParts[4];
-    const querystring = pathParts[5];
-    console.log(querystring);
+    const querystring =
+      pathParts.length > 5 && !/\.\w+$/.test(pathParts[5])
+        ? pathParts.slice(5).join('/')
+        : '';
 
     if (token) {
       const domainurl = address.includes('localhost' || '127.0.0.1')
@@ -32,6 +38,8 @@ export default function TemplateList() {
       if (querystring) {
         url += `&directory=${querystring}`;
       }
+
+      console.log(`URL: ${url}`);
 
       fetch(url, {
         headers: {
@@ -72,7 +80,21 @@ export default function TemplateList() {
   const uniqueId = pathParts[2];
   const prefix = pathParts[3];
   const name = pathParts[4];
-  const querystring = pathParts[5];
+  const querystring =
+    pathParts.length > 5 && !/\.\w+$/.test(pathParts[pathParts.length - 1])
+      ? pathParts.slice(5).join('/')
+      : '';
+
+  console.log(`Query String: ${querystring}`);
+
+  function formatBytes(bytes, decimals = 2) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const dm = decimals < 0 ? 0 : decimals;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
+  }
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
@@ -119,7 +141,27 @@ export default function TemplateList() {
               </thead>
               <tbody className="divide-y divide-gray-200 text-light-color">
                 {templateBrowser
-                  .filter((files) => !files.path.includes('/'))
+                  .filter((files) => {
+                    // Get the path segments of the current directory
+                    const currentPathSegments = querystring
+                      .split('/')
+                      .filter(Boolean);
+                    // Get the path segments of the file
+                    const fileSegments = files.path.split('/').filter(Boolean);
+                    // Check if the file is directly under the current directory
+                    return (
+                      fileSegments.length === currentPathSegments.length + 1
+                    );
+                  })
+                  .sort((a, b) => {
+                    if (a.directory && !b.directory) {
+                      return -1;
+                    } else if (!a.directory && b.directory) {
+                      return 1;
+                    } else {
+                      return a.name.localeCompare(b.name);
+                    }
+                  })
                   .sort((a, b) => {
                     if (a.directory && !b.directory) {
                       return -1;
@@ -131,20 +173,27 @@ export default function TemplateList() {
                   })
                   .map((files) => (
                     <tr key={`${files.name}`}>
-                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
-                        {files.name}
+                      <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0 flex items-center">
+                        <FontAwesomeIcon
+                          icon={files.directory ? faFolder : faFileAlt}
+                          className="mr-2 h-5 w-5"
+                        />
+                        <span className="h-5">{files.name}</span>
                       </td>
                       <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
-                        {files.directory
-                          ? ''
-                          : files.size < 1000000
-                          ? `${(files.size / 1000).toFixed(2)} KB`
-                          : `${(files.size / 1000000).toFixed(2)} MB`}
+                        {files.directory ? '-' : formatBytes(files.size)}
                       </td>
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                         <Link
                           className="hover:text-blurple pr-4"
-                          href={`/templates/${uniqueId}/${prefix}/${name}/${files.path}`}
+                          href={[
+                            '/templates',
+                            uniqueId,
+                            prefix,
+                            name,
+                            querystring,
+                            files.path
+                          ].join('/')}
                         >
                           {files.directory ? 'Open' : 'Edit'}
                         </Link>
