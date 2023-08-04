@@ -16,6 +16,7 @@ export default function Auth() {
 
   useEffect(() => {
     let newAddress = address;
+    newAddress = newAddress.replace(/\/$/, '').trim();
     if (address.includes('http://')) {
       newAddress = address.replace('http://', '');
     } else if (address.includes('https://')) {
