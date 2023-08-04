@@ -177,7 +177,10 @@ export default function Service() {
 
 
 
-  const tabs = [{ name: 'Configuration', href: '#', current: false }];
+  const tabs = [
+    { name: 'Configuration', href: '#', current: false },
+    { name: 'Console', href: `${uniqueId}/console`, current: false }
+  ];
 
   return (
     <div>

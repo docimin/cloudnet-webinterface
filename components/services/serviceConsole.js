@@ -1,44 +1,42 @@
 'use client';
 import { useEffect } from 'react';
 import io from 'socket.io-client';
+import Link from 'next/link';
 
 const WebSocketClient = ({ onDataReceived, token }) => {
   useEffect(() => {
     const token = getCookie('token');
-    const uniqueId = window.location.pathname.split('/').pop();
+    const pathParts = window.location.pathname.split('/');
+    const uniqueId = pathParts[2];
     if (!token) {
       window.location.href = '/auth';
       return;
     }
     if (token) {
-      const socket = io(
-        'ws://i-am-waiting-for-cors:2812/api/v2/service/test-1/liveLog',
-        {
-          extraHeaders: {
-            Authorization: `Bearer ${token}`
-          }
-        }
+      const socket = new WebSocket(
+        'wss://proxy-api.fayevr.dev/api/v2/service/lobby-1/liveLog',
+        token
       );
 
-      socket.on('connect', () => {
+      socket.addEventListener('open', (event) => {
         console.log('WebSocket connected');
       });
 
-      socket.on('data', (data) => {
-        console.log('Received data:', data);
-        onDataReceived(data);
+      socket.addEventListener('message', (event) => {
+        console.log('Received data:', event.data);
+        onDataReceived(event.data);
       });
 
-      socket.on('disconnect', (reason) => {
-        console.log('WebSocket disconnected:', reason);
+      socket.addEventListener('close', (event) => {
+        console.log('WebSocket disconnected:', event.reason);
       });
 
-      socket.on('error', (error) => {
-        console.error('WebSocket error:', error);
+      socket.addEventListener('error', (event) => {
+        console.error('WebSocket error:', event);
       });
 
       return () => {
-        socket.disconnect();
+        socket.close();
       };
     }
   }, [onDataReceived, token]);
@@ -49,44 +47,52 @@ const WebSocketClient = ({ onDataReceived, token }) => {
     if (parts.length === 2) return parts.pop().split(';').shift();
   };
 
+  const pathParts = window.location.pathname.split('/');
+  const uniqueId = pathParts[2];
+
+  const tabs = [
+    { name: 'Configuration', href: '#', current: false },
+    { name: 'Console', href: `${uniqueId}/console`, current: false }
+  ];
+
   return (
-    <main>
-      <div className="relative border-b border-gray-200 pb-5 sm:pb-0">
-        <div className="md:flex md:items-center md:justify-between">
-          <h3 className="text-base font-semibold leading-6 text-gray-900">
-            Console
-          </h3>
-          <div className="mt-3 flex md:absolute md:right-0 md:top-3 md:mt-0">
-            <button
-              type="button"
-              className="ml-3 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick="{handleSave}"
-            >
-              Save
-            </button>
-          </div>
+    <div className="px-4 sm:px-6 lg:px-8">
+      <div className="mt-4">
+        <div className="sm:hidden">
+          <label htmlFor="current-tab" className="sr-only">
+            Select a tab
+          </label>
+          <select
+            id="current-tab"
+            name="current-tab"
+            className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
+          ></select>
         </div>
-        <div className="mt-4">
-          <div className="sm:hidden">
-            <label htmlFor="current-tab" className="sr-only">
-              Select a tab
-            </label>
-            <select
-              id="current-tab"
-              name="current-tab"
-              className="block w-full rounded-md border-0 py-1.5 pl-3 pr-10 ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600"
-            ></select>
-          </div>
+        <div className="hidden sm:block pb-2">
+          <nav className="-mb-px flex space-x-8">
+            {tabs.map((tab) => (
+              <Link key={tab.name} href={tab.href}>
+                <button
+                  key={tab.name}
+                  className={
+                    'text-white hover:border-indigo-500 whitespace-nowrap px-1 text-sm font-medium'
+                  }
+                  aria-current={tab.current ? 'page' : undefined}
+                >
+                  <span className="">{tab.name}</span>
+                </button>
+              </Link>
+            ))}
+          </nav>
         </div>
       </div>
-      <div className="divide-y divide-gray-200 overflow-hidden rounded-lg bg-gray-800 shadow">
+      <div className="divide-y divide-gray-200 overflow-hidden rounded-lg border shadow">
         <div className="px-4 py-5 sm:px-6 min-h-[600px]">
-          {/* Content goes here */}
-          {/* We use less vertical padding on card headers on desktop than on body sections */}
+          <span className="text-white">Test</span>
         </div>
         <div className="px-4 py-5 sm:p-6">{/* Content goes here */}</div>
       </div>
-    </main>
+    </div>
   );
 };
 
