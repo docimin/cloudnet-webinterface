@@ -23,10 +23,13 @@ export default function TemplateList() {
     const uniqueId = pathParts[2];
     const prefix = pathParts[3];
     const name = pathParts[4];
+    const lastPart = pathParts[pathParts.length - 1];
     const querystring =
-      pathParts.length > 5 && !/\.\w+$/.test(pathParts[5])
+      pathParts.length > 5 && !/\.\w+$/.test(lastPart)
         ? pathParts.slice(5).join('/')
-        : '';
+        : pathParts.slice(5, -1).join('/');
+
+    console.log(`Query String: ${querystring}`);
 
     if (token) {
       const domainurl = address.includes('localhost' || '127.0.0.1')
@@ -76,17 +79,6 @@ export default function TemplateList() {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   };
 
-  const pathParts = window.location.pathname.split('/');
-  const uniqueId = pathParts[2];
-  const prefix = pathParts[3];
-  const name = pathParts[4];
-  const querystring =
-    pathParts.length > 5 && !/\.\w+$/.test(pathParts[pathParts.length - 1])
-      ? pathParts.slice(5).join('/')
-      : '';
-
-  console.log(`Query String: ${querystring}`);
-
   function formatBytes(bytes, decimals = 2) {
     if (bytes === 0) return '0 Bytes';
     const k = 1024;
@@ -95,6 +87,18 @@ export default function TemplateList() {
     const i = Math.floor(Math.log(bytes) / Math.log(k));
     return parseFloat((bytes / Math.pow(k, i)).toFixed(dm)) + ' ' + sizes[i];
   }
+
+  const pathParts = window.location.pathname.split('/');
+  const uniqueId = pathParts[2];
+  const prefix = pathParts[3];
+  const name = pathParts[4];
+  const lastPart = pathParts[pathParts.length - 1];
+  const querystring =
+    pathParts.length > 5 && !/\.\w+$/.test(lastPart)
+      ? pathParts.slice(5).join('/')
+      : pathParts.slice(5, -1).join('/');
+
+  console.log(`Query String: ${querystring}`);
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
@@ -186,14 +190,10 @@ export default function TemplateList() {
                       <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                         <Link
                           className="hover:text-blurple pr-4"
-                          href={[
-                            '/templates',
-                            uniqueId,
-                            prefix,
-                            name,
-                            querystring,
-                            files.path
-                          ].join('/')}
+                          href={`/templates/${uniqueId}/${prefix}/${name}/${querystring}/${files.path.replace(
+                            /^.*\/(?!.*\/)/,
+                            ''
+                          )}`}
                         >
                           {files.directory ? 'Open' : 'Edit'}
                         </Link>
