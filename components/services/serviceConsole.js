@@ -1,6 +1,5 @@
 'use client';
 import { useEffect } from 'react';
-import io from 'socket.io-client';
 import Link from 'next/link';
 
 const WebSocketClient = ({ onDataReceived, token }) => {
@@ -51,8 +50,8 @@ const WebSocketClient = ({ onDataReceived, token }) => {
   const uniqueId = pathParts[2];
 
   const tabs = [
-    { name: 'Configuration', href: '#', current: false },
-    { name: 'Console', href: `${uniqueId}/console`, current: false }
+    { name: 'Configuration', href: '.', current: false },
+    { name: 'Console', href: `#`, current: false }
   ];
 
   return (
@@ -90,7 +89,6 @@ const WebSocketClient = ({ onDataReceived, token }) => {
         <div className="px-4 py-5 sm:px-6 min-h-[600px]">
           <span className="text-white">Test</span>
         </div>
-        <div className="px-4 py-5 sm:p-6">{/* Content goes here */}</div>
       </div>
     </div>
   );

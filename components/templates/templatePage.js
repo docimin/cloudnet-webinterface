@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 export default function TemplateList() {
   const [templateBrowser, setTemplateBrowser] = useState([]);
@@ -17,21 +19,26 @@ export default function TemplateList() {
     const uniqueId = pathParts[2];
     const prefix = pathParts[3];
     const name = pathParts[4];
+    const querystring = pathParts[5];
+    console.log(querystring);
 
     if (token) {
       const domainurl = address.includes('localhost' || '127.0.0.1')
         ? ''
         : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
 
-      fetch(
-        `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/directory/list?deep=true`,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-            'Content-Type': 'application/json'
-          }
+      let url = `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/directory/list?deep=true`;
+
+      if (querystring) {
+        url += `&directory=${querystring}`;
+      }
+
+      fetch(url, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
-      )
+      })
         .then((response) => {
           if (!response.ok) {
             throw new Error(response.statusText);
@@ -42,10 +49,10 @@ export default function TemplateList() {
           setTemplateBrowser(data.files);
         })
         .catch((error) => {
-          deleteCookie('token');
-          deleteCookie('username');
-          deleteCookie('address');
-          window.location.href = '/auth';
+          //deleteCookie('token');
+          //deleteCookie('username');
+          //deleteCookie('address');
+          //window.location.href = '/auth';
           setError(error.message);
         });
     }
@@ -65,6 +72,7 @@ export default function TemplateList() {
   const uniqueId = pathParts[2];
   const prefix = pathParts[3];
   const name = pathParts[4];
+  const querystring = pathParts[5];
 
   return (
     <div className="px-4 sm:px-6 lg:px-8">
@@ -76,6 +84,14 @@ export default function TemplateList() {
           <p className="mt-2 text-sm text-light-color">
             A list of all the files and their info about them.
           </p>
+          <button className="pt-4">
+            {querystring && (
+              <Link className="text-white hover:text-blurple" href=".">
+                <FontAwesomeIcon icon={faArrowLeft} className="pr-2" />
+                <span className="">Back</span>
+              </Link>
+            )}
+          </button>
         </div>
       </div>
       <div className="mt-8 flow-root">

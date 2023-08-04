@@ -16,7 +16,7 @@ export default function Home() {
   return (
     <div className="">
       <div className="mx-auto max-w-7xl">
-        <div className="grid gap-2 bg-white/5 sm:grid-cols-5 lg:grid-cols-5">
+        <div className="grid gap-2 sm:grid-cols-5 lg:grid-cols-5">
           {stats.map((stat) => (
             <div key={stat.name} className="bg-gray-900 px-4 py-6 sm:px-6 lg:px-8 rounded-lg">
               <p className="text-sm font-medium leading-6 text-gray-400">{stat.name}</p>

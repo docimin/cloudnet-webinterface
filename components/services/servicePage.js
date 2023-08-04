@@ -7,6 +7,7 @@ import {
   faCodeBranch,
   faCircleExclamation
 } from '@fortawesome/free-solid-svg-icons';
+import Link from 'next/link';
 
 export default function Service() {
   const [service, setService] = useState({});
@@ -219,7 +220,7 @@ export default function Service() {
           <div className="hidden sm:block">
             <nav className="-mb-px flex space-x-8">
               {tabs.map((tab) => (
-                <a
+                <Link
                   key={tab.name}
                   href={tab.href}
                   className={
@@ -228,7 +229,7 @@ export default function Service() {
                   aria-current={tab.current ? 'page' : undefined}
                 >
                   <span className="">{tab.name}</span>
-                </a>
+                </Link>
               ))}
             </nav>
           </div>
