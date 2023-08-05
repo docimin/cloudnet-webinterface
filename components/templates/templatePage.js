@@ -206,9 +206,21 @@ export default function TemplateList() {
         </div>
       </div>
       <div className="flow-root">
-        {['txt', 'yml', 'conf', 'json', 'properties', 'mcmeta'].includes(
-          fileExtension
-        ) ? (
+        {[
+          'txt',
+          'yml',
+          'conf',
+          'json',
+          'properties',
+          'mcmeta',
+          'lang',
+          'lng',
+          'toml',
+          'ini',
+          'yaml',
+          'sk',
+          'js'
+        ].includes(fileExtension) ? (
           <>
             <div className="px-4 sm:px-6 lg:px-8">
               <div className="mt-4">

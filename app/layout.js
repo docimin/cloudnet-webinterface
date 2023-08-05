@@ -14,6 +14,9 @@ import {
   ServerIcon,
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faHeart, faMugHot } from '@fortawesome/free-solid-svg-icons';
+import { faGithub } from '@fortawesome/free-brands-svg-icons';
 
 const navigation = [
   { name: 'Dashboard', href: '/', icon: HomeIcon, current: false },
@@ -39,9 +42,9 @@ const navigation = [
   }
 ];
 const teams = [
-  { id: 1, name: 'Profile', href: '#', initial: 'P', current: false },
-  { id: 2, name: 'Tailwind Labs', href: '#', initial: 'T', current: false },
-  { id: 3, name: 'Workcation', href: '#', initial: 'W', current: false }
+  { id: 1, name: 'GitHub', href: 'https://github.com/docimin/cloudnet-webinterface', icon: faGithub, initial: 'GH', current: false },
+  { id: 2, name: 'Ko-Fi', href: 'https://ko-fi.com/fayevr', initial: 'K-F', icon: faMugHot, current: false },
+  { id: 3, name: 'Sponsor me', href: 'https://github.com/sponsors/docimin', icon: faHeart, initial: 'S', current: false },
 ];
 
 const getCookie = (name) => {
@@ -166,7 +169,7 @@ export default function RootLayout({ children }) {
                                 ))}
                               </ul>
                             </li>
-                            {/*<li>
+                            {<li>
                               <div className="text-xs font-semibold leading-6 text-gray-400">
                                 Your teams
                               </div>
@@ -186,11 +189,11 @@ export default function RootLayout({ children }) {
                                         className={classNames(
                                           team.current
                                             ? 'text-indigo-600 border-indigo-600'
-                                            : 'text-white border-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600',
-                                          'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-transparent'
+                                            : 'text-white0 group-hover:border-indigo-600 group-hover:text-indigo-600',
+                                          'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-[0.625rem] font-medium bg-transparent'
                                         )}
                                       >
-                                        {team.initial}
+                                        <FontAwesomeIcon icon={team.icon} size="2xl" />
                                       </span>
                                       <span className="truncate">
                                         {team.name}
@@ -199,7 +202,7 @@ export default function RootLayout({ children }) {
                                   </li>
                                 ))}
                               </ul>
-                            </li>*/}
+                            </li>}
                           </ul>
                         </nav>
                       </div>
@@ -246,7 +249,7 @@ export default function RootLayout({ children }) {
                         ))}
                       </ul>
                     </li>
-                    {/*<li>
+                    {<li>
                       <div className="text-xs font-semibold leading-6 text-gray-400">
                         Your teams
                       </div>
@@ -266,18 +269,18 @@ export default function RootLayout({ children }) {
                                 className={classNames(
                                   team.current
                                     ? 'text-indigo-600 border-indigo-600'
-                                    : 'text-light-color border-gray-400 group-hover:border-indigo-600 group-hover:text-indigo-600',
-                                  'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg border text-[0.625rem] font-medium bg-transparent'
+                                    : 'text-light-color group-hover:border-indigo-600 group-hover:text-indigo-600',
+                                  'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-[0.625rem] font-medium bg-transparent'
                                 )}
                               >
-                                {team.initial}
+                                <FontAwesomeIcon icon={team.icon} size="2xl" />
                               </span>
                               <span className="truncate">{team.name}</span>
                             </Link>
                           </li>
                         ))}
                       </ul>
-                    </li>*/}
+                    </li>}
                     {
                       <li className="-mx-6 mt-auto">
                         <a
