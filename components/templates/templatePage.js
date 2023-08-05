@@ -208,7 +208,7 @@ export default function TemplateList() {
                             ? 'Open'
                             : files.name.match(/\.(jpeg|jpg|gif|png|dat|dat_old|mca|jar|jar_old)$/)
                             ? ''
-                            : 'Edit'}
+                            : ''} {/* This was supposed to be "Edit" */}
                         </Link>
                       </td>
                     </tr>
