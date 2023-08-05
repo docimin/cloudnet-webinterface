@@ -67,7 +67,7 @@ export default function Service() {
     document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
   };
 
-  const handleSave = () => {
+  const handleStatus = (target) => {
     const token = getCookie('token');
     if (!token) {
       window.location.href = '/auth';
@@ -75,44 +75,63 @@ export default function Service() {
     }
 
     const uniqueId = window.location.pathname.split('/').pop();
-    const { IP, Port } = connectionDetailsObj;
 
-    const updatedService = {
-      properties: {},
-      uniqueId: `${uniqueId}`,
-      listeners: [
-        {
-          host: editedFields.IP || IP,
-          port: editedFields.Port || Port
+    fetch(
+      `${process.env.NEXT_PUBLIC_DEV_PROXY_URL}/service/${uniqueId}/lifecycle?target=${target}`,
+      {
+        method: 'PATCH',
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
-      ]
-    };
-
-    fetch(`${process.env.NEXT_PUBLIC_DEV_PROXY_URL}/service`, {
-      method: 'PUT',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(updatedService)
-    })
+      }
+    )
       .then((response) => {
         if (!response.ok) {
           throw new Error(response.statusText);
         }
-        //console.log('response', response);
         return response.json();
       })
       .then((data) => {
         setService(data.service);
         window.location.reload();
-        //console.log('data', data);
+        setError(error.message);
       })
       .catch((error) => {
         setError(error.message);
-        //console.log('error', error);
       });
-    //console.log('updatedService', updatedService);
+  };
+
+  const handleDelete = (target) => {
+    const token = getCookie('token');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
+
+    const uniqueId = window.location.pathname.split('/').pop();
+
+    fetch(`${process.env.NEXT_PUBLIC_DEV_PROXY_URL}/service/${uniqueId}`, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.json();
+      })
+      .then((data) => {
+        setService(data.service);
+        window.location.reload();
+        setError(error.message);
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
   };
 
   // This only exists so heapUsageMemory does not give NaN, whatever this is.
@@ -169,7 +188,7 @@ export default function Service() {
       name: 'Player details',
       icon: faCodeBranch,
       canEdit: false,
-      value1: service?.properties?.['Online-Count'].toString(),
+      value1: service?.properties?.['Online-Count']?.toString() || '0',
       value2: service?.properties?.['Max-Players'],
       value1Name: 'Online Count',
       value2Name: 'Max Players'
@@ -195,10 +214,31 @@ export default function Service() {
           <div className="mt-3 flex md:absolute md:right-0 md:top-3 md:mt-0">
             <button
               type="button"
-              className="ml-3 inline-flex items-center rounded-md bg-indigo-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
-              onClick={handleSave}
+              className="ml-3 inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={() => handleStatus('restart')}
             >
-              Save
+              Restart
+            </button>
+            <button
+              type="button"
+              className="ml-3 inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={() => handleStatus('stop')}
+            >
+              Stop
+            </button>
+            <button
+              type="button"
+              className="ml-3 inline-flex items-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={() => handleDelete()}
+            >
+              Delete
+            </button>
+            <button
+              type="button"
+              className="ml-3 inline-flex items-center rounded-md bg-green-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-indigo-500 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-indigo-600"
+              onClick={() => handleStatus('start')}
+            >
+              Start
             </button>
           </div>
         </div>
