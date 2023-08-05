@@ -148,7 +148,8 @@ export default function Service() {
       name: 'Networking',
       icon: faCircleExclamation,
       canEdit: false,
-      value1: service?.configuration?.serviceId?.environment?.defaultServiceStartPort,
+      value1:
+        service?.configuration?.serviceId?.environment?.defaultServiceStartPort,
       value2: service?.lifeCycle,
       value1Name: 'Starting Port',
       value2Name: 'Life Cycle'
@@ -168,20 +169,15 @@ export default function Service() {
       name: 'Player details',
       icon: faCodeBranch,
       canEdit: false,
-      value1: service?.properties?.['Online-Count'] ? service.properties['Online-Count'] : 0,
+      value1: service?.properties?.['Online-Count'].toString(),
       value2: service?.properties?.['Max-Players'],
       value1Name: 'Online Count',
       value2Name: 'Max Players'
     }
   ];
-  //console.log(stats.find((stat) => stat.name === 'Memory'));
+  //console.log(stats.find((stat) => stat.name === 'Player details'));
 
-
-
-  const tabs = [
-    { name: 'Configuration', href: '#', current: false },
-    { name: 'Console', href: `${uniqueId}/console`, current: false }
-  ];
+  const tabs = [{ name: 'Configuration', href: '#', current: false }];
 
   return (
     <div>

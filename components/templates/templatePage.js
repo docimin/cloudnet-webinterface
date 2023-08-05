@@ -204,7 +204,11 @@ export default function TemplateList() {
                             ''
                           )}`}
                         >
-                          {files.directory ? 'Open' : 'Edit'}
+                          {files.directory
+                            ? 'Open'
+                            : files.name.match(/\.(jpeg|jpg|gif|png)$/)
+                            ? ''
+                            : 'Edit'}
                         </Link>
                       </td>
                     </tr>
