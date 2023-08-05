@@ -206,7 +206,7 @@ export default function TemplateList() {
                         >
                           {files.directory
                             ? 'Open'
-                            : files.name.match(/\.(jpeg|jpg|gif|png)$/)
+                            : files.name.match(/\.(jpeg|jpg|gif|png|dat|dat_old|mca|jar|jar_old)$/)
                             ? ''
                             : 'Edit'}
                         </Link>
