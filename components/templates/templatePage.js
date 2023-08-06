@@ -124,7 +124,6 @@ export default function TemplateList() {
         ? pathParts.slice(5).join('/')
         : pathParts.slice(5, -1).join('/');
 
-    const extension = lastPart.split('.').pop().toLowerCase();
     const path = querystring ? `${querystring}/${lastPart}` : lastPart;
     const modifiedPath = `?path=${path}`;
 
@@ -340,7 +339,6 @@ export default function TemplateList() {
                                 )
                               ? ''
                               : 'Edit'}
-                            {/* This was supposed to be "Edit" */}
                           </Link>
                         </td>
                       </tr>
