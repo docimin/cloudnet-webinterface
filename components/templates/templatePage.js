@@ -5,7 +5,9 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
   faArrowLeft,
   faFolder,
-  faFileAlt
+  faFileAlt,
+  faDownload,
+  faPenToSquare
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function TemplateList() {
@@ -103,7 +105,47 @@ export default function TemplateList() {
       });
   }, [fileExtension]);
 
-  const handleSave = (target) => {
+  const handleDownload = (filePath) => {
+    const token = getCookie('token');
+    const address = getCookie('address');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
+    const domainurl = address.includes('localhost' || '127.0.0.1')
+      ? ''
+      : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
+
+    const apiURL = `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/file/download?path=${encodeURIComponent(
+      filePath
+    )}`;
+
+    fetch(apiURL, {
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.blob();
+      })
+      .then((blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filePath.split('/').pop();
+        a.click();
+        window.URL.revokeObjectURL(url);
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  };
+
+  const handleSave = () => {
     const token = getCookie('token');
     const address = getCookie('address');
     if (!token) {
@@ -332,37 +374,47 @@ export default function TemplateList() {
                         return a.name.localeCompare(b.name);
                       }
                     })
-                    .map((files) => (
-                      <tr key={`${files.name}`}>
+                    .map((file) => (
+                      <tr key={file.name}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0 flex items-center">
                           <FontAwesomeIcon
-                            icon={files.directory ? faFolder : faFileAlt}
+                            icon={file.directory ? faFolder : faFileAlt}
                             className="mr-2 h-5 w-5"
                           />
-                          <span className="h-5">{files.name}</span>
+                          <span className="h-5">{file.name}</span>
                         </td>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
-                          {files.directory ? '-' : formatBytes(files.size)}
+                          {file.directory ? '-' : formatBytes(file.size)}
                         </td>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
-                          {new Date(files.lastModified).toLocaleString()}
+                          {new Date(file.lastModified).toLocaleString()}
                         </td>
                         <td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
                           <Link
                             className="hover:text-blurple pr-4"
-                            href={`/templates/${uniqueId}/${prefix}/${name}/${querystring}/${files.path.replace(
+                            href={`/templates/${uniqueId}/${prefix}/${name}/${querystring}/${file.path.replace(
                               /^.*\/(?!.*\/)/,
                               ''
                             )}`}
                           >
-                            {files.directory
-                              ? 'Open'
-                              : files.name.match(
-                                  /\.(yml|txt|json|properties|yaml|lang|lng|toml|ini|cnf|cnl|sk|js|conf|mcdata)$/i
-                                )
-                              ? 'Edit'
-                              : ''}
+                            {file.directory ? (
+                              'Open'
+                            ) : file.name.match(
+                                /\.(yml|txt|json|properties|yaml|lang|lng|toml|ini|cnf|cnl|sk|js|conf|mcdata)$/i
+                              ) ? (
+                              <FontAwesomeIcon icon={faPenToSquare} />
+                            ) : (
+                              ''
+                            )}
                           </Link>
+                          {!file.directory && (
+                            <button
+                              className="hover:text-blurple pr-4"
+                              onClick={() => handleDownload(file.path)}
+                            >
+                              <FontAwesomeIcon icon={faDownload} />
+                            </button>
+                          )}
                         </td>
                       </tr>
                     ))}

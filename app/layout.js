@@ -11,7 +11,7 @@ import {
   XMarkIcon,
   UserCircleIcon,
   ServerStackIcon,
-  ServerIcon,
+  ServerIcon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -42,9 +42,30 @@ const navigation = [
   }
 ];
 const teams = [
-  { id: 1, name: 'GitHub', href: 'https://github.com/docimin/cloudnet-webinterface', icon: faGithub, initial: 'GH', current: false },
-  { id: 2, name: 'Ko-Fi', href: 'https://ko-fi.com/fayevr', initial: 'K-F', icon: faMugHot, current: false },
-  { id: 3, name: 'Sponsor me', href: 'https://github.com/sponsors/docimin', icon: faHeart, initial: 'S', current: false },
+  {
+    id: 1,
+    name: 'GitHub',
+    href: 'https://github.com/docimin/cloudnet-webinterface',
+    icon: faGithub,
+    initial: 'GH',
+    current: false
+  },
+  {
+    id: 2,
+    name: 'Ko-Fi',
+    href: 'https://ko-fi.com/fayevr',
+    initial: 'K-F',
+    icon: faMugHot,
+    current: false
+  },
+  {
+    id: 3,
+    name: 'Sponsor me',
+    href: 'https://github.com/sponsors/docimin',
+    icon: faHeart,
+    initial: 'S',
+    current: false
+  }
 ];
 
 const getCookie = (name) => {
@@ -63,11 +84,54 @@ function classNames(...classes) {
 export default function RootLayout({ children }) {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [username, setUsername] = useState('');
+  const [isOpen, setIsOpen] = useState(false);
 
   useEffect(() => {
     setUsername(getCookie('username'));
   }, []);
   const notLoggedIn = 'Not logged in!';
+
+  const handleLogout = () => {
+    const token = getCookie('token');
+    const address = getCookie('address');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
+    const domainurl = address.includes('localhost' || '127.0.0.1')
+      ? ''
+      : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
+
+    const apiURL = `${domainurl}${address}/session/logout`;
+
+    fetch(apiURL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+
+        return response.json();
+      })
+      .then((data) => {
+        // Handle the response data if needed
+        deleteCookie('token');
+        deleteCookie('address')
+        deleteCookie('username')
+        window.location.href = '/auth';
+      })
+      .catch((error) => {
+        console.log(error)
+      });
+  };
+
+  const deleteCookie = (name) => {
+    document.cookie = `${name}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`;
+  };
 
   return (
     <html className="h-full" lang="en" suppressHydrationWarning>
@@ -130,10 +194,13 @@ export default function RootLayout({ children }) {
                       <div className="flex grow flex-col gap-y-5 overflow-y-auto bg-gray-800 px-6 pb-2">
                         <div className="flex h-16 shrink-0 items-center">
                           <img
-                            className="h-8 w-auto"
-                            src="logo.svg"
+                            className="h-8 w-auto pr-2"
+                            src="/logo.svg"
                             alt="image"
                           />
+                          <span className="text-white">
+                            {username || notLoggedIn}
+                          </span>
                         </div>
 
                         <nav className="flex flex-1 flex-col">
@@ -169,40 +236,48 @@ export default function RootLayout({ children }) {
                                 ))}
                               </ul>
                             </li>
-                            {<li>
-                              <div className="text-xs font-semibold leading-6 text-gray-400">
-                                Your teams
-                              </div>
-                              <ul role="list" className="-mx-2 mt-2 space-y-1">
-                                {teams.map((team) => (
-                                  <li key={team.name}>
-                                    <Link
-                                      href={team.href}
-                                      className={classNames(
-                                        team.current
-                                          ? 'bg-gray-50 text-indigo-600'
-                                          : 'text-light-color hover:text-indigo-600 hover:bg-gray-100',
-                                        'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                                      )}
-                                    >
-                                      <span
+                            {
+                              <li>
+                                <div className="text-xs font-semibold leading-6 text-gray-400">
+                                  Your teams
+                                </div>
+                                <ul
+                                  role="list"
+                                  className="-mx-2 mt-2 space-y-1"
+                                >
+                                  {teams.map((team) => (
+                                    <li key={team.name}>
+                                      <Link
+                                        href={team.href}
                                         className={classNames(
                                           team.current
-                                            ? 'text-indigo-600 border-indigo-600'
-                                            : 'text-white0 group-hover:border-indigo-600 group-hover:text-indigo-600',
-                                          'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-[0.625rem] font-medium bg-transparent'
+                                            ? 'bg-gray-50 text-indigo-600'
+                                            : 'text-light-color hover:text-indigo-600 hover:bg-gray-100',
+                                          'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                         )}
                                       >
-                                        <FontAwesomeIcon icon={team.icon} size="2xl" />
-                                      </span>
-                                      <span className="truncate">
-                                        {team.name}
-                                      </span>
-                                    </Link>
-                                  </li>
-                                ))}
-                              </ul>
-                            </li>}
+                                        <span
+                                          className={classNames(
+                                            team.current
+                                              ? 'text-indigo-600 border-indigo-600'
+                                              : 'text-white0 group-hover:border-indigo-600 group-hover:text-indigo-600',
+                                            'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-[0.625rem] font-medium bg-transparent'
+                                          )}
+                                        >
+                                          <FontAwesomeIcon
+                                            icon={team.icon}
+                                            size="2xl"
+                                          />
+                                        </span>
+                                        <span className="truncate">
+                                          {team.name}
+                                        </span>
+                                      </Link>
+                                    </li>
+                                  ))}
+                                </ul>
+                              </li>
+                            }
                           </ul>
                         </nav>
                       </div>
@@ -249,38 +324,43 @@ export default function RootLayout({ children }) {
                         ))}
                       </ul>
                     </li>
-                    {<li>
-                      <div className="text-xs font-semibold leading-6 text-gray-400">
-                        Your teams
-                      </div>
-                      <ul role="list" className="-mx-2 mt-2 space-y-1">
-                        {teams.map((team) => (
-                          <li key={team.name}>
-                            <Link
-                              href={team.href}
-                              className={classNames(
-                                team.current
-                                  ? 'bg-gray-50 text-indigo-600'
-                                  : 'text-light-color hover:text-indigo-600 hover:bg-gray-100',
-                                'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
-                              )}
-                            >
-                              <span
+                    {
+                      <li>
+                        <div className="text-xs font-semibold leading-6 text-gray-400">
+                          Your teams
+                        </div>
+                        <ul role="list" className="-mx-2 mt-2 space-y-1">
+                          {teams.map((team) => (
+                            <li key={team.name}>
+                              <Link
+                                href={team.href}
                                 className={classNames(
                                   team.current
-                                    ? 'text-indigo-600 border-indigo-600'
-                                    : 'text-light-color group-hover:border-indigo-600 group-hover:text-indigo-600',
-                                  'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-[0.625rem] font-medium bg-transparent'
+                                    ? 'bg-gray-50 text-indigo-600'
+                                    : 'text-light-color hover:text-indigo-600 hover:bg-gray-100',
+                                  'group flex gap-x-3 rounded-md p-2 text-sm leading-6 font-semibold'
                                 )}
                               >
-                                <FontAwesomeIcon icon={team.icon} size="2xl" />
-                              </span>
-                              <span className="truncate">{team.name}</span>
-                            </Link>
-                          </li>
-                        ))}
-                      </ul>
-                    </li>}
+                                <span
+                                  className={classNames(
+                                    team.current
+                                      ? 'text-indigo-600 border-indigo-600'
+                                      : 'text-light-color group-hover:border-indigo-600 group-hover:text-indigo-600',
+                                    'flex h-6 w-6 shrink-0 items-center justify-center rounded-lg text-[0.625rem] font-medium bg-transparent'
+                                  )}
+                                >
+                                  <FontAwesomeIcon
+                                    icon={team.icon}
+                                    size="2xl"
+                                  />
+                                </span>
+                                <span className="truncate">{team.name}</span>
+                              </Link>
+                            </li>
+                          ))}
+                        </ul>
+                      </li>
+                    }
                     {
                       <li className="-mx-6 mt-auto">
                         <a
@@ -316,11 +396,39 @@ export default function RootLayout({ children }) {
               <div className="flex-1 text-sm font-semibold leading-6 text-white">
                 Dashboard
               </div>
-              <span className="sr-only">Your profile</span>
-              <UserCircleIcon
-                className="h-8 w-8 text-white"
-                aria-hidden="true"
-              />
+              <div className="relative inline-block text-left">
+                <div>
+                  <button
+                    type="button"
+                    className="flex items-center text-gray-700"
+                    onClick={() => setIsOpen(!isOpen)}
+                  >
+                    <span className="text-white">{username}</span>
+                    <UserCircleIcon
+                      className="h-8 w-8 text-white"
+                      aria-hidden="true"
+                    />
+                  </button>
+                </div>
+                {isOpen && (
+                  <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                    <div
+                      className="py-1"
+                      role="menu"
+                      aria-orientation="vertical"
+                      aria-labelledby="options-menu"
+                    >
+                      <button
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 hover:text-gray-900 w-full text-left"
+                        role="menuitem"
+                        onClick={handleLogout}
+                      >
+                        Log out
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
             </div>
 
             <main className="py-10 lg:pl-72">
