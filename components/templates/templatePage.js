@@ -104,10 +104,14 @@ export default function TemplateList() {
 
   const handleSave = (target) => {
     const token = getCookie('token');
+    const address = getCookie('address');
     if (!token) {
       window.location.href = '/auth';
       return;
     }
+    const domainurl = address.includes('localhost' || '127.0.0.1')
+    ? ''
+    : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
 
     const textareaValue = document.querySelector('textarea').value;
     const pathParts = window.location.pathname.split('/');
@@ -124,7 +128,7 @@ export default function TemplateList() {
     const path = querystring ? `${querystring}/${lastPart}` : lastPart;
     const modifiedPath = `?path=${path}`;
 
-    const apiURL = `${process.env.NEXT_PUBLIC_DEV_PROXY_URL}/template/${uniqueId}/${prefix}/${name}/file/create${modifiedPath}`;
+    const apiURL = `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/file/create${modifiedPath}`;
 
     fetch(apiURL, {
       method: 'POST',
@@ -206,21 +210,9 @@ export default function TemplateList() {
         </div>
       </div>
       <div className="flow-root">
-        {[
-          'txt',
-          'yml',
-          'conf',
-          'json',
-          'properties',
-          'mcmeta',
-          'lang',
-          'lng',
-          'toml',
-          'ini',
-          'yaml',
-          'sk',
-          'js'
-        ].includes(fileExtension) ? (
+        {['txt', 'yml', 'conf', 'json', 'properties', 'mcmeta'].includes(
+          fileExtension
+        ) ? (
           <>
             <div className="px-4 sm:px-6 lg:px-8">
               <div className="mt-4">

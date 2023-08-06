@@ -44,8 +44,8 @@ export default function Auth() {
           }
         }
       );
+
       const data = await response.json();
-      console.log(data);
       if (data.token === undefined) {
         setError('Invalid username or password');
       } else {
@@ -58,7 +58,7 @@ export default function Auth() {
         window.location.href = '/';
       }
     } catch (error) {
-      console.error(error);
+      //console.error(error);
     }
   };
 
