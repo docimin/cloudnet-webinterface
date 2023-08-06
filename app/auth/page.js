@@ -50,9 +50,9 @@ export default function Auth() {
         setError('Invalid username or password');
       } else {
         const expirationTime = new Date(Date.now() + 2 * 60 * 60 * 1000); // 2 hours from now
-        document.cookie = `token=${data.token}; path=/; expires=${expirationTime}`;
-        document.cookie = `username=${username}; path=/; expires=${expirationTime}`;
-        document.cookie = `address=${modifiedAddress}; path=/; expires=${expirationTime}`;
+        document.cookie = `token=${data.token}; path=/; expires=${expirationTime}; sameSite=none; secure=true;`;
+        document.cookie = `username=${username}; path=/; expires=${expirationTime}; sameSite=none; secure=true;`;
+        document.cookie = `address=${modifiedAddress}; path=/; expires=${expirationTime}; sameSite=none; secure=true;`;
         setToken(data.token);
         setLoggedIn(true);
         window.location.href = '/';
