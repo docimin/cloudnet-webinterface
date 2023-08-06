@@ -13,6 +13,7 @@ export default function TemplateList() {
   const [error, setError] = useState('');
   const [fileExtension, setFileExtension] = useState('');
   const [inputValue, setInputValue] = useState('');
+  const [saveStatus, setSaveStatus] = useState('');
 
   const handleInputChange = (e) => {
     setInputValue(e.target.value);
@@ -110,8 +111,8 @@ export default function TemplateList() {
       return;
     }
     const domainurl = address.includes('localhost' || '127.0.0.1')
-    ? ''
-    : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
+      ? ''
+      : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
 
     const textareaValue = document.querySelector('textarea').value;
     const pathParts = window.location.pathname.split('/');
@@ -138,17 +139,22 @@ export default function TemplateList() {
     })
       .then((response) => {
         if (!response.ok) {
-          //console.log(response);
           throw new Error(response.statusText);
         }
+        setSaveStatus('Saved!');
+
+        // Clear the save status after 5 seconds
+        setTimeout(() => {
+          setSaveStatus('');
+        }, 5000);
+
         return response.json();
       })
       .then((data) => {
-        window.location.reload();
-        //console.log(data);
+        // Handle the response data if needed
       })
       .catch((error) => {
-        //console.log(error);
+        // Handle any error that occurred during the fetch
       });
   };
 
@@ -209,9 +215,23 @@ export default function TemplateList() {
         </div>
       </div>
       <div className="flow-root">
-        {['txt', 'yml', 'conf', 'json', 'properties', 'mcmeta'].includes(
-          fileExtension
-        ) ? (
+        {[
+          'txt',
+          'yml',
+          'conf',
+          'json',
+          'properties',
+          'mcmeta',
+          'lang',
+          'yaml',
+          'ini',
+          'cnf',
+          'cnl',
+          'sk',
+          'js',
+          'lang',
+          'lng'
+        ].includes(fileExtension) ? (
           <>
             <div className="px-4 sm:px-6 lg:px-8">
               <div className="mt-4">
@@ -241,6 +261,9 @@ export default function TemplateList() {
               >
                 Save
               </button>
+              {saveStatus && (
+                <span className="ml-2 mt-1 text-green-500">{saveStatus}</span>
+              )}
             </div>
           </>
         ) : (
@@ -335,10 +358,10 @@ export default function TemplateList() {
                             {files.directory
                               ? 'Open'
                               : files.name.match(
-                                  /\.(jpeg|jpg|gif|png|dat|dat_old|mca|jar|jar_old|zip|rar|7z|tar|gz|bz2)$/i
+                                  /\.(yml|txt|json|properties|yaml|lang|lng|toml|ini|cnf|cnl|sk|js|conf|mcdata)$/i
                                 )
-                              ? ''
-                              : 'Edit'}
+                              ? 'Edit'
+                              : ''}
                           </Link>
                         </td>
                       </tr>
