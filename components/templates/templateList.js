@@ -1,6 +1,8 @@
 'use client';
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faArrowLeft } from '@fortawesome/free-solid-svg-icons';
 
 export default function TemplateList() {
   const [templateList, setTemplateList] = useState([]);
@@ -65,6 +67,12 @@ export default function TemplateList() {
           <p className="mt-2 text-sm text-light-color">
             A list of all the templates and their info about them.
           </p>
+          <button className="pt-4">
+            <Link className="text-white hover:text-blurple" href=".">
+              <FontAwesomeIcon icon={faArrowLeft} className="pr-2" />
+              <span className="">Back</span>
+            </Link>
+          </button>
         </div>
       </div>
       <div className="mt-8 flow-root">

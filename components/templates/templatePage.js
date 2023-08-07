@@ -7,7 +7,8 @@ import {
   faFolder,
   faFileAlt,
   faDownload,
-  faPenToSquare
+  faPenToSquare,
+  faTrash
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function TemplateList() {
@@ -139,6 +140,42 @@ export default function TemplateList() {
         a.download = filePath.split('/').pop();
         a.click();
         window.URL.revokeObjectURL(url);
+      })
+      .catch((error) => {
+        setError(error.message);
+      });
+  };
+
+  const handleDelete = (filePath) => {
+    const token = getCookie('token');
+    const address = getCookie('address');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
+    const domainurl = address.includes('localhost' || '127.0.0.1')
+      ? ''
+      : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
+
+    const apiURL = `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/file?path=${encodeURIComponent(
+      filePath
+    )}`;
+
+    fetch(apiURL, {
+      method: 'DELETE',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.blob();
+      })
+      .then((data) => {
+        location.reload();
       })
       .catch((error) => {
         setError(error.message);
@@ -365,15 +402,6 @@ export default function TemplateList() {
                         return a.name.localeCompare(b.name);
                       }
                     })
-                    .sort((a, b) => {
-                      if (a.directory && !b.directory) {
-                        return -1;
-                      } else if (!a.directory && b.directory) {
-                        return 1;
-                      } else {
-                        return a.name.localeCompare(b.name);
-                      }
-                    })
                     .map((file) => (
                       <tr key={file.name}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0 flex items-center">
@@ -413,6 +441,14 @@ export default function TemplateList() {
                               onClick={() => handleDownload(file.path)}
                             >
                               <FontAwesomeIcon icon={faDownload} />
+                            </button>
+                          )}
+                          {!file.directory && (
+                            <button
+                              className="hover:text-blurple pr-4"
+                              onClick={() => handleDelete(file.path)}
+                            >
+                              <FontAwesomeIcon icon={faTrash} />
                             </button>
                           )}
                         </td>
