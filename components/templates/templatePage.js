@@ -286,10 +286,10 @@ export default function TemplateList() {
             </span>
           </p>
           <button className="pt-4">
-            <Link className="text-white hover:text-blurple" href=".">
+            <a className="text-white hover:text-blurple" href=".">
               <FontAwesomeIcon icon={faArrowLeft} className="pr-2" />
               <span className="">Back</span>
-            </Link>
+            </a>
           </button>
         </div>
       </div>
