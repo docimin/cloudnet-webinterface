@@ -108,7 +108,7 @@ export default function RootLayout({ children }) {
       method: 'POST',
       headers: {
         Authorization: `Bearer ${token}`
-      },
+      }
     })
       .then((response) => {
         if (!response.ok) {
@@ -120,12 +120,12 @@ export default function RootLayout({ children }) {
       .then((data) => {
         // Handle the response data if needed
         deleteCookie('token');
-        deleteCookie('address')
-        deleteCookie('username')
+        deleteCookie('address');
+        deleteCookie('username');
         window.location.href = '/auth';
       })
       .catch((error) => {
-        console.log(error)
+        console.log(error);
       });
   };
 
@@ -376,6 +376,15 @@ export default function RootLayout({ children }) {
                           <span aria-hidden="true">
                             {username || notLoggedIn}
                           </span>
+                          {/* Log out button */}
+                          {username && (
+                            <button
+                              className="ml-auto px-2 py-1 text-sm font-semibold text-white bg-red-500 rounded hover:bg-red-600"
+                              onClick={handleLogout}
+                            >
+                              Log out
+                            </button>
+                          )}
                         </a>
                       </li>
                     }
@@ -410,7 +419,7 @@ export default function RootLayout({ children }) {
                     />
                   </button>
                 </div>
-                {isOpen && (
+                {isOpen && username && (
                   <div className="origin-top-right absolute right-0 mt-2 w-48 rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
                     <div
                       className="py-1"
