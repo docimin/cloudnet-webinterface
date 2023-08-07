@@ -148,7 +148,7 @@ export default function TemplateList() {
       });
   };
 
-  function handleUpload(filePath) {
+  function handleUpload(file) {
     const token = getCookie('token');
     const address = getCookie('address');
     if (!token) {
@@ -161,26 +161,29 @@ export default function TemplateList() {
 
     const apiURL = `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/deploy`;
 
-    fetch(apiURL, {
-      method: 'POST',
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
+    const formData = new FormData();
+    formData.append('file', file);
+
+    // Log FormData values
+    console.log([...formData.values()]);
+
+    const xhr = new XMLHttpRequest();
+    xhr.open('POST', apiURL);
+    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+
+    xhr.onload = function () {
+      if (xhr.status === 200) {
+        console.log('File uploaded successfully');
+      } else {
+        console.error('File upload failed');
       }
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
-        }
-        return response.blob();
-      })
-      .then((data) => {
-        console.log(data)
-      })
-      .catch((error) => {
-        setError(error.message);
-        console.log(error)
-      });
+    };
+
+    xhr.onerror = function () {
+      console.error('An error occurred during the file upload');
+    };
+
+    xhr.send(formData);
   }
 
   document.addEventListener('DOMContentLoaded', () => {
@@ -193,7 +196,7 @@ export default function TemplateList() {
     container.addEventListener('drop', (e) => {
       e.preventDefault();
       const file = e.dataTransfer.files[0];
-      handleUpload(file.path);
+      handleUpload(file);
     });
   });
 
