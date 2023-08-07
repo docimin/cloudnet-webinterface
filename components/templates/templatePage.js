@@ -8,7 +8,9 @@ import {
   faFileAlt,
   faDownload,
   faPenToSquare,
-  faTrash
+  faTrash,
+  faArrowRight,
+  faUpload
 } from '@fortawesome/free-solid-svg-icons';
 
 export default function TemplateList() {
@@ -145,6 +147,55 @@ export default function TemplateList() {
         setError(error.message);
       });
   };
+
+  function handleUpload(filePath) {
+    const token = getCookie('token');
+    const address = getCookie('address');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
+    const domainurl = address.includes('localhost' || '127.0.0.1')
+      ? ''
+      : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
+
+    const apiURL = `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/deploy`;
+
+    fetch(apiURL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`,
+        'Content-Type': 'application/json'
+      }
+    })
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error(response.statusText);
+        }
+        return response.blob();
+      })
+      .then((data) => {
+        console.log(data)
+      })
+      .catch((error) => {
+        setError(error.message);
+        console.log(error)
+      });
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const preventDefault = (e) => {
+      e.preventDefault();
+    };
+
+    const container = document.getElementById('upload-container');
+    container.addEventListener('dragover', preventDefault);
+    container.addEventListener('drop', (e) => {
+      e.preventDefault();
+      const file = e.dataTransfer.files[0];
+      handleUpload(file.path);
+    });
+  });
 
   const handleDelete = (filePath) => {
     const token = getCookie('token');
@@ -290,6 +341,26 @@ export default function TemplateList() {
               <FontAwesomeIcon icon={faArrowLeft} className="pr-2" />
               <span className="">Back</span>
             </a>
+          </button>
+        </div>
+        <div id="upload-container">
+          {' '}
+          {/* Add an id to the container element */}
+          <input
+            type="file"
+            id="upload-input"
+            style={{ display: 'none' }}
+            onChange={(e) => handleUpload(e.target.files[0]?.path)} // Handle null or undefined error
+          />
+          <button
+            className="bg-blurple hover:bg-blurple/50 p-2 text-white rounded-md mr-4"
+            onClick={() => {
+              const input = document.getElementById('upload-input');
+              input.click();
+            }}
+          >
+            Upload (Test)
+            <FontAwesomeIcon className="pl-2" icon={faUpload} />
           </button>
         </div>
       </div>
