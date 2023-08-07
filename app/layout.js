@@ -239,7 +239,7 @@ export default function RootLayout({ children }) {
                             {
                               <li>
                                 <div className="text-xs font-semibold leading-6 text-gray-400">
-                                  Your teams
+                                  Support the Developer
                                 </div>
                                 <ul
                                   role="list"
@@ -327,7 +327,7 @@ export default function RootLayout({ children }) {
                     {
                       <li>
                         <div className="text-xs font-semibold leading-6 text-gray-400">
-                          Your teams
+                          Support the Developer
                         </div>
                         <ul role="list" className="-mx-2 mt-2 space-y-1">
                           {teams.map((team) => (
