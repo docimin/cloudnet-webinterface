@@ -286,7 +286,7 @@ export default function TemplateList() {
         // Handle the response data if needed
       })
       .catch((error) => {
-        // Handle any error that occurred during the fetch
+        console.log("Save error! :( => ", error);
       });
   };
 
