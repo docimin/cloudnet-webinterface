@@ -151,25 +151,24 @@ export default function TemplateList() {
   function handleUpload(file) {
     const token = getCookie('token');
     const address = getCookie('address');
+
     if (!token) {
       window.location.href = '/auth';
       return;
     }
+
     const domainurl = address.includes('localhost' || '127.0.0.1')
       ? ''
       : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
 
     const apiURL = `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/deploy`;
 
-    const formData = new FormData();
-    formData.append('file', file);
-
-    // Log FormData values
-    console.log([...formData.values()]);
-
     const xhr = new XMLHttpRequest();
     xhr.open('POST', apiURL);
     xhr.setRequestHeader('Authorization', `Bearer ${token}`);
+
+    const formData = new FormData();
+    formData.append('file', file, 'upload.zip');
 
     xhr.onload = function () {
       if (xhr.status === 200) {
@@ -347,13 +346,11 @@ export default function TemplateList() {
           </button>
         </div>
         <div id="upload-container">
-          {' '}
-          {/* Add an id to the container element */}
           <input
             type="file"
             id="upload-input"
             style={{ display: 'none' }}
-            onChange={(e) => handleUpload(e.target.files[0]?.path)} // Handle null or undefined error
+            onChange={(e) => handleUpload(e.target.files[0])}
           />
           <button
             className="bg-blurple hover:bg-blurple/50 p-2 text-white rounded-md mr-4"
