@@ -11,7 +11,8 @@ import {
   XMarkIcon,
   UserCircleIcon,
   ServerStackIcon,
-  ServerIcon
+  ServerIcon,
+  Bars4Icon
 } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
@@ -38,6 +39,12 @@ const navigation = [
     name: 'Templates',
     href: '/templates',
     icon: ServerIcon,
+    current: false
+  },
+  {
+    name: 'Modules',
+    href: '/modules',
+    icon: Bars4Icon,
     current: false
   }
 ];

@@ -167,23 +167,23 @@ export default function TemplateList() {
     // Log FormData values
     console.log([...formData.values()]);
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', apiURL);
-    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        console.log('File uploaded successfully');
-      } else {
-        console.error('File upload failed');
-      }
-    };
-
-    xhr.onerror = function () {
-      console.error('An error occurred during the file upload');
-    };
-
-    xhr.send(formData);
+    fetch(apiURL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: formData
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log('File uploaded successfully');
+        } else {
+          console.error('File upload failed');
+        }
+      })
+      .catch((error) => {
+        console.error('An error occurred during the file upload', error);
+      });
   }
 
   document.addEventListener('DOMContentLoaded', () => {
