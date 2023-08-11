@@ -419,7 +419,7 @@ export default function RootLayout({ children }) {
                     className="flex items-center text-gray-700"
                     onClick={() => setIsOpen(!isOpen)}
                   >
-                    <span className="text-white">{username}</span>
+                    <span className="text-white pr-2">{username}</span>
                     <UserCircleIcon
                       className="h-8 w-8 text-white"
                       aria-hidden="true"
