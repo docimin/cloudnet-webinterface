@@ -2,8 +2,8 @@
 import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
-export default function Groups() {
-  const [groups, setGroups] = useState([]);
+export default function Modules() {
+  const [modules, setModules] = useState([]);
   const [error, setError] = useState('');
 
   useEffect(() => {
@@ -14,12 +14,11 @@ export default function Groups() {
       return;
     }
     if (token) {
-        const domainurl = address.includes('localhost' || '127.0.0.1')
+      const domainurl = address.includes('localhost' || '127.0.0.1')
         ? ''
         : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
 
-      fetch(
-        `${domainurl}${address}/group`, {
+      fetch(`${domainurl}${address}/module`, {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json'
@@ -32,7 +31,7 @@ export default function Groups() {
           //console.log(response);
           return response.json();
         })
-        .then((data) => setGroups(data.groups))
+        .then((data) => setModules(data.modules))
         .catch((error) => {
           deleteCookie('token');
           deleteCookie('username');
@@ -66,10 +65,10 @@ export default function Groups() {
       <div className="sm:flex sm:items-center">
         <div className="sm:flex-auto">
           <h1 className="text-base font-semibold leading-6 text-light-color">
-            Groups
+            Modules
           </h1>
           <p className="mt-2 text-sm text-light-color">
-            A list of all the groups and their info about them.
+            A list of all the modules and their info about them.
           </p>
         </div>
       </div>
@@ -85,17 +84,40 @@ export default function Groups() {
                   >
                     Name
                   </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold"
+                  >
+                    Version
+                  </th>
+                  <th
+                    scope="col"
+                    className="px-3 py-3.5 text-left text-sm font-semibold"
+                  >
+                    Status
+                  </th>
                   <th scope="col" className="relative py-3.5 pl-3 pr-4 sm:pr-0">
                     <span className="sr-only">Edit</span>
                   </th>
                 </tr>
               </thead>
               <tbody className="divide-y divide-gray-200 text-light-color">
-                {groups.map((group) => (
-                  <tr key={group.name}>
+                {modules.map((module) => (
+                  <tr key={module.configuration.name}>
                     <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0">
-                      {group.name}
+                      {module.configuration.name}
                     </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm">
+                      {module.configuration.version}
+                    </td>
+                    <td className="whitespace-nowrap px-3 py-4 text-sm">
+                      {module.lifecycle}
+                    </td>
+                    {/*<td className="relative whitespace-nowrap py-4 pl-3 pr-4 text-right text-sm font-medium sm:pr-0">
+                      <Link className="hover:text-blurple" href={``}>
+                        Edit
+                      </Link>
+                    </td>*/}
                   </tr>
                 ))}
               </tbody>

@@ -24,8 +24,6 @@ export default function Service() {
     }
     const uniqueId = window.location.pathname.split('/').pop();
     if (token) {
-      //fetch(`process.env.NEXT_PUBLIC_DEV_PROXY_URL + /cluster/${uniqueId}`, {
-
       const domainurl = address.includes('localhost' || '127.0.0.1')
         ? ''
         : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
@@ -74,10 +72,15 @@ export default function Service() {
       return;
     }
 
+    const address = getCookie('address');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
     const uniqueId = window.location.pathname.split('/').pop();
 
     fetch(
-      `${process.env.NEXT_PUBLIC_DEV_PROXY_URL}/service/${uniqueId}/lifecycle?target=${target}`,
+      `${domainurl}${address}/service/${uniqueId}/lifecycle?target=${target}`,
       {
         method: 'PATCH',
         headers: {
@@ -109,9 +112,19 @@ export default function Service() {
       return;
     }
 
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
+
+    const address = getCookie('address');
+    if (!token) {
+      window.location.href = '/auth';
+      return;
+    }
     const uniqueId = window.location.pathname.split('/').pop();
 
-    fetch(`${process.env.NEXT_PUBLIC_DEV_PROXY_URL}/service/${uniqueId}`, {
+    fetch(`${domainurl}${address}/service/${uniqueId}`, {
       method: 'DELETE',
       headers: {
         Authorization: `Bearer ${token}`,

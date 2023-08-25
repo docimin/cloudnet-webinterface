@@ -168,26 +168,29 @@ export default function TemplateList() {
 
     const apiURL = `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/deploy`;
 
-    const xhr = new XMLHttpRequest();
-    xhr.open('POST', apiURL);
-    xhr.setRequestHeader('Authorization', `Bearer ${token}`);
-
     const formData = new FormData();
-    formData.append('file', file, 'upload.zip');
+    formData.append('file', file);
 
-    xhr.onload = function () {
-      if (xhr.status === 200) {
-        console.log('File uploaded successfully');
-      } else {
-        console.error('File upload failed');
-      }
-    };
+    // Log FormData values
+    console.log([...formData.values()]);
 
-    xhr.onerror = function () {
-      console.error('An error occurred during the file upload');
-    };
-
-    xhr.send(formData);
+    fetch(apiURL, {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${token}`
+      },
+      body: formData
+    })
+      .then((response) => {
+        if (response.ok) {
+          console.log('File uploaded successfully');
+        } else {
+          console.error('File upload failed');
+        }
+      })
+      .catch((error) => {
+        console.error('An error occurred during the file upload', error);
+      });
   }
 
   document.addEventListener('DOMContentLoaded', () => {

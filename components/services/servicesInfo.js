@@ -14,8 +14,6 @@ export default function Services() {
       return;
     }
     if (token) {
-      //fetch(process.env.NEXT_PUBLIC_DEV_PROXY_URL + '/service', {
-
         const domainurl = address.includes('localhost' || '127.0.0.1')
         ? ''
         : `${process.env.NEXT_PUBLIC_CORS_PROXY_URL}/`;
