@@ -81,31 +81,36 @@ export default function TemplateList() {
         //console.log(error);
       });
 
-    // Fetch file data if fileExtension exists
-    const path = querystring ? `${querystring}/${lastPart}` : lastPart;
-    const modifiedPath = `?path=${path}`;
-    const apiURL = `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/file/download${modifiedPath}`;
+    // Check if the last part of the URL is a file
+    const isFile = lastPart.indexOf('.') !== -1;
 
-    fetch(apiURL, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      }
-    })
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(response.statusText);
+    // Fetch file data if fileExtension exists
+    if (isFile) {
+      const path = querystring ? `${querystring}/${lastPart}` : lastPart;
+      const modifiedPath = `?path=${path}`;
+      const apiURL = `${domainurl}${address}/template/${uniqueId}/${prefix}/${name}/file/download${modifiedPath}`;
+
+      fetch(apiURL, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json'
         }
-        return response.text();
       })
-      .then((data) => {
-        setInputValue(data);
-        //console.log(data);
-      })
-      .catch((error) => {
-        setError(error.message);
-        //console.log(error);
-      });
+        .then((response) => {
+          if (!response.ok) {
+            throw new Error(response.statusText);
+          }
+          return response.text();
+        })
+        .then((data) => {
+          setInputValue(data);
+          //console.log(data);
+        })
+        .catch((error) => {
+          setError(error.message);
+          //console.log(error);
+        });
+    }
   }, [fileExtension]);
 
   const handleDownload = (filePath) => {
@@ -286,7 +291,7 @@ export default function TemplateList() {
         // Handle the response data if needed
       })
       .catch((error) => {
-        console.log("Save error! :( => ", error);
+        console.log('Save error! :( => ', error);
       });
   };
 
@@ -330,8 +335,22 @@ export default function TemplateList() {
             File Browser
           </h1>
           <p className="mt-2 text-sm text-light-color">
-            A list of all the files and their info about them.
+            {uniqueId === 'local'
+              ? 'A list of all the files and their info about them.'
+              : 'A list of all the files and their info about them in the remote server.'}
           </p>
+          {uniqueId === 's3' && (
+            <>
+              <p className="mt-2 text-sm text-light-color">
+                <span className="text-red-500">Note:</span> This is an external
+                template storage, so you can only view the files.
+              </p>
+              <p className="text-sm text-light-color">
+                If you want to edit the files, you need to edit the files via
+                S3, SFTP or other means.
+              </p>
+            </>
+          )}
           <p className="mt-4 text-sm text-light-color">
             Path:{' '}
             <span className="text-blurple">
@@ -345,24 +364,26 @@ export default function TemplateList() {
             </a>
           </button>
         </div>
-        <div id="upload-container">
-          <input
-            type="file"
-            id="upload-input"
-            style={{ display: 'none' }}
-            onChange={(e) => handleUpload(e.target.files[0])}
-          />
-          <button
-            className="bg-blurple hover:bg-blurple/50 p-2 text-white rounded-md mr-4"
-            onClick={() => {
-              const input = document.getElementById('upload-input');
-              input.click();
-            }}
-          >
-            Upload (Test)
-            <FontAwesomeIcon className="pl-2" icon={faUpload} />
-          </button>
-        </div>
+        {uniqueId === 'local' && (
+          <div id="upload-container">
+            <input
+              type="file"
+              id="upload-input"
+              style={{ display: 'none' }}
+              onChange={(e) => handleUpload(e.target.files[0])}
+            />
+            <button
+              className="bg-blurple hover:bg-blurple/50 p-2 text-white rounded-md mr-4"
+              onClick={() => {
+                const input = document.getElementById('upload-input');
+                input.click();
+              }}
+            >
+              Upload (Test)
+              <FontAwesomeIcon className="pl-2" icon={faUpload} />
+            </button>
+          </div>
+        )}
       </div>
       <div className="flow-root">
         {[
@@ -466,10 +487,11 @@ export default function TemplateList() {
                     })
                     .sort((a, b) => {
                       if (a.directory && !b.directory) {
-                        return -1;
+                        return -1; // Place folders before files
                       } else if (!a.directory && b.directory) {
-                        return 1;
+                        return 1; // Place files after folders
                       } else {
+                        // Both a and b are either folders or files, sort alphabetically
                         return a.name.localeCompare(b.name);
                       }
                     })
@@ -477,7 +499,11 @@ export default function TemplateList() {
                       <tr key={file.name}>
                         <td className="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium sm:pl-0 flex items-center">
                           <FontAwesomeIcon
-                            icon={file.directory ? faFolder : faFileAlt}
+                            icon={
+                              file.directory || file.name.indexOf('.') === -1
+                                ? faFolder
+                                : faFileAlt
+                            }
                             className="mr-2 h-5 w-5"
                           />
                           <span className="h-5">{file.name}</span>
@@ -496,7 +522,7 @@ export default function TemplateList() {
                               ''
                             )}`}
                           >
-                            {file.directory ? (
+                            {file.directory || file.name.indexOf('.') === -1 ? (
                               'Open'
                             ) : file.name.match(
                                 /\.(yml|txt|json|properties|yaml|lang|lng|toml|ini|cnf|cnl|sk|js|conf|mcdata)$/i
@@ -506,7 +532,7 @@ export default function TemplateList() {
                               ''
                             )}
                           </Link>
-                          {!file.directory && (
+                          {!file.directory && uniqueId == 'local' && (
                             <button
                               className="hover:text-blurple pr-4"
                               onClick={() => handleDownload(file.path)}
@@ -514,7 +540,7 @@ export default function TemplateList() {
                               <FontAwesomeIcon icon={faDownload} />
                             </button>
                           )}
-                          {!file.directory && (
+                          {!file.directory && uniqueId == 'local' && (
                             <button
                               className="hover:text-blurple pr-4"
                               onClick={() => handleDelete(file.path)}
