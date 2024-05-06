@@ -8,10 +8,15 @@ First, edit the .env file to include your URL.
 
 Make sure to rename `.env.example` to `.env` !
 
+Next, install the packages using:
+```bash
+npm install
+```
+
 To start the server, use the following command:
 
 ```bash
-yarn dev
+npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
