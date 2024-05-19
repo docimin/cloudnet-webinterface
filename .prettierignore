@@ -1,0 +1,9 @@
+src/components/ui
+.github
+.next
+node_modules
+.dockerignore
+Dockerfile
+package.json
+package-lock.json
+pnpm-lock.yaml

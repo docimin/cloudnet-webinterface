@@ -1,0 +1,128 @@
+{
+  "Main": {
+    "backtohomepage": "Zurück zur Startseite",
+    "save": "Speichern",
+    "cancel": "Abbrechen",
+    "back": "Zurück",
+    "moreinfo": "Mehr Informationen",
+    "edit": "Bearbeiten",
+    "login": "Anmelden",
+    "remove": "Entfernen",
+    "close": "Schließen",
+    "accept": "Akzeptieren",
+    "reject": "Ablehnen"
+  },
+  "MetaData": {
+    "title": "Ihr Partner für Verpackungen in den Niederlanden!",
+    "description": "Als Hersteller von Wellpappe-Verpackungen und Lieferant von Verpackungsmaterialien hat DutchBoxx eine lange Geschichte von fast 60 Jahren Fachkenntnisse in der Verpackungsbranche.",
+    "keywords": "DutchBoxx, Wellpappe, Maßgeschneiderte Verpackungen, Verpackung, Wellpappe-Verpackungen, Verpackungsmaterialien"
+  },
+  "Countries": {
+    "nl": "Niederlande",
+    "be": "Belgien",
+    "de": "Deutschland",
+    "fr": "Frankreich",
+    "uk": "Vereinigtes Königreich",
+    "es": "Spanien",
+    "it": "Italien",
+    "pl": "Polen",
+    "cz": "Tschechien",
+    "se": "Schweden",
+    "at": "Österreich",
+    "pt": "Portugal",
+    "gr": "Griechenland",
+    "hu": "Ungarn",
+    "ro": "Rumänien",
+    "bg": "Bulgarien",
+    "hr": "Kroatien",
+    "si": "Slowenien",
+    "sk": "Slowakei",
+    "fi": "Finnland",
+    "dk": "Dänemark",
+    "ie": "Irland",
+    "lu": "Luxemburg",
+    "cy": "Zypern",
+    "mt": "Malta"
+  },
+  "Login": {
+    "password": "Passwort",
+    "forgotpassword": "Passwort vergessen?",
+    "register": "Noch keinen Account? Jetzt registrieren!",
+    "registerlink": "Noch keinen Account? Jetzt registrieren!",
+    "loginlink": "Bereits registriert? Jetzt einloggen!",
+    "signin": "Anmelden"
+  },
+  "Register": {
+    "fullname": "Vollständiger Name",
+    "password": "Passwort",
+    "companydata": "Firmendaten",
+    "userdata": "Benutzerdaten",
+    "registration": "Registrierung",
+    "register": "Registrieren"
+  },
+  "FAQ": {
+    "helpcenter": "Hilfe-Center",
+    "payments": "Zahlungen",
+    "shipping": "Versand",
+    "account": "Konto",
+    "contactus": "Kontaktiere uns",
+    "general": "Allgemein",
+    "orders": "Bestellungen",
+    "privacy": "Datenschutz",
+    "developers": "Entwickler",
+    "searchtitle": "Suchen",
+    "newtitle": "Suche nach irgendwas?",
+    "newsubtitle": "Hier finden Sie Antworten auf die häufigsten Fragen."
+  },
+  "Search": {
+    "searchforanything": "Suchen Sie nach allem..",
+    "searchquickly": "Suchen Sie schnell nach Produkten, Kategorien, Seiten und mehr.",
+    "categoriestext": "Kategorien",
+    "productstext": "Produkte",
+    "pagestext": "Seiten",
+    "noresults": "Keine Ergebnisse gefunden.",
+    "couldnotfindanything": "Wir konnten nichts finden. Versuchen Sie es erneut."
+  },
+  "AccountSettings": {
+    "newemail": "Neue E-Mail-Adresse",
+    "password": "Passwort",
+    "newpassword": "Neues Passwort",
+    "currentpassword": "Aktuelles Passwort",
+    "changeemaildesc": "Hier können sie ihre E-Mail-Adresse ändern.",
+    "changepassworddesc": "Hier können sie ihr Passwort ändern.",
+    "changepasswordtitle": "Passwort ändern",
+    "changeemailtitle": "E-Mail-Adresse ändern",
+    "incorrectpwd": "Passwort ist inkorrekt.",
+    "emailchanged": "E-Mail-Adresse erfolgreich geändert.",
+    "accalreadyexists": "Es existiert bereits ein Account mit dieser E-Mail-Adresse.",
+    "pwdchanged": "'Passwort erfolgreich geändert.",
+    "entervalidpwd": "Das Passwort muss mindestens 8 Zeichen lang sein."
+  },
+  "CookieSettings": {
+    "cookiepreferences": "Cookie-Einstellungen",
+    "acceptalldesc": "Wenn Sie akzeptieren, erklären Sie sich mit der Verwendung von Cookies und anderen Technologien zur Verarbeitung Ihrer personenbezogenen Daten einverstanden. Dies wird uns helfen, Ihre Erfahrung zu verbessern und die Inhalte, die Sie sehen, zu personalisieren. Sie können Ihre Einstellungen jederzeit ändern.",
+    "settings": "Einstellungen",
+    "active": "Aktiv",
+    "inactive": "Inaktiv",
+    "essential": "Essenziell",
+    "essentialdesc": "Essenzielle Cookies sind notwendig, damit die Website ordnungsgemäß funktioniert. Diese Cookies sind für die Funktion der Website erforderlich und können in unseren Systemen nicht deaktiviert werden. Sie werden normalerweise nur als Reaktion auf von Ihnen getätigte Aktionen gesetzt, die einem Serviceantrag gleichkommen, wie das Festlegen Ihrer Datenschutzeinstellungen, das Anmelden oder das Ausfüllen von Formularen. Sie können Ihren Browser so einstellen, dass er Sie über diese Cookies warnt oder blockiert, aber einige Teile der Website funktionieren dann möglicherweise nicht. Diese Cookies speichern keine persönlich identifizierbaren Informationen.",
+    "functional": "Funktional",
+    "functionaldesc": "Funktionale Cookies ermöglichen es der Website, erweiterte Funktionen und Personalisierung bereitzustellen. Sie können von uns oder von Drittanbieteranbietern, deren Dienste wir unseren Seiten hinzugefügt haben, gesetzt werden. Wenn Sie diese Cookies nicht zulassen, funktionieren möglicherweise einige oder alle diese Dienste nicht ordnungsgemäß.",
+    "marketing": "Marketing",
+    "marketingdesc": "Marketing-Cookies werden verwendet, um Besucher über Websites hinweg zu verfolgen. Die Absicht besteht darin, Anzeigen anzuzeigen, die für den einzelnen Benutzer relevant und ansprechend sind und somit für Publisher und Werbetreibende von Drittanbietern wertvoller sind.",
+    "googleanalytics": "Google Analytics",
+    "googleanalyticsdesc": "Google Analytics ist ein von Google angebotener Webanalysedienst, der den Datenverkehr auf Websites verfolgt und berichtet. Google verwendet die gesammelten Daten, um die Nutzung unseres Dienstes zu verfolgen und zu überwachen. Diese Daten werden mit anderen Google-Diensten geteilt. Google kann die gesammelten Daten verwenden, um die Anzeigen seines eigenen Werbenetzwerks zu kontextualisieren und zu personalisieren.",
+    "cookiesettings": "Cookie Settings",
+    "description": "Hier findest du eine Übersicht über alle Cookies, die wir sowohl auf unserer Website als auch in unserem Webshop verwenden. Du kannst deine Zustimmung für die verschiedenen Arten von Cookies individuell anpassen. Diese Einstellungen kannst du jederzeit ändern."
+  },
+  "PricingInfo": {
+    "subtotal": "Zwischensumme",
+    "shipping": "Versand",
+    "tax": "Steuern",
+    "total": "Gesamt"
+  },
+  "BillingAccount": {
+    "billingaddresstext": "Rechnungsadresse",
+    "subtext": "Diese Informationen werden für die Rechnungsstellung verwendet."
+  }
+}

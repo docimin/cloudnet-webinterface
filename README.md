@@ -1,32 +1,71 @@
-# This is a WIP project, it's not production ready!
+# ERP-System
 
-This is a [Next.js](https://nextjs.org/) project using Tailwind CSS.
+### Database management roles:
 
-## Getting Started
+- owner (full access)
+- manager (edit users, edit roles, add modules)
+- finance (see financial data)
 
-First, edit the .env file to include your URL.
+### Modules:
 
-Make sure to rename `.env.example` to `.env` !
+- HR
+- Finance
+- Sales
+- Production
+- Inventory
+- CRM
+- Projects
+- Services
+- Marketing
+- E-commerce
+- Purchase
+- Quality
+- Maintenance
+- Fleet
+- Helpdesk
+- Documents
+- Field Service
+- IoT
+- PLM
+- MRP
+- POS
+- Survey
+- Timesheets
+- Expenses
+- Approvals
+- Recruitment
+- Employees
+- Leaves
+- Attendances
+- Payroll
+- Accounting
+- Invoicing
+- Expenses
 
-Next, install the packages using:
-```bash
-npm install
-```
+### Roles:
 
-To start the server, use the following command:
+For each role, there are 3 permissions: read, write, delete.
+So for example: mrp-read, mrp-write, mrp-delete.
 
-```bash
-npm run dev
-```
+- Employee
+- Manager
+- Owner
+- Finance
+- HR
+- Sales
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### Features:
 
-## Learn More
+- Employee management
+- Role management
+- Module management
+- Data management
+- Reporting
+- Dashboard
+- Notifications
+- Setup settings
+- Disable modules
 
-To learn more about Next.js, take a look at the following resources:
+### Good ideas:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-## It is with extreme importance to know that this is a WIP project.
-You are however welcome to contribute to this project.
+- Rewind a document to a previous state (like git)
