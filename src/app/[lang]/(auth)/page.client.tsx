@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
 import { useRouter } from 'next/navigation'
 import { Label } from '@/components/ui/label'
@@ -10,7 +10,8 @@ import Image from 'next/image'
 export default function Client() {
   const { toast } = useToast()
   const [data, setData] = useState({
-    email: '',
+    address: process.env.NEXT_PUBLIC_ADDRESS || '',
+    username: '',
     password: '',
   })
   const router = useRouter()
@@ -18,6 +19,35 @@ export default function Client() {
   const handleEmailLogin = async (e) => {
     e.preventDefault()
 
+    try {
+      const response = await fetch(`/api/user/signin`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          address: data.address,
+          username: data.username,
+          password: data.password,
+        }),
+      })
+
+      const dataResponse = await response.json()
+      console.log(dataResponse)
+      if (dataResponse.status === 401) {
+        toast({
+          title: 'Error',
+          description: 'Invalid username or password',
+          variant: 'destructive',
+        })
+      } else {
+        //router.push('/dashboard')
+      }
+    } catch (error) {
+      console.error(error)
+    }
+
+    /*
     const response = await fetch('/api/user/signin', {
       method: 'POST',
       headers: {
@@ -52,6 +82,7 @@ export default function Client() {
     }
 
     router.push('/dashboard')
+     */
   }
 
   return (
@@ -73,15 +104,27 @@ export default function Client() {
               </div>
               <div className="grid gap-4">
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Email</Label>
+                  <Label htmlFor="address">Address</Label>
+                  <Input
+                    id="address"
+                    type="text"
+                    onChange={(e) =>
+                      setData({ ...data, address: e.target.value })
+                    }
+                    value={data.address}
+                    required
+                  />
+                </div>
+                <div className="grid gap-2">
+                  <Label htmlFor="email">Username</Label>
                   <Input
                     id="username"
-                    type="username"
+                    type="text"
                     placeholder="user@beyond.cloud"
                     onChange={(e) =>
-                      setData({ ...data, email: e.target.value })
+                      setData({ ...data, username: e.target.value })
                     }
-                    value={data.email}
+                    value={data.username}
                     required
                   />
                 </div>

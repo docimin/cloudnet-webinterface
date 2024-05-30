@@ -1,71 +1,34 @@
-# ERP-System
+# Cloudnet Webinterface
 
-### Database management roles:
+<p style="text-align:center;">
+    <a href="https://appwrite.io" target="_blank"><img src="./public/images/banner.png" alt="Appwrite Logo"></a>
+    <br />
+    <br />
+    <b>Appwrite is a backend platform for developing Web, Mobile, and Flutter applications. Built with the open source community and optimized for developer experience in the coding languages you love.</b>
+    <br />
+    <br />
+</p>
 
-- owner (full access)
-- manager (edit users, edit roles, add modules)
-- finance (see financial data)
+## Getting Started
 
-### Modules:
+First, edit the .env file to include your URL.
 
-- HR
-- Finance
-- Sales
-- Production
-- Inventory
-- CRM
-- Projects
-- Services
-- Marketing
-- E-commerce
-- Purchase
-- Quality
-- Maintenance
-- Fleet
-- Helpdesk
-- Documents
-- Field Service
-- IoT
-- PLM
-- MRP
-- POS
-- Survey
-- Timesheets
-- Expenses
-- Approvals
-- Recruitment
-- Employees
-- Leaves
-- Attendances
-- Payroll
-- Accounting
-- Invoicing
-- Expenses
+Make sure to rename `.env.example` to `.env` !
 
-### Roles:
+Next, install the packages using:
 
-For each role, there are 3 permissions: read, write, delete.
-So for example: mrp-read, mrp-write, mrp-delete.
+```bash
+npm install
+```
 
-- Employee
-- Manager
-- Owner
-- Finance
-- HR
-- Sales
+To start the server, use the following command:
 
-### Features:
+```bash
+npm run dev
+```
 
-- Employee management
-- Role management
-- Module management
-- Data management
-- Reporting
-- Dashboard
-- Notifications
-- Setup settings
-- Disable modules
+Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-### Good ideas:
+## It is with extreme importance to know that this is a WIP project.
 
-- Rewind a document to a previous state (like git)
+You are however welcome to contribute to this project.

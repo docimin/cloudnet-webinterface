@@ -28,7 +28,6 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card'
-import { createCompanyData } from '@/utils/actions/management/createDatabase'
 import * as Sentry from '@sentry/nextjs'
 import { useRouter } from 'next/navigation'
 
@@ -51,6 +50,7 @@ export default function CreateDatabaseModal() {
   const createDatabase = async (e: { preventDefault: () => void }) => {
     e.preventDefault()
 
+    /*
     await createCompanyData(
       companyName,
       city,
@@ -85,6 +85,7 @@ export default function CreateDatabaseModal() {
           reset()
         }
       })
+     */
   }
 
   const handleNext = () => {

@@ -8,7 +8,7 @@ const withNextIntl = require('next-intl/plugin')(
 const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com blob:;
-    connect-src 'self' https://api.stripe.com https://sentry.fayevr.dev https://dash.fayevr.dev;
+    connect-src 'self' *;
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data: https://q.stripe.com;
     font-src 'self';
@@ -18,7 +18,6 @@ const cspHeader = `
     form-action 'self';
     frame-ancestors 'none';
     block-all-mixed-content;
-    upgrade-insecure-requests;
 `
 
 const nextConfig = {
@@ -40,10 +39,6 @@ const nextConfig = {
       {
         protocol: 'http',
         hostname: 'localhost',
-      },
-      {
-        protocol: 'https',
-        hostname: 'dash.fayevr.dev',
       },
     ],
   },
@@ -69,12 +64,6 @@ const nextConfig = {
             key: 'X-DNS-Prefetch-Control',
             value: 'on',
           },
-          /*
-          {
-            key: 'Access-Control-Allow-Origin',
-            value: 'https://dutchboxx.nl',
-          },
-           */
           {
             key: 'Strict-Transport-Security',
             value: 'max-age=63072000; includeSubDomains; preload',

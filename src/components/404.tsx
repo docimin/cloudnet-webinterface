@@ -20,12 +20,12 @@ const links = [
 const social = [
   {
     name: 'Discord',
-    href: 'https://discord.gg/headpat',
+    href: 'https://discord.gg/YNjT42v936',
     icon: (props) => <SiDiscord className="h-6 w-6" {...props} />,
   },
   {
     name: 'GitHub',
-    href: 'https://github.com/Headpat-Community/headpat.de',
+    href: 'https://github.com/docimin/cloudnet-webinterface',
     icon: (props) => <SiGithub className="h-6 w-6" {...props} />,
   },
 ]
@@ -40,7 +40,7 @@ export default function NotFoundComponent() {
           height={256}
           width={256}
           src="/images/404.webp"
-          alt="Headpat Community"
+          alt="CloudNet"
         />
         <div className="mx-auto mt-4 max-w-2xl text-center sm:mt-8">
           <p className="text-base font-semibold leading-8 text-indigo-600">
@@ -100,9 +100,7 @@ export default function NotFoundComponent() {
       </main>
       <footer className="border-t border-gray-100 py-6 sm:py-10">
         <div className="mx-auto flex max-w-7xl flex-col items-center justify-center gap-8 px-6 sm:flex-row lg:px-8">
-          <p className="text-sm leading-7 text-white">
-            &copy; Headpat Community.
-          </p>
+          <p className="text-sm leading-7 text-white">&copy; CloudNet.</p>
           <div className="hidden sm:block sm:h-7 sm:w-px sm:flex-none sm:bg-gray-200" />
           <div className="flex gap-x-4">
             {social.map((item, itemIdx) => (
