@@ -1,6 +1,6 @@
 import Client from './page.client'
-import { redirect } from 'next/navigation'
-import { checkAuthToken } from '@/lib/server-calls'
+
+export const runtime = 'edge'
 
 export default async function Page() {
   return (

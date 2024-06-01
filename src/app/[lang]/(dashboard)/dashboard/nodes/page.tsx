@@ -14,6 +14,8 @@ import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import Link from 'next/link'
 
+export const runtime = 'edge'
+
 export default async function NodesPage({ params: { lang } }) {
   const nodes: NodesType = await getNodes()
   const permissions: any = await getPermissions()
