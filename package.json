@@ -17,6 +17,7 @@
     "singleQuote": true
   },
   "dependencies": {
+    "@cloudflare/next-on-pages": "^1.11.3",
     "@headlessui/react": "^1.7.19",
     "@hookform/resolvers": "^3.3.4",
     "@icons-pack/react-simple-icons": "^9.4.1",

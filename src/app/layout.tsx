@@ -20,16 +20,14 @@ export async function generateMetadata() {
       'webinterface',
     ],
     icons: {
-      icon: '/logo.svg',
+      icon: '/logos/logo.svg',
     },
     openGraph: {
       title: 'CloudNet Webinterface',
       description: 'Modern webinterface for CloudNet v4',
       siteName: 'CloudNet Webinterface',
-      images: `${process.env.NEXT_PUBLIC_DOMAIN}/logos/logo.svg`,
       type: 'website',
     },
-    metadataBase: new URL(`${process.env.NEXT_PUBLIC_DOMAIN}`),
   }
 }
 
