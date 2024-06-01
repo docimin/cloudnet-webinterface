@@ -6,7 +6,7 @@ export const runtime = 'edge'
 
 export default function UsersPage() {
   return (
-    <PageLayout title={'Users'}>
+    <PageLayout title={'Tasks'}>
       <div className="h-svh">
         <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">
           <h1 className="text-[7rem] font-bold leading-tight">418</h1>
