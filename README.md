@@ -1,21 +1,12 @@
 # Cloudnet Webinterface
 
 <p style="text-align:center;">
-    <a href="https://appwrite.io" target="_blank"><img src="./public/images/banner.png" alt="Appwrite Logo"></a>
-    <br />
-    <br />
-    <b>Appwrite is a backend platform for developing Web, Mobile, and Flutter applications. Built with the open source community and optimized for developer experience in the coding languages you love.</b>
-    <br />
-    <br />
+    <b>CloudNet is a modern application that can dynamically and easily deliver Minecraft oriented software.</b>
 </p>
 
 ## Getting Started
 
-First, edit the .env file to include your URL.
-
-Make sure to rename `.env.example` to `.env` !
-
-Next, install the packages using:
+First, install the packages using:
 
 ```bash
 npm install
@@ -28,6 +19,18 @@ npm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+
+## Custom domain
+
+Want to host the website on a custom domain?
+
+Copy .env.example to .env and change `NEXT_PUBLIC_DOMAIN` to your own domain (including https).
+
+## Pre-fill CloudNet address
+
+So you want to fill in your user/pass without the address every single time?
+
+Fill in `NEXT_PUBLIC_CLOUDNET_ADDRESS` in your .env file, like for example: `NEXT_PUBLIC_CLOUDNET_ADDRESS=127.0.0.1:2812`, this will auto-fill it for you.
 
 ## It is with extreme importance to know that this is a WIP project.
 
