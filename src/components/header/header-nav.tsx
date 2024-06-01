@@ -33,7 +33,10 @@ export function Nav({ isCollapsed, links }: NavProps) {
     >
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
         {links.map((link, index) => {
-          const isActive = currentPath.includes(link.href) // Assuming each link object has a 'href' property that represents its path
+          const isActive =
+            link.href === '/' || link.href.includes('/dashboard')
+              ? currentPath === link.href
+              : currentPath.startsWith(link.href)
           const variant = isActive ? 'default' : 'ghost'
 
           return isCollapsed ? (

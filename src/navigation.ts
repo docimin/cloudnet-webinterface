@@ -20,42 +20,6 @@ export const pathnames = {
     de: '/ueber-uns',
     en: '/about',
   },
-
-  '/register': {
-    nl: '/registreren',
-    de: '/registrieren',
-    en: '/register',
-  },
-
-  '/contact': {
-    nl: '/contact',
-    de: '/kontakt',
-    en: '/contact',
-  },
-
-  '/vacancies': {
-    nl: '/vacatures',
-    de: '/stellenangebote',
-    en: '/vacancies',
-  },
-
-  '/privacy-policy': {
-    nl: '/privacyverklaring',
-    de: '/datenschutz',
-    en: '/privacy-policy',
-  },
-
-  '/terms-and-conditions': {
-    nl: '/algemene-voorwaarden',
-    de: '/allgemeine-geschaeftsbedingungen',
-    en: '/terms-and-conditions',
-  },
-
-  '/cookie-settings': {
-    nl: '/cookie-instellingen',
-    de: '/cookie-einstellungen',
-    en: '/cookie-settings',
-  },
 } satisfies Pathnames<typeof locales>
 
 export const { Link, redirect, usePathname, useRouter, getPathname } =

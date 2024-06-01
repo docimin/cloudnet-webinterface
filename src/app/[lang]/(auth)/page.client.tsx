@@ -6,6 +6,7 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
+import { checkToken } from '@/utils/actions/user/jwt'
 
 export default function Client() {
   const { toast } = useToast()
@@ -15,6 +16,14 @@ export default function Client() {
     password: '',
   })
   const router = useRouter()
+
+  useEffect(() => {
+    checkToken().then((response) => {
+      if (response.status === 200) {
+        router.push('/dashboard')
+      }
+    })
+  }, [router])
 
   const handleEmailLogin = async (e) => {
     e.preventDefault()
@@ -33,7 +42,7 @@ export default function Client() {
       })
 
       const dataResponse = await response.json()
-      console.log(dataResponse)
+
       if (dataResponse.status === 401) {
         toast({
           title: 'Error',
@@ -48,39 +57,6 @@ export default function Client() {
     }
 
     /*
-    const response = await fetch('/api/user/signin', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        email: data.email,
-        password: data.password,
-      }),
-    })
-
-    const dataResponse = await response.json()
-
-    if (dataResponse.type == 'user_invalid_credentials') {
-      toast({
-        title: 'Error',
-        description: 'E-Mail or Password incorrect.',
-        variant: 'destructive',
-      })
-    } else if (dataResponse.type == 'user_blocked') {
-      toast({
-        title: 'Error',
-        description: 'User is blocked.',
-        variant: 'destructive',
-      })
-    } else if (dataResponse.type == 'general_argument_invalid') {
-      toast({
-        title: 'Error',
-        description: 'Please provide a valid email and password.',
-        variant: 'destructive',
-      })
-    }
-
     router.push('/dashboard')
      */
   }
@@ -120,7 +96,7 @@ export default function Client() {
                   <Input
                     id="username"
                     type="text"
-                    placeholder="user@beyond.cloud"
+                    placeholder="derklaro"
                     onChange={(e) =>
                       setData({ ...data, username: e.target.value })
                     }

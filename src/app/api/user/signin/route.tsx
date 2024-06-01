@@ -1,9 +1,9 @@
 import { cookies } from 'next/headers'
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
 
 export const runtime = 'edge'
 
-export async function POST(request) {
+export async function POST(request: NextRequest) {
   // if POST is not json, return 400
   if (request.headers.get('content-type') !== 'application/json') {
     return NextResponse.json({ error: 'Invalid content type', status: 400 })
@@ -11,6 +11,17 @@ export async function POST(request) {
   if (!request.body) {
     return NextResponse.json({ error: 'No body provided', status: 400 })
   }
+
+  const setCookie = (name: string, value: string, expiresIn: number) => {
+    cookies().set(name, value, {
+      httpOnly: true,
+      secure: true,
+      sameSite: 'strict',
+      maxAge: Number(new Date(Date.now() + expiresIn)),
+      path: '/',
+    })
+  }
+
   let { address, username, password } = await request.json()
 
   if (address.startsWith('https://')) {
@@ -33,36 +44,21 @@ export async function POST(request) {
 
     const dataResponse = await response.json()
 
-    const expirationAccessTime = new Date(
-      Date.now() + dataResponse.accessToken.expiresIn
+    const expirationAccessTime = Number(
+      new Date(Date.now() + dataResponse.accessToken.expiresIn)
     )
-    const expirationRefreshTime = new Date(
-      Date.now() + dataResponse.refreshToken.expiresIn
+    const expirationRefreshTime = Number(
+      new Date(Date.now() + dataResponse.refreshToken.expiresIn)
     )
 
-    cookies().set(`add`, address, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: expirationRefreshTime,
-      path: '/',
-    })
-
-    cookies().set(`at`, dataResponse.accessToken.token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: expirationAccessTime,
-      path: '/',
-    })
-
-    cookies().set(`rt`, dataResponse.refreshToken.token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: 'strict',
-      maxAge: expirationRefreshTime,
-      path: '/',
-    })
+    setCookie('add', address, dataResponse.refreshToken.expiresIn)
+    setCookie('at', dataResponse.accessToken.token, expirationAccessTime)
+    setCookie('rt', dataResponse.refreshToken.token, expirationRefreshTime)
+    setCookie(
+      'permissions',
+      JSON.stringify(dataResponse.scopes),
+      expirationAccessTime
+    )
 
     return NextResponse.json(dataResponse)
   } catch (error) {

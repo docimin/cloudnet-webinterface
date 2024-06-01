@@ -9,8 +9,7 @@ export default createMiddleware({
 })
 
 export const config = {
-  // Match only internationalized pathnames
-  matcher: [
-    '/((?!api|_next/static|_next/image|favicon.ico|apple-touch-icon.png|favicon.svg|images/books|icons|manifest).*)',
-  ],
+  // Skip all paths that should not be internationalized. This example skips
+  // certain folders and all pathnames with a dot (e.g. favicon.ico)
+  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
 }

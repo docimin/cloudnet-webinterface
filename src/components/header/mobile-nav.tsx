@@ -8,31 +8,33 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '../ui/sheet'
-import { MenuIcon, Triangle } from 'lucide-react'
+import { MenuIcon } from 'lucide-react'
 import * as React from 'react'
 import { Separator } from '../ui/separator'
-import { Nav1, Nav2, NavFooter } from '@/components/header/data'
+import { Nav1, Nav2, Nav3, NavFooter } from '@/components/header/data'
 import { Nav } from '@/components/header/header-nav'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { Tabs } from '@/components/ui/tabs'
 import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
-import { setOrgId } from '@/utils/actions/system/setOrgId'
+import Image from 'next/image'
 
 export default function MobileNav({
-  defaultViewMode,
-  setupSettings,
   permissions,
+  lang,
   children,
 }): React.JSX.Element {
   const router = useRouter()
 
-  const filteredNav1 = Nav1.filter((link) =>
+  const filteredNav1 = Nav1(lang, '').filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
   )
-  const filteredNav2 = Nav2.filter((link) =>
+  const filteredNav2 = Nav2(lang, '').filter((link) =>
+    link.permission.some(
+      (permission) => permissions.includes(permission) || permission === 'any'
+    )
+  )
+  const filteredNav3 = Nav3(lang, '').filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
@@ -43,10 +45,14 @@ export default function MobileNav({
       <header className={'border-b'}>
         <div className={'flex align-middle justify-between items-center px-2'}>
           <div className={'flex h-[52px] items-center ml-2'}>
-            <Triangle />
-            <span className={'ml-2'}>
-              {setupSettings?.shortName || 'Name not set'}
-            </span>
+            <Image
+              src={'/logos/logo.svg'}
+              width={32}
+              height={32}
+              alt={'CloudNet logo'}
+              className={'rounded-full'}
+            />
+            <span className={'ml-2'}>CloudNet</span>
           </div>
           <Sheet>
             <SheetTrigger asChild>
@@ -78,28 +84,20 @@ export default function MobileNav({
                     <Nav isCollapsed={false} links={filteredNav1} />
                     <Separator />
                     <Nav isCollapsed={false} links={filteredNav2} />
+                    <Separator />
+                    <Nav isCollapsed={false} links={filteredNav2} />
                   </div>
                 </div>
               </ScrollArea>
               <div className={'mt-auto'}>
                 <Separator className={'mb-2'} />
-                <Nav isCollapsed={false} links={NavFooter} />
+                <Nav isCollapsed={false} links={NavFooter(lang, '')} />
               </div>
             </SheetContent>
           </Sheet>
         </div>
       </header>
-      <main>
-        <Tabs
-          defaultValue={defaultViewMode || 'normal'}
-          onValueChange={(value) => {
-            document.cookie = `viewMode=${value}; path=/`
-            router.refresh()
-          }}
-        >
-          {children}
-        </Tabs>
-      </main>
+      <main>{children}</main>
     </>
   )
 }

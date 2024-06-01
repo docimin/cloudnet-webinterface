@@ -10,23 +10,26 @@ export async function getCookies() {
 }
 
 export async function checkAuthToken() {
-  if (!getCookies['rt'] || !getCookies['add']) {
+  const cookies = await getCookies()
+
+  if (!cookies['rt'] || !cookies['add']) {
     return { status: 401 }
   }
 
   try {
-    const decodedUrl = decodeURIComponent(getCookies['add'])
+    const decodedUrl = decodeURIComponent(cookies['add'])
 
     const response = await fetch(`${decodedUrl}/auth/verify`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: getCookies['at'],
+        Authorization: `Bearer ${cookies['at']}`,
       },
     })
 
     return await response.json()
   } catch (error) {
+    console.log('Error:', error)
     return error
   }
 }
