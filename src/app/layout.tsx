@@ -6,7 +6,7 @@ import { Toaster as SonnerToaster } from '@/components/ui/sonner'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export async function generateMetadata(req) {
+export async function generateMetadata() {
   return {
     title: {
       default: 'CloudNet Webinterface',
@@ -26,10 +26,10 @@ export async function generateMetadata(req) {
       title: 'CloudNet Webinterface',
       description: 'Modern webinterface for CloudNet v4',
       siteName: 'CloudNet Webinterface',
-      images: '/logos/logo.svg',
+      images: `${process.env.NEXT_PUBLIC_DOMAIN}/logos/logo.svg`,
       type: 'website',
     },
-    metadataBase: new URL('localhost:3000'),
+    metadataBase: new URL(`${process.env.NEXT_PUBLIC_DOMAIN}`),
   }
 }
 

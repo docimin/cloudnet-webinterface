@@ -46,7 +46,7 @@ export default function MobileNav({
         <div className={'flex align-middle justify-between items-center px-2'}>
           <div className={'flex h-[52px] items-center ml-2'}>
             <Image
-              src={'/logos/logo.svg'}
+              src={`/logos/logo.svg`}
               width={32}
               height={32}
               alt={'CloudNet logo'}

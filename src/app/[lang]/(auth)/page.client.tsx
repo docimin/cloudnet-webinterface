@@ -11,7 +11,7 @@ import { checkToken } from '@/utils/actions/user/jwt'
 export default function Client() {
   const { toast } = useToast()
   const [data, setData] = useState({
-    address: process.env.NEXT_PUBLIC_ADDRESS || '',
+    address: process.env.NEXT_PUBLIC_CLOUDNET_ADDRESS || '',
     username: '',
     password: '',
   })
