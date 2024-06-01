@@ -24,14 +24,26 @@ export async function POST(request: NextRequest) {
 
   let { address, username, password } = await request.json()
 
-  if (address.startsWith('https://')) {
-    address = 'http://' + address.slice(8)
-  } else if (!address.startsWith('http://')) {
-    address = 'http://' + address
+  const ipPattern = new RegExp(
+    /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?::[0-9]{1,5})?$/
+  )
+
+  if (ipPattern.test(address)) {
+    if (!address.startsWith('http://')) {
+      address = 'http://' + address
+    }
+  } else {
+    if (address.startsWith('http://')) {
+      address = 'https://' + address.slice(7)
+    } else if (!address.startsWith('https://')) {
+      address = 'https://' + address
+    }
   }
+
   if (!address.endsWith('/api/v3')) {
     address += '/api/v3'
   }
+  console.log(address)
 
   try {
     const response = await fetch(`${address}/auth`, {
@@ -43,6 +55,12 @@ export async function POST(request: NextRequest) {
     })
 
     const dataResponse = await response.json()
+
+    if (dataResponse.status) {
+      return NextResponse.json(dataResponse)
+    } else if (dataResponse.name === 'SyntaxError') {
+      return NextResponse.json({ error: 'Invalid response', status: 404 })
+    }
 
     const expirationAccessTime = Number(
       new Date(Date.now() + dataResponse.accessToken.expiresIn)

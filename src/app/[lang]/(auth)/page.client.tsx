@@ -43,22 +43,35 @@ export default function Client() {
 
       const dataResponse = await response.json()
 
-      if (dataResponse.status === 401) {
+      if (dataResponse.cause) {
+        toast({
+          title: 'Error',
+          description: "Can't connect to the server. Please check the address",
+          variant: 'destructive',
+        })
+      } else if (dataResponse.status === 401) {
         toast({
           title: 'Error',
           description: 'Invalid username or password',
           variant: 'destructive',
         })
+      } else if (dataResponse.status === 404) {
+        toast({
+          title: 'Error',
+          description: 'Invalid response',
+          variant: 'destructive',
+        })
       } else {
-        //router.push('/dashboard')
+        toast({
+          title: 'Success',
+          description: 'You have successfully logged in',
+        })
+
+        router.push('/dashboard')
       }
     } catch (error) {
       console.error(error)
     }
-
-    /*
-    router.push('/dashboard')
-     */
   }
 
   return (
@@ -84,6 +97,7 @@ export default function Client() {
                   <Input
                     id="address"
                     type="text"
+                    placeholder="127.0.0.1:2812"
                     onChange={(e) =>
                       setData({ ...data, address: e.target.value })
                     }

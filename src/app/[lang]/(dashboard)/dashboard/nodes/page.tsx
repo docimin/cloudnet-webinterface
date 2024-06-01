@@ -18,7 +18,7 @@ export const runtime = 'edge'
 
 export default async function NodesPage({ params: { lang } }) {
   const nodes: NodesType = await getNodes()
-  const permissions: any = await getPermissions()
+  const permissions: string[] = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:cluster_read',
     'cloudnet_rest:cluster_node_get',

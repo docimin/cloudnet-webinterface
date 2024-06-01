@@ -1,11 +1,11 @@
 import { fetchWithPermissions } from '@/utils/server-api/fetchWithPermissions'
 
-export async function getNodes() {
+export async function getNode(nodeId: string) {
   const requiredPermissions = [
     'cloudnet_rest:cluster_read',
-    'cloudnet_rest:cluster_node_list',
+    'cloudnet_rest:cluster_node_get',
     'global:admin',
   ]
 
-  return await fetchWithPermissions('/cluster', requiredPermissions)
+  return await fetchWithPermissions(`/cluster/${nodeId}`, requiredPermissions)
 }

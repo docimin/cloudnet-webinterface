@@ -1,10 +1,10 @@
 import { getCookies } from '@/lib/server-calls'
 
-export async function getPermissions() {
+export async function getPermissions(): Promise<string[]> {
   const cookie = await getCookies()
   if (!cookie['permissions']) {
-    return { permissions: [] }
+    return []
   }
 
-  return decodeURIComponent(cookie['permissions'].split(','))
+  return JSON.parse(decodeURIComponent(cookie['permissions']))
 }

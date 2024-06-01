@@ -10,7 +10,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { usePathname } from 'next/navigation'
+import { useParams, usePathname } from 'next/navigation'
 
 interface NavProps {
   isCollapsed: boolean
@@ -25,6 +25,7 @@ interface NavProps {
 
 export function Nav({ isCollapsed, links }: NavProps) {
   const currentPath = usePathname()
+  const params = useParams()
 
   return (
     <div
@@ -34,9 +35,10 @@ export function Nav({ isCollapsed, links }: NavProps) {
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
         {links.map((link, index) => {
           const isActive =
-            link.href === '/' || link.href.includes('/dashboard')
+            link.href === '/' || link.href === `/${params.lang}/dashboard`
               ? currentPath === link.href
-              : currentPath.startsWith(link.href)
+              : currentPath.includes(link.href)
+
           const variant = isActive ? 'default' : 'ghost'
 
           return isCollapsed ? (
