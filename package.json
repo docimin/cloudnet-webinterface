@@ -88,6 +88,7 @@
   },
   "devDependencies": {
     "@types/node": "20.12.7",
-    "@types/react": "18.2.79"
+    "@types/react": "18.2.79",
+    "pnpm": "^9.1.4"
   }
 }
