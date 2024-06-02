@@ -1,14 +1,14 @@
 import { fetchWithPermissions } from '@/utils/actions/fetchWithPermissions'
 
-export async function getNumberRegisteredPlayers() {
+export async function getModuleConfig(moduleId: string) {
   const requiredPermissions = [
-    'cloudnet_bridge:player_read',
-    'cloudnet_bridge:player_registered_count',
+    'cloudnet_rest:module_read',
+    'cloudnet_rest:module_list_loaded',
     'global:admin',
   ]
 
   return await fetchWithPermissions(
-    '/player/registeredCount',
+    `/module/${moduleId}/config`,
     requiredPermissions
   )
 }

@@ -1,20 +1,22 @@
 import PageLayout from '@/components/pageLayout'
-import { Nodes } from '@/utils/types/nodes'
-import { getNode } from '@/utils/server-api/nodes/getNode'
 import { Button } from '@/components/ui/button'
 import Link from 'next/link'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
-import NodeClientPage from '@/app/[lang]/(dashboard)/dashboard/nodes/[nodeId]/page.client'
+import { Module } from '@/utils/types/modules'
+import { getModule } from '@/utils/server-api/modules/getModule'
+import ModuleClientPage from '@/app/[lang]/(dashboard)/dashboard/modules/[moduleId]/page.client'
 import NoAccess from '@/components/static/noAccess'
+import { getModuleConfig } from '@/utils/server-api/modules/getModuleConfig'
 
 export const runtime = 'edge'
 
-export default async function NodePage({ params: { lang, nodeId } }) {
-  const node: Nodes = await getNode(nodeId)
+export default async function NodePage({ params: { lang, moduleId } }) {
+  const moduleSingle: Module = await getModule(moduleId)
+  const moduleConfig = await getModuleConfig(moduleId)
   const permissions: any = await getPermissions()
   const requiredPermissions = [
-    'cloudnet_rest:cluster_read',
-    'cloudnet_rest:cluster_node_get',
+    'cloudnet_rest:module_read',
+    'cloudnet_rest:module_get',
     'global:admin',
   ]
 
@@ -27,15 +29,15 @@ export default async function NodePage({ params: { lang, nodeId } }) {
     return <NoAccess />
   }
 
-  if (!node?.node?.uniqueId) {
+  if (!moduleSingle?.configuration?.name) {
     return (
       <div className="h-svh">
         <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">
           <h1 className="text-[7rem] font-bold leading-tight">401</h1>
-          <span className="font-medium">Node not found!</span>
+          <span className="font-medium">Module not found!</span>
           <p className="text-center text-muted-foreground">
-            It looks like you&apos;re trying to access a node that doesn&apos;t
-            exist.
+            It looks like you&apos;re trying to access a module that
+            doesn&apos;t exist.
           </p>
           <div className="mt-6 flex gap-4">
             <Link href={'.'}>
@@ -48,8 +50,12 @@ export default async function NodePage({ params: { lang, nodeId } }) {
   }
 
   return (
-    <PageLayout title={node?.node?.uniqueId}>
-      <NodeClientPage node={node} nodeId={nodeId} />
+    <PageLayout title={moduleSingle.configuration.name}>
+      <ModuleClientPage
+        module={moduleSingle}
+        moduleId={moduleId}
+        moduleConfig={moduleConfig}
+      />
     </PageLayout>
   )
 }

@@ -22,8 +22,6 @@ export default function MobileNav({
   lang,
   children,
 }): React.JSX.Element {
-  const router = useRouter()
-
   const filteredNav1 = Nav1(lang, '').filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
@@ -81,11 +79,21 @@ export default function MobileNav({
                 >
                   <h1 className={'border-b pb-2'}>Pages</h1>
                   <div>
-                    <Nav isCollapsed={false} links={filteredNav1} />
-                    <Separator />
-                    <Nav isCollapsed={false} links={filteredNav2} />
-                    <Separator />
-                    <Nav isCollapsed={false} links={filteredNav2} />
+                    {filteredNav1.length > 0 && (
+                      <Nav isCollapsed={false} links={filteredNav1} />
+                    )}
+                    {filteredNav1.length > 0 && filteredNav2.length > 0 && (
+                      <Separator />
+                    )}
+                    {filteredNav2.length > 0 && (
+                      <Nav isCollapsed={false} links={filteredNav2} />
+                    )}
+                    {filteredNav2.length > 0 && filteredNav3.length > 0 && (
+                      <Separator />
+                    )}
+                    {filteredNav3.length > 0 && (
+                      <Nav isCollapsed={false} links={filteredNav3} />
+                    )}
                   </div>
                 </div>
               </ScrollArea>

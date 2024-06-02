@@ -1,4 +1,4 @@
-import { fetchWithPermissions } from '@/utils/server-api/fetchWithPermissions'
+import { fetchWithPermissions } from '@/utils/actions/fetchWithPermissions'
 
 export async function getGroups() {
   const requiredPermissions = [

@@ -13,6 +13,7 @@ import { getSFTPTemplates } from '@/utils/server-api/templates/getSFTPTemplates'
 import { getStorages } from '@/utils/server-api/templates/getStorages'
 import Link from 'next/link'
 import { getGroups } from '@/utils/server-api/groups/getGroups'
+import { getLoadedModules } from '@/utils/server-api/modules/getLoadedModules'
 
 export const runtime = 'edge'
 
@@ -20,25 +21,26 @@ export default async function DashboardPage({ params: { lang } }) {
   const onlinePlayers = await getNumberOnlinePlayers()
   const registeredPlayers = await getNumberRegisteredPlayers()
   const nodes = await getNodes()
+  const availableModules = await getLoadedModules()
   const groups = await getGroups()
   const totalTasks = await getTasks()
   const templateStorages = await getStorages()
   const services = await getServices()
 
   let totalTemplates = 0
-  if (templateStorages.storages.includes('local')) {
+  if (templateStorages?.storages?.includes('local')) {
     const localTemplates = await getLocalTemplates()
-    totalTemplates += localTemplates.templates.length
+    totalTemplates += localTemplates?.templates?.length
   }
 
-  if (templateStorages.storages.includes('s3')) {
+  if (templateStorages?.storages?.includes('s3')) {
     const s3Templates = await getS3Templates()
-    totalTemplates += s3Templates.templates.length
+    totalTemplates += s3Templates?.templates?.length
   }
 
-  if (templateStorages.storages.includes('sftp')) {
+  if (templateStorages?.storages?.includes('sftp')) {
     const sftpTemplates = await getSFTPTemplates()
-    totalTemplates += sftpTemplates.templates.length
+    totalTemplates += sftpTemplates?.templates?.length
   }
 
   return (
@@ -48,7 +50,7 @@ export default async function DashboardPage({ params: { lang } }) {
           <DashboardCard
             title="Active players"
             icon={<UsersIcon className="w-4 h-4" />}
-            value={onlinePlayers.onlineCount}
+            value={onlinePlayers.onlineCount || 0}
             permissions={[
               'cloudnet_bridge:player_read',
               'cloudnet_bridge:player_online_count',
@@ -58,7 +60,7 @@ export default async function DashboardPage({ params: { lang } }) {
           <DashboardCard
             title="Registered players"
             icon={<UsersIcon className="w-4 h-4" />}
-            value={registeredPlayers.registeredCount}
+            value={registeredPlayers.registeredCount || 0}
             permissions={[
               'cloudnet_bridge:player_read',
               'cloudnet_bridge:player_registered_count',
@@ -69,10 +71,22 @@ export default async function DashboardPage({ params: { lang } }) {
             <DashboardCard
               title="Total nodes"
               icon={<UsersIcon className="w-4 h-4" />}
-              value={nodes.nodes.length}
+              value={nodes?.nodes?.length || 0}
               permissions={[
                 'cloudnet_rest:cluster_read',
                 'cloudnet_rest:cluster_node_list',
+                'global:admin',
+              ]}
+            />
+          </Link>
+          <Link href={`/${lang}/dashboard/modules`}>
+            <DashboardCard
+              title="Loaded modules"
+              icon={<UsersIcon className="w-4 h-4" />}
+              value={availableModules?.modules?.length || 0}
+              permissions={[
+                'cloudnet_rest:module_read',
+                'cloudnet_rest:module_list_loaded',
                 'global:admin',
               ]}
             />
@@ -90,7 +104,7 @@ export default async function DashboardPage({ params: { lang } }) {
           <DashboardCard
             title="Total groups"
             icon={<UsersIcon className="w-4 h-4" />}
-            value={groups.groups.length}
+            value={groups?.groups?.length || 0}
             permissions={[
               'cloudnet_rest:group_read',
               'cloudnet_rest:group_list',
@@ -100,7 +114,7 @@ export default async function DashboardPage({ params: { lang } }) {
           <DashboardCard
             title="Total tasks"
             icon={<UsersIcon className="w-4 h-4" />}
-            value={totalTasks.tasks.length}
+            value={totalTasks?.tasks?.length || 0}
             permissions={[
               'cloudnet_rest:task_read',
               'cloudnet_rest:task_list',
@@ -110,7 +124,7 @@ export default async function DashboardPage({ params: { lang } }) {
           <DashboardCard
             title="Total services"
             icon={<UsersIcon className="w-4 h-4" />}
-            value={services.services.length}
+            value={services?.services?.length || 0}
             permissions={[
               'cloudnet_rest:service_read',
               'cloudnet_rest:service_list',
@@ -124,9 +138,11 @@ export default async function DashboardPage({ params: { lang } }) {
 }
 
 const DashboardCard = async ({ title, icon, value, permissions }) => {
-  const perms: string[] = await getPermissions()
+  let perms: string[] = await getPermissions()
 
-  return permissions.some((permission) => perms.includes(permission)) ? (
+  return permissions.some((permission: string) =>
+    perms.includes(permission)
+  ) ? (
     <Card>
       <CardHeader className="flex flex-row items-center justify-between pb-2">
         <CardTitle className="text-sm font-medium">{title}</CardTitle>

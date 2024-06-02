@@ -13,6 +13,7 @@ import { NodesType } from '@/utils/types/nodes'
 import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import Link from 'next/link'
+import NoAccess from '@/components/static/noAccess'
 
 export const runtime = 'edge'
 
@@ -25,10 +26,19 @@ export default async function NodesPage({ params: { lang } }) {
     'global:admin',
   ]
 
+  // check if user has required permissions
+  const hasPermissions = requiredPermissions.some((permission) =>
+    permissions.includes(permission)
+  )
+
+  if (!hasPermissions) {
+    return <NoAccess />
+  }
+
   return (
     <PageLayout title={'Nodes'}>
       <Table>
-        <TableCaption>A list of your recent invoices.</TableCaption>
+        <TableCaption>A list of your nodes.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Name</TableHead>

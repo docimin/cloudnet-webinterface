@@ -10,8 +10,15 @@ import {
 } from 'lucide-react'
 import { useToast } from '@/components/ui/use-toast'
 import { Input } from '@/components/ui/input'
+import { Nodes } from '@/utils/types/nodes'
 
-export default function NodeClientPage({ node, nodeId }) {
+export default function NodeClientPage({
+  node,
+  nodeId,
+}: {
+  node: Nodes
+  nodeId: string
+}) {
   const { toast } = useToast()
   const handleSave = async (event) => {
     event.preventDefault()
@@ -45,11 +52,12 @@ export default function NodeClientPage({ node, nodeId }) {
       name: 'CPU Usage',
       icon: MemoryStickIcon,
       canEdit: false,
-      value1:
-        (node?.nodeInfoSnapshot.processSnapshot.cpuUsage).toFixed(2) + '%',
-      value2:
-        (node?.nodeInfoSnapshot.processSnapshot.systemCpuUsage).toFixed(2) +
-        '%',
+      value1: node?.nodeInfoSnapshot?.processSnapshot?.cpuUsage
+        ? node.nodeInfoSnapshot.processSnapshot.cpuUsage.toFixed(2) + '%'
+        : 'N/A',
+      value2: node?.nodeInfoSnapshot?.processSnapshot?.systemCpuUsage
+        ? node.nodeInfoSnapshot.processSnapshot.systemCpuUsage.toFixed(2) + '%'
+        : 'N/A',
       value1Name: 'Node Usage',
       value2Name: 'System Usage',
     },
@@ -57,10 +65,12 @@ export default function NodeClientPage({ node, nodeId }) {
       name: 'Memory',
       icon: MemoryStickIcon,
       canEdit: false,
-      value1:
-        node?.nodeInfoSnapshot && node?.nodeInfoSnapshot?.usedMemory + ' MB',
-      value2:
-        node?.nodeInfoSnapshot && node?.nodeInfoSnapshot?.maxMemory + ' MB',
+      value1: node?.nodeInfoSnapshot?.usedMemory
+        ? node.nodeInfoSnapshot.usedMemory + ' MB'
+        : 'N/A',
+      value2: node?.nodeInfoSnapshot?.maxMemory
+        ? node.nodeInfoSnapshot.maxMemory + ' MB'
+        : 'N/A',
       value1Name: 'Used Memory',
       value2Name: 'Max Memory',
     },
@@ -68,7 +78,7 @@ export default function NodeClientPage({ node, nodeId }) {
       name: 'Amount of services',
       icon: DatabaseZapIcon,
       canEdit: false,
-      value1: node?.nodeInfoSnapshot?.currentServicesCount,
+      value1: node?.nodeInfoSnapshot?.currentServicesCount || 0,
       value2: '',
       value1Name: 'Current Services Count',
       value2Name: '',
@@ -86,7 +96,7 @@ export default function NodeClientPage({ node, nodeId }) {
       name: 'Version',
       icon: GitBranchIcon,
       canEdit: false,
-      value1: node?.nodeInfoSnapshot?.version?.major,
+      value1: node?.nodeInfoSnapshot?.version?.major || 'N/A',
       value2: node?.nodeInfoSnapshot?.version?.versionType,
       value1Name: 'Major version',
       value2Name: 'Type',

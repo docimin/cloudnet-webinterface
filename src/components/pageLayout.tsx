@@ -2,6 +2,7 @@ import { Separator } from '@/components/ui/separator'
 import CheckAuth from '@/components/checkAuth'
 import { ThemeToggle } from '@/components/ThemeToggle'
 import ChangeLanguage from '@/components/system/changeLanguage'
+import { ScrollArea } from '@/components/ui/scroll-area'
 
 export default function PageLayout({ children, title }) {
   return (

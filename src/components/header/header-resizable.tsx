@@ -52,7 +52,7 @@ export default function SidebarResizable({
             sizes
           )}; path=/`
         }}
-        className="h-full max-h-[full] items-stretch flex"
+        className="h-full max-h-[full] items-stretch flex fixed"
       >
         <ResizablePanel
           defaultSize={defaultLayout[0]}
@@ -76,8 +76,9 @@ export default function SidebarResizable({
         >
           <div
             className={cn(
-              'flex flex-col h-full w-full',
-              isCollapsed && 'items-center'
+              'flex flex-col h-full w-full z-50',
+              isCollapsed && 'items-center',
+              'sticky top-0' // Make the header sticky
             )}
           >
             <div>
@@ -100,13 +101,23 @@ export default function SidebarResizable({
               </div>
               <Separator />
             </div>
-            <ScrollArea className={'h-full'}>
+            <ScrollArea className={'h-full overflow-auto'}>
               <div>
-                <Nav isCollapsed={isCollapsed} links={filteredNav1} />
-                <Separator />
-                <Nav isCollapsed={isCollapsed} links={filteredNav2} />
-                <Separator />
-                <Nav isCollapsed={isCollapsed} links={filteredNav3} />
+                {filteredNav1.length > 0 && (
+                  <Nav isCollapsed={isCollapsed} links={filteredNav1} />
+                )}
+                {filteredNav1.length > 0 && filteredNav2.length > 0 && (
+                  <Separator />
+                )}
+                {filteredNav2.length > 0 && (
+                  <Nav isCollapsed={isCollapsed} links={filteredNav2} />
+                )}
+                {filteredNav2.length > 0 && filteredNav3.length > 0 && (
+                  <Separator />
+                )}
+                {filteredNav3.length > 0 && (
+                  <Nav isCollapsed={isCollapsed} links={filteredNav3} />
+                )}
               </div>
             </ScrollArea>
             <div className={'mt-auto relative bottom-0 block'}>
@@ -117,7 +128,7 @@ export default function SidebarResizable({
         </ResizablePanel>
         <ResizableHandle withHandle />
         <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
-          {children}
+          <ScrollArea className={'h-full w-full'}>{children}</ScrollArea>
         </ResizablePanel>
       </ResizablePanelGroup>
     </TooltipProvider>

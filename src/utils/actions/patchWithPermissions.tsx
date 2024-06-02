@@ -1,9 +1,10 @@
 import { getCookies } from '@/lib/server-calls'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 
-export async function fetchWithPermissions(
+export async function patchWithPermissions(
   url: string,
-  requiredPermissions: string[]
+  requiredPermissions: string[],
+  body: any = {}
 ) {
   const cookies = await getCookies()
   const perms: string[] = await getPermissions()
@@ -20,16 +21,21 @@ export async function fetchWithPermissions(
     const decodedUrl = decodeURIComponent(cookies['add'])
 
     const response = await fetch(`${decodedUrl}${url}`, {
-      method: 'GET',
+      method: 'PATCH',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${cookies['at']}`,
       },
+      body: JSON.stringify({ ...body }),
     })
 
-    return await response.json()
+    return response.ok
+      ? { success: response.statusText, status: response.status }
+      : {
+          error: response.statusText,
+          status: response.status,
+        }
   } catch (error) {
-    console.log('Error:', error)
-    return error
+    return { error: error.message, status: error.status }
   }
 }

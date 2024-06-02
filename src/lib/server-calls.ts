@@ -29,7 +29,6 @@ export async function checkAuthToken() {
 
     return await response.json()
   } catch (error) {
-    console.log('Error:', error)
     return error
   }
 }

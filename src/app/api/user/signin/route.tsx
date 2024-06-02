@@ -43,7 +43,6 @@ export async function POST(request: NextRequest) {
   if (!address.endsWith('/api/v3')) {
     address += '/api/v3'
   }
-  console.log(address)
 
   try {
     const response = await fetch(`${address}/auth`, {
