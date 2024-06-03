@@ -1,7 +1,8 @@
+'use server'
 import { getCookies } from '@/lib/server-calls'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 
-export async function putWithPermissions(
+export async function postWithPermissions(
   url: string,
   requiredPermissions: string[],
   body: any = {}
@@ -21,7 +22,7 @@ export async function putWithPermissions(
     const decodedUrl = decodeURIComponent(cookies['add'])
 
     const response = await fetch(`${decodedUrl}${url}`, {
-      method: 'PUT',
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${cookies['at']}`,
@@ -29,13 +30,8 @@ export async function putWithPermissions(
       body: JSON.stringify({ ...body }),
     })
 
-    return response.ok
-      ? { success: 'Updated successfully', status: 200 }
-      : {
-          error: 'Failed to update',
-          status: 500,
-        }
+    return await response.json()
   } catch (error) {
-    return { error: 'Failed to update', status: 500 }
+    return error
   }
 }
