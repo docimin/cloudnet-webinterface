@@ -69,22 +69,40 @@ export default function ModuleClientPage({
       <form onSubmit={handleModuleConfigSave}>
         <div className={'w-full flex justify-between'}>
           <div>
-            <Button variant="outline" type="submit">
-              Save
-            </Button>
+            {moduleConfigData && (
+              <Button variant="outline" type="submit">
+                Save
+              </Button>
+            )}
           </div>
           <div className={'flex gap-4 items-center'}>
             <span>STATUS: {module.lifecycle}</span>
-            <Button variant="outline" onClick={() => handleLifecycle('start')}>
+            <Button
+              variant="outline"
+              onClick={() => handleLifecycle('start')}
+              type={'button'}
+            >
               Start
             </Button>
-            <Button variant="outline" onClick={() => handleLifecycle('reload')}>
+            <Button
+              variant="outline"
+              onClick={() => handleLifecycle('reload')}
+              type={'button'}
+            >
               Reload
             </Button>
-            <Button variant="outline" onClick={() => handleLifecycle('stop')}>
+            <Button
+              variant="outline"
+              onClick={() => handleLifecycle('stop')}
+              type={'button'}
+            >
               Stop
             </Button>
-            <Button variant="outline" onClick={() => handleLifecycle('unload')}>
+            <Button
+              variant="outline"
+              onClick={() => handleLifecycle('unload')}
+              type={'button'}
+            >
               Unload
             </Button>
             <Button variant="destructive" onClick={handleUninstall}>
@@ -154,19 +172,21 @@ export default function ModuleClientPage({
             />
           </div>
         </div>
-        <div className={'w-full mt-8'}>
-          <Label htmlFor="json">JSON</Label>
-          <div className="mt-2">
-            <Textarea
-              name="json"
-              id="json"
-              className={'h-96'}
-              required
-              value={moduleConfigData}
-              onChange={(event) => setModuleConfigData(event.target.value)}
-            />
+        {moduleConfigData && (
+          <div className="w-full mt-8">
+            <Label htmlFor="json">JSON</Label>
+            <div className="mt-2">
+              <Textarea
+                name="json"
+                id="json"
+                className={'h-96'}
+                required
+                value={moduleConfigData}
+                onChange={(event) => setModuleConfigData(event.target.value)}
+              />
+            </div>
           </div>
-        </div>
+        )}
       </form>
     </>
   )

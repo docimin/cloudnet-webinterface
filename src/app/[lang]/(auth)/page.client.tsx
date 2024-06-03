@@ -73,7 +73,7 @@ export default function Client() {
       console.error(error)
     }
   }
-
+  
   return (
     <>
       <div className="w-full h-full">
@@ -92,19 +92,21 @@ export default function Client() {
                 </p>
               </div>
               <div className="grid gap-4">
-                <div className="grid gap-2">
-                  <Label htmlFor="address">Address</Label>
-                  <Input
-                    id="address"
-                    type="text"
-                    placeholder="127.0.0.1:2812"
-                    onChange={(e) =>
-                      setData({ ...data, address: e.target.value })
-                    }
-                    value={data.address}
-                    required
-                  />
-                </div>
+                {process.env.NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN !== 'true' && (
+                  <div className="grid gap-2">
+                    <Label htmlFor="address">Address</Label>
+                    <Input
+                      id="address"
+                      type="text"
+                      placeholder="127.0.0.1:2812"
+                      onChange={(e) =>
+                        setData({ ...data, address: e.target.value })
+                      }
+                      value={data.address}
+                      required
+                    />
+                  </div>
+                )}
                 <div className="grid gap-2">
                   <Label htmlFor="email">Username</Label>
                   <Input
