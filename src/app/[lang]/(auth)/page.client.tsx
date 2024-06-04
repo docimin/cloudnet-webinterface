@@ -7,6 +7,7 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { checkToken } from '@/utils/actions/user/jwt'
+import * as Sentry from '@sentry/nextjs'
 
 export default function Client() {
   const { toast } = useToast()
@@ -44,7 +45,14 @@ export default function Client() {
       const dataResponse = await response.json()
       console.log(dataResponse)
 
-      if (dataResponse.cause) {
+      if (dataResponse.accessToken) {
+        toast({
+          title: 'Success',
+          description: 'You have successfully logged in',
+        })
+
+        router.push('/dashboard')
+      } else if (dataResponse.cause) {
         toast({
           title: 'Error',
           description: "Can't connect to the server. Please check the address",
@@ -64,11 +72,11 @@ export default function Client() {
         })
       } else {
         toast({
-          title: 'Success',
-          description: 'You have successfully logged in',
+          title: 'Error',
+          description: 'An error occurred',
+          variant: 'destructive',
         })
-
-        router.push('/dashboard')
+        Sentry.captureException('Error logging in', dataResponse)
       }
     } catch (error) {
       console.error(error)
