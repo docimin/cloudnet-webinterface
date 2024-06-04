@@ -1,27 +1,101 @@
 import PageLayout from '@/components/pageLayout'
-import Link from 'next/link'
+import {
+  Table,
+  TableBody,
+  TableCaption,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
+import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import Link from 'next/link'
+import NoAccess from '@/components/static/noAccess'
+import Maintenance from '@/components/static/maintenance'
+import { getServices } from '@/utils/server-api/services/getServices'
+import { formatBytes } from '@/components/formatBytes'
 
 export const runtime = 'edge'
 
-export default function UsersPage() {
+export default async function ServicesPage({ params: { lang } }) {
+  const services: Services = await getServices()
+  const permissions: string[] = await getPermissions()
+  const requiredPermissions = [
+    'cloudnet_rest:service_read',
+    'cloudnet_rest:service_list',
+    'global:admin',
+  ]
+
+  // check if user has required permissions
+  const hasPermissions = requiredPermissions.some((permission) =>
+    permissions.includes(permission)
+  )
+
+  if (!hasPermissions) {
+    return <NoAccess />
+  }
+
+  if (!services.services) {
+    return <Maintenance />
+  }
+
   return (
-    <PageLayout title={'Services'}>
-      <div className="h-svh">
-        <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">
-          <h1 className="text-[7rem] font-bold leading-tight">418</h1>
-          <span className="font-medium">Teapot!</span>
-          <p className="text-center text-muted-foreground">
-            It looks like you&apos;re trying to access a page that isn&apos;t
-            available yet.
-          </p>
-          <div className="mt-6 flex gap-4">
-            <Link href={'.'}>
-              <Button variant="outline">Go back</Button>
-            </Link>
-          </div>
-        </div>
-      </div>
+    <PageLayout title={'Nodes'}>
+      <Table>
+        <TableCaption>A list of your services.</TableCaption>
+        <TableHeader>
+          <TableRow>
+            <TableHead className="w-[300px]">Name</TableHead>
+            <TableHead>CPU Usage</TableHead>
+            <TableHead>RAM Usage</TableHead>
+            {requiredPermissions.some((permission) =>
+              permissions.includes(permission)
+            ) && <TableHead className="sr-only">Edit</TableHead>}
+          </TableRow>
+        </TableHeader>
+        <TableBody>
+          {services?.services
+            .sort((a, b) =>
+              a.configuration.serviceId.nodeUniqueId.localeCompare(
+                b.configuration.serviceId.nodeUniqueId
+              )
+            )
+            .map((service) => (
+              <TableRow key={service?.configuration.serviceId.uniqueId}>
+                <TableCell className="font-medium">
+                  {service?.configuration.serviceId.taskName}
+                  {service?.configuration.serviceId.nameSplitter}
+                  {service?.configuration.serviceId.taskServiceId}
+                </TableCell>
+                <TableCell>
+                  {service?.processSnapshot.cpuUsage.toFixed(2) + '%'}
+                </TableCell>
+                <TableCell>
+                  {formatBytes(service?.processSnapshot.heapUsageMemory)} /{' '}
+                  {formatBytes(service?.processSnapshot.maxHeapMemory)}
+                </TableCell>
+                {requiredPermissions.some((permission) =>
+                  permissions.includes(permission)
+                ) && (
+                  <TableCell>
+                    <Link
+                      href={`/${lang}/dashboard/services/${service?.configuration.serviceId.uniqueId}`}
+                    >
+                      <Button
+                        size={'sm'}
+                        variant={'link'}
+                        className={'p-0 text-right'}
+                      >
+                        Edit
+                      </Button>
+                    </Link>
+                  </TableCell>
+                )}
+              </TableRow>
+            ))}
+        </TableBody>
+      </Table>
     </PageLayout>
   )
 }

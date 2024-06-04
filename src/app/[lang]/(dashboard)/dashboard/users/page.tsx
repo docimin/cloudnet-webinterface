@@ -17,6 +17,7 @@ import NoAccess from '@/components/static/noAccess'
 import { getUsers } from '@/utils/server-api/users/getUsers'
 import { Users } from '@/utils/types/users'
 import { formatDate } from '@/components/formatDate'
+import Maintenance from '@/components/static/maintenance'
 
 export const runtime = 'edge'
 
@@ -28,7 +29,7 @@ export default async function UsersPage({ params: { lang } }) {
     'cloudnet_rest:user_get_all',
     'global:admin',
   ]
-  
+
   // check if user has required permissions
   const hasPermissions = requiredPermissions.some((permission) =>
     permissions.includes(permission)
@@ -36,6 +37,10 @@ export default async function UsersPage({ params: { lang } }) {
 
   if (!hasPermissions) {
     return <NoAccess />
+  }
+
+  if (!users.users) {
+    return <Maintenance />
   }
 
   return (
@@ -53,7 +58,7 @@ export default async function UsersPage({ params: { lang } }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {users.users
+          {users?.users
             .sort((a, b) => a.username.localeCompare(b.username))
             .map((user) => (
               <TableRow key={user?.id}>

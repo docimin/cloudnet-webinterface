@@ -14,6 +14,7 @@ import Link from 'next/link'
 import { getModules } from '@/utils/server-api/modules/getModules'
 import { Modules } from '@/utils/types/modules'
 import NoAccess from '@/components/static/noAccess'
+import Maintenance from '@/components/static/maintenance'
 
 export const runtime = 'edge'
 
@@ -33,6 +34,10 @@ export default async function NodesPage({ params: { lang } }) {
 
   if (!hasPermissions) {
     return <NoAccess />
+  }
+
+  if (!modules.modules) {
+    return <Maintenance />
   }
 
   return (

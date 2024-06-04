@@ -44,7 +44,7 @@ export default async function DashboardPage({ params: { lang } }) {
     const sftpTemplates = await getSFTPTemplates()
     totalTemplates += sftpTemplates?.templates?.length
   }
-  
+
   return (
     <PageLayout title={'Dashboard'}>
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
@@ -133,16 +133,18 @@ export default async function DashboardPage({ params: { lang } }) {
               'global:admin',
             ]}
           />
-          <DashboardCard
-            title="REST Users"
-            icon={<UsersIcon className="w-4 h-4" />}
-            value={users?.users?.length || 0}
-            permissions={[
-              'cloudnet_rest:user_read',
-              'cloudnet_rest:user_get_all',
-              'global:admin',
-            ]}
-          />
+          <Link href={`/${lang}/dashboard/users`}>
+            <DashboardCard
+              title="REST Users"
+              icon={<UsersIcon className="w-4 h-4" />}
+              value={users?.users?.length || 0}
+              permissions={[
+                'cloudnet_rest:user_read',
+                'cloudnet_rest:user_get_all',
+                'global:admin',
+              ]}
+            />
+          </Link>
         </div>
       </main>
     </PageLayout>

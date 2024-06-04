@@ -14,6 +14,7 @@ import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import Link from 'next/link'
 import NoAccess from '@/components/static/noAccess'
+import Maintenance from '@/components/static/maintenance'
 
 export const runtime = 'edge'
 
@@ -33,6 +34,10 @@ export default async function NodesPage({ params: { lang } }) {
 
   if (!hasPermissions) {
     return <NoAccess />
+  }
+
+  if (!nodes.nodes) {
+    return <Maintenance />
   }
 
   return (

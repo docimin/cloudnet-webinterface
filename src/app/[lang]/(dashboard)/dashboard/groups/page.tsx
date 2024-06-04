@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button'
 
 export const runtime = 'edge'
 
-export default function UsersPage() {
+export default function GroupsPage() {
   return (
     <PageLayout title={'Groups'}>
       <div className="h-svh">
