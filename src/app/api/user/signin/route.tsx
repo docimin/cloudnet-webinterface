@@ -12,6 +12,13 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'No body provided', status: 400 })
   }
 
+  const domainUrl = new URL(
+    process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost'
+  )
+  const domain = domainUrl.hostname.startsWith('www.')
+    ? domainUrl.hostname.slice(4)
+    : domainUrl.hostname
+
   const setCookie = (name: string, value: string, expiresIn: number) => {
     cookies().set(name, value, {
       httpOnly: true,
@@ -19,6 +26,7 @@ export async function POST(request: NextRequest) {
       sameSite: 'strict',
       maxAge: Number(new Date(Date.now() + expiresIn)),
       path: '/',
+      domain: domain,
     })
   }
 

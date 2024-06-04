@@ -14,6 +14,7 @@ import { getStorages } from '@/utils/server-api/templates/getStorages'
 import Link from 'next/link'
 import { getGroups } from '@/utils/server-api/groups/getGroups'
 import { getLoadedModules } from '@/utils/server-api/modules/getLoadedModules'
+import { getUsers } from '@/utils/server-api/users/getUsers'
 
 export const runtime = 'edge'
 
@@ -26,6 +27,7 @@ export default async function DashboardPage({ params: { lang } }) {
   const totalTasks = await getTasks()
   const templateStorages = await getStorages()
   const services = await getServices()
+  const users = await getUsers()
 
   let totalTemplates = 0
   if (templateStorages?.storages?.includes('local')) {
@@ -42,7 +44,7 @@ export default async function DashboardPage({ params: { lang } }) {
     const sftpTemplates = await getSFTPTemplates()
     totalTemplates += sftpTemplates?.templates?.length
   }
-
+  
   return (
     <PageLayout title={'Dashboard'}>
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
@@ -128,6 +130,16 @@ export default async function DashboardPage({ params: { lang } }) {
             permissions={[
               'cloudnet_rest:service_read',
               'cloudnet_rest:service_list',
+              'global:admin',
+            ]}
+          />
+          <DashboardCard
+            title="REST Users"
+            icon={<UsersIcon className="w-4 h-4" />}
+            value={users?.users?.length || 0}
+            permissions={[
+              'cloudnet_rest:user_read',
+              'cloudnet_rest:user_get_all',
               'global:admin',
             ]}
           />
