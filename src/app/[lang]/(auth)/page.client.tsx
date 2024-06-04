@@ -42,6 +42,7 @@ export default function Client() {
       })
 
       const dataResponse = await response.json()
+      console.log(dataResponse)
 
       if (dataResponse.cause) {
         toast({
@@ -73,7 +74,7 @@ export default function Client() {
       console.error(error)
     }
   }
-  
+
   return (
     <>
       <div className="w-full h-full">
