@@ -13,6 +13,8 @@ import PageLayout from '@/components/pageLayout'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 
+export const runtime = 'edge'
+
 export default async function ServiceClientPage({
   params: { serviceId, lang },
 }) {
