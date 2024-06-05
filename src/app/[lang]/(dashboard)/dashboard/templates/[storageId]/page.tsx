@@ -13,7 +13,7 @@ import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import Link from 'next/link'
 import NoAccess from '@/components/static/noAccess'
 import Maintenance from '@/components/static/maintenance'
-import { TemplatesList } from '@/utils/types/templateStorages'
+import { Templates, TemplatesList } from '@/utils/types/templateStorages'
 import { getTemplates } from '@/utils/server-api/templates/getTemplates'
 
 export const runtime = 'edge'
@@ -46,8 +46,18 @@ export default async function ServicesPage({ params: { storageId, lang } }) {
     return <Maintenance />
   }
 
+  const uniqueTemplates: Templates[] = templates.templates.reduce(
+    (unique, template) => {
+      if (!unique.some((item) => item.prefix === template.prefix)) {
+        unique.push(template)
+      }
+      return unique
+    },
+    []
+  )
+
   return (
-    <PageLayout title={'Nodes'}>
+    <PageLayout title={storageId || 'Templates'}>
       <Table>
         <TableCaption>A list of your templates.</TableCaption>
         <TableHeader>
@@ -59,17 +69,17 @@ export default async function ServicesPage({ params: { storageId, lang } }) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {templates?.templates
-            .sort((a, b) => a.name.localeCompare(b.name))
+          {uniqueTemplates
+            .sort((a, b) => a.prefix.localeCompare(b.prefix))
             .map((template) => (
-              <TableRow key={template.name}>
-                <TableCell className="font-medium">{template.name}</TableCell>
+              <TableRow key={template.prefix}>
+                <TableCell className="font-medium">{template.prefix}</TableCell>
                 {requiredPermissions.some((permission) =>
                   permissions.includes(permission)
                 ) && (
                   <TableCell>
                     <Link
-                      href={`/${lang}/dashboard/templates/${storageId}/${template.name}`}
+                      href={`/${lang}/dashboard/templates/${storageId}/${template.prefix}`}
                     >
                       <Button
                         size={'sm'}

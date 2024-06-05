@@ -47,7 +47,7 @@ export default async function ServicesPage({ params: { lang } }) {
   }
 
   return (
-    <PageLayout title={'Nodes'}>
+    <PageLayout title={'Templates'}>
       <Table>
         <TableCaption>A list of your storages.</TableCaption>
         <TableHeader>

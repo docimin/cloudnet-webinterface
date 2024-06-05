@@ -44,9 +44,9 @@ export default async function UsersPage({ params: { lang } }) {
   }
 
   return (
-    <PageLayout title={'Nodes'}>
+    <PageLayout title={'Users'}>
       <Table>
-        <TableCaption>A list of your nodes.</TableCaption>
+        <TableCaption>A list of your users.</TableCaption>
         <TableHeader>
           <TableRow>
             <TableHead className="w-[100px]">Name</TableHead>

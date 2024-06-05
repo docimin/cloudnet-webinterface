@@ -2,7 +2,7 @@
 import { getCookies } from '@/lib/server-calls'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 
-export async function fetchWithPermissions(
+export async function fetchWithPermissionsAsText(
   url: string,
   requiredPermissions: string[]
 ) {
@@ -30,7 +30,7 @@ export async function fetchWithPermissions(
 
     //console.log(response.status + ' ' + response.statusText)
 
-    return await response.json()
+    return await response.text()
   } catch (error) {
     return error
   }

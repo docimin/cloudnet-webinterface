@@ -13,17 +13,25 @@ import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import Link from 'next/link'
 import NoAccess from '@/components/static/noAccess'
 import Maintenance from '@/components/static/maintenance'
-import { getServices } from '@/utils/server-api/services/getServices'
-import { formatBytes } from '@/components/formatBytes'
+import { Templates, TemplatesList } from '@/utils/types/templateStorages'
+import { getTemplates } from '@/utils/server-api/templates/getTemplates'
 
 export const runtime = 'edge'
 
-export default async function ServicesPage({ params: { lang } }) {
-  const services: Services = await getServices()
+export default async function ServicesPage({
+  params: { storageId, storagePrefix, lang },
+}) {
+  const templates: TemplatesList = await getTemplates(storageId)
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [
-    'cloudnet_rest:service_read',
-    'cloudnet_rest:service_list',
+    'cloudnet_rest:template_storage_read',
+    'cloudnet_rest:template_storage_template_list',
+    'global:admin',
+  ]
+
+  const requiredEditPermissions = [
+    'cloudnet_rest:template_read',
+    'cloudnet_rest:template_directory_list',
     'global:admin',
   ]
 
@@ -36,51 +44,48 @@ export default async function ServicesPage({ params: { lang } }) {
     return <NoAccess />
   }
 
-  if (!services.services) {
+  if (!templates.templates) {
     return <Maintenance />
   }
 
+  const filteredTemplates = templates.templates.filter(
+    (template) => template.prefix === storagePrefix
+  )
+
+  const uniqueTemplates: Templates[] = filteredTemplates.reduce(
+    (unique, template) => {
+      if (!unique.some((item) => item.name === template.name)) {
+        unique.push(template)
+      }
+      return unique
+    },
+    []
+  )
+
   return (
-    <PageLayout title={'Services'}>
+    <PageLayout title={`${storageId} - ${storagePrefix}` || 'Templates'}>
       <Table>
-        <TableCaption>A list of your services.</TableCaption>
+        <TableCaption>A list of your templates.</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[300px]">Name</TableHead>
-            <TableHead>CPU Usage</TableHead>
-            <TableHead>RAM Usage</TableHead>
-            {requiredPermissions.some((permission) =>
+            <TableHead className="w-full">Name</TableHead>
+            {requiredEditPermissions.some((permission) =>
               permissions.includes(permission)
             ) && <TableHead className="sr-only">Edit</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
-          {services?.services
-            .sort((a, b) =>
-              a.configuration.serviceId.nodeUniqueId.localeCompare(
-                b.configuration.serviceId.nodeUniqueId
-              )
-            )
-            .map((service) => (
-              <TableRow key={service?.configuration.serviceId.uniqueId}>
-                <TableCell className="font-medium">
-                  {service?.configuration.serviceId.taskName}
-                  {service?.configuration.serviceId.nameSplitter}
-                  {service?.configuration.serviceId.taskServiceId}
-                </TableCell>
-                <TableCell>
-                  {service?.processSnapshot.cpuUsage.toFixed(2) + '%'}
-                </TableCell>
-                <TableCell>
-                  {formatBytes(service?.processSnapshot.heapUsageMemory)} /{' '}
-                  {formatBytes(service?.processSnapshot.maxHeapMemory)}
-                </TableCell>
+          {uniqueTemplates
+            .sort((a, b) => a.name.localeCompare(b.name))
+            .map((template) => (
+              <TableRow key={template.name}>
+                <TableCell className="font-medium">{template.name}</TableCell>
                 {requiredPermissions.some((permission) =>
                   permissions.includes(permission)
                 ) && (
                   <TableCell>
                     <Link
-                      href={`/${lang}/dashboard/services/${service?.configuration.serviceId.uniqueId}`}
+                      href={`/${lang}/dashboard/templates/${storageId}/${storagePrefix}/${template.name}`}
                     >
                       <Button
                         size={'sm'}

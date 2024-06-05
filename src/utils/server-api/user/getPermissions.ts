@@ -1,3 +1,4 @@
+'use server'
 import { getCookies } from '@/lib/server-calls'
 
 export async function getPermissions(): Promise<string[]> {
@@ -5,6 +6,6 @@ export async function getPermissions(): Promise<string[]> {
   if (!cookie['permissions']) {
     return []
   }
-  
+
   return JSON.parse(decodeURIComponent(cookie['permissions']))
 }
