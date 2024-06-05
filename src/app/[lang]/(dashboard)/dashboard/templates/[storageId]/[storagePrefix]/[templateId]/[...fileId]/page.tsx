@@ -15,7 +15,6 @@ export default async function TemplatePage({ params }) {
     'cloudnet_rest:template_directory_list',
     'global:admin',
   ]
-  let fileData = ''
 
   // check if user has required permissions
   const hasPermissions = requiredPermissions.some((permission) =>
@@ -33,16 +32,9 @@ export default async function TemplatePage({ params }) {
   if (params.fileId && params.fileId.length > 0) {
     const lastElement = params.fileId[params.fileId.length - 1]
     if (lastElement.includes('.')) {
-      fileData = await getFile(
-        params.storageId,
-        params.storagePrefix,
-        params.templateId,
-        params.fileId
-      )
-
       return (
         <PageLayout title={'File editor'}>
-          <FileEditor params={params} fileData={fileData} />
+          <FileEditor params={params} />
         </PageLayout>
       )
     }

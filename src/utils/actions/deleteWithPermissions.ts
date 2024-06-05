@@ -1,13 +1,9 @@
-'use server'
 import { getCookies } from '@/lib/server-calls'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 
-export async function postWithPermissions(
+export async function deleteWithPermissions(
   url: string,
-  requiredPermissions: string[],
-  body: any = {},
-  returnJson: boolean = true,
-  stringifyBody: boolean = true
+  requiredPermissions: string[]
 ) {
   const cookies = await getCookies()
   const perms: string[] = await getPermissions()
@@ -24,20 +20,22 @@ export async function postWithPermissions(
     const decodedUrl = decodeURIComponent(cookies['add'])
 
     const response = await fetch(`${decodedUrl}${url}`, {
-      method: 'POST',
+      method: 'DELETE',
       headers: {
         'Content-Type': 'application/json',
         Authorization: `Bearer ${cookies['at']}`,
       },
-      body: stringifyBody ? JSON.stringify({ ...body }) : body,
     })
 
-    if (returnJson) {
-      return await response.json()
-    } else {
-      return response
-    }
+    console.log(response.status + ' ' + response.statusText)
+
+    return response.ok
+      ? { success: 'Updated successfully', status: 200 }
+      : {
+          error: 'Failed to update',
+          status: 500,
+        }
   } catch (error) {
-    return error
+    return { error: 'Failed to update', status: 500 }
   }
 }

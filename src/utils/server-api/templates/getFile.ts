@@ -1,3 +1,4 @@
+'use server'
 import { fetchWithPermissionsAsText } from '@/utils/actions/fetchWithPermissionsAsText'
 
 export async function getFile(
@@ -14,7 +15,9 @@ export async function getFile(
 
   // Skip the first element and join the rest with '/'
   const directory = params.join('/')
-  const url = `/template/${storageId}/${storagePrefix}/${templateId}/file/download?path=${directory}`
 
-  return await fetchWithPermissionsAsText(url, requiredPermissions)
+  return await fetchWithPermissionsAsText(
+    `/template/${storageId}/${storagePrefix}/${templateId}/file/download?path=${directory}`,
+    requiredPermissions
+  )
 }

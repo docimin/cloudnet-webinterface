@@ -15,9 +15,9 @@ export async function getTemplateFiles(
 
   // Skip the first element and join the rest with '/'
   const directory = (fileId && fileId.join('/')) || ''
-  console.log(fileId)
-  const url = `/template/${storageId}/${storagePrefix}/${templateId}/directory/list?deep=true&directory=${directory}`
-  console.log(url)
 
-  return await fetchWithPermissions(url, requiredPermissions)
+  return await fetchWithPermissions(
+    `/template/${storageId}/${storagePrefix}/${templateId}/directory/list?deep=true&directory=${directory}`,
+    requiredPermissions
+  )
 }
