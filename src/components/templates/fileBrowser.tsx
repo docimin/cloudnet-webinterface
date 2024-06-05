@@ -16,6 +16,7 @@ import { formatDate } from '@/components/formatDate'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
+import { deleteFile } from '@/utils/actions/templates/deleteFile'
 
 export default function FileBrowser({
   params,
@@ -63,6 +64,17 @@ export default function FileBrowser({
     })
   }, [])
 
+  const handleDelete = async (file: string) => {
+    const newFileId = [...params.fileId, file]
+    await deleteFile(
+      params.storageId,
+      params.storagePrefix,
+      params.templateId,
+      newFileId
+    )
+    router.refresh()
+  }
+
   return (
     <div className="flex w-full flex-col">
       <main className="flex-1">
@@ -104,11 +116,11 @@ export default function FileBrowser({
                       </TableCell>
                       <TableCell>
                         <div className="flex items-center gap-2">
-                          <Button variant="ghost" size="icon">
-                            <DeleteIcon className="h-4 w-4" />
-                            <span className="sr-only">Edit</span>
-                          </Button>
-                          <Button variant="ghost" size="icon">
+                          <Button
+                            variant="ghost"
+                            size="icon"
+                            onClick={() => handleDelete(file.name)}
+                          >
                             <Trash2Icon className="h-4 w-4" />
                             <span className="sr-only">Delete</span>
                           </Button>
@@ -123,27 +135,6 @@ export default function FileBrowser({
         </div>
       </main>
     </div>
-  )
-}
-
-function DeleteIcon(props) {
-  return (
-    <svg
-      {...props}
-      xmlns="http://www.w3.org/2000/svg"
-      width="24"
-      height="24"
-      viewBox="0 0 24 24"
-      fill="none"
-      stroke="currentColor"
-      strokeWidth="2"
-      strokeLinecap="round"
-      strokeLinejoin="round"
-    >
-      <path d="M20 5H9l-7 7 7 7h11a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z" />
-      <line x1="18" x2="12" y1="9" y2="15" />
-      <line x1="12" x2="18" y1="9" y2="15" />
-    </svg>
   )
 }
 
