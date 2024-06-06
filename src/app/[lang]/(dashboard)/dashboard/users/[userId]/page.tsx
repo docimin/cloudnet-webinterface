@@ -34,7 +34,7 @@ export default async function UserPage({ params: { lang, userId } }) {
 
   return (
     <PageLayout title={`Edit ${user.username}`}>
-      <UserClientPage user={user} userId={userId} />
+      <UserClientPage user={user} />
     </PageLayout>
   )
 }

@@ -48,7 +48,12 @@ export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {
               <TooltipTrigger asChild>
                 <Link
                   href={link.href}
-                  onClick={() => setIsOpen(false)}
+                  onClick={(e) => {
+                    if (window.innerWidth <= 768) {
+                      // 768px is a common breakpoint for mobile devices
+                      setIsOpen(false)
+                    }
+                  }}
                   className={cn(
                     buttonVariants({ variant, size: 'icon' }),
                     'h-9 w-9',
@@ -73,7 +78,12 @@ export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {
             <Link
               key={index}
               href={link.href}
-              onClick={() => setIsOpen(false)}
+              onClick={(e) => {
+                if (window.innerWidth <= 768) {
+                  // 768px is a common breakpoint for mobile devices
+                  setIsOpen(false)
+                }
+              }}
               className={cn(
                 buttonVariants({ variant, size: 'sm' }),
                 variant === 'default' &&

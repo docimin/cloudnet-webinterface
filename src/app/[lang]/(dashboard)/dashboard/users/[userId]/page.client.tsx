@@ -9,13 +9,7 @@ import { updateUser } from '@/utils/actions/users/updateUser'
 import MultipleSelector, { Option } from '@/components/ui/custom/multi-select'
 import { OPTIONS } from '@/app/[lang]/(dashboard)/dashboard/users/[userId]/options'
 
-export default function UserClientPage({
-  user,
-  userId,
-}: {
-  user: User
-  userId: string
-}) {
+export default function UserClientPage({ user }: { user: User }) {
   const { toast } = useToast()
   const [username, setUsername] = useState(user.username)
   const [password, setPassword] = useState('')
