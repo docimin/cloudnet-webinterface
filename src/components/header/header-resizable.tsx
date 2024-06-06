@@ -25,7 +25,6 @@ export default function SidebarResizable({
   children,
 }) {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(defaultCollapsed)
-  const router = useRouter()
 
   const filteredNav1 = Nav1(lang, '').filter((link) =>
     link.permission.some(
