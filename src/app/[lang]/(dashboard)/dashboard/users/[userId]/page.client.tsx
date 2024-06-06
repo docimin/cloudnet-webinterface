@@ -53,7 +53,7 @@ export default function UserClientPage({
     if (response.status === 200) {
       toast({
         title: 'Updated',
-        description: 'Module updated successfully',
+        description: 'User updated successfully',
       })
     } else if (response.status === 401) {
       toast({

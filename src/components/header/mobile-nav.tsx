@@ -14,7 +14,6 @@ import { Separator } from '../ui/separator'
 import { Nav1, Nav2, Nav3, NavFooter } from '@/components/header/data'
 import { Nav } from '@/components/header/header-nav'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
 export default function MobileNav({
@@ -22,6 +21,8 @@ export default function MobileNav({
   lang,
   children,
 }): React.JSX.Element {
+  const [isOpen, setIsOpen] = React.useState(false)
+
   const filteredNav1 = Nav1(lang, '').filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
@@ -52,7 +53,7 @@ export default function MobileNav({
             />
             <span className={'ml-2'}>CloudNet</span>
           </div>
-          <Sheet>
+          <Sheet onOpenChange={(open) => setIsOpen(open)} open={isOpen}>
             <SheetTrigger asChild>
               <Button variant="outline" size={'icon'}>
                 <MenuIcon />
@@ -80,26 +81,42 @@ export default function MobileNav({
                   <h1 className={'border-b pb-2'}>Pages</h1>
                   <div>
                     {filteredNav1.length > 0 && (
-                      <Nav isCollapsed={false} links={filteredNav1} />
+                      <Nav
+                        isCollapsed={false}
+                        links={filteredNav1}
+                        setIsOpen={setIsOpen}
+                      />
                     )}
                     {filteredNav1.length > 0 && filteredNav2.length > 0 && (
                       <Separator />
                     )}
                     {filteredNav2.length > 0 && (
-                      <Nav isCollapsed={false} links={filteredNav2} />
+                      <Nav
+                        isCollapsed={false}
+                        links={filteredNav2}
+                        setIsOpen={setIsOpen}
+                      />
                     )}
                     {filteredNav2.length > 0 && filteredNav3.length > 0 && (
                       <Separator />
                     )}
                     {filteredNav3.length > 0 && (
-                      <Nav isCollapsed={false} links={filteredNav3} />
+                      <Nav
+                        isCollapsed={false}
+                        links={filteredNav3}
+                        setIsOpen={setIsOpen}
+                      />
                     )}
                   </div>
                 </div>
               </ScrollArea>
               <div className={'mt-auto'}>
                 <Separator className={'mb-2'} />
-                <Nav isCollapsed={false} links={NavFooter(lang, '')} />
+                <Nav
+                  isCollapsed={false}
+                  links={NavFooter(lang, '')}
+                  setIsOpen={setIsOpen}
+                />
               </div>
             </SheetContent>
           </Sheet>

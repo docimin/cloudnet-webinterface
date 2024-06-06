@@ -21,9 +21,10 @@ interface NavProps {
     variant: 'default' | 'ghost'
     href: string
   }[]
+  setIsOpen: (isOpen: boolean) => void
 }
 
-export function Nav({ isCollapsed, links }: NavProps) {
+export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {
   const currentPath = usePathname()
   const params = useParams()
 
@@ -47,6 +48,7 @@ export function Nav({ isCollapsed, links }: NavProps) {
               <TooltipTrigger asChild>
                 <Link
                   href={link.href}
+                  onClick={() => setIsOpen(false)}
                   className={cn(
                     buttonVariants({ variant, size: 'icon' }),
                     'h-9 w-9',
@@ -71,6 +73,7 @@ export function Nav({ isCollapsed, links }: NavProps) {
             <Link
               key={index}
               href={link.href}
+              onClick={() => setIsOpen(false)}
               className={cn(
                 buttonVariants({ variant, size: 'sm' }),
                 variant === 'default' &&

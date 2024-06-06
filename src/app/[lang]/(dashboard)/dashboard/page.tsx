@@ -93,6 +93,7 @@ export default async function DashboardPage({ params: { lang } }) {
               ]}
             />
           </Link>
+          <Link href={`/${lang}/dashboard/templates`}>
           <DashboardCard
             title="Total templates"
             icon={<UsersIcon className="w-4 h-4" />}
@@ -103,6 +104,8 @@ export default async function DashboardPage({ params: { lang } }) {
               'global:admin',
             ]}
           />
+          </Link>
+          <Link href={`/${lang}/dashboard/groups`}>
           <DashboardCard
             title="Total groups"
             icon={<UsersIcon className="w-4 h-4" />}
@@ -113,6 +116,8 @@ export default async function DashboardPage({ params: { lang } }) {
               'global:admin',
             ]}
           />
+          </Link>
+          <Link href={`/${lang}/dashboard/tasks`}>
           <DashboardCard
             title="Total tasks"
             icon={<UsersIcon className="w-4 h-4" />}
@@ -123,6 +128,8 @@ export default async function DashboardPage({ params: { lang } }) {
               'global:admin',
             ]}
           />
+          </Link>
+          <Link href={`/${lang}/dashboard/services`}>
           <DashboardCard
             title="Total services"
             icon={<UsersIcon className="w-4 h-4" />}
@@ -133,6 +140,7 @@ export default async function DashboardPage({ params: { lang } }) {
               'global:admin',
             ]}
           />
+          </Link>
           <Link href={`/${lang}/dashboard/users`}>
             <DashboardCard
               title="REST Users"
