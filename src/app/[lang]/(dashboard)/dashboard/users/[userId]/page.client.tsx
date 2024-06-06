@@ -20,8 +20,16 @@ export default function UserClientPage({
   const [username, setUsername] = useState(user.username)
   const [password, setPassword] = useState('')
 
+  function getLabelForScope(scope: string): string {
+    const option = OPTIONS.find((option) => option.value === scope)
+    return option ? option.label : scope
+  }
+
   const [scopes, setScopes] = useState<Option[]>(
-    user.scopes.map((scope) => ({ label: scope, value: scope }))
+    user.scopes.map((scope) => ({
+      label: getLabelForScope(scope),
+      value: scope,
+    }))
   )
 
   const handleSave = async (event: any) => {
