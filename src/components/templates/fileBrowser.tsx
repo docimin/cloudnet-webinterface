@@ -35,12 +35,12 @@ export default function FileBrowser({
   const pathname = usePathname()
 
   const fetchFiles = async () => {
-    return await getTemplateFiles(
+    return (await getTemplateFiles(
       params.storageId,
       params.storagePrefix,
       params.templateId,
       params.fileId
-    ) as { files: FileType[] }
+    )) as { files: FileType[] }
   }
 
   useEffect(() => {
@@ -90,6 +90,19 @@ export default function FileBrowser({
                 </TableRow>
               </TableHeader>
               <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <FolderIcon className="h-5 w-5 text-primary" />
+                      <Link href={'.'}>
+                        <span>..</span>
+                      </Link>
+                    </div>
+                  </TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
                 {files.map((file) => {
                   // Append the file name to the current path
                   const newPath = `${pathname}/${file.name}`
