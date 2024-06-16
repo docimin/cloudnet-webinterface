@@ -26,6 +26,7 @@ export async function fetchWithPermissionsAsText(
         'Content-Type': 'application/json',
         Authorization: `Bearer ${cookies['at']}`,
       },
+      cache: 'no-cache',
     })
 
     //console.log(response.status + ' ' + response.statusText)

@@ -35,32 +35,32 @@ export default function FileBrowser({
   const pathname = usePathname()
 
   const fetchFiles = async () => {
-    return await getTemplateFiles(
+    return (await getTemplateFiles(
       params.storageId,
       params.storagePrefix,
       params.templateId,
       params.fileId
-    )
+    )) as { files: FileType[] }
   }
 
   useEffect(() => {
     fetchFiles().then((fetchedFiles) => {
-      const sortedFiles = fetchedFiles.files.sort((a, b) => {
+      const sortedFiles = fetchedFiles?.files?.sort((a, b) => {
         // Put directories at the top
-        if (a.directory !== b.directory) {
-          return a.directory ? -1 : 1
+        if (a?.directory !== b?.directory) {
+          return a?.directory ? -1 : 1
         }
         // Sort alphabetically
-        return a.name.localeCompare(b.name)
+        return a?.name.localeCompare(b.name)
       })
 
       // Filter out files that are in a subdirectory deeper than the first level, but not directories themselves
       const filteredFiles = sortedFiles.filter((file) => {
         const pathParts = file.path.split('/')
-        return !(pathParts.length > 2 && !file.directory)
+        return !(pathParts?.length > 2 && !file?.directory)
       })
 
-      setFiles(filteredFiles)
+      setFiles(filteredFiles || [])
     })
   }, [])
 
@@ -90,6 +90,19 @@ export default function FileBrowser({
                 </TableRow>
               </TableHeader>
               <TableBody>
+                <TableRow>
+                  <TableCell>
+                    <div className="flex items-center gap-2">
+                      <FolderIcon className="h-5 w-5 text-primary" />
+                      <Link href={'.'}>
+                        <span>..</span>
+                      </Link>
+                    </div>
+                  </TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
                 {files.map((file) => {
                   // Append the file name to the current path
                   const newPath = `${pathname}/${file.name}`

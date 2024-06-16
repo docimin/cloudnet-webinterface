@@ -9,19 +9,21 @@ import { updateUser } from '@/utils/actions/users/updateUser'
 import MultipleSelector, { Option } from '@/components/ui/custom/multi-select'
 import { OPTIONS } from '@/app/[lang]/(dashboard)/dashboard/users/[userId]/options'
 
-export default function UserClientPage({
-  user,
-  userId,
-}: {
-  user: User
-  userId: string
-}) {
+export default function UserClientPage({ user }: { user: User }) {
   const { toast } = useToast()
   const [username, setUsername] = useState(user.username)
   const [password, setPassword] = useState('')
 
+  function getLabelForScope(scope: string): string {
+    const option = OPTIONS.find((option) => option.value === scope)
+    return option ? option.label : scope
+  }
+
   const [scopes, setScopes] = useState<Option[]>(
-    user.scopes.map((scope) => ({ label: scope, value: scope }))
+    user.scopes.map((scope) => ({
+      label: getLabelForScope(scope),
+      value: scope,
+    }))
   )
 
   const handleSave = async (event: any) => {
@@ -53,7 +55,7 @@ export default function UserClientPage({
     if (response.status === 200) {
       toast({
         title: 'Updated',
-        description: 'Module updated successfully',
+        description: 'User updated successfully',
       })
     } else if (response.status === 401) {
       toast({
