@@ -1,10 +1,10 @@
 /** @type {import('next').NextConfig} */
-const webpack = require('webpack')
 
 const withNextIntl = require('next-intl/plugin')(
   // This is the default (also the `src` folder is supported out of the box)
   './src/i18n.ts'
 )
+
 const cspHeader = `
     default-src 'self';
     script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com blob:;
