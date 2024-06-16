@@ -12,8 +12,7 @@ import { Nav } from '@/components/header/header-nav'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Nav1, Nav2, Nav3, NavFooter } from '@/components/header/data'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
-import { checkToken } from '@/utils/actions/user/jwt'
+import { useState } from 'react'
 import Image from 'next/image'
 
 export default function SidebarResizable({

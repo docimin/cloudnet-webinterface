@@ -14,7 +14,6 @@ import { Separator } from '../ui/separator'
 import { Nav1, Nav2, Nav3, NavFooter } from '@/components/header/data'
 import { Nav } from '@/components/header/header-nav'
 import { ScrollArea } from '@/components/ui/scroll-area'
-import { useRouter } from 'next/navigation'
 import Image from 'next/image'
 
 export default function MobileNav({
