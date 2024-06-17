@@ -8,8 +8,6 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { getNodes } from '@/utils/server-api/nodes/getNodes'
-import { NodesType } from '@/utils/types/nodes'
 import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import Link from 'next/link'
