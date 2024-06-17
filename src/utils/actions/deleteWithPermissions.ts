@@ -26,16 +26,17 @@ export async function deleteWithPermissions(
         Authorization: `Bearer ${cookies['at']}`,
       },
     })
+    console.log(`${decodedUrl}${url}`)
 
     console.log(response.status + ' ' + response.statusText)
 
     return response.ok
-      ? { success: 'Updated successfully', status: 200 }
+      ? { success: response.statusText, status: response.status }
       : {
-          error: 'Failed to update',
+          error: 'Failed to delete',
           status: 500,
         }
   } catch (error) {
-    return { error: 'Failed to update', status: 500 }
+    return { error: error.statusText, status: error.status }
   }
 }

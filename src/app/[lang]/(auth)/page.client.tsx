@@ -43,7 +43,6 @@ export default function Client() {
       })
 
       const dataResponse = await response.json()
-      console.log(dataResponse)
 
       if (dataResponse.accessToken) {
         toast({

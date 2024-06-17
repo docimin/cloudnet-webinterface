@@ -12,9 +12,9 @@ import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import Link from 'next/link'
 import NoAccess from '@/components/static/noAccess'
-import Maintenance from '@/components/static/maintenance'
 import { Templates, TemplatesList } from '@/utils/types/templateStorages'
 import { getTemplates } from '@/utils/server-api/templates/getTemplates'
+import NoRecords from '@/components/static/noRecords'
 
 export const runtime = 'edge'
 
@@ -39,13 +39,16 @@ export default async function ServicesPage({
   const hasPermissions = requiredPermissions.some((permission) =>
     permissions.includes(permission)
   )
+  const hasEditPermissions = requiredEditPermissions.some((permission) =>
+    permissions.includes(permission)
+  )
 
   if (!hasPermissions) {
     return <NoAccess />
   }
 
   if (!templates.templates) {
-    return <Maintenance />
+    return <NoRecords />
   }
 
   const filteredTemplates = templates.templates.filter(
@@ -69,9 +72,9 @@ export default async function ServicesPage({
         <TableHeader>
           <TableRow>
             <TableHead className="w-full">Name</TableHead>
-            {requiredEditPermissions.some((permission) =>
-              permissions.includes(permission)
-            ) && <TableHead className="sr-only">Edit</TableHead>}
+            {hasEditPermissions && (
+              <TableHead className="sr-only">Edit</TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -80,9 +83,7 @@ export default async function ServicesPage({
             .map((template) => (
               <TableRow key={template.name}>
                 <TableCell className="font-medium">{template.name}</TableCell>
-                {requiredPermissions.some((permission) =>
-                  permissions.includes(permission)
-                ) && (
+                {hasEditPermissions && (
                   <TableCell>
                     <Link
                       href={`/${lang}/dashboard/templates/${storageId}/${storagePrefix}/${template.name}`}

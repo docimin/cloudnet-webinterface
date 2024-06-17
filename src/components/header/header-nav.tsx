@@ -21,7 +21,7 @@ interface NavProps {
     variant: 'default' | 'ghost'
     href: string
   }[]
-  setIsOpen?: (isOpen: boolean) => void
+  setIsOpen?: any
 }
 
 export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {

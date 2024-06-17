@@ -1,6 +1,4 @@
 import PageLayout from '@/components/pageLayout'
-import { Button } from '@/components/ui/button'
-import Link from 'next/link'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import { Module } from '@/utils/types/modules'
 import { getModule } from '@/utils/server-api/modules/getModule'

@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from './providers'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as SonnerToaster } from '@/components/ui/sonner'
+import ContextMenuProvider from '@/components/system/contextMenu'
 
 const inter = Inter({ subsets: ['latin'] })
 
@@ -43,7 +44,9 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <div className="w-full">{children}</div>
+          <ContextMenuProvider>
+            <div className="w-full">{children}</div>
+          </ContextMenuProvider>
         </ThemeProvider>
         <Toaster />
         <SonnerToaster />

@@ -29,7 +29,7 @@ export async function putWithPermissions(
       body: JSON.stringify({ ...body }),
     })
 
-    console.log(response.status + ' ' + response.statusText)
+    //console.log(response.status + ' ' + response.statusText)
 
     return response.ok
       ? { success: 'Updated successfully', status: 200 }

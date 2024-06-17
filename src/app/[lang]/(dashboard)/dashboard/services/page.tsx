@@ -12,9 +12,9 @@ import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import Link from 'next/link'
 import NoAccess from '@/components/static/noAccess'
-import Maintenance from '@/components/static/maintenance'
 import { getServices } from '@/utils/server-api/services/getServices'
 import { formatBytes } from '@/components/formatBytes'
+import NoRecords from '@/components/static/noRecords'
 
 export const runtime = 'edge'
 
@@ -37,7 +37,7 @@ export default async function ServicesPage({ params: { lang } }) {
   }
 
   if (!services.services) {
-    return <Maintenance />
+    return <NoRecords />
   }
 
   return (

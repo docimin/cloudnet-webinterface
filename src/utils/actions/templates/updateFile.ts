@@ -24,6 +24,5 @@ export async function updateFile(
     false,
     false
   )
-  console.log(data.ok)
   return data.ok
 }

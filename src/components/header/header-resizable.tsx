@@ -11,7 +11,6 @@ import { TooltipProvider } from '@/components/ui/tooltip'
 import { Nav } from '@/components/header/header-nav'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import { Nav1, Nav2, Nav3, NavFooter } from '@/components/header/data'
-import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import Image from 'next/image'
 

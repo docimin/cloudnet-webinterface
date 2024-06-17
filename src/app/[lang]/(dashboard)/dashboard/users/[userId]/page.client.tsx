@@ -48,8 +48,6 @@ export default function UserClientPage({ user }: { user: User }) {
       body = { ...body, password: password }
     }
 
-    console.log(body)
-
     const response = await updateUser(user.id, body)
 
     if (response.status === 200) {

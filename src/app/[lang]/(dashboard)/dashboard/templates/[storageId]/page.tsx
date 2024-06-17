@@ -12,9 +12,9 @@ import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import Link from 'next/link'
 import NoAccess from '@/components/static/noAccess'
-import Maintenance from '@/components/static/maintenance'
 import { Templates, TemplatesList } from '@/utils/types/templateStorages'
 import { getTemplates } from '@/utils/server-api/templates/getTemplates'
+import NoRecords from '@/components/static/noRecords'
 
 export const runtime = 'edge'
 
@@ -43,7 +43,7 @@ export default async function ServicesPage({ params: { storageId, lang } }) {
   }
 
   if (!templates.templates) {
-    return <Maintenance />
+    return <NoRecords />
   }
 
   const uniqueTemplates: Templates[] = templates.templates.reduce(

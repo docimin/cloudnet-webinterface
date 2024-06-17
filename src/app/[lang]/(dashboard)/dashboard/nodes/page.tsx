@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import Link from 'next/link'
 import NoAccess from '@/components/static/noAccess'
-import Maintenance from '@/components/static/maintenance'
+import NoRecords from '@/components/static/noRecords'
 
 export const runtime = 'edge'
 
@@ -22,6 +22,11 @@ export default async function NodesPage({ params: { lang } }) {
   const nodes: NodesType = await getNodes()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [
+    'cloudnet_rest:cluster_read',
+    'cloudnet_rest:cluster_node_list',
+    'global:admin',
+  ]
+  const requiredEditPermissions = [
     'cloudnet_rest:cluster_read',
     'cloudnet_rest:cluster_node_get',
     'global:admin',
@@ -31,13 +36,16 @@ export default async function NodesPage({ params: { lang } }) {
   const hasPermissions = requiredPermissions.some((permission) =>
     permissions.includes(permission)
   )
+  const hasEditPermissions = requiredEditPermissions.some((permission) =>
+    permissions.includes(permission)
+  )
 
   if (!hasPermissions) {
     return <NoAccess />
   }
 
   if (!nodes.nodes) {
-    return <Maintenance />
+    return <NoRecords />
   }
 
   return (
@@ -50,9 +58,9 @@ export default async function NodesPage({ params: { lang } }) {
             <TableHead>Status</TableHead>
             <TableHead>Memory</TableHead>
             <TableHead>Version</TableHead>
-            {requiredPermissions.some((permission) =>
-              permissions.includes(permission)
-            ) && <TableHead className="sr-only">Edit</TableHead>}
+            {hasEditPermissions && (
+              <TableHead className="sr-only">Edit</TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -78,9 +86,7 @@ export default async function NodesPage({ params: { lang } }) {
                     ' | '}
                   {node?.nodeInfoSnapshot?.version?.versionType}
                 </TableCell>
-                {requiredPermissions.some((permission) =>
-                  permissions.includes(permission)
-                ) && (
+                {hasEditPermissions && (
                   <TableCell>
                     <Link
                       href={`/${lang}/dashboard/nodes/${node.node.uniqueId}`}

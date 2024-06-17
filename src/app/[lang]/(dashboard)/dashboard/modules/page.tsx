@@ -14,7 +14,7 @@ import Link from 'next/link'
 import { getModules } from '@/utils/server-api/modules/getModules'
 import { Modules } from '@/utils/types/modules'
 import NoAccess from '@/components/static/noAccess'
-import Maintenance from '@/components/static/maintenance'
+import NoRecords from '@/components/static/noRecords'
 
 export const runtime = 'edge'
 
@@ -37,7 +37,7 @@ export default async function NodesPage({ params: { lang } }) {
   }
 
   if (!modules.modules) {
-    return <Maintenance />
+    return <NoRecords />
   }
 
   return (

@@ -14,8 +14,8 @@ import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import Link from 'next/link'
 import NoAccess from '@/components/static/noAccess'
-import Maintenance from '@/components/static/maintenance'
 import { getGroups } from '@/utils/server-api/groups/getGroups'
+import NoRecords from '@/components/static/noRecords'
 
 export const runtime = 'edge'
 
@@ -38,13 +38,16 @@ export default async function GroupsPage({ params: { lang } }) {
   const hasPermissions = requiredPermissions.some((permission) =>
     permissions.includes(permission)
   )
+  const hasEditPermissions = requiredEditPermissions.some((permission) =>
+    permissions.includes(permission)
+  )
 
   if (!hasPermissions) {
     return <NoAccess />
   }
 
   if (!groups.groups) {
-    return <Maintenance />
+    return <NoRecords />
   }
 
   return (
@@ -54,9 +57,9 @@ export default async function GroupsPage({ params: { lang } }) {
         <TableHeader>
           <TableRow>
             <TableHead className="w-full">Name</TableHead>
-            {requiredPermissions.some((permission) =>
-              permissions.includes(permission)
-            ) && <TableHead className="sr-only">Edit</TableHead>}
+            {hasEditPermissions && (
+              <TableHead className="sr-only">Edit</TableHead>
+            )}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -65,9 +68,7 @@ export default async function GroupsPage({ params: { lang } }) {
             .map((group) => (
               <TableRow key={group.name}>
                 <TableCell className="font-medium">{group.name}</TableCell>
-                {requiredEditPermissions.some((permission) =>
-                  permissions.includes(permission)
-                ) && (
+                {hasEditPermissions && (
                   <TableCell>
                     <Link href={`/${lang}/dashboard/groups/${group.name}`}>
                       <Button

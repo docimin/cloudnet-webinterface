@@ -15,7 +15,7 @@ import NoAccess from '@/components/static/noAccess'
 import { getUsers } from '@/utils/server-api/users/getUsers'
 import { Users } from '@/utils/types/users'
 import { formatDate } from '@/components/formatDate'
-import Maintenance from '@/components/static/maintenance'
+import NoRecords from '@/components/static/noRecords'
 
 export const runtime = 'edge'
 
@@ -38,7 +38,7 @@ export default async function UsersPage({ params: { lang } }) {
   }
 
   if (!users.users) {
-    return <Maintenance />
+    return <NoRecords />
   }
 
   return (

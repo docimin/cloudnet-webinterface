@@ -32,6 +32,8 @@ export async function postWithPermissions(
       body: stringifyBody ? JSON.stringify({ ...body }) : body,
     })
 
+    //console.log(response.status + ' ' + response.statusText)
+
     if (returnJson) {
       return await response.json()
     } else {

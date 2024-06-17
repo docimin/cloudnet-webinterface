@@ -15,6 +15,7 @@ import Link from 'next/link'
 import { getGroups } from '@/utils/server-api/groups/getGroups'
 import { getLoadedModules } from '@/utils/server-api/modules/getLoadedModules'
 import { getUsers } from '@/utils/server-api/users/getUsers'
+import { DashboardCard } from '@/components/dashboardCard'
 
 export const runtime = 'edge'
 
@@ -49,16 +50,18 @@ export default async function DashboardPage({ params: { lang } }) {
     <PageLayout title={'Dashboard'}>
       <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-          <DashboardCard
-            title="Active players"
-            icon={<UsersIcon className="w-4 h-4" />}
-            value={onlinePlayers.onlineCount || 0}
-            permissions={[
-              'cloudnet_bridge:player_read',
-              'cloudnet_bridge:player_online_count',
-              'global:admin',
-            ]}
-          />
+          <Link href={`/${lang}/dashboard/players`}>
+            <DashboardCard
+              title="Active players"
+              icon={<UsersIcon className="w-4 h-4" />}
+              value={onlinePlayers.onlineCount || 0}
+              permissions={[
+                'cloudnet_bridge:player_read',
+                'cloudnet_bridge:player_online_count',
+                'global:admin',
+              ]}
+            />
+          </Link>
           <DashboardCard
             title="Registered players"
             icon={<UsersIcon className="w-4 h-4" />}
@@ -94,52 +97,52 @@ export default async function DashboardPage({ params: { lang } }) {
             />
           </Link>
           <Link href={`/${lang}/dashboard/templates`}>
-          <DashboardCard
-            title="Total templates"
-            icon={<UsersIcon className="w-4 h-4" />}
-            value={totalTemplates}
-            permissions={[
-              'cloudnet_rest:template_storage_read',
-              'cloudnet_rest:template_storage_template_list',
-              'global:admin',
-            ]}
-          />
+            <DashboardCard
+              title="Total templates"
+              icon={<UsersIcon className="w-4 h-4" />}
+              value={totalTemplates}
+              permissions={[
+                'cloudnet_rest:template_storage_read',
+                'cloudnet_rest:template_storage_template_list',
+                'global:admin',
+              ]}
+            />
           </Link>
           <Link href={`/${lang}/dashboard/groups`}>
-          <DashboardCard
-            title="Total groups"
-            icon={<UsersIcon className="w-4 h-4" />}
-            value={groups?.groups?.length || 0}
-            permissions={[
-              'cloudnet_rest:group_read',
-              'cloudnet_rest:group_list',
-              'global:admin',
-            ]}
-          />
+            <DashboardCard
+              title="Total groups"
+              icon={<UsersIcon className="w-4 h-4" />}
+              value={groups?.groups?.length || 0}
+              permissions={[
+                'cloudnet_rest:group_read',
+                'cloudnet_rest:group_list',
+                'global:admin',
+              ]}
+            />
           </Link>
           <Link href={`/${lang}/dashboard/tasks`}>
-          <DashboardCard
-            title="Total tasks"
-            icon={<UsersIcon className="w-4 h-4" />}
-            value={totalTasks?.tasks?.length || 0}
-            permissions={[
-              'cloudnet_rest:task_read',
-              'cloudnet_rest:task_list',
-              'global:admin',
-            ]}
-          />
+            <DashboardCard
+              title="Total tasks"
+              icon={<UsersIcon className="w-4 h-4" />}
+              value={totalTasks?.tasks?.length || 0}
+              permissions={[
+                'cloudnet_rest:task_read',
+                'cloudnet_rest:task_list',
+                'global:admin',
+              ]}
+            />
           </Link>
           <Link href={`/${lang}/dashboard/services`}>
-          <DashboardCard
-            title="Total services"
-            icon={<UsersIcon className="w-4 h-4" />}
-            value={services?.services?.length || 0}
-            permissions={[
-              'cloudnet_rest:service_read',
-              'cloudnet_rest:service_list',
-              'global:admin',
-            ]}
-          />
+            <DashboardCard
+              title="Total services"
+              icon={<UsersIcon className="w-4 h-4" />}
+              value={services?.services?.length || 0}
+              permissions={[
+                'cloudnet_rest:service_read',
+                'cloudnet_rest:service_list',
+                'global:admin',
+              ]}
+            />
           </Link>
           <Link href={`/${lang}/dashboard/users`}>
             <DashboardCard
@@ -157,22 +160,4 @@ export default async function DashboardPage({ params: { lang } }) {
       </main>
     </PageLayout>
   )
-}
-
-const DashboardCard = async ({ title, icon, value, permissions }) => {
-  let perms: string[] = await getPermissions()
-
-  return permissions.some((permission: string) =>
-    perms.includes(permission)
-  ) ? (
-    <Card>
-      <CardHeader className="flex flex-row items-center justify-between pb-2">
-        <CardTitle className="text-sm font-medium">{title}</CardTitle>
-        {icon}
-      </CardHeader>
-      <CardContent>
-        <div className="text-2xl font-bold">{value}</div>
-      </CardContent>
-    </Card>
-  ) : null
 }
