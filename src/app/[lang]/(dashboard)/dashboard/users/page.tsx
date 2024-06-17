@@ -27,6 +27,7 @@ export default async function UsersPage({ params: { lang } }) {
     'cloudnet_rest:user_get_all',
     'global:admin',
   ]
+  console.log(users)
 
   // check if user has required permissions
   const hasPermissions = requiredPermissions.some((permission) =>
@@ -37,11 +38,9 @@ export default async function UsersPage({ params: { lang } }) {
     return <NoAccess />
   }
 
-  /*
   if (!users.users) {
     return <Maintenance />
   }
-   */
 
   return (
     <PageLayout title={'Users'}>
