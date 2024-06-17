@@ -37,9 +37,11 @@ export default async function UsersPage({ params: { lang } }) {
     return <NoAccess />
   }
 
+  /*
   if (!users.users) {
     return <Maintenance />
   }
+   */
 
   return (
     <PageLayout title={'Users'}>
