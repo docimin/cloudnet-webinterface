@@ -26,7 +26,10 @@ export async function fetchWithPermissions(
         'Content-Type': 'application/json',
         Authorization: `Bearer ${cookies['at']}`,
       },
-      cache: 'no-store',
+      //cache: 'no-store',
+      next: {
+        revalidate: 0,
+      },
     })
 
     //console.log(response.status + ' ' + response.statusText)
