@@ -17,6 +17,8 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { useRouter } from 'next/navigation'
+import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
+import { Terminal } from 'lucide-react'
 
 function DeleteButton({ taskId }: { taskId: string }) {
   const router = useRouter()
@@ -78,6 +80,14 @@ export default function TaskClientPage({
         {hasEditPermissions && <UpdateButton taskId={taskId} body={body} />}
         {hasDeletePermissions && <DeleteButton taskId={taskId} />}
       </div>
+      <Alert className={'mt-8'}>
+        <Terminal className="h-4 w-4" />
+        <AlertTitle>Heads up!</AlertTitle>
+        <AlertDescription>
+          Editing the &quot;name&quot; field will not change the group name.
+          Instead, it will create a new group with the new name.
+        </AlertDescription>
+      </Alert>
       {children}
       <div className="w-full mt-8">
         <Label htmlFor="json">JSON</Label>

@@ -16,6 +16,7 @@ import Link from 'next/link'
 import NoAccess from '@/components/static/noAccess'
 import { getGroups } from '@/utils/server-api/groups/getGroups'
 import NoRecords from '@/components/static/noRecords'
+import CreateGroup from '@/components/modules/groups/createGroup'
 
 export const runtime = 'edge'
 
@@ -52,7 +53,8 @@ export default async function GroupsPage({ params: { lang } }) {
 
   return (
     <PageLayout title={'Groups'}>
-      <Table>
+      <CreateGroup />
+      <Table className={'mt-4'}>
         <TableCaption>A list of your groups.</TableCaption>
         <TableHeader>
           <TableRow>

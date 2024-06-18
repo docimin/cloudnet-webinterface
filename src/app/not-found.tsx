@@ -1,11 +1,12 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
+import { cn } from '@/lib/utils'
 
 export default function NotFoundComponent() {
   const router = useRouter()
   return (
-    <div className="h-svh">
+    <div className={cn('h-svh w-full')}>
       <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">
         <h1 className="text-[7rem] font-bold leading-tight">404</h1>
         <span className="font-medium">Oops! Page Not Found!</span>

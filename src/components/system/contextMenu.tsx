@@ -22,7 +22,7 @@ import Link from 'next/link'
 export default function ContextMenuProvider({ children }) {
   return (
     <ContextMenu>
-      <ContextMenuTrigger>{children}</ContextMenuTrigger>
+      <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
       <ContextMenuContent className="w-64">
         <Link href={'https://cloudnetservice.eu/'} passHref target={'_blank'}>
           <ContextMenuItem inset>

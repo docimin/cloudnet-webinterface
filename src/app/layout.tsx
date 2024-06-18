@@ -45,7 +45,7 @@ export default function RootLayout({ children }) {
           disableTransitionOnChange
         >
           <ContextMenuProvider>
-            <div className="w-full">{children}</div>
+            <div className="w-full h-full">{children}</div>
           </ContextMenuProvider>
         </ThemeProvider>
         <Toaster />

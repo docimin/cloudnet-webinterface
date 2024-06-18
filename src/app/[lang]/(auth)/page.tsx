@@ -4,7 +4,7 @@ export const runtime = 'edge'
 
 export default async function Page() {
   return (
-    <div className={'h-full w-full'}>
+    <div className={'h-svh w-full'}>
       <Client />
     </div>
   )

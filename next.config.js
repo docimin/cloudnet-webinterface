@@ -7,7 +7,7 @@ const withNextIntl = require('next-intl/plugin')(
 
 const cspHeader = `
     default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com blob:;
+    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com https://static.cloudflareinsights.com blob:;
     connect-src 'self' *;
     style-src 'self' 'unsafe-inline';
     img-src 'self' blob: data: https://q.stripe.com;

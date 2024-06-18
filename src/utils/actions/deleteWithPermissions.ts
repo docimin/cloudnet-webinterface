@@ -26,9 +26,8 @@ export async function deleteWithPermissions(
         Authorization: `Bearer ${cookies['at']}`,
       },
     })
-    console.log(`${decodedUrl}${url}`)
 
-    console.log(response.status + ' ' + response.statusText)
+    //console.log(response.status + ' ' + response.statusText)
 
     return response.ok
       ? { success: response.statusText, status: response.status }
