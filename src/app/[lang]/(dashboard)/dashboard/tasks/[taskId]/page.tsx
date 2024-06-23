@@ -105,16 +105,6 @@ export default async function UserPage({ params: { lang, taskId } }) {
               ]}
             />
             <DashboardCard
-              title="Auto deletion"
-              icon={<FolderXIcon className="w-4 h-4" />}
-              value={task?.autoDeleteOnStop ? 'Yes' : 'No'}
-              permissions={[
-                'cloudnet_rest:task_read',
-                'cloudnet_rest:task_get',
-                'global:admin',
-              ]}
-            />
-            <DashboardCard
               title="Min. Service count"
               icon={<FolderXIcon className="w-4 h-4" />}
               value={task?.minServiceCount}
