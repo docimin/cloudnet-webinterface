@@ -1,3 +1,4 @@
+'use server'
 import { fetchWithPermissions } from '@/utils/actions/fetchWithPermissions'
 
 export async function getNumberOnlinePlayers() {

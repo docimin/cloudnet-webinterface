@@ -9,14 +9,13 @@ import {
 import { SiGithub } from '@icons-pack/react-simple-icons'
 import Image from 'next/image'
 import * as React from 'react'
-import Link from 'next/link'
 
 export default function ContextMenuProvider({ children }) {
   return (
     <ContextMenu>
       <ContextMenuTrigger asChild>{children}</ContextMenuTrigger>
       <ContextMenuContent className="w-64">
-        <Link href={'https://cloudnetservice.eu/'} passHref target={'_blank'}>
+        <a href={'https://cloudnetservice.eu/'} target={'_blank'}>
           <ContextMenuItem inset>
             CloudNet
             <ContextMenuShortcut>
@@ -29,10 +28,9 @@ export default function ContextMenuProvider({ children }) {
               />
             </ContextMenuShortcut>
           </ContextMenuItem>
-        </Link>
-        <Link
+        </a>
+        <a
           href={'https://github.com/docimin/cloudnet-webinterface'}
-          passHref
           target={'_blank'}
         >
           <ContextMenuItem inset>
@@ -41,7 +39,7 @@ export default function ContextMenuProvider({ children }) {
               <SiGithub size={16} />
             </ContextMenuShortcut>
           </ContextMenuItem>
-        </Link>
+        </a>
       </ContextMenuContent>
     </ContextMenu>
   )

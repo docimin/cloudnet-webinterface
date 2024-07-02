@@ -18,22 +18,22 @@ import Image from 'next/image'
 
 export default function MobileNav({
   permissions,
-  lang,
+  translations,
   children,
 }): React.JSX.Element {
   const [isOpen, setIsOpen] = React.useState(false)
 
-  const filteredNav1 = Nav1(lang, '').filter((link) =>
+  const filteredNav1 = Nav1(translations).filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
   )
-  const filteredNav2 = Nav2(lang, '').filter((link) =>
+  const filteredNav2 = Nav2(translations).filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
   )
-  const filteredNav3 = Nav3(lang, '').filter((link) =>
+  const filteredNav3 = Nav3(translations).filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
@@ -85,6 +85,7 @@ export default function MobileNav({
                         isCollapsed={false}
                         links={filteredNav1}
                         setIsOpen={setIsOpen}
+                        translations={translations}
                       />
                     )}
                     {filteredNav1.length > 0 && filteredNav2.length > 0 && (
@@ -95,6 +96,7 @@ export default function MobileNav({
                         isCollapsed={false}
                         links={filteredNav2}
                         setIsOpen={setIsOpen}
+                        translations={translations}
                       />
                     )}
                     {filteredNav2.length > 0 && filteredNav3.length > 0 && (
@@ -105,6 +107,7 @@ export default function MobileNav({
                         isCollapsed={false}
                         links={filteredNav3}
                         setIsOpen={setIsOpen}
+                        translations={translations}
                       />
                     )}
                   </div>
@@ -114,8 +117,9 @@ export default function MobileNav({
                 <Separator className={'mb-2'} />
                 <Nav
                   isCollapsed={false}
-                  links={NavFooter(lang, '')}
+                  links={NavFooter(translations)}
                   setIsOpen={setIsOpen}
+                  translations={translations}
                 />
               </div>
             </SheetContent>

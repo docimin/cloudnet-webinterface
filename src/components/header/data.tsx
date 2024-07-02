@@ -12,13 +12,13 @@ import {
   WorkflowIcon,
 } from 'lucide-react'
 
-export const Nav1 = (lang: string, translations) => [
+export const Nav1 = (translations) => [
   {
-    title: 'Dashboard',
+    title: translations.dashboard,
     label: '',
     icon: LayoutDashboardIcon,
     variant: 'default' as const,
-    href: `/${lang}/dashboard`,
+    href: `/dashboard`,
     permission: ['any'],
   },
   {
@@ -26,7 +26,7 @@ export const Nav1 = (lang: string, translations) => [
     label: '',
     icon: WorkflowIcon,
     variant: 'ghost' as const,
-    href: `/${lang}/dashboard/nodes`,
+    href: `/dashboard/nodes`,
     permission: [
       'global:admin',
       'cloudnet_rest:node_read',
@@ -38,7 +38,7 @@ export const Nav1 = (lang: string, translations) => [
     label: '',
     icon: PackageIcon,
     variant: 'ghost' as const,
-    href: `/${lang}/dashboard/modules`,
+    href: `/dashboard/modules`,
     permission: [
       'global:admin',
       'cloudnet_rest:module_read',
@@ -47,13 +47,13 @@ export const Nav1 = (lang: string, translations) => [
   },
 ]
 
-export const Nav2 = (lang: string, translations) => [
+export const Nav2 = (translations) => [
   {
     title: 'Players',
     label: '',
     icon: BlendIcon,
     variant: 'ghost' as const,
-    href: `/${lang}/dashboard/players`,
+    href: `/dashboard/players`,
     permission: ['global:admin', 'owner', 'social-read'],
   },
   {
@@ -61,7 +61,7 @@ export const Nav2 = (lang: string, translations) => [
     label: '',
     icon: UngroupIcon,
     variant: 'ghost' as const,
-    href: `/${lang}/dashboard/tasks`,
+    href: `/dashboard/tasks`,
     permission: ['global:admin', 'owner', 'social-read'],
   },
   {
@@ -69,7 +69,7 @@ export const Nav2 = (lang: string, translations) => [
     label: '',
     icon: GroupIcon,
     variant: 'ghost' as const,
-    href: `/${lang}/dashboard/groups`,
+    href: `/dashboard/groups`,
     permission: ['global:admin', 'owner', 'social-read'],
   },
   {
@@ -77,7 +77,7 @@ export const Nav2 = (lang: string, translations) => [
     label: '',
     icon: DatabaseZapIcon,
     variant: 'ghost' as const,
-    href: `/${lang}/dashboard/services`,
+    href: `/dashboard/services`,
     permission: [
       'global:admin',
       'cloudnet_rest:service_read',
@@ -89,7 +89,7 @@ export const Nav2 = (lang: string, translations) => [
     label: '',
     icon: BookDashedIcon,
     variant: 'ghost' as const,
-    href: `/${lang}/dashboard/templates`,
+    href: `/dashboard/templates`,
     permission: [
       'global:admin',
       'cloudnet_rest:template_storage_read',
@@ -98,13 +98,13 @@ export const Nav2 = (lang: string, translations) => [
   },
 ]
 
-export const Nav3 = (lang: string, translations) => [
+export const Nav3 = (translations) => [
   {
     title: 'Users',
     label: '',
     icon: UsersIcon,
     variant: 'default' as const,
-    href: `/${lang}/dashboard/users`,
+    href: `/dashboard/users`,
     permission: [
       'global:admin',
       'cloudnet_rest:user_read',
@@ -113,21 +113,21 @@ export const Nav3 = (lang: string, translations) => [
   },
 ]
 
-export const NavFooter = (lang: string, translations) => {
+export const NavFooter = (translations) => {
   return [
     {
       title: 'Account',
       label: '',
       icon: CircleUserIcon,
       variant: 'ghost' as const,
-      href: `/${lang}/account/settings`,
+      href: `/account/settings`,
     },
     {
       title: 'Logout',
       label: '',
       icon: LogOutIcon,
       variant: 'ghost' as const,
-      href: `/${lang}/logout`,
+      href: `/logout`,
     },
   ]
 }

@@ -1,7 +1,9 @@
-import Link from 'next/link'
+'use client'
 import { Button } from '@/components/ui/button'
+import { useRouter } from '@/navigation'
 
 export default function DoesNotExist({ name }) {
+  const router = useRouter()
   return (
     <div className="h-svh">
       <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">
@@ -12,9 +14,9 @@ export default function DoesNotExist({ name }) {
           exist.
         </p>
         <div className="mt-6 flex gap-4">
-          <Link href={'.'}>
-            <Button variant="outline">Go back</Button>
-          </Link>
+          <Button variant="outline" onClick={() => router.back()}>
+            Go back
+          </Button>
         </div>
       </div>
     </div>

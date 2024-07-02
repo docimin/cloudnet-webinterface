@@ -13,10 +13,10 @@ import { getTemplateFiles } from '@/utils/actions/templates/getTemplateFiles'
 import { FileType } from '@/utils/types/templates'
 import { formatBytes } from '@/components/formatBytes'
 import { formatDate } from '@/components/formatDate'
-import Link from 'next/link'
 import { useRouter } from 'next/navigation'
 import { usePathname } from 'next/navigation'
 import { deleteFile } from '@/utils/actions/templates/deleteFile'
+import { Link } from '@/navigation'
 
 export default function FileBrowser({
   params,
@@ -116,6 +116,7 @@ export default function FileBrowser({
                           ) : (
                             <FileIcon className="h-5 w-5 text-gray-500" />
                           )}
+                          {/* @ts-ignore */}
                           <Link href={newPath}>
                             <span>{file.name}</span>
                           </Link>

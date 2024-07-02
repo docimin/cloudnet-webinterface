@@ -1,6 +1,5 @@
 'use client'
 
-import Link from 'next/link'
 import { LucideIcon } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -10,7 +9,7 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { useParams, usePathname } from 'next/navigation'
+import { Link, usePathname } from '@/navigation'
 
 interface NavProps {
   isCollapsed: boolean
@@ -22,11 +21,11 @@ interface NavProps {
     href: string
   }[]
   setIsOpen?: any
+  translations: any
 }
 
-export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {
+export function Nav({ isCollapsed, links, setIsOpen, translations }: NavProps) {
   const currentPath = usePathname()
-  const params = useParams()
 
   return (
     <div
@@ -36,10 +35,9 @@ export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
         {links.map((link, index) => {
           const isActive =
-            link.href === `/${params.lang}` ||
-            link.href === `/${params.lang}/dashboard`
-              ? currentPath === link.href
-              : currentPath.includes(link.href)
+            link.title === translations.dashboard
+              ? currentPath === link.href.replace(/\/$/, '')
+              : currentPath.startsWith(link.href)
 
           const variant = isActive ? 'default' : 'ghost'
 
@@ -47,6 +45,7 @@ export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {
             <Tooltip key={index} delayDuration={0}>
               <TooltipTrigger asChild>
                 <Link
+                  // @ts-ignore
                   href={link.href}
                   onClick={(e) => {
                     if (window.innerWidth <= 768) {
@@ -77,6 +76,7 @@ export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {
           ) : (
             <Link
               key={index}
+              // @ts-ignore
               href={link.href}
               onClick={(e) => {
                 if (window.innerWidth <= 768) {

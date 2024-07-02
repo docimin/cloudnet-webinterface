@@ -19,22 +19,22 @@ export default function SidebarResizable({
   defaultCollapsed = false,
   navCollapsedSize,
   permissions,
-  lang,
+  translations,
   children,
 }) {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(defaultCollapsed)
 
-  const filteredNav1 = Nav1(lang, '').filter((link) =>
+  const filteredNav1 = Nav1(translations).filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
   )
-  const filteredNav2 = Nav2(lang, '').filter((link) =>
+  const filteredNav2 = Nav2(translations).filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
   )
-  const filteredNav3 = Nav3(lang, '').filter((link) =>
+  const filteredNav3 = Nav3(translations).filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
@@ -101,25 +101,41 @@ export default function SidebarResizable({
             <ScrollArea className={'h-full overflow-auto'}>
               <div>
                 {filteredNav1.length > 0 && (
-                  <Nav isCollapsed={isCollapsed} links={filteredNav1} />
+                  <Nav
+                    isCollapsed={isCollapsed}
+                    links={filteredNav1}
+                    translations={translations}
+                  />
                 )}
                 {filteredNav1.length > 0 && filteredNav2.length > 0 && (
                   <Separator />
                 )}
                 {filteredNav2.length > 0 && (
-                  <Nav isCollapsed={isCollapsed} links={filteredNav2} />
+                  <Nav
+                    isCollapsed={isCollapsed}
+                    links={filteredNav2}
+                    translations={translations}
+                  />
                 )}
                 {filteredNav2.length > 0 && filteredNav3.length > 0 && (
                   <Separator />
                 )}
                 {filteredNav3.length > 0 && (
-                  <Nav isCollapsed={isCollapsed} links={filteredNav3} />
+                  <Nav
+                    isCollapsed={isCollapsed}
+                    links={filteredNav3}
+                    translations={translations}
+                  />
                 )}
               </div>
             </ScrollArea>
             <div className={'mt-auto relative bottom-0 block'}>
               <Separator />
-              <Nav isCollapsed={isCollapsed} links={NavFooter(lang, '')} />
+              <Nav
+                isCollapsed={isCollapsed}
+                links={NavFooter(translations)}
+                translations={translations}
+              />
             </div>
           </div>
         </ResizablePanel>
