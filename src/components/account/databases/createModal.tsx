@@ -28,7 +28,6 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card'
-import * as Sentry from '@sentry/nextjs'
 import { useRouter } from 'next/navigation'
 
 export default function CreateDatabaseModal() {

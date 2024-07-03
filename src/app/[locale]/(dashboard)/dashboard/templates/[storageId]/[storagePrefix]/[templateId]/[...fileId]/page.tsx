@@ -4,7 +4,6 @@ import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
 import FileEditor from '@/components/templates/fileEditor'
-import { getFile } from '@/utils/server-api/templates/getFile'
 
 export const runtime = 'edge'
 
