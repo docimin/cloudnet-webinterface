@@ -1,7 +1,8 @@
 /** @type {import('next').NextConfig} */
 
-import createNextIntlPlugin from 'next-intl/plugin'
-const withNextIntl = createNextIntlPlugin()
+import createNextIntlPlugin from 'next-intl/plugin';
+
+const withNextIntl = createNextIntlPlugin();
 import { withSentryConfig } from '@sentry/nextjs';
 
 const cspHeader = `
@@ -17,18 +18,18 @@ const cspHeader = `
     form-action 'self';
     frame-ancestors 'none';
     block-all-mixed-content;
-`
+`;
 
 const nextConfig = {
   reactStrictMode: true,
   compress: false,
   devIndicators: {
     buildActivityPosition: 'bottom-right',
-    buildActivity: true,
+    buildActivity: true
   },
   // output: 'standalone', // This is needed if you want to use docker
   compiler: {
-    styledComponents: true,
+    styledComponents: true
     //removeConsole: {
     //  exclude: ['error'],
     //},
@@ -37,22 +38,22 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: 'localhost',
-      },
-    ],
+        hostname: 'localhost'
+      }
+    ]
   },
   poweredByHeader: false,
   async rewrites() {
     return [
       {
         source: '/:path*/blog/:slug',
-        destination: '/:path*/blog/',
+        destination: '/:path*/blog/'
       },
       {
         source: '/sitemap.xml',
-        destination: '/api/sitemap',
-      },
-    ]
+        destination: '/api/sitemap'
+      }
+    ];
   },
   async headers() {
     return [
@@ -61,37 +62,37 @@ const nextConfig = {
         headers: [
           {
             key: 'X-DNS-Prefetch-Control',
-            value: 'on',
+            value: 'on'
           },
           {
             key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload',
+            value: 'max-age=63072000; includeSubDomains; preload'
           },
           {
             key: 'X-Content-Type-Options',
-            value: 'nosniff',
+            value: 'nosniff'
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
+            value: 'origin-when-cross-origin'
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
+            value: 'SAMEORIGIN'
           },
           {
             key: 'X-XSS-Protection',
-            value: '1; mode=block',
+            value: '1; mode=block'
           },
           {
             key: 'Content-Security-Policy',
-            value: cspHeader.replace(/\n/g, ''),
-          },
-        ],
-      },
-    ]
-  },
-}
+            value: cspHeader.replace(/\n/g, '')
+          }
+        ]
+      }
+    ];
+  }
+};
 
 // Injected content via Sentry wizard below
 
@@ -103,7 +104,7 @@ const sentryConfig = {
   silent: true,
   org: 'CloudNet',
   project: 'javascript-nextjs',
-  url: 'https://sentry.fayevr.dev/',
+  url: 'https://sentry.fayevr.dev/'
 };
 
 const sentryOptions = {
@@ -131,8 +132,8 @@ const sentryOptions = {
   // See the following for more information:
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
-  automaticVercelMonitors: false,
-}
+  automaticVercelMonitors: false
+};
 
 const sentryNextConfig = withSentryConfig(nextConfig, sentryConfig, sentryOptions);
 const sentryIntlNextConfig = withNextIntl(sentryNextConfig);

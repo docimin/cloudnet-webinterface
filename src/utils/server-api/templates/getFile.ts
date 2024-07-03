@@ -1,5 +1,6 @@
 'use server'
 import { fetchWithPermissionsAsText } from '@/utils/actions/fetchWithPermissionsAsText'
+import { unstable_noStore } from 'next/cache'
 
 export async function getFile(
   storageId: string,
@@ -7,6 +8,7 @@ export async function getFile(
   templateId: string,
   params: string[]
 ) {
+  unstable_noStore()
   const requiredPermissions = [
     'cloudnet_rest:template_storage_read',
     'cloudnet_rest:template_storage_template_list',
