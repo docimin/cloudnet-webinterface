@@ -30,7 +30,6 @@ export async function checkToken() {
   try {
     /**
      * Verifies if the JWT is still valid.
-     * @type {Response}
      */
     const accessResponse: Response = await fetch(`${address}/auth/verify`, {
       method: 'POST',
@@ -45,7 +44,6 @@ export async function checkToken() {
     } else if (accessResponse.status === 401) {
       /**
        * Verifies if the JWT is still valid.
-       * @type {Response}
        */
       const refreshResponse: Response = await fetch(`${address}/auth/verify`, {
         method: 'POST',
@@ -66,9 +64,8 @@ export async function checkToken() {
 
       /**
        * Refreshes both refreshToken & accessToken
-       * @type {Response}
        */
-      const responseRefresh = await fetch(`${address}/auth/refresh`, {
+      const responseRefresh: Response = await fetch(`${address}/auth/refresh`, {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${cookie['rt']}`,
