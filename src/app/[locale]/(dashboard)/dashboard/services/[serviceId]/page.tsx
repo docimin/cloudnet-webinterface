@@ -1,11 +1,4 @@
-import { Button } from '@/components/ui/button'
-import {
-  CableIcon,
-  DatabaseZapIcon,
-  GitBranchIcon,
-  MemoryStickIcon,
-  ServerOffIcon,
-} from 'lucide-react'
+import { DatabaseZapIcon, MemoryStickIcon, ServerOffIcon } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { formatBytes } from '@/components/formatBytes'
 import { getService } from '@/utils/server-api/services/getService'

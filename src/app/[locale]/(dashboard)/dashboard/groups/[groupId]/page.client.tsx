@@ -22,15 +22,35 @@ export default function GroupClientPage({
   const [groupConfigData, setGroupConfigData] = useState(
     JSON.stringify(group, null, 2)
   )
+  const [originalName, setOriginalName] = useState(group.name)
 
   const handleModuleConfigSave = async (event) => {
     event.preventDefault()
 
-    const response = await updateGroup(JSON.parse(groupConfigData))
+    try {
+      const updatedGroup = JSON.parse(groupConfigData)
+      if (updatedGroup.name !== originalName) {
+        toast({
+          description: 'Warning: Group name has been changed!',
+          variant: 'destructive',
+        })
+        // Optionally, update the original name to the new name
+        setOriginalName(updatedGroup.name)
+        return
+      }
 
-    if (response) {
+      const response = await updateGroup(updatedGroup)
+
+      if (response) {
+        toast({
+          description: 'Group config updated successfully',
+        })
+      }
+      // Proceed with the rest of your logic for a valid updatedGroup
+    } catch (error) {
       toast({
-        description: 'Group config updated successfully',
+        description: 'Invalid JSON format.',
+        variant: 'destructive',
       })
     }
   }

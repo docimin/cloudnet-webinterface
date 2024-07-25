@@ -57,6 +57,7 @@ export default async function UserPage({ params: { locale, taskId } }) {
   return (
     <PageLayout title={`Edit ${task?.name}`}>
       <TaskClientPage
+        taskName={task?.name}
         taskId={taskId}
         hasEditPermissions={hasEditPermissions}
         hasDeletePermissions={hasDeletePermissions}

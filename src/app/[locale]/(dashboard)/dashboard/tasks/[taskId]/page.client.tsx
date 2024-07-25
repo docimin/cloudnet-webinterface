@@ -19,6 +19,7 @@ import {
 import { useRouter } from 'next/navigation'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Terminal } from 'lucide-react'
+import { useToast } from '@/components/ui/use-toast'
 
 function DeleteButton({ taskId }: { taskId: string }) {
   const router = useRouter()
@@ -52,32 +53,66 @@ function DeleteButton({ taskId }: { taskId: string }) {
   )
 }
 
-function UpdateButton({ taskId, body }: { taskId: string; body: any }) {
+function UpdateButton({
+  taskId,
+  body,
+  originalName,
+}: {
+  taskId: string
+  body: any
+  originalName: string
+}) {
+  const { toast } = useToast()
   const handleUpdate = async () => {
-    await updateTask(taskId, body)
+    try {
+      const updatedTask = JSON.parse(body) // Assuming `body` is a JSON string of your task data
+      if (updatedTask.name !== originalName) {
+        toast({
+          description: 'Warning: Task name has been changed!',
+          variant: 'destructive',
+        })
+        // Optionally, update the original name to the new name here or handle accordingly
+        return // Stop the update process or handle accordingly
+      }
+      // Proceed with your update logic here if the name hasn't changed
+      await updateTask(taskId, updatedTask)
+      toast({
+        description: 'Task updated successfully',
+      })
+    } catch (error) {
+      toast({
+        description: 'Invalid JSON format.',
+        variant: 'destructive',
+      })
+    }
   }
 
   return <Button onClick={handleUpdate}>Update task</Button>
 }
 
 export default function TaskClientPage({
+  taskName,
   taskId,
   hasEditPermissions,
   hasDeletePermissions,
   taskConfigData,
   children,
 }: {
+  taskName: string
   taskId: string
   hasEditPermissions: boolean
   hasDeletePermissions: boolean
-  taskConfigData: string
+  taskConfigData: any
   children: any
 }) {
   const [body, setBody] = useState(taskConfigData)
+
   return (
     <div>
       <div className={'flex items-center justify-between'}>
-        {hasEditPermissions && <UpdateButton taskId={taskId} body={body} />}
+        {hasEditPermissions && (
+          <UpdateButton taskId={taskId} body={body} originalName={taskName} />
+        )}{' '}
         {hasDeletePermissions && <DeleteButton taskId={taskId} />}
       </div>
       <Alert className={'mt-8'}>

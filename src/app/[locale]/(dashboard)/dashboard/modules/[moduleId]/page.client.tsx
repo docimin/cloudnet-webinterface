@@ -1,6 +1,5 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { updateNode } from '@/utils/actions/nodes/updateNode'
 import { useToast } from '@/components/ui/use-toast'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
