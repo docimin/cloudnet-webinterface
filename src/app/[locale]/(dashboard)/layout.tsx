@@ -1,5 +1,6 @@
 import Header from '@/components/header/header-server'
-import { notFound, redirect } from 'next/navigation'
+import { notFound } from 'next/navigation'
+import { redirect } from '@/navigation'
 import { locales } from '@/navigation'
 import { checkAuthToken } from '@/lib/server-calls'
 import { getTranslations } from 'next-intl/server'

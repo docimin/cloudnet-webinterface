@@ -6,7 +6,7 @@ import { getFile } from '@/utils/server-api/templates/getFile'
 import { updateFile } from '@/utils/actions/templates/updateFile'
 import { useToast } from '@/components/ui/use-toast'
 import * as Sentry from '@sentry/nextjs'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/navigation'
 import { deleteFile } from '@/utils/actions/templates/deleteFile'
 
 export default function FileEditor({ params }) {

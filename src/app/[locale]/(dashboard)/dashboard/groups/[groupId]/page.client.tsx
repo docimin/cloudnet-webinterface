@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { Label } from '@/components/ui/label'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/navigation'
 import { Textarea } from '@/components/ui/textarea'
 import { useState } from 'react'
 import { updateGroup } from '@/utils/actions/groups/updateGroup'

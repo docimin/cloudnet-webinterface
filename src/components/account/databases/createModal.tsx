@@ -28,7 +28,7 @@ import {
   HoverCardContent,
   HoverCardTrigger,
 } from '@/components/ui/hover-card'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/navigation'
 
 export default function CreateDatabaseModal() {
   const [modalOpen, setModalOpen] = useState<boolean>(false)

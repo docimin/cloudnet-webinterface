@@ -13,18 +13,18 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { useToast } from '@/components/ui/use-toast'
 import { updateGroup } from '@/utils/actions/groups/updateGroup'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/navigation'
 
 export default function CreateGroup() {
   const { toast } = useToast()
   const router = useRouter()
-  const [groupName, setGroupName] = useState('')
+  const [name, setName] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
 
   const handleSubmit = async (event: any) => {
     event.preventDefault()
     const data = await updateGroup({
-      name: groupName,
+      name: name,
       jvmOptions: [],
       processParameters: [],
       environmentVariables: {},
@@ -64,8 +64,8 @@ export default function CreateGroup() {
           <Label htmlFor={'name'}>Name</Label>
           <Input
             id={'name'}
-            value={groupName}
-            onChange={(e) => setGroupName(e.target.value)}
+            value={name}
+            onChange={(e) => setName(e.target.value)}
             type={'text'}
           />
         </DialogHeader>

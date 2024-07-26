@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@/navigation'
 import { useToast } from '@/components/ui/use-toast'
 
 export default function RefreshButton() {

@@ -4,10 +4,10 @@ import { unstable_noStore } from 'next/cache'
 
 export async function getPermissions(): Promise<string[]> {
   unstable_noStore()
-  const cookie = await getCookies()
-  if (!cookie['permissions']) {
+  const cookies = await getCookies()
+  if (!cookies['permissions']) {
     return []
   }
 
-  return JSON.parse(decodeURIComponent(cookie['permissions']))
+  return JSON.parse(decodeURIComponent(cookies['permissions']))
 }

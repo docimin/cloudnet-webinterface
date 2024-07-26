@@ -55,6 +55,7 @@ export default function ChangeLanguage() {
     const newUrl = pathParts.join('/')
 
     // Update the browser's URL and reload the page
+    // @ts-ignore
     router.push(newUrl)
   }
 

@@ -1,4 +1,3 @@
-'use server'
 import { getCookies } from '@/lib/server-calls'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 
