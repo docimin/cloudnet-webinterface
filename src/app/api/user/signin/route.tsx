@@ -12,6 +12,8 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'No body provided', status: 400 })
   }
 
+  console.log('starting')
+
   const domainUrl = new URL(
     process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost'
   )
@@ -61,6 +63,8 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    console.log('respone status', response.status)
+
     const dataResponse = await response.json()
 
     if (dataResponse.status) {
@@ -76,6 +80,8 @@ export async function POST(request: NextRequest) {
       new Date(Date.now() + dataResponse.refreshToken.expiresIn)
     )
 
+    console.log('setting cookies')
+
     setCookie('add', address, dataResponse.refreshToken.expiresIn)
     setCookie('at', dataResponse.accessToken.token, expirationAccessTime)
     setCookie('rt', dataResponse.refreshToken.token, expirationRefreshTime)
@@ -84,6 +90,8 @@ export async function POST(request: NextRequest) {
       JSON.stringify(dataResponse.scopes),
       expirationAccessTime
     )
+
+    console.log('cookies set')
 
     return NextResponse.json(dataResponse)
   } catch (error) {

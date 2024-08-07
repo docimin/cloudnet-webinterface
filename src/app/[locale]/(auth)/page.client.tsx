@@ -28,6 +28,7 @@ export default function Client() {
 
   const handleEmailLogin = async (e) => {
     e.preventDefault()
+    console.log('Logging in...')
 
     try {
       const response = await fetch(`/api/user/signin`, {
@@ -41,6 +42,8 @@ export default function Client() {
           password: data.password,
         }),
       })
+
+      console.log('Tried to login')
 
       const dataResponse = await response.json()
 
@@ -70,12 +73,13 @@ export default function Client() {
           variant: 'destructive',
         })
       } else {
+        console.log(dataResponse)
         toast({
           title: 'Error',
           description: 'An error occurred',
           variant: 'destructive',
         })
-        Sentry.captureException('Error logging in', dataResponse)
+        Sentry.captureException(dataResponse)
       }
     } catch (error) {
       console.error(error)
