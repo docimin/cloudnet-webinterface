@@ -55,6 +55,7 @@ const nextConfig = {
       },
     ]
   },
+  /*
   async headers() {
     return [
       {
@@ -92,6 +93,7 @@ const nextConfig = {
       },
     ]
   },
+   */
 }
 
 // Injected content via Sentry wizard below
