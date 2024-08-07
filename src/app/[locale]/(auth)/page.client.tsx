@@ -73,13 +73,18 @@ export default function Client() {
           variant: 'destructive',
         })
       } else {
-        console.log(dataResponse)
+        console.log(
+          'An error occurred',
+          dataResponse.status + ' ' + dataResponse.statusText
+        )
         toast({
           title: 'Error',
           description: 'An error occurred',
           variant: 'destructive',
         })
-        Sentry.captureException(dataResponse)
+        Sentry.captureException('An error occurred while logging in', {
+          extra: dataResponse,
+        })
       }
     } catch (error) {
       console.error(error)
