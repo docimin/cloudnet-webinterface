@@ -73,10 +73,7 @@ export default function Client() {
           variant: 'destructive',
         })
       } else {
-        console.log(
-          'An error occurred',
-          dataResponse.status + ' ' + dataResponse.statusText
-        )
+        console.log('An error occurred')
         toast({
           title: 'Error',
           description: 'An error occurred',
