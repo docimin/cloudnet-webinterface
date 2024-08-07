@@ -34,6 +34,7 @@ export async function POST(request: NextRequest) {
 
   let { address, username, password } = await request.json()
 
+  /*
   const ipPattern = new RegExp(
     /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?::[0-9]{1,5})?$/
   )
@@ -53,9 +54,10 @@ export async function POST(request: NextRequest) {
   if (!address.endsWith('/api/v3')) {
     address += '/api/v3'
   }
+   */
 
   try {
-    const response = await fetch(`${address}/auth`, {
+    const response = await fetch(`http://217.160.138.194:2814/api/v3/auth`, {
       method: 'POST',
       headers: {
         Authorization: `Basic ${btoa(`${username}:${password}`)}`,
@@ -63,9 +65,6 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    console.log('response', response.toString())
-    console.log('address:', address)
-    console.log('full address:', `${address}/auth`)
     console.log('respone status', response.status)
     console.log('response text', response.statusText)
 
@@ -87,7 +86,11 @@ export async function POST(request: NextRequest) {
 
     console.log('setting cookies')
 
-    setCookie('add', address, dataResponse.refreshToken.expiresIn)
+    setCookie(
+      'add',
+      'http://217.160.138.194:2814/api/v3',
+      dataResponse.refreshToken.expiresIn
+    )
     setCookie('at', dataResponse.accessToken.token, expirationAccessTime)
     setCookie('rt', dataResponse.refreshToken.token, expirationRefreshTime)
     setCookie(
