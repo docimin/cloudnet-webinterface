@@ -63,6 +63,9 @@ export async function POST(request: NextRequest) {
       },
     })
 
+    console.log('response', response)
+    console.log('address:', address)
+    console.log('full address:', `${address}/auth`)
     console.log('respone status', response.status)
 
     const dataResponse = await response.json()
