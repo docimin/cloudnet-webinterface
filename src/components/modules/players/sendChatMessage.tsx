@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import {
   Dialog,
   DialogContent,
@@ -21,15 +21,12 @@ export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
 
   const handleSend = async (event: any) => {
     event.preventDefault()
-    const data = await sendMessage(
-      player.networkPlayerProxyInfo.uniqueId,
-      message
-    )
-    if (data.status === 204) {
+    try {
+      await sendMessage(player.networkPlayerProxyInfo.uniqueId, message)
       toast({
         description: 'Message has been sent',
       })
-    } else {
+    } catch (error) {
       toast({
         title: 'Failed',
         description: 'Failed to send message',
@@ -37,7 +34,14 @@ export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
       })
     }
     setDialogOpen(false)
+    setMessage('')
   }
+
+  useEffect(() => {
+    if (!dialogOpen) {
+      setMessage('')
+    }
+  }, [dialogOpen])
 
   return (
     <Dialog open={dialogOpen} onOpenChange={(open) => setDialogOpen(open)}>

@@ -13,29 +13,21 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { kickPlayer } from '@/utils/actions/players/kickPlayer'
 import { useToast } from '@/components/ui/use-toast'
+import { connectPlayerToService } from '@/utils/actions/players/connectPlayerToService'
 
 export default function SendToService({ player }: { player: OnlinePlayer }) {
   const { toast } = useToast()
   const [kickReason, setKickReason] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
+  const [event, setEvent] = useState('')
+  const [target, setTarget] = useState('')
 
-  const handleSend = async (event: any) => {
-    event.preventDefault()
-    const data = await kickPlayer(
-      player.networkPlayerProxyInfo.uniqueId,
-      kickReason
-    )
-    if (data.status === 204) {
-      toast({
-        title: 'Kicked',
-        description: 'Player has been kicked',
-      })
-    } else {
-      toast({
-        title: 'Failed',
-        description: 'Failed to kick player',
-        variant: 'destructive',
-      })
+  const handleSend = async () => {
+    if (event === 'service') {
+      await connectPlayerToService(
+        player.networkPlayerProxyInfo.uniqueId,
+        target
+      )
     }
     setDialogOpen(false)
   }
@@ -47,9 +39,9 @@ export default function SendToService({ player }: { player: OnlinePlayer }) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Kick {player?.name}</DialogTitle>
+          <DialogTitle>Send {player?.name} to somewhere..</DialogTitle>
           <DialogDescription className={'pb-4'}>
-            Are you sure you want to kick {player?.name}?
+            Are you sure you want to send {player?.name} to a different server?
           </DialogDescription>
           <Label htmlFor={'kickReason'}>Kick reason</Label>
           <Input
@@ -59,8 +51,8 @@ export default function SendToService({ player }: { player: OnlinePlayer }) {
             type={'text'}
           />
         </DialogHeader>
-        <Button variant={'destructive'} onClick={handleSend}>
-          Kick
+        <Button variant={'destructive'} type={'button'} onClick={handleSend}>
+          Send to server
         </Button>
       </DialogContent>
     </Dialog>
