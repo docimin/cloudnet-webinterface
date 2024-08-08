@@ -23,7 +23,7 @@ import {
 
 export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
   const { toast } = useToast()
-  const [command, setMessage] = useState<string>('')
+  const [command, setCommand] = useState<string>('')
   const [isProxy, setIsProxy] = useState<boolean>(false)
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 
@@ -47,6 +47,7 @@ export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
       })
     }
     setDialogOpen(false)
+    setCommand('')
   }
 
   return (
@@ -69,16 +70,20 @@ export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
               <Input
                 id={'command'}
                 value={command}
-                onChange={(e) => setMessage(e.target.value)}
+                onChange={(e) => setCommand(e.target.value)}
                 type={'text'}
                 className="border-0 pl-0 align-middle bg-transparent ml-1 focus:ring-0 focus:outline-none focus:border-0 focus-visible:ring-0 focus-visible:outline-none focus-visible:border-0 focus-visible:ring-offset-0"
               />
             </div>
           </div>
           <div>
-            <Select onValueChange={(value) => setIsProxy(value === 'true')}>
+            <Label htmlFor={'command'}>Proxy command?</Label>
+            <Select
+              defaultValue={'false'}
+              onValueChange={(value) => setIsProxy(value === 'true')}
+            >
               <SelectTrigger>
-                <SelectValue placeholder="Proxy command?" />
+                <SelectValue />
               </SelectTrigger>
               <SelectContent>
                 <SelectItem value="true">True</SelectItem>

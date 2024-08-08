@@ -15,6 +15,8 @@ export async function connectPlayerToTaskOrGroup(
 
   return await postWithPermissions(
     `/player/online/${playerId}/connect?target=${target}&serverSelector=${serverSelector}&type=${type}`,
-    requiredPermissions
+    requiredPermissions,
+    {},
+    true
   )
 }

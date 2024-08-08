@@ -40,6 +40,9 @@ export async function postWithPermissions(
       return response
     }
   } catch (error) {
+    if (returnJson) {
+      return JSON.stringify(error)
+    }
     return error
   }
 }

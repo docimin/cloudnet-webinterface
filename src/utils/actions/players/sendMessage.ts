@@ -8,12 +8,12 @@ export async function sendMessage(playerId: string, message) {
     'global:admin',
   ]
 
-  const data = await postWithPermissions(
+  return await postWithPermissions(
     `/player/online/${playerId}/sendChat`,
     requiredPermissions,
     {
       chatMessage: message,
-    }
+    },
+    true
   )
-  return JSON.stringify(data)
 }
