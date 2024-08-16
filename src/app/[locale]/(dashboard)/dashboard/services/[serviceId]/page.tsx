@@ -1,4 +1,4 @@
-import { DatabaseZapIcon, MemoryStickIcon, ServerOffIcon } from 'lucide-react'
+import { DatabaseZapIcon, MemoryStickIcon, ServerOffIcon, UsersIcon } from 'lucide-react';
 import { Input } from '@/components/ui/input'
 import { formatBytes } from '@/components/formatBytes'
 import { getService } from '@/utils/server-api/services/getService'
@@ -56,6 +56,15 @@ export default async function ServiceClientPage({
       value2: '',
       value1Name: 'MC Version',
       value2Name: '',
+    },
+    {
+      name: 'Players',
+      icon: UsersIcon,
+      canEdit: false,
+      value1: service?.properties['Online-Count'] || '0',
+      value2: service?.properties['Max-Players'] || '0',
+      value1Name: 'Online Players',
+      value2Name: 'Max Players',
     },
   ]
 
