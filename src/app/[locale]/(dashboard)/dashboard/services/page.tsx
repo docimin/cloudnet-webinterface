@@ -51,6 +51,7 @@ export default async function ServicesPage({ params: { locale } }) {
               <TableHead className="w-[300px]">Name</TableHead>
               <TableHead>CPU Usage</TableHead>
               <TableHead>RAM Usage</TableHead>
+              <TableHead>Players</TableHead>
               {requiredPermissions.some((permission) =>
                 permissions.includes(permission)
               ) && <TableHead className="sr-only">Edit</TableHead>}
@@ -76,6 +77,9 @@ export default async function ServicesPage({ params: { locale } }) {
                   <TableCell>
                     {formatBytes(service?.processSnapshot.heapUsageMemory)} /{' '}
                     {formatBytes(service?.processSnapshot.maxHeapMemory)}
+                  </TableCell>
+                  <TableCell>
+                    {service?.properties['Online-Count'] || '0'} / {service?.properties['Max-Players'] || '0'}
                   </TableCell>
                   {requiredPermissions.some((permission) =>
                     permissions.includes(permission)
