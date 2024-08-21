@@ -1,5 +1,5 @@
 'use server'
-import { deleteWithPermissions } from '@/utils/actions/deleteWithPermissions';
+import { deleteWithPermissions } from '@/utils/actions/deleteWithPermissions'
 
 export async function deleteService(serviceId: string) {
   const requiredPermissions = [
