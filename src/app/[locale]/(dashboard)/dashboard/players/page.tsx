@@ -58,11 +58,12 @@ export default async function PlayersPage({ params: { locale } }) {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[250px]">Name</TableHead>
-              <TableHead>Last location</TableHead>
-              <TableHead>Node</TableHead>
+              <TableHead>Downstream Service</TableHead>
+              <TableHead>Proxy Service</TableHead>
+              <TableHead>Proxy Node</TableHead>
               {requiredPermissions.some((permission) =>
                 permissions.includes(permission)
-              ) && <TableHead className="sr-only">Edit</TableHead>}
+              ) && <TableHead className="sr-only">Details</TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -75,7 +76,12 @@ export default async function PlayersPage({ params: { locale } }) {
                     player?.connectedService.serviceId.taskServiceId}
                 </TableCell>
                 <TableCell>
-                  {player?.connectedService.serviceId.nodeUniqueId}
+                  {player?.loginService.serviceId.taskName +
+                    player?.loginService.serviceId.nameSplitter +
+                    player?.loginService.serviceId.taskServiceId}
+                </TableCell>
+                <TableCell>
+                  {player?.loginService.serviceId.nodeUniqueId}
                 </TableCell>
                 {requiredPermissions.some((permission) =>
                   permissions.includes(permission)
@@ -94,7 +100,7 @@ export default async function PlayersPage({ params: { locale } }) {
                         variant={'link'}
                         className={'p-0 text-right'}
                       >
-                        Edit
+                        Details
                       </Button>
                     </Link>
                   </TableCell>
