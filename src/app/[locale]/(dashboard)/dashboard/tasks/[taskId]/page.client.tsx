@@ -119,8 +119,8 @@ export default function TaskClientPage({
         <Terminal className="h-4 w-4" />
         <AlertTitle>Heads up!</AlertTitle>
         <AlertDescription>
-          Editing the &quot;name&quot; field will not change the group name.
-          Instead, it will create a new group with the new name.
+          Editing the &quot;name&quot; field will not change the task name.
+          Instead, it will create a new task with the new name.
         </AlertDescription>
       </Alert>
       {children}
