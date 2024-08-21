@@ -13,9 +13,3 @@ export async function updateServiceLifecycle(serviceId: string, lifecycle: Servi
     requiredPermissions
   );
 }
-
-export enum ServiceLifeCycleUpdate {
-  START = 'start',
-  RESTART = 'restart',
-  STOP = 'stop',
-}

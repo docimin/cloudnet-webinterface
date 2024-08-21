@@ -13,8 +13,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useRouter } from '@/navigation';
 import { deleteService } from '@/utils/actions/services/deleteService';
-import { updateLifecycle } from '@/utils/actions/modules/updateLifecycle';
-import { ServiceLifeCycleUpdate } from '@/utils/actions/services/updateServiceLifecycle';
+import { updateServiceLifecycle } from '@/utils/actions/services/updateServiceLifecycle';
 
 function DeleteButton({ serviceId }: { serviceId: string }) {
   const router = useRouter();
@@ -50,12 +49,26 @@ function DeleteButton({ serviceId }: { serviceId: string }) {
 
 function StartButton({ serviceId, lifeCycle }: { serviceId: string, lifeCycle: LifeCycle }) {
   const handleStart = async () => {
-    if (lifeCycle !== LifeCycle.RUNNING) {
-      await updateLifecycle(serviceId, ServiceLifeCycleUpdate.START);
+    if (lifeCycle !== 'RUNNING') {
+      await updateServiceLifecycle(serviceId, ServiceLifeCycleUpdate.START);
     }
   };
   return (
     <Button variant={'default'} onClick={handleStart}>Start service</Button>
+  );
+}
+
+function RestartButton({ serviceId }: { serviceId: string }) {
+  const handleRestart = async () => await updateServiceLifecycle(serviceId, ServiceLifeCycleUpdate.RESTART);
+  return (
+    <Button variant={'default'} onClick={handleRestart}>Restart service</Button>
+  );
+}
+
+function StopButton({ serviceId }: { serviceId: string }) {
+  const handleStop = async () => await updateServiceLifecycle(serviceId, ServiceLifeCycleUpdate.STOP);
+  return (
+    <Button variant={'destructive'} onClick={handleStop}>Stop service</Button>
   );
 }
 
@@ -74,10 +87,12 @@ export default function ServiceClientPage({
 }) {
   return (
     <div>
-      <div className={'flex items-center justify-between'}>
-        {hasLifecyclePermissions && (
+      <div className={'flex gap-x-1'}>
+        {hasLifecyclePermissions && <>
           <StartButton serviceId={serviceId} lifeCycle={lifeCycle} />
-        )}{' '}
+          <RestartButton serviceId={serviceId} />
+          <StopButton serviceId={serviceId} />
+        </>}{' '}
         {hasDeletePermissions && <DeleteButton serviceId={serviceId} />}
       </div>
       {children}

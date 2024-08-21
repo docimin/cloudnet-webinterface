@@ -124,6 +124,12 @@ interface Include {
   destination: string
 }
 
+enum ServiceLifeCycleUpdate {
+  START = 'start',
+  RESTART = 'restart',
+  STOP = 'stop',
+}
+
 enum LifeCycle {
   PREPARED = 'PREPARED',
   RUNNING = 'RUNNING',
