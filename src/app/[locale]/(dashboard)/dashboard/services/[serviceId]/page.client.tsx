@@ -1,5 +1,5 @@
-'use client';
-import { Button } from '@/components/ui/button';
+'use client'
+import { Button } from '@/components/ui/button'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -9,21 +9,21 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger
-} from '@/components/ui/alert-dialog';
-import { useRouter } from '@/navigation';
-import { deleteService } from '@/utils/actions/services/deleteService';
-import { updateServiceLifecycle } from '@/utils/actions/services/updateServiceLifecycle';
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog'
+import { useRouter } from '@/navigation'
+import { deleteService } from '@/utils/actions/services/deleteService'
+import { updateServiceLifecycle } from '@/utils/actions/services/updateServiceLifecycle'
 
 function DeleteButton({ serviceId }: { serviceId: string }) {
-  const router = useRouter();
+  const router = useRouter()
 
   const handleDelete = async () => {
-    const data = await deleteService(serviceId);
+    const data = await deleteService(serviceId)
     if (data.status === 204) {
-      router.push('/dashboard/services');
+      router.push('/dashboard/services')
     }
-  };
+  }
 
   return (
     <AlertDialog>
@@ -44,47 +44,63 @@ function DeleteButton({ serviceId }: { serviceId: string }) {
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
-  );
+  )
 }
 
-function StartButton({ serviceId, lifeCycle }: { serviceId: string, lifeCycle: LifeCycle }) {
+function StartButton({
+  serviceId,
+  lifeCycle,
+}: {
+  serviceId: string
+  lifeCycle: LifeCycle
+}) {
   const handleStart = async () => {
     if (lifeCycle !== 'RUNNING') {
-      await updateServiceLifecycle(serviceId, 'start');
+      await updateServiceLifecycle(serviceId, 'start' as ServiceLifeCycleUpdate)
     }
-  };
+  }
   return (
-    <Button variant={'default'} onClick={handleStart}>Start service</Button>
-  );
+    <Button variant={'default'} onClick={handleStart}>
+      Start service
+    </Button>
+  )
 }
 
 function RestartButton({ serviceId }: { serviceId: string }) {
-  const handleRestart = async () => await updateServiceLifecycle(serviceId, 'restart');
+  const handleRestart = async () =>
+    await updateServiceLifecycle(serviceId, 'restart' as ServiceLifeCycleUpdate)
   return (
-    <Button variant={'default'} onClick={handleRestart}>Restart service</Button>
-  );
+    <Button variant={'default'} onClick={handleRestart}>
+      Restart service
+    </Button>
+  )
 }
 
 function StopButton({ serviceId }: { serviceId: string }) {
-  const router = useRouter();
+  const router = useRouter()
   const handleStop = async () => {
-    const data = await updateServiceLifecycle(serviceId, 'stop');
+    const data = await updateServiceLifecycle(
+      serviceId,
+      'stop' as ServiceLifeCycleUpdate
+    )
     if (data.status === 204) {
-      router.push('/dashboard/services');
+      router.push('/dashboard/services')
     }
-  };
+  }
   return (
-    <Button variant={'destructive'} onClick={handleStop}>Stop service</Button>
-  );
+    <Button variant={'destructive'} onClick={handleStop}>
+      Stop service
+    </Button>
+  )
 }
 
 export default function ServiceClientPage({
-                                            serviceId,
-                                            lifeCycle,
-                                            hasLifecyclePermissions,
-                                            hasDeletePermissions,
-                                            children
-                                          }: {
+  serviceId,
+  lifeCycle,
+  hasLifecyclePermissions,
+  hasDeletePermissions,
+  children,
+}: {
   serviceId: string
   lifeCycle: LifeCycle
   hasLifecyclePermissions: boolean
@@ -94,14 +110,16 @@ export default function ServiceClientPage({
   return (
     <div>
       <div className={'flex gap-x-1'}>
-        {hasLifecyclePermissions && <>
-          <StartButton serviceId={serviceId} lifeCycle={lifeCycle} />
-          <RestartButton serviceId={serviceId} />
-          <StopButton serviceId={serviceId} />
-        </>}{' '}
+        {hasLifecyclePermissions && (
+          <>
+            <StartButton serviceId={serviceId} lifeCycle={lifeCycle} />
+            <RestartButton serviceId={serviceId} />
+            <StopButton serviceId={serviceId} />
+          </>
+        )}{' '}
         {hasDeletePermissions && <DeleteButton serviceId={serviceId} />}
       </div>
       {children}
     </div>
-  );
+  )
 }

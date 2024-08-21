@@ -112,7 +112,7 @@ export default function TaskClientPage({
       <div className={'flex items-center justify-between'}>
         {hasEditPermissions && (
           <UpdateButton taskId={taskId} body={body} originalName={taskName} />
-        )}{' '}
+        )}
         {hasDeletePermissions && <DeleteButton taskId={taskId} />}
       </div>
       <Alert className={'mt-8'}>

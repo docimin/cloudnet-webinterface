@@ -1,15 +1,18 @@
-'use server';
-import { patchWithPermissions } from '@/utils/actions/patchWithPermissions';
+'use server'
+import { patchWithPermissions } from '@/utils/actions/patchWithPermissions'
 
-export async function updateServiceLifecycle(serviceId: string, lifecycle: string) {
+export async function updateServiceLifecycle(
+  serviceId: string,
+  lifecycle: ServiceLifeCycleUpdate
+) {
   const requiredPermissions = [
     'cloudnet_rest:service_write',
     'cloudnet_rest:service_lifecycle',
-    'global:admin'
-  ];
+    'global:admin',
+  ]
 
   return await patchWithPermissions(
     `/service/${serviceId}/lifecycle?target=${lifecycle}`,
     requiredPermissions
-  );
+  )
 }
