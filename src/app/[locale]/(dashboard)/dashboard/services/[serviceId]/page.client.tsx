@@ -50,7 +50,7 @@ function DeleteButton({ serviceId }: { serviceId: string }) {
 function StartButton({ serviceId, lifeCycle }: { serviceId: string, lifeCycle: LifeCycle }) {
   const handleStart = async () => {
     if (lifeCycle !== 'RUNNING') {
-      await updateServiceLifecycle(serviceId, ServiceLifeCycleUpdate.START);
+      await updateServiceLifecycle(serviceId, 'start');
     }
   };
   return (
@@ -59,14 +59,20 @@ function StartButton({ serviceId, lifeCycle }: { serviceId: string, lifeCycle: L
 }
 
 function RestartButton({ serviceId }: { serviceId: string }) {
-  const handleRestart = async () => await updateServiceLifecycle(serviceId, ServiceLifeCycleUpdate.RESTART);
+  const handleRestart = async () => await updateServiceLifecycle(serviceId, 'restart');
   return (
     <Button variant={'default'} onClick={handleRestart}>Restart service</Button>
   );
 }
 
 function StopButton({ serviceId }: { serviceId: string }) {
-  const handleStop = async () => await updateServiceLifecycle(serviceId, ServiceLifeCycleUpdate.STOP);
+  const router = useRouter();
+  const handleStop = async () => {
+    const data = await updateServiceLifecycle(serviceId, 'stop');
+    if (data.status === 204) {
+      router.push('/dashboard/services');
+    }
+  };
   return (
     <Button variant={'destructive'} onClick={handleStop}>Stop service</Button>
   );
