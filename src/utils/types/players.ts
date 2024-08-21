@@ -51,6 +51,7 @@ interface OnlinePlayer {
   lastNetworkPlayerProxyInfo: NetworkPlayerProxyInfo
   networkPlayerProxyInfo: NetworkPlayerProxyInfo
   connectedService: NetworkService
+  loginService: NetworkService
   networkPlayerServerInfo: NetworkPlayerProxyInfo
 }
 
