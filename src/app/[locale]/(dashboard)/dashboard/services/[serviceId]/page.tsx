@@ -5,10 +5,11 @@ import { getService } from '@/utils/server-api/services/getService'
 import PageLayout from '@/components/pageLayout'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
+import ServiceClientPage from '@/app/[locale]/(dashboard)/dashboard/services/[serviceId]/page.client';
 
 export const runtime = 'edge'
 
-export default async function ServiceClientPage({
+export default async function UserPage({
   params: { serviceId, lang },
 }) {
   const service: Service = await getService(serviceId)
@@ -76,6 +77,7 @@ export default async function ServiceClientPage({
           service?.configuration.serviceId.taskServiceId || 'Service'
       }
     >
+      <ServiceClientPage serviceId={serviceId} lifeCycle={service.lifeCycle} hasLifecyclePermissions={true} hasDeletePermissions={true}>
       <ul
         role="list"
         className="grid grid-cols-1 gap-x-6 gap-y-8 lg:grid-cols-3 xl:gap-x-8 pt-4"
@@ -146,6 +148,7 @@ export default async function ServiceClientPage({
           </div>
         </div>
       )}
+      </ServiceClientPage>
     </PageLayout>
   )
 }
