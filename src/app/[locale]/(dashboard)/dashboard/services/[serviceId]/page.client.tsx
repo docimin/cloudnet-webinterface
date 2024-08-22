@@ -34,8 +34,7 @@ function DeleteButton({ serviceId }: { serviceId: string }) {
         <AlertDialogHeader>
           <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your task
-            and remove your data.
+            This will stop the service and temporary files are deleted.
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
@@ -56,7 +55,7 @@ function StartButton({
 }) {
   const handleStart = async () => {
     if (lifeCycle !== 'RUNNING') {
-      await updateServiceLifecycle(serviceId, 'start' as ServiceLifeCycleUpdate)
+      await updateServiceLifecycle(serviceId, 'start')
     }
   }
   return (
@@ -68,7 +67,7 @@ function StartButton({
 
 function RestartButton({ serviceId }: { serviceId: string }) {
   const handleRestart = async () =>
-    await updateServiceLifecycle(serviceId, 'restart' as ServiceLifeCycleUpdate)
+    await updateServiceLifecycle(serviceId, 'restart')
   return (
     <Button variant={'default'} onClick={handleRestart}>
       Restart service

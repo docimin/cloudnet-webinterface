@@ -13,19 +13,23 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { kickPlayer } from '@/utils/actions/players/kickPlayer'
 import { useToast } from '@/components/ui/use-toast'
+import { useRouter } from '@/navigation';
 
 export default function KickPlayer({ player }: { player: OnlinePlayer }) {
   const { toast } = useToast()
   const [kickReason, setKickReason] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
 
+  const router = useRouter()
   const handleKick = async (event: any) => {
     event.preventDefault()
     const data = await kickPlayer(
       player.networkPlayerProxyInfo.uniqueId,
-      kickReason
+      kickReason ? kickReason : 'Bye!'
     )
-    if (data.status === 204) {
+
+    if (data === 204) {
+      router.push('/dashboard/players')
       toast({
         title: 'Kicked',
         description: 'Player has been kicked',

@@ -124,18 +124,9 @@ interface Include {
   destination: string
 }
 
-enum ServiceLifeCycleUpdate {
-  START = 'start',
-  RESTART = 'restart',
-  STOP = 'stop',
-}
+type ServiceLifeCycleUpdate = 'start' | 'restart' | 'stop'
 
-enum LifeCycle {
-  PREPARED = 'PREPARED',
-  RUNNING = 'RUNNING',
-  STOPPED = 'STOPPED',
-  DELETED = 'DELETED',
-}
+type LifeCycle = 'PREPARED' | 'RUNNING' | 'STOPPED' | 'DELETED'
 
 interface Services {
   services: Service[]
