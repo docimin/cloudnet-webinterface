@@ -6,16 +6,23 @@
 
 ## Getting Started
 
+Make sure you have pnpm installed using:
+
+```bash
+npm i -g pnpm
+```
+
+
 First, install the packages using:
 
 ```bash
-npm install
+pnpm install
 ```
 
 To start the server, use the following command:
 
 ```bash
-npm run dev
+pnpm run dev
 ```
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
