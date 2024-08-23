@@ -32,8 +32,8 @@ So you want to fill in your user/pass without the address every single time?
 
 Fill in `NEXT_PUBLIC_CLOUDNET_ADDRESS` in your .env file, like for example: `NEXT_PUBLIC_CLOUDNET_ADDRESS=127.0.0.1:2812`, this will auto-fill it for you.
 
-If you want to use a domain, please put HTTPS in front of it, like for example: `NEXT_PUBLIC_CLOUDNET_ADDRESS=https://cloudnet.example.com`.
+If you want to use a domain: `NEXT_PUBLIC_CLOUDNET_ADDRESS=https://cloudnet.example.com`.
 
-## It is with extreme importance to know that this is a WIP project.
+## Bugs may occur!
 
-You are however welcome to contribute to this project.
+Meaning if you encounter any issues, please open up an issue. You are welcome to contribute to this project and create a PR.
