@@ -49,12 +49,13 @@ export default async function ServicesPage({ params: { locale } }) {
           <TableHeader>
             <TableRow>
               <TableHead className="w-[300px]">Name</TableHead>
+              <TableHead>State</TableHead>
               <TableHead>CPU Usage</TableHead>
               <TableHead>RAM Usage</TableHead>
               <TableHead>Players</TableHead>
               {requiredPermissions.some((permission) =>
                 permissions.includes(permission)
-              ) && <TableHead className="sr-only">Edit</TableHead>}
+              ) && <TableHead className="sr-only">Details</TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -70,6 +71,9 @@ export default async function ServicesPage({ params: { locale } }) {
                     {service?.configuration.serviceId.taskName}
                     {service?.configuration.serviceId.nameSplitter}
                     {service?.configuration.serviceId.taskServiceId}
+                  </TableCell>
+                  <TableCell>
+                    {service?.lifeCycle}
                   </TableCell>
                   <TableCell>
                     {service?.processSnapshot.cpuUsage.toFixed(2) + '%'}
@@ -100,7 +104,7 @@ export default async function ServicesPage({ params: { locale } }) {
                           variant={'link'}
                           className={'p-0 text-right'}
                         >
-                          Edit
+                          Details
                         </Button>
                       </Link>
                     </TableCell>
