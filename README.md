@@ -20,17 +20,17 @@ npm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
-## Custom domain
+## .env
 
-Want to host the website on a custom domain?
+Want to host the website yourself?
 
-Copy .env.example to .env and change `NEXT_PUBLIC_DOMAIN` to your own domain (including https).
+Copy .env.example to .env and change `NEXT_PUBLIC_DOMAIN` to your own domain (including https, if it's a domain).
 
 ## Pre-fill CloudNet address
 
 So you want to fill in your user/pass without the address every single time?
 
-Fill in `NEXT_PUBLIC_CLOUDNET_ADDRESS` in your .env file, like for example: `NEXT_PUBLIC_CLOUDNET_ADDRESS=127.0.0.1:2812`, this will auto-fill it for you.
+Fill in `NEXT_PUBLIC_CLOUDNET_ADDRESS` in your .env file, like for example: `NEXT_PUBLIC_CLOUDNET_ADDRESS=127.0.0.1:2812`, this will autofill it for you.
 
 If you want to use a domain, please put HTTPS in front of it, like for example: `NEXT_PUBLIC_CLOUDNET_ADDRESS=https://cloudnet.example.com`.
 
