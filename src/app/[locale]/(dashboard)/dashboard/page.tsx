@@ -96,6 +96,7 @@ export default async function DashboardPage({ params: { locale } }) {
                 ]}
               />
             </Link>
+            {/* TODO: Wait for new API - cc: 0utplay && klaro
             <Link href={'/dashboard/templates'}>
               <DashboardCard
                 title="Total templates"
@@ -108,6 +109,7 @@ export default async function DashboardPage({ params: { locale } }) {
                 ]}
               />
             </Link>
+            */}
             <Link href={'/dashboard/groups'}>
               <DashboardCard
                 title="Total groups"

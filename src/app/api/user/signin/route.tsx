@@ -4,19 +4,15 @@ import { NextRequest, NextResponse } from 'next/server'
 export const runtime = 'edge'
 
 export async function POST(request: NextRequest) {
-  // if POST is not json, return 400
   if (request.headers.get('content-type') !== 'application/json') {
     return NextResponse.json({ error: 'Invalid content type', status: 400 })
   }
+
   if (!request.body) {
     return NextResponse.json({ error: 'No body provided', status: 400 })
   }
 
-  console.log('starting')
-
-  const domainUrl = new URL(
-    process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost'
-  )
+  const domainUrl = new URL(process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost')
   const domain = domainUrl.hostname.startsWith('www.')
     ? domainUrl.hostname.slice(4)
     : domainUrl.hostname
@@ -32,30 +28,29 @@ export async function POST(request: NextRequest) {
     })
   }
 
-  let { address, username, password } = await request.json()
+  const { address, username, password } = await request.json() as { address: string, username: string, password: string }
 
-  const ipPattern = new RegExp(
-    /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?::[0-9]{1,5})?$/
-  )
+  const ipPattern = /^(?:[0-9]{1,3}\.){3}[0-9]{1,3}(?::[0-9]{1,5})?$/
 
+  let formattedAddress = address
   if (ipPattern.test(address)) {
     if (!address.startsWith('http://')) {
-      address = 'http://' + address
+      formattedAddress = 'http://' + address
     }
   } else {
     if (address.startsWith('http://')) {
-      address = 'https://' + address.slice(7)
+      formattedAddress = 'https://' + address.slice(7)
     } else if (!address.startsWith('https://')) {
-      address = 'https://' + address
+      formattedAddress = 'https://' + address
     }
   }
 
-  if (!address.endsWith('/api/v3')) {
-    address += '/api/v3'
+  if (!formattedAddress.endsWith('/api/v3')) {
+    formattedAddress += '/api/v3'
   }
 
   try {
-    const response = await fetch(`${address}/auth`, {
+    const response = await fetch(`${formattedAddress}/auth`, {
       method: 'POST',
       headers: {
         Authorization: `Basic ${btoa(`${username}:${password}`)}`,
@@ -63,43 +58,24 @@ export async function POST(request: NextRequest) {
       },
     })
 
-    console.log('response', response.toString())
-    console.log('address:', address)
-    console.log('full address:', `${address}/auth`)
-    console.log('respone status', response.status)
-    console.log('response text', response.statusText)
-
     const dataResponse = await response.json()
-    console.log('dataResponse', dataResponse)
 
-    if (dataResponse.status) {
-      return NextResponse.json(dataResponse)
-    } else if (dataResponse.name === 'SyntaxError') {
-      return NextResponse.json({ error: 'Invalid response', status: 404 })
+    if (!response.ok) {
+      return NextResponse.json({ error: dataResponse.message || 'Authentication failed', status: response.status })
     }
 
-    const expirationAccessTime = Number(
-      new Date(Date.now() + dataResponse.accessToken.expiresIn)
-    )
-    const expirationRefreshTime = Number(
-      new Date(Date.now() + dataResponse.refreshToken.expiresIn)
-    )
+    const { accessToken, refreshToken, scopes } = dataResponse
 
-    console.log('setting cookies')
+    const expirationAccessTime = accessToken.expiresIn
+    const expirationRefreshTime = refreshToken.expiresIn
 
-    setCookie('add', address, dataResponse.refreshToken.expiresIn)
-    setCookie('at', dataResponse.accessToken.token, expirationAccessTime)
-    setCookie('rt', dataResponse.refreshToken.token, expirationRefreshTime)
-    setCookie(
-      'permissions',
-      JSON.stringify(dataResponse.scopes),
-      expirationAccessTime
-    )
-
-    console.log('cookies set')
+    setCookie('add', formattedAddress, expirationRefreshTime)
+    setCookie('at', accessToken.token, expirationAccessTime)
+    setCookie('rt', refreshToken.token, expirationRefreshTime)
+    setCookie('permissions', JSON.stringify(scopes), expirationAccessTime)
 
     return NextResponse.json(dataResponse)
   } catch (error) {
-    return NextResponse.json(error)
+    return NextResponse.json({ error: 'Internal Server Error', status: 500 })
   }
 }

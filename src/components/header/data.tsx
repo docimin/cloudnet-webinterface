@@ -84,6 +84,7 @@ export const Nav2 = (translations) => [
       'cloudnet_rest:service_list',
     ],
   },
+  /*
   {
     title: 'Templates',
     label: '',
@@ -96,6 +97,7 @@ export const Nav2 = (translations) => [
       'cloudnet_rest:template_storage_list',
     ],
   },
+   */
 ]
 
 export const Nav3 = (translations) => [
