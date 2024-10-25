@@ -31,7 +31,7 @@ Open [http://localhost:3000](http://localhost:3000) with your browser to see the
 
 Want to host the website yourself?
 
-Copy .env.example to .env and change `NEXT_PUBLIC_DOMAIN` to your own domain (including https, if it's a domain).
+Copy .env.example to .env and change `NEXT_PUBLIC_DOMAIN` to your own domain (including http or https).
 
 ## Pre-fill CloudNet address
 
