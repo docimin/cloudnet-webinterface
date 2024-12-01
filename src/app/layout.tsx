@@ -1,6 +1,6 @@
 import '../../css/globals.css'
 import { Inter } from 'next/font/google'
-import { ThemeProvider } from './providers'
+import { ThemeProvider } from 'next-themes'
 import { Toaster } from '@/components/ui/toaster'
 import { Toaster as SonnerToaster } from '@/components/ui/sonner'
 import ContextMenuProvider from '@/components/system/contextMenu'

@@ -10,6 +10,11 @@ export async function getCookies() {
   }, {})
 }
 
+export async function getCookie(name: string) {
+  const cookies = await getCookies()
+  return decodeURIComponent(cookies[name])
+}
+
 export async function checkAuthToken() {
   const cookies = await getCookies()
 

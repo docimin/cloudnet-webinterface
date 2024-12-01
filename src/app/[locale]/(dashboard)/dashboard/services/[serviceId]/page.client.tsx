@@ -115,7 +115,7 @@ export default function ServiceClientPage({
             <RestartButton serviceId={serviceId} />
             <StopButton serviceId={serviceId} />
           </>
-        )}{' '}
+        )}
         {hasDeletePermissions && <DeleteButton serviceId={serviceId} />}
       </div>
       {children}
