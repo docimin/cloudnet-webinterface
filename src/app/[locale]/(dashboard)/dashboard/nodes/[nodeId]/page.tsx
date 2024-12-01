@@ -9,7 +9,14 @@ import AutoRefresh from '@/components/autoRefresh'
 
 export const runtime = 'edge'
 
-export default async function NodePage({ params: { locale, nodeId } }) {
+export default async function NodePage(props) {
+  const params = await props.params;
+
+  const {
+    locale,
+    nodeId
+  } = params;
+
   const node: Nodes = await getNode(nodeId)
   const permissions: any = await getPermissions()
   const requiredPermissions = [

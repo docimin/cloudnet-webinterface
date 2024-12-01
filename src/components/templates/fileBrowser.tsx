@@ -13,9 +13,9 @@ import { getTemplateFiles } from '@/utils/actions/templates/getTemplateFiles'
 import { FileType } from '@/utils/types/templates'
 import { formatBytes } from '@/components/formatBytes'
 import { formatDate } from '@/components/formatDate'
-import { useRouter, usePathname } from '@/navigation'
+import { useRouter, usePathname } from '@/i18n/routing'
 import { deleteFile } from '@/utils/actions/templates/deleteFile'
-import { Link } from '@/navigation'
+import { Link } from '@/i18n/routing'
 
 export default function FileBrowser({
   params,

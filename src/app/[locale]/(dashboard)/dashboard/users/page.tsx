@@ -15,11 +15,15 @@ import { getUsers } from '@/utils/server-api/users/getUsers'
 import { Users } from '@/utils/types/users'
 import { formatDate } from '@/components/formatDate'
 import NoRecords from '@/components/static/noRecords'
-import { Link } from '@/navigation'
+import { Link } from '@/i18n/routing'
 
 export const runtime = 'edge'
 
-export default async function UsersPage({ params: { locale } }) {
+export default async function UsersPage(props) {
+  const params = await props.params
+
+  const { locale } = params
+
   const users: Users = await getUsers()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [

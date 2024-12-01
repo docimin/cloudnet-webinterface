@@ -1,7 +1,7 @@
 'use client'
 import { useEffect, useState } from 'react'
 import { useToast } from '@/components/ui/use-toast'
-import { useRouter } from '@/navigation'
+import { useRouter } from '@/i18n/routing'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'

@@ -1,19 +1,16 @@
 import Header from '@/components/header/header-server'
-import { notFound } from 'next/navigation'
-import { redirect } from '@/navigation'
-import { locales } from '@/navigation'
+import { redirect } from '@/i18n/routing'
 import { checkAuthToken } from '@/lib/server-calls'
 import { getTranslations } from 'next-intl/server'
 
-export default async function LocaleLayout({ children, params: { locale } }) {
-  // Get locales from navigation.ts
-  // Validate that the incoming `locale` parameter is valid
-  const isValidLocale = locales.includes(locale)
-  if (!isValidLocale) notFound()
+export default async function LocaleLayout(props) {
+  const params = await props.params
+
+  const { locale } = params
 
   const accountData = await checkAuthToken()
   if (accountData.status === 401) {
-    redirect('/')
+    redirect({ href: '/', locale })
   }
 
   const navigation = await getTranslations({ locale, namespace: 'Navigation' })
@@ -21,7 +18,7 @@ export default async function LocaleLayout({ children, params: { locale } }) {
   return (
     <>
       <Header locale={locale} dashboard={navigation('dashboard')}>
-        {children}
+        {props.children}
       </Header>
     </>
   )

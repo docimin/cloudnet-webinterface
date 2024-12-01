@@ -94,6 +94,7 @@ const nextConfig = {
   },
 }
 
+/*
 // Injected content via Sentry wizard below
 
 const sentryConfig = {
@@ -143,3 +144,5 @@ const sentryNextConfig = withSentryConfig(
 const sentryIntlNextConfig = withNextIntl(sentryNextConfig)
 
 export default sentryIntlNextConfig
+ */
+export default withNextIntl(nextConfig)

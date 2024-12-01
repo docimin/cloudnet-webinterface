@@ -14,11 +14,15 @@ import NoAccess from '@/components/static/noAccess'
 import { getGroups } from '@/utils/server-api/groups/getGroups'
 import NoRecords from '@/components/static/noRecords'
 import CreateGroup from '@/components/modules/groups/createGroup'
-import { Link } from '@/navigation'
+import { Link } from '@/i18n/routing'
 
 export const runtime = 'edge'
 
-export default async function GroupsPage({ params: { locale } }) {
+export default async function GroupsPage(props) {
+  const params = await props.params
+
+  const { locale } = params
+
   const groups: GroupsType = await getGroups()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [

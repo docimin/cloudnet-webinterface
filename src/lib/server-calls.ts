@@ -2,7 +2,7 @@
 import { headers } from 'next/headers'
 
 export async function getCookies() {
-  const headersList = headers()
+  const headersList = await headers()
   const cookieHeader = headersList.get('cookie')
   return cookieHeader.split('; ').reduce((res, item) => {
     const data = item.split('=')

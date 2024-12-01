@@ -4,6 +4,7 @@ import { NextRequest, NextResponse } from 'next/server'
 export const runtime = 'edge'
 
 export async function POST(request: NextRequest) {
+  const cookie = await cookies()
   // if POST is not json, return 400
   if (request.headers.get('content-type') !== 'application/json') {
     return NextResponse.json({ error: 'Invalid content type', status: 400 })
@@ -19,14 +20,14 @@ export async function POST(request: NextRequest) {
     ? domainUrl.hostname.slice(4)
     : domainUrl.hostname
 
-  const setCookie = (name: string, value: string, expiresIn: number) => {
-    cookies().set(name, value, {
+  const setCookie = async (name: string, value: string, expiresIn: number) => {
+    cookie.set(name, value, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
       maxAge: expiresIn,
       path: '/',
-      domain: domain,
+      //domain: domain,
     })
   }
 
@@ -76,10 +77,14 @@ export async function POST(request: NextRequest) {
       new Date(Date.now() + dataResponse.refreshToken.expiresIn)
     )
 
-    setCookie('add', address, dataResponse.refreshToken.expiresIn)
-    setCookie('at', dataResponse.accessToken.token, expirationAccessTime)
-    setCookie('rt', dataResponse.refreshToken.token, expirationRefreshTime)
-    setCookie(
+    await setCookie('add', address, dataResponse.refreshToken.expiresIn)
+    await setCookie('at', dataResponse.accessToken.token, expirationAccessTime)
+    await setCookie(
+      'rt',
+      dataResponse.refreshToken.token,
+      expirationRefreshTime
+    )
+    await setCookie(
       'permissions',
       JSON.stringify(dataResponse.scopes),
       expirationAccessTime

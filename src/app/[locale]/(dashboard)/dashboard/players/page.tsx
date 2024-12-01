@@ -13,12 +13,16 @@ import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import { getListOnlinePlayers } from '@/utils/server-api/players/getListOnlinePlayers'
 import NoRecords from '@/components/static/noRecords'
-import { Link } from '@/navigation'
+import { Link } from '@/i18n/routing'
 import AutoRefresh from '@/components/autoRefresh'
 
 export const runtime = 'edge'
 
-export default async function PlayersPage({ params: { locale } }) {
+export default async function PlayersPage(props) {
+  const params = await props.params
+
+  const { locale } = params
+
   const onlinePlayers: OnlinePlayersSchema = await getListOnlinePlayers(0)
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [

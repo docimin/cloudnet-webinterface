@@ -1,7 +1,7 @@
 'use client'
 
 import { Button } from '@/components/ui/button'
-import { useRouter } from '@/navigation'
+import { useRouter } from '@/i18n/routing'
 import { useToast } from '@/components/ui/use-toast'
 
 export default function RefreshButton() {

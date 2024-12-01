@@ -15,11 +15,15 @@ import { getServices } from '@/utils/server-api/services/getServices'
 import { formatBytes } from '@/components/formatBytes'
 import NoRecords from '@/components/static/noRecords'
 import AutoRefresh from '@/components/autoRefresh'
-import { Link } from '@/navigation'
+import { Link } from '@/i18n/routing'
 
 export const runtime = 'edge'
 
-export default async function ServicesPage({ params: { locale } }) {
+export default async function ServicesPage(props) {
+  const params = await props.params
+
+  const { locale } = params
+
   const services: Services = await getServices()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [
@@ -72,9 +76,7 @@ export default async function ServicesPage({ params: { locale } }) {
                     {service?.configuration.serviceId.nameSplitter}
                     {service?.configuration.serviceId.taskServiceId}
                   </TableCell>
-                  <TableCell>
-                    {service?.lifeCycle}
-                  </TableCell>
+                  <TableCell>{service?.lifeCycle}</TableCell>
                   <TableCell>
                     {service?.processSnapshot.cpuUsage.toFixed(2) + '%'}
                   </TableCell>

@@ -1,10 +1,11 @@
 'use server'
-import { cookies } from 'next/headers'
+import { cookies, type UnsafeUnwrappedCookies } from 'next/headers'
 import { getCookies } from '@/lib/server-calls'
 
 export async function checkToken() {
+  const cookie = await cookies()
   const setCookie = (name: string, value: string, expiresIn: number) => {
-    cookies().set(name, value, {
+    cookie.set(name, value, {
       httpOnly: true,
       secure: true,
       sameSite: 'strict',
@@ -13,17 +14,17 @@ export async function checkToken() {
     })
   }
 
-  const cookie = await getCookies()
-  if (!cookie['rt'] || !cookie['add']) {
-    cookies().delete('add')
-    cookies().delete('at')
-    cookies().delete('rt')
-    cookies().delete('permissions')
+  const currentCookies = await getCookies()
+  if (!currentCookies['rt'] || !currentCookies['add']) {
+    cookie.delete('add')
+    cookie.delete('at')
+    cookie.delete('rt')
+    cookie.delete('permissions')
 
     return { status: 401 }
   }
 
-  const address = decodeURIComponent(cookie['add'])
+  const address = decodeURIComponent(currentCookies['add'])
 
   // If cookies neccessary cookies do not exist, delete all and go to login page
 
@@ -35,7 +36,7 @@ export async function checkToken() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${cookie['at']}`,
+        Authorization: `Bearer ${currentCookies['at']}`,
       },
     })
 
@@ -49,15 +50,15 @@ export async function checkToken() {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${cookie['rt']}`,
+          Authorization: `Bearer ${currentCookies['rt']}`,
         },
       })
 
       if (refreshResponse.status === 401) {
-        cookies().delete('add')
-        cookies().delete('at')
-        cookies().delete('rt')
-        cookies().delete('permissions')
+        cookie.delete('add')
+        cookie.delete('at')
+        cookie.delete('rt')
+        cookie.delete('permissions')
 
         return { status: 401 }
       }
@@ -68,7 +69,7 @@ export async function checkToken() {
       const responseRefresh: Response = await fetch(`${address}/auth/refresh`, {
         method: 'POST',
         headers: {
-          Authorization: `Bearer ${cookie['rt']}`,
+          Authorization: `Bearer ${currentCookies['rt']}`,
           'Content-Type': 'application/json',
         },
       })
@@ -94,10 +95,10 @@ export async function checkToken() {
       return { status: 200 }
     }
   } catch (error) {
-    cookies().delete('add')
-    cookies().delete('at')
-    cookies().delete('rt')
-    cookies().delete('permissions')
+    cookie.delete('add')
+    cookie.delete('at')
+    cookie.delete('rt')
+    cookie.delete('permissions')
 
     return { status: 401 }
   }

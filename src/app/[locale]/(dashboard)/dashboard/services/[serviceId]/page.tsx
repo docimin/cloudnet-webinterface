@@ -16,7 +16,14 @@ import NoAccess from '@/components/static/noAccess'
 
 export const runtime = 'edge'
 
-export default async function UserPage({ params: { serviceId, lang } }) {
+export default async function UserPage(props) {
+  const params = await props.params;
+
+  const {
+    serviceId,
+    lang
+  } = params;
+
   const service: Service = await getService(serviceId)
   const serviceConfigData = JSON.stringify(service, null, 2)
   const permissions: any = await getPermissions()

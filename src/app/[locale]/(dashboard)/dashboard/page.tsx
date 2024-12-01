@@ -13,12 +13,16 @@ import { getGroups } from '@/utils/server-api/groups/getGroups'
 import { getLoadedModules } from '@/utils/server-api/modules/getLoadedModules'
 import { getUsers } from '@/utils/server-api/users/getUsers'
 import { DashboardCard } from '@/components/dashboardCard'
-import { Link } from '@/navigation'
+import { Link } from '@/i18n/routing'
 import AutoRefresh from '@/components/autoRefresh'
 
 export const runtime = 'edge'
 
-export default async function DashboardPage({ params: { locale } }) {
+export default async function DashboardPage(props) {
+  const params = await props.params
+
+  const { locale } = params
+
   const onlinePlayers = await getNumberOnlinePlayers()
   const registeredPlayers = await getNumberRegisteredPlayers()
   const nodes = await getNodes()

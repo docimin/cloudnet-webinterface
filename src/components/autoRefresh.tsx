@@ -1,6 +1,6 @@
 'use client'
 import React, { useEffect } from 'react'
-import { useRouter } from '@/navigation'
+import { useRouter } from '@/i18n/routing'
 
 export default function AutoRefresh({
   timer = 10000,

@@ -13,11 +13,15 @@ import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import NoRecords from '@/components/static/noRecords'
 import { getTasks } from '@/utils/server-api/tasks/getTasks'
-import { Link } from '@/navigation'
+import { Link } from '@/i18n/routing'
 
 export const runtime = 'edge'
 
-export default async function TasksPage({ params: { locale } }) {
+export default async function TasksPage(props) {
+  const params = await props.params
+
+  const { locale } = params
+
   const tasks: TasksType = await getTasks()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [

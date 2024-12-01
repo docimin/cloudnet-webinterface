@@ -14,11 +14,15 @@ import NoAccess from '@/components/static/noAccess'
 import { Templates, TemplatesList } from '@/utils/types/templateStorages'
 import { getTemplates } from '@/utils/server-api/templates/getTemplates'
 import NoRecords from '@/components/static/noRecords'
-import { Link } from '@/navigation'
+import { Link } from '@/i18n/routing'
 
 export const runtime = 'edge'
 
-export default async function ServicesPage({ params: { storageId, lang } }) {
+export default async function ServicesPage(props) {
+  const params = await props.params
+
+  const { storageId, lang } = params
+
   const templates: TemplatesList = await getTemplates(storageId)
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [

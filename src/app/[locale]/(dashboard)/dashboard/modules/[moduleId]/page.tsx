@@ -9,7 +9,14 @@ import ModuleClientPage from '@/app/[locale]/(dashboard)/dashboard/modules/[modu
 
 export const runtime = 'edge'
 
-export default async function NodePage({ params: { locale, moduleId } }) {
+export default async function NodePage(props) {
+  const params = await props.params;
+
+  const {
+    locale,
+    moduleId
+  } = params;
+
   const moduleSingle: Module = await getModule(moduleId)
   let moduleConfig = {}
   const permissions: any = await getPermissions()

@@ -14,11 +14,15 @@ import NoAccess from '@/components/static/noAccess'
 import { getStorages } from '@/utils/server-api/templates/getStorages'
 import { Storages } from '@/utils/types/templateStorages'
 import NoRecords from '@/components/static/noRecords'
-import { Link } from '@/navigation'
+import { Link } from '@/i18n/routing'
 
 export const runtime = 'edge'
 
-export default async function ServicesPage({ params: { locale } }) {
+export default async function ServicesPage(props) {
+  const params = await props.params
+
+  const { locale } = params
+
   const storages: Storages = await getStorages()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [

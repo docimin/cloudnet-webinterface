@@ -14,11 +14,15 @@ import { getModules } from '@/utils/server-api/modules/getModules'
 import { Modules } from '@/utils/types/modules'
 import NoAccess from '@/components/static/noAccess'
 import NoRecords from '@/components/static/noRecords'
-import { Link } from '@/navigation'
+import { Link } from '@/i18n/routing'
 
 export const runtime = 'edge'
 
-export default async function NodesPage({ params: { locale } }) {
+export default async function NodesPage(props) {
+  const params = await props.params
+
+  const { locale } = params
+
   const modules: Modules = await getModules()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [
