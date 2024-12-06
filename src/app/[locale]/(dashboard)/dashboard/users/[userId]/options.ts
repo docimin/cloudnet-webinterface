@@ -500,11 +500,6 @@ export const OPTIONS: Option[] = [
     group: 'Service Versions',
   },
   {
-    label: 'Load service version type',
-    value: 'cloudnet_rest:service_version_load',
-    group: 'Service Versions',
-  },
-  {
     label: 'Load service version to service/template',
     value: 'cloudnet_rest:service_version_load',
     group: 'Service Versions',
