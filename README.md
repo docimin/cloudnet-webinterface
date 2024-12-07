@@ -4,6 +4,19 @@
     <b>CloudNet is a modern application that can dynamically and easily deliver Minecraft oriented software.</b>
 </p>
 
+# Supported Versions
+
+The current supported cloudnet versions. If your version is not supported, please upgrade to the newest one.
+
+| Version | Supported          |
+| ------- | ------------------ |
+| RC-11   | :white_check_mark: |
+| RC-10   | :x: |
+
+## My dashboard is empty
+
+You forgot to give yourself permissions. Create a rest user using the `rest` command. Give it the scope `global:admin` and you're good to go.
+
 ## Getting Started
 
 Make sure you have pnpm installed using:
