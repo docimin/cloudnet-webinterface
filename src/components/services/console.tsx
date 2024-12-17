@@ -31,11 +31,12 @@ export default function ServiceConsole({
       const cookieAddress = await getCookie('add')
       const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
 
-      const socket = io(`wss://${address}`, {
+      const socket = io(`ws://${address}`, {
         path: `/api/v3/service/${serviceName}/liveLog`,
         query: {
           ticket,
         },
+        transports: ['websocket'],
       })
 
       socket.on('connect', () => {
