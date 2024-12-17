@@ -4,6 +4,8 @@ import React, { useState, useRef, useEffect } from 'react'
 import { ChevronRight } from 'lucide-react'
 import { getCookie } from '@/lib/server-calls'
 import { io } from 'socket.io-client'
+import { createTicket } from '@/utils/actions/user/createTicket'
+import { toast } from 'sonner'
 
 interface ConsoleEntry {
   command: string
@@ -18,47 +20,51 @@ export default function ServiceConsole({
   const [history, setHistory] = useState<ConsoleEntry[]>([])
   const [input, setInput] = useState('')
   const consoleEndRef = useRef<HTMLDivElement>(null)
-  const [address, setAddress] = useState('')
 
   useEffect(() => {
-    async function fetchAddress() {
+    const fetchTicket = async () => {
+      return await createTicket()
+    }
+
+    const initializeSocket = async () => {
+      const ticket = await fetchTicket()
       const cookieAddress = await getCookie('add')
-      setAddress(cookieAddress.replace(/^http:\/\//, ''))
-    }
-    fetchAddress().then()
-  }, [])
+      const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
 
-  useEffect(() => {
-    if (!address) return
+      const socket = io(`wss://${address}`, {
+        path: `/api/v3/service/${serviceName}/liveLog`,
+        query: {
+          ticket,
+        },
+      })
 
-    const socket = io(`ws://${address}`, {
-      path: `/api/v3/service/${serviceName}/liveLog`,
-    })
+      socket.on('connect', () => {
+        console.log('Socket connected')
+      })
 
-    socket.on('connect', () => {
-      console.log('Socket connected')
-    })
+      socket.on('message', (data) => {
+        const newEntry: ConsoleEntry = {
+          command: 'Server',
+          output: data,
+        }
+        setHistory((prev) => [...prev, newEntry])
+      })
 
-    socket.on('message', (data) => {
-      const newEntry: ConsoleEntry = {
-        command: 'Server',
-        output: data,
+      socket.on('connect_error', (error) => {
+        console.error('Socket connection error:', error)
+      })
+
+      socket.on('disconnect', () => {
+        console.log('Socket disconnected')
+      })
+
+      return () => {
+        socket.disconnect()
       }
-      setHistory((prev) => [...prev, newEntry])
-    })
-
-    socket.on('connect_error', (error) => {
-      console.error('Socket connection error:', error)
-    })
-
-    socket.on('disconnect', () => {
-      console.log('Socket disconnected')
-    })
-
-    return () => {
-      socket.disconnect()
     }
-  }, [address])
+
+    initializeSocket().then()
+  }, [serviceName])
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()

@@ -4,7 +4,7 @@ import { getPermissions } from '@/utils/server-api/user/getPermissions'
 
 export async function postWithPermissions(
   url: string,
-  requiredPermissions: string[],
+  requiredPermissions: string[] = [],
   body: any = {},
   returnJson: boolean = true,
   stringifyBody: boolean = true
@@ -12,7 +12,10 @@ export async function postWithPermissions(
   const cookies = await getCookies()
   const perms: string[] = await getPermissions()
 
-  if (!requiredPermissions.some((permission) => perms.includes(permission))) {
+  if (
+    requiredPermissions.length > 0 &&
+    !requiredPermissions.some((permission) => perms.includes(permission))
+  ) {
     return { status: 401 }
   }
 
@@ -31,8 +34,6 @@ export async function postWithPermissions(
       },
       body: stringifyBody ? JSON.stringify({ ...body }) : body,
     })
-
-    //console.log(response.status + ' ' + response.statusText)
 
     if (returnJson) {
       return await response.json()

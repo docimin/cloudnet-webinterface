@@ -21,7 +21,7 @@ export const runtime = 'edge'
 export default async function UserPage(props) {
   const params = await props.params
 
-  const { serviceId, lang } = params
+  const { serviceId } = params
 
   const service: Service = await getService(serviceId)
   const serviceConfigData = JSON.stringify(service, null, 2)
