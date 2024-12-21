@@ -19,7 +19,7 @@ import {
 import { useRouter } from '@/i18n/routing'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Terminal } from 'lucide-react'
-import { useToast } from '@/components/ui/use-toast'
+import { toast } from 'sonner'
 
 function DeleteButton({ taskId }: { taskId: string }) {
   const router = useRouter()
@@ -62,28 +62,19 @@ function UpdateButton({
   body: any
   originalName: string
 }) {
-  const { toast } = useToast()
   const handleUpdate = async () => {
     try {
       const updatedTask = JSON.parse(body) // Assuming `body` is a JSON string of your task data
       if (updatedTask.name !== originalName) {
-        toast({
-          description: 'Warning: Task name has been changed!',
-          variant: 'destructive',
-        })
+        toast.warning('Task name has been changed!')
         // Optionally, update the original name to the new name here or handle accordingly
         return // Stop the update process or handle accordingly
       }
       // Proceed with your update logic here if the name hasn't changed
       await updateTask(taskId, updatedTask)
-      toast({
-        description: 'Task updated successfully',
-      })
+      toast.success('Task updated successfully')
     } catch (error) {
-      toast({
-        description: 'Invalid JSON format.',
-        variant: 'destructive',
-      })
+      toast.error('Invalid JSON format.')
     }
   }
 

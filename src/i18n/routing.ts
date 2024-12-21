@@ -28,6 +28,7 @@ export const routing = defineRouting({
     '/dashboard/players/[playerId]': '/dashboard/players/[playerId]',
 
     '/dashboard/nodes': '/dashboard/nodes',
+    '/dashboard/nodes/console': '/dashboard/nodes/console',
     '/dashboard/nodes/[nodeId]': '/dashboard/nodes/[nodeId]',
 
     '/dashboard/modules': '/dashboard/modules',

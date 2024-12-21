@@ -12,11 +12,10 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { kickPlayer } from '@/utils/actions/players/kickPlayer'
-import { useToast } from '@/components/ui/use-toast'
 import { useRouter } from '@/i18n/routing'
+import { toast } from 'sonner'
 
 export default function KickPlayer({ player }: { player: OnlinePlayer }) {
-  const { toast } = useToast()
   const [kickReason, setKickReason] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
 
@@ -30,16 +29,9 @@ export default function KickPlayer({ player }: { player: OnlinePlayer }) {
 
     if (data === 204) {
       router.push('/dashboard/players')
-      toast({
-        title: 'Kicked',
-        description: 'Player has been kicked',
-      })
+      toast.success('Player has been kicked')
     } else {
-      toast({
-        title: 'Failed',
-        description: 'Failed to kick player',
-        variant: 'destructive',
-      })
+      toast.error('Failed to kick player')
     }
     setDialogOpen(false)
   }

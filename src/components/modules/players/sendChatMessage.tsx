@@ -11,11 +11,10 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/use-toast'
 import { sendMessage } from '@/utils/actions/players/sendMessage'
+import { toast } from 'sonner'
 
 export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
-  const { toast } = useToast()
   const [message, setMessage] = useState<string>('')
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 
@@ -23,15 +22,9 @@ export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
     event.preventDefault()
     try {
       await sendMessage(player.networkPlayerProxyInfo.uniqueId, message)
-      toast({
-        description: 'Message has been sent',
-      })
+      toast.success('Message has been sent')
     } catch (error) {
-      toast({
-        title: 'Failed',
-        description: 'Failed to send message',
-        variant: 'destructive',
-      })
+      toast.error('Failed to send message')
     }
     setDialogOpen(false)
     setMessage('')

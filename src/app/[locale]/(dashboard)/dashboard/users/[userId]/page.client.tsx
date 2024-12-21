@@ -1,6 +1,5 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/use-toast'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { User } from '@/utils/types/users'
@@ -8,9 +7,9 @@ import { useState } from 'react'
 import { updateUser } from '@/utils/actions/users/updateUser'
 import MultipleSelector, { Option } from '@/components/ui/custom/multi-select'
 import { OPTIONS } from './options'
+import { toast } from 'sonner'
 
 export default function UserClientPage({ user }: { user: User }) {
-  const { toast } = useToast()
   const [username, setUsername] = useState(user.username)
   const [password, setPassword] = useState('')
 
@@ -30,11 +29,7 @@ export default function UserClientPage({ user }: { user: User }) {
     event.preventDefault()
 
     if (username === '') {
-      toast({
-        title: 'Failed',
-        description: 'Username cannot be empty.',
-        variant: 'destructive',
-      })
+      toast.error('Username cannot be empty.')
       return
     }
 
@@ -51,22 +46,11 @@ export default function UserClientPage({ user }: { user: User }) {
     const response = await updateUser(user.id, body)
 
     if (response.status === 200) {
-      toast({
-        title: 'Updated',
-        description: 'User updated successfully',
-      })
+      toast.success('User updated successfully')
     } else if (response.status === 401) {
-      toast({
-        title: 'Failed',
-        description: 'No permission to update user.',
-        variant: 'destructive',
-      })
+      toast.error('No permission to update user.')
     } else if (response.status === 500) {
-      toast({
-        title: 'Failed',
-        description: 'Failed to update module',
-        variant: 'destructive',
-      })
+      toast.error('Failed to update module')
     }
   }
 

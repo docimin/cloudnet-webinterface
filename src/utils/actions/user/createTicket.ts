@@ -2,12 +2,19 @@
 import { postWithPermissions } from '@/utils/actions/postWithPermissions'
 import { unstable_noStore } from 'next/cache'
 
-export async function createTicket() {
+type TicketType = 'service' | 'node'
+
+export async function createTicket(type: TicketType) {
   unstable_noStore()
   const requiredPermissions = []
 
+  const scopes =
+    type === 'node'
+      ? ['cloudnet_rest:node_live_console']
+      : ['cloudnet_rest:service_live_log']
+
   const data = await postWithPermissions(`/auth/ticket`, requiredPermissions, {
-    scopes: ['cloudnet_rest:service_read'],
+    scopes,
   })
 
   if (data.secret) {

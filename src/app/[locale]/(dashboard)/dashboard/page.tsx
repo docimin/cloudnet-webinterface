@@ -162,6 +162,18 @@ export default async function DashboardPage(props) {
                 ]}
               />
             </Link>
+            <Link href={'/dashboard/nodes/console'}>
+              <DashboardCard
+                title="Node Console"
+                icon={<UsersIcon className="w-4 h-4" />}
+                value={'View'}
+                permissions={[
+                  'cloudnet_rest:user_read',
+                  'cloudnet_rest:user_get_all',
+                  'global:admin',
+                ]}
+              />
+            </Link>
           </div>
         </main>
       </AutoRefresh>

@@ -3,78 +3,75 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { ChevronRight } from 'lucide-react'
 import { getCookie } from '@/lib/server-calls'
-import { io } from 'socket.io-client'
 import { createTicket } from '@/utils/actions/user/createTicket'
-import { toast } from 'sonner'
+import { executeCommand } from '@/utils/actions/commands/executeCommand'
 
 interface ConsoleEntry {
   command: string
   output: string
 }
 
+interface ServiceConsoleProps {
+  webSocketPath: string
+  serviceName?: string
+  disableCommands?: boolean
+  type?: 'service' | 'node'
+}
+
 export default function ServiceConsole({
+  webSocketPath,
   serviceName,
-}: {
-  serviceName: string
-}) {
+  disableCommands = false,
+  type,
+}: ServiceConsoleProps) {
   const [history, setHistory] = useState<ConsoleEntry[]>([])
   const [input, setInput] = useState('')
   const consoleEndRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const fetchTicket = async () => {
-      return await createTicket()
-    }
+    let socket: WebSocket | null = null
 
     const initializeSocket = async () => {
-      const ticket = await fetchTicket()
+      const ticket = await createTicket(type)
       const cookieAddress = await getCookie('add')
       const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
 
-      const socket = io(`ws://${address}`, {
-        path: `/api/v3/service/${serviceName}/liveLog`,
-        query: {
-          ticket,
-        },
-        transports: ['websocket'],
-      })
-
-      socket.on('connect', () => {
-        console.log('Socket connected')
-      })
-
-      socket.on('message', (data) => {
+      const socket = new WebSocket(
+        `ws://${address}${webSocketPath}?ticket=${ticket}`
+      )
+      socket.onmessage = (event) => {
         const newEntry: ConsoleEntry = {
           command: 'Server',
-          output: data,
+          output: event.data,
         }
         setHistory((prev) => [...prev, newEntry])
-      })
-
-      socket.on('connect_error', (error) => {
-        console.error('Socket connection error:', error)
-      })
-
-      socket.on('disconnect', () => {
-        console.log('Socket disconnected')
-      })
-
-      return () => {
-        socket.disconnect()
       }
     }
 
     initializeSocket().then()
-  }, [serviceName])
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault()
-    if (input.trim()) {
-      const newEntry: ConsoleEntry = {
-        command: input,
-        output: `Output for command: ${input}`, // Replace with actual command processing logic
+    return () => {
+      if (socket) {
+        socket.close()
       }
-      setHistory((prev) => [...prev, newEntry])
+    }
+  }, [webSocketPath])
+
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault()
+
+    const requiredPermissions = [
+      'cloudnet_rest:service_write',
+      'cloudnet_rest:service_send_commands',
+      'global:admin',
+    ]
+
+    if (input.trim()) {
+      await executeCommand(
+        `/service/${serviceName}/command`,
+        input,
+        requiredPermissions
+      )
       setInput('')
     }
   }
@@ -97,18 +94,20 @@ export default function ServiceConsole({
         ))}
         <div ref={consoleEndRef} />
       </div>
-      <form onSubmit={handleSubmit} className="p-2 bg-gray-900">
-        <div className="flex items-center">
-          <ChevronRight className="w-5 h-5 mr-1 text-green-400" />
-          <input
-            type="text"
-            value={input}
-            onChange={(e) => setInput(e.target.value)}
-            className="flex-1 bg-transparent outline-none text-gray-200 font-mono"
-            placeholder="Type your command..."
-          />
-        </div>
-      </form>
+      {disableCommands ? null : (
+        <form onSubmit={handleSubmit} className="p-2 bg-gray-900">
+          <div className="flex items-center">
+            <ChevronRight className="w-5 h-5 mr-1 text-green-400" />
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="flex-1 bg-transparent outline-none text-gray-200 font-mono"
+              placeholder="Type your command..."
+            />
+          </div>
+        </form>
+      )}
     </div>
   )
 }

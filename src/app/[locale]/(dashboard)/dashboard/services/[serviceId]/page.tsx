@@ -14,7 +14,7 @@ import ServiceClientPage from '@/app/[locale]/(dashboard)/dashboard/services/[se
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
-import ServiceConsole from '@/components/services/console'
+import ServiceConsole from '@/components/console'
 
 export const runtime = 'edge'
 
@@ -40,6 +40,12 @@ export default async function UserPage(props) {
   const requiredDeletePermissions = [
     'cloudnet_rest:service_write',
     'cloudnet_rest:service_delete',
+    'global:admin',
+  ]
+
+  const requiredConsolePermissions = [
+    'cloudnet_rest:service_read',
+    'cloudnet_rest:service_live_log',
     'global:admin',
   ]
 
@@ -122,7 +128,9 @@ export default async function UserPage(props) {
       <Tabs defaultValue={'config'}>
         <TabsList>
           <TabsTrigger value={'config'}>Configuration</TabsTrigger>
-          <TabsTrigger value={'console'}>Console</TabsTrigger>
+          {requiredConsolePermissions.some((permission) =>
+            permissions.includes(permission)
+          ) && <TabsTrigger value={'console'}>Console</TabsTrigger>}
         </TabsList>
         <TabsContent value={'config'}>
           <ServiceClientPage
@@ -203,9 +211,17 @@ export default async function UserPage(props) {
             )}
           </ServiceClientPage>
         </TabsContent>
-        <TabsContent value={'console'}>
-          <ServiceConsole serviceName={name} />
-        </TabsContent>
+        {requiredConsolePermissions.some((permission) =>
+          permissions.includes(permission)
+        ) && (
+          <TabsContent value={'console'}>
+            <ServiceConsole
+              serviceName={name}
+              webSocketPath={`/service/${name}/liveLog`}
+              type={'service'}
+            />
+          </TabsContent>
+        )}
       </Tabs>
     </PageLayout>
   )
