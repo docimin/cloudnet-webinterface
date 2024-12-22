@@ -131,3 +131,7 @@ type LifeCycle = 'PREPARED' | 'RUNNING' | 'STOPPED' | 'DELETED'
 interface Services {
   services: Service[]
 }
+
+interface ServiceLogCache {
+  lines: string[]
+}
