@@ -11,7 +11,7 @@ The current supported cloudnet versions. If your version is not supported, pleas
 | Version | Supported          |
 | ------- | ------------------ |
 | RC-11   | :white_check_mark: |
-| RC-10   | :x: |
+| RC-10   | :x:                |
 
 ## My dashboard is empty
 
@@ -24,7 +24,6 @@ Make sure you have pnpm installed using:
 ```bash
 npm i -g pnpm
 ```
-
 
 First, install the packages using:
 

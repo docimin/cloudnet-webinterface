@@ -9,12 +9,9 @@ import UserClientPage from '@/app/[locale]/(dashboard)/dashboard/users/[userId]/
 export const runtime = 'edge'
 
 export default async function UserPage(props) {
-  const params = await props.params;
+  const params = await props.params
 
-  const {
-    locale,
-    userId
-  } = params;
+  const { locale, userId } = params
 
   const user: User = await getUser(userId)
   const permissions: any = await getPermissions()

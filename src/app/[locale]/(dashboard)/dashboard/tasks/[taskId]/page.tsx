@@ -16,12 +16,9 @@ import TaskClientPage from '@/app/[locale]/(dashboard)/dashboard/tasks/[taskId]/
 export const runtime = 'edge'
 
 export default async function UserPage(props) {
-  const params = await props.params;
+  const params = await props.params
 
-  const {
-    locale,
-    taskId
-  } = params;
+  const { locale, taskId } = params
 
   const task: Task = await getTask(taskId)
   const taskConfigData = JSON.stringify(task, null, 2)

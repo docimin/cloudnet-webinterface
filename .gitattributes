@@ -1,0 +1,34 @@
+# Normalize as LF in the repository, OS native locally
+*               text eol=lf
+
+# These are explicitly windows files and should use crlf
+*.bat           text eol=crlf
+
+*.html          text diff=html
+
+# These files are binary and should be left untouched
+# (binary is a macro for -text -diff)
+*.a             binary
+*.lib           binary
+*.icns          binary
+*.png           binary
+*.jpg           binary
+*.jpeg          binary
+*.gif           binary
+*.ico           binary
+*.mov           binary
+*.mp4           binary
+*.mp3           binary
+*.flv           binary
+*.fla           binary
+*.swf           binary
+*.gz            binary
+*.zip           binary
+*.jar           binary
+*.tar           binary
+*.tar.gz        binary
+*.7z            binary
+*.ttf           binary
+*.pyc           binary
+*.gpg           binary
+*.bin           binary

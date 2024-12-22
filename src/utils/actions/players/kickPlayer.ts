@@ -11,9 +11,9 @@ export async function kickPlayer(playerId: string, kickMessage) {
   const result = await postWithPermissions(
     `/player/online/${playerId}/kick`,
     requiredPermissions,
-    { kickMessage: kickMessage, },
+    { kickMessage: kickMessage },
     false
   )
 
-  return result.status;
+  return result.status
 }

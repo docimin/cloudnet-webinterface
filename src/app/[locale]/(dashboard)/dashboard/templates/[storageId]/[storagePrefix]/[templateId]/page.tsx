@@ -7,7 +7,7 @@ import DoesNotExist from '@/components/static/doesNotExist'
 export const runtime = 'edge'
 
 export default async function TemplatePage(props) {
-  const params = await props.params;
+  const params = await props.params
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:template_read',

@@ -8,12 +8,9 @@ import GroupClientPage from '@/app/[locale]/(dashboard)/dashboard/groups/[groupI
 export const runtime = 'edge'
 
 export default async function GroupPage(props) {
-  const params = await props.params;
+  const params = await props.params
 
-  const {
-    locale,
-    groupId
-  } = params;
+  const { locale, groupId } = params
 
   const group: Group = await getGroup(groupId)
   const permissions: any = await getPermissions()

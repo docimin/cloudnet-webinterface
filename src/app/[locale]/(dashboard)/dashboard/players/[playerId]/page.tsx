@@ -20,12 +20,9 @@ import ExecuteCommand from '@/components/modules/players/executeCommand'
 export const runtime = 'edge'
 
 export default async function UserPage(props) {
-  const params = await props.params;
+  const params = await props.params
 
-  const {
-    locale,
-    playerId
-  } = params;
+  const { locale, playerId } = params
 
   const player: OnlinePlayer = await getPlayer(playerId)
   const permissions: any = await getPermissions()
