@@ -2,6 +2,7 @@
 
 import { Button } from '@/components/ui/button'
 import { useRouter } from '@/i18n/routing'
+import { toast } from 'sonner'
 
 export default function RefreshButton() {
   const router = useRouter()
