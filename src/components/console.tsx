@@ -5,7 +5,7 @@ import { ChevronRight } from 'lucide-react'
 import { getCookie } from '@/lib/server-calls'
 import { createTicket } from '@/utils/actions/user/createTicket'
 import { executeCommand } from '@/utils/actions/commands/executeCommand'
-import { getCachedServiceLog } from '@/utils/server-api/services/getCachedServiceLog';
+import { getCachedServiceLog } from '@/utils/server-api/services/getCachedServiceLog'
 
 interface ConsoleEntry {
   command: string
@@ -35,7 +35,9 @@ export default function ServiceConsole({
     const cachedLogLines = async () => {
       if (type === 'service') {
         const cache = await getCachedServiceLog(serviceName)
-        setHistory(cache.lines.map((line) => ({ command: 'Server', output: line })))
+        setHistory(
+          cache.lines.map((line) => ({ command: 'Server', output: line }))
+        )
       }
     }
 
@@ -44,9 +46,7 @@ export default function ServiceConsole({
       const cookieAddress = await getCookie('add')
       const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
 
-      socket = new WebSocket(
-        `ws://${address}${webSocketPath}?ticket=${ticket}`
-      )
+      socket = new WebSocket(`ws://${address}${webSocketPath}?ticket=${ticket}`)
       socket.onmessage = (event) => {
         const newEntry: ConsoleEntry = {
           command: 'Server',

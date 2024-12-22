@@ -2,7 +2,7 @@ import '../../css/globals.css'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import ContextMenuProvider from '@/components/system/contextMenu'
-import { Toaster } from '@/components/ui/sonner'
+import { Toaster } from 'sonner'
 
 const inter = Inter({ subsets: ['latin'] })
 
