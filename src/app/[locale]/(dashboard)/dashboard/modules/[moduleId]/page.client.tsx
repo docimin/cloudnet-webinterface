@@ -1,6 +1,5 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/use-toast'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { Module } from '@/utils/types/modules'
@@ -10,6 +9,7 @@ import { uninstallModule } from '@/utils/actions/modules/uninstallModule'
 import { Textarea } from '@/components/ui/textarea'
 import { useState } from 'react'
 import { updateModuleConfig } from '@/utils/actions/modules/updateModuleConfig'
+import { toast } from 'sonner'
 
 export default function ModuleClientPage({
   module,
@@ -20,7 +20,6 @@ export default function ModuleClientPage({
   moduleId: string
   moduleConfig: any
 }) {
-  const { toast } = useToast()
   const router = useRouter()
   const [moduleConfigData, setModuleConfigData] = useState(
     JSON.stringify(moduleConfig, null, 2)
@@ -35,9 +34,7 @@ export default function ModuleClientPage({
     )
 
     if (response.status === 200) {
-      toast({
-        description: 'Module config updated successfully',
-      })
+      toast.success('Module config updated successfully')
     }
   }
 
@@ -46,9 +43,7 @@ export default function ModuleClientPage({
       lifecycle: event,
     })
     if (response.status === 204) {
-      toast({
-        description: 'Lifecycle updated successfully',
-      })
+      toast.success('Lifecycle updated successfully')
       router.refresh()
     }
   }
@@ -56,9 +51,7 @@ export default function ModuleClientPage({
   const handleUninstall = async () => {
     const response = await uninstallModule(moduleId)
     if (response.status === 201) {
-      toast({
-        description: 'Module has been uninstalled.',
-      })
+      toast.success('Module has been uninstalled.')
       router.push('.')
     }
   }

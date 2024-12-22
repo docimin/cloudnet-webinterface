@@ -11,8 +11,6 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/use-toast'
-import { executeCommand } from '@/utils/actions/players/executeCommand'
 import {
   Select,
   SelectContent,
@@ -20,31 +18,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
+import { executeCommand } from '@/utils/actions/commands/executeCommand'
+import { toast } from 'sonner'
 
 export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
-  const { toast } = useToast()
   const [command, setCommand] = useState<string>('')
   const [isProxy, setIsProxy] = useState<boolean>(false)
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 
   const handleSend = async (event: any) => {
     event.preventDefault()
+
+    const requiredPermissions = [
+      'cloudnet_bridge:player_write',
+      'cloudnet_bridge:player_disconnect',
+      'global:admin',
+    ]
+
     const data = await executeCommand(
-      player.networkPlayerProxyInfo.uniqueId,
+      `/player/online/${player.networkPlayerProxyInfo.uniqueId}/command?redirectToServer=${isProxy ? 'false' : 'true'}`,
       command,
-      isProxy
+      requiredPermissions
     )
 
     if (data) {
-      toast({
-        description: 'Command has been executed',
-      })
+      toast.success('Command has been executed')
     } else {
-      toast({
-        title: 'Failed',
-        description: 'Failed to execute command',
-        variant: 'destructive',
-      })
+      toast.error('Failed to execute command')
     }
     setDialogOpen(false)
     setCommand('')

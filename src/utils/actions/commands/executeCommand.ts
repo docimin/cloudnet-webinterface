@@ -2,18 +2,12 @@
 import { postWithPermissions } from '@/utils/actions/postWithPermissions'
 
 export async function executeCommand(
-  playerId: string,
+  path: string,
   command: string,
-  isProxy: boolean = false
+  requiredPermissions: string[]
 ) {
-  const requiredPermissions = [
-    'cloudnet_bridge:player_write',
-    'cloudnet_bridge:player_disconnect',
-    'global:admin',
-  ]
-
   const data = await postWithPermissions(
-    `/player/online/${playerId}/command?redirectToServer=${isProxy ? 'false' : 'true'}`,
+    path,
     requiredPermissions,
     {
       command: command,

@@ -11,12 +11,11 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/use-toast'
 import { updateGroup } from '@/utils/actions/groups/updateGroup'
 import { useRouter } from '@/i18n/routing'
+import { toast } from 'sonner'
 
 export default function CreateGroup() {
-  const { toast } = useToast()
   const router = useRouter()
   const [name, setName] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
@@ -35,16 +34,9 @@ export default function CreateGroup() {
       properties: {},
     })
     if (data) {
-      toast({
-        title: 'Created',
-        description: 'Group has been created',
-      })
+      toast.success('Group has been created')
     } else {
-      toast({
-        title: 'Failed',
-        description: 'Failed to create group',
-        variant: 'destructive',
-      })
+      toast.error('Failed to create group')
     }
     router.refresh()
     setDialogOpen(false)

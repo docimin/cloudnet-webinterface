@@ -1,6 +1,5 @@
 'use client'
 import { useEffect, useState } from 'react'
-import { useToast } from '@/components/ui/use-toast'
 import { useRouter } from '@/i18n/routing'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -8,9 +7,9 @@ import { Button } from '@/components/ui/button'
 import Image from 'next/image'
 import { checkToken } from '@/utils/actions/user/jwt'
 import * as Sentry from '@sentry/nextjs'
+import { toast } from 'sonner'
 
 export default function Client() {
-  const { toast } = useToast()
   const [data, setData] = useState({
     address: process.env.NEXT_PUBLIC_CLOUDNET_ADDRESS || '',
     username: '',
@@ -48,37 +47,18 @@ export default function Client() {
       const dataResponse = await response.json()
 
       if (dataResponse.accessToken) {
-        toast({
-          title: 'Success',
-          description: 'You have successfully logged in',
-        })
+        toast.success('You have successfully logged in')
 
         router.push('/dashboard')
       } else if (dataResponse.cause) {
-        toast({
-          title: 'Error',
-          description: "Can't connect to the server. Please check the address",
-          variant: 'destructive',
-        })
+        toast.error("Can't connect to the server. Please check the address")
       } else if (dataResponse.status === 401) {
-        toast({
-          title: 'Error',
-          description: 'Invalid username or password',
-          variant: 'destructive',
-        })
+        toast.error('Invalid username or password')
       } else if (dataResponse.status === 404) {
-        toast({
-          title: 'Error',
-          description: 'Invalid response',
-          variant: 'destructive',
-        })
+        toast.error('Invalid response')
       } else {
         console.log('An error occurred')
-        toast({
-          title: 'Error',
-          description: 'An error occurred',
-          variant: 'destructive',
-        })
+        toast.error('An error occurred')
         Sentry.captureException('An error occurred while logging in', {
           extra: dataResponse,
         })

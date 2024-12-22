@@ -1,6 +1,5 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { useToast } from '@/components/ui/use-toast'
 import { Label } from '@/components/ui/label'
 import { useRouter } from '@/i18n/routing'
 import { Textarea } from '@/components/ui/textarea'
@@ -9,6 +8,7 @@ import { updateGroup } from '@/utils/actions/groups/updateGroup'
 import { deleteGroup } from '@/utils/actions/groups/deleteGroup'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Terminal } from 'lucide-react'
+import { toast } from 'sonner'
 
 export default function GroupClientPage({
   group,
@@ -17,7 +17,6 @@ export default function GroupClientPage({
   group: Group
   groupId: string
 }) {
-  const { toast } = useToast()
   const router = useRouter()
   const [groupConfigData, setGroupConfigData] = useState(
     JSON.stringify(group, null, 2)
@@ -30,10 +29,7 @@ export default function GroupClientPage({
     try {
       const updatedGroup = JSON.parse(groupConfigData)
       if (updatedGroup.name !== originalName) {
-        toast({
-          description: 'Warning: Group name has been changed!',
-          variant: 'destructive',
-        })
+        toast.warning('Group name has been changed!')
         // Optionally, update the original name to the new name
         setOriginalName(updatedGroup.name)
         return
@@ -42,25 +38,18 @@ export default function GroupClientPage({
       const response = await updateGroup(updatedGroup)
 
       if (response) {
-        toast({
-          description: 'Group config updated successfully',
-        })
+        toast.success('Group config updated successfully')
       }
       // Proceed with the rest of your logic for a valid updatedGroup
     } catch (error) {
-      toast({
-        description: 'Invalid JSON format.',
-        variant: 'destructive',
-      })
+      toast.error('Invalid JSON format.')
     }
   }
 
   const handleUninstall = async () => {
     const response = await deleteGroup(groupId)
     if (response.status === 204) {
-      toast({
-        description: 'Group has been uninstalled.',
-      })
+      toast.success('Group has been uninstalled.')
       router.push('.')
     }
   }

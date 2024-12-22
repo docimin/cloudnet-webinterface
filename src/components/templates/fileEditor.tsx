@@ -4,14 +4,13 @@ import { Textarea } from '@/components/ui/textarea'
 import React, { useEffect, useState } from 'react'
 import { getFile } from '@/utils/server-api/templates/getFile'
 import { updateFile } from '@/utils/actions/templates/updateFile'
-import { useToast } from '@/components/ui/use-toast'
 import * as Sentry from '@sentry/nextjs'
 import { useRouter } from '@/i18n/routing'
 import { deleteFile } from '@/utils/actions/templates/deleteFile'
+import { toast } from 'sonner'
 
 export default function FileEditor({ params }) {
   const [data, setData] = useState<string>('')
-  const { toast } = useToast()
   const router = useRouter()
 
   useEffect(() => {
@@ -39,16 +38,10 @@ export default function FileEditor({ params }) {
         data
       )
 
-      toast({
-        title: 'File Saved',
-        description: 'Your file has been saved successfully.',
-      })
+      toast.success('Your file has been saved successfully.')
     } catch (error) {
       Sentry.captureException('Failed to save file:', error)
-      toast({
-        title: 'Error',
-        description: 'Failed to save file. Please check file contents.',
-      })
+      toast.error('Failed to save file. Please check file contents.')
     }
   }
 

@@ -8,9 +8,9 @@ import {
   MemoryStickIcon,
   ServerOffIcon,
 } from 'lucide-react'
-import { useToast } from '@/components/ui/use-toast'
 import { Input } from '@/components/ui/input'
 import { Nodes } from '@/utils/types/nodes'
+import { toast } from 'sonner'
 
 export default function NodeClientPage({
   node,
@@ -19,31 +19,19 @@ export default function NodeClientPage({
   node: Nodes
   nodeId: string
 }) {
-  const { toast } = useToast()
   const handleSave = async (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
     const data = Object.fromEntries(formData.entries())
     if (data.IP === '' || data.Port === '') {
-      toast({
-        title: 'Failed',
-        description: 'IP and Port are required to update node',
-        variant: 'destructive',
-      })
+      toast.error('IP and Port are required to update node')
       return
     }
     const response = await updateNode(nodeId, data.IP, data.Port)
     if (response.status === 200) {
-      toast({
-        title: 'Updated',
-        description: 'Node updated successfully',
-      })
+      toast.success('Node updated successfully')
     } else if (response.status === 500) {
-      toast({
-        title: 'Failed',
-        description: 'Failed to update node',
-        variant: 'destructive',
-      })
+      toast.error('Failed to update node')
     }
   }
 
