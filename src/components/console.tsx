@@ -8,7 +8,6 @@ import { executeCommand } from '@/utils/actions/commands/executeCommand'
 import { getCachedServiceLog } from '@/utils/server-api/services/getCachedServiceLog'
 
 interface ConsoleEntry {
-  command: string
   output: string
 }
 
@@ -44,12 +43,14 @@ export default function ServiceConsole({
     const initializeSocket = async () => {
       const ticket = await createTicket(type)
       const cookieAddress = await getCookie('add')
+      const protocol = cookieAddress.startsWith('https') ? 'wss' : 'ws'
       const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
 
-      socket = new WebSocket(`ws://${address}${webSocketPath}?ticket=${ticket}`)
+      socket = new WebSocket(
+        `${protocol}://${address}${webSocketPath}?ticket=${ticket}`
+      )
       socket.onmessage = (event) => {
         const newEntry: ConsoleEntry = {
-          command: 'Server',
           output: event.data,
         }
         setHistory((prev) => [...prev, newEntry])
@@ -93,11 +94,7 @@ export default function ServiceConsole({
       <div className="flex-1 p-4 overflow-y-auto font-mono text-sm">
         {history.map((entry, index) => (
           <div key={index} className="mb-2">
-            <div className="flex items-center">
-              <ChevronRight className="w-4 h-4 mr-1 text-green-400" />
-              <span className="text-yellow-400">{entry.command}</span>
-            </div>
-            <div className="pl-5 text-gray-400">{entry.output}</div>
+            <div className="text-gray-400">{entry.output}</div>
           </div>
         ))}
         <div ref={consoleEndRef} />
