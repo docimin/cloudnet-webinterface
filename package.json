@@ -51,6 +51,7 @@
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.9",
     "@tailwindcss/typography": "^0.5.15",
+    "ajv": "^8.17.1",
     "autoprefixer": "10.4.20",
     "class-variance-authority": "^0.7.1",
     "clsx": "^2.1.1",
@@ -59,6 +60,7 @@
     "emblor": "^1.4.7",
     "import-in-the-middle": "^1.12.0",
     "input-otp": "^1.4.1",
+    "json-edit-react": "^1.19.1",
     "lucide-react": "^0.469.0",
     "next": "^15.1.2",
     "next-i18next": "^15.4.1",
@@ -87,9 +89,9 @@
   "devDependencies": {
     "@types/node": "22.10.2",
     "@types/react": "19.0.2",
-    "prettier": "^3.4.2",
-    "prettier-plugin-tailwindcss": "^0.6.9",
     "eslint": "^9.17.0",
-    "eslint-config-next": "^15.1.2"
+    "eslint-config-next": "^15.1.2",
+    "prettier": "^3.4.2",
+    "prettier-plugin-tailwindcss": "^0.6.9"
   }
 }

@@ -6,10 +6,16 @@ import { Module } from '@/utils/types/modules'
 import { updateLifecycle } from '@/utils/actions/modules/updateLifecycle'
 import { useRouter } from '@/i18n/routing'
 import { uninstallModule } from '@/utils/actions/modules/uninstallModule'
-import { Textarea } from '@/components/ui/textarea'
 import { useState } from 'react'
 import { updateModuleConfig } from '@/utils/actions/modules/updateModuleConfig'
 import { toast } from 'sonner'
+import { githubDarkTheme, JsonEditor } from 'json-edit-react'
+import jsonSchema from './rest-configuration-schema.json'
+import Ajv2019 from 'ajv/dist/2019'
+
+const ajv = new Ajv2019()
+console.log(jsonSchema)
+const schema = ajv.compile(jsonSchema)
 
 export default function ModuleClientPage({
   module,
@@ -168,13 +174,28 @@ export default function ModuleClientPage({
           <div className="w-full mt-8">
             <Label htmlFor="json">JSON</Label>
             <div className="mt-2">
-              <Textarea
-                name="json"
-                id="json"
-                className={'h-96'}
-                required
-                value={moduleConfigData}
-                onChange={(event) => setModuleConfigData(event.target.value)}
+              <JsonEditor
+                data={moduleConfig}
+                theme={githubDarkTheme}
+                maxWidth={'100%'}
+                onUpdate={({ newData }) => {
+                  const valid = schema(newData)
+                  if (!valid) {
+                    console.log('Errors', schema.errors)
+                    const errorMessage = schema.errors
+                      ?.map(
+                        (error) =>
+                          `${error.instancePath}${error.instancePath ? ': ' : ''}${error.message}`
+                      )
+                      .join('\n')
+                    // Send detailed error message to an external UI element, such as a "Toast" notification
+                    toast.error(errorMessage)
+                    // This string returned to and displayed in json-edit-react UI
+                    return 'Schema invalid'
+                  }
+                }}
+                defaultValue={'data'}
+                showCollectionCount={'when-closed'}
               />
             </div>
           </div>

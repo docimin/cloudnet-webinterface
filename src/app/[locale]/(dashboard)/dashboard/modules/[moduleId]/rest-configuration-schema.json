@@ -1,0 +1,122 @@
+{
+  "type": "object",
+  "properties": {
+    "maxContentLength": {
+      "type": "integer"
+    },
+    "requestDispatchThreadLimit": {
+      "type": "integer"
+    },
+    "disableNativeTransport": {
+      "type": "boolean"
+    },
+    "corsConfig": {
+      "type": "object",
+      "properties": {
+        "allowCredentials": {
+          "type": "boolean"
+        },
+        "allowPrivateNetworks": {
+          "type": "boolean",
+          "nullable": true
+        },
+        "allowedHeaders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "allowedOrigins": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "exposedHeaders": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "maxAge": {
+          "type": "integer"
+        }
+      }
+    },
+    "proxyMode": {
+      "type": "string",
+      "enum": [
+        "ENABLED",
+        "DISABLED",
+        "AUTO_DETECT"
+      ]
+    },
+    "authConfig": {
+      "type": "object",
+      "properties": {
+        "jwtRefreshTokenLifetimeSeconds": {
+          "type": "integer"
+        },
+        "jwtTokenLifetimeSeconds": {
+          "type": "integer"
+        },
+        "ticketLifetimeSeconds": {
+          "type": "integer"
+        }
+      }
+    },
+    "httpListeners": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "host": {
+            "type": "string"
+          },
+          "port": {
+            "type": "integer"
+          }
+        },
+        "required": ["host", "port"]
+      }
+    },
+    "connectionInfoResolver": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "properties": {
+          "properties": {
+            "type": "object"
+          },
+          "type": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "sslConfiguration": {
+      "type": ["object", "null"],
+      "properties": {
+        "keyCertPath": {
+          "type": "string"
+        },
+        "keyPassword": {
+          "type": "string"
+        },
+        "keyPath": {
+          "type": "string"
+        }
+      }
+    }
+  },
+  "required": [
+    "maxContentLength",
+    "requestDispatchThreadLimit",
+    "disableNativeTransport",
+    "corsConfig",
+    "proxyMode",
+    "authConfig",
+    "httpListeners",
+    "connectionInfoResolver"
+  ]
+}
