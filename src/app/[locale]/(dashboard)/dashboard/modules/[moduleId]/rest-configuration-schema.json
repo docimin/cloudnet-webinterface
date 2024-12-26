@@ -41,7 +41,15 @@
         "maxAge": {
           "type": "integer"
         }
-      }
+      },
+      "required": [
+        "allowCredentials",
+        "allowPrivateNetworks",
+        "allowedHeaders",
+        "allowedOrigins",
+        "exposedHeaders",
+        "maxAge"
+      ]
     },
     "proxyMode": {
       "type": "string",
@@ -63,7 +71,12 @@
         "ticketLifetimeSeconds": {
           "type": "integer"
         }
-      }
+      },
+      "required": [
+        "jwtRefreshTokenLifetimeSeconds",
+        "jwtTokenLifetimeSeconds",
+        "ticketLifetimeSeconds"
+      ]
     },
     "httpListeners": {
       "type": "array",
@@ -77,7 +90,10 @@
             "type": "integer"
           }
         },
-        "required": ["host", "port"]
+        "required": [
+          "host",
+          "port"
+        ]
       }
     },
     "connectionInfoResolver": {
@@ -95,7 +111,10 @@
       }
     },
     "sslConfiguration": {
-      "type": ["object", "null"],
+      "type": [
+        "object",
+        "null"
+      ],
       "properties": {
         "keyCertPath": {
           "type": "string"
@@ -117,6 +136,7 @@
     "proxyMode",
     "authConfig",
     "httpListeners",
-    "connectionInfoResolver"
+    "connectionInfoResolver",
+    "sslConfiguration"
   ]
 }

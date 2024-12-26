@@ -173,15 +173,14 @@ export default function ModuleClientPage({
         {moduleConfigData && (
           <div className="w-full mt-8">
             <Label htmlFor="json">JSON</Label>
-            <div className="mt-2">
+            <div className="mt-2 text-black">
               <JsonEditor
                 data={moduleConfig}
-                theme={githubDarkTheme}
+                theme={[githubDarkTheme, {}]}
                 maxWidth={'100%'}
                 onUpdate={({ newData }) => {
                   const valid = schema(newData)
                   if (!valid) {
-                    console.log('Errors', schema.errors)
                     const errorMessage = schema.errors
                       ?.map(
                         (error) =>
@@ -191,7 +190,7 @@ export default function ModuleClientPage({
                     // Send detailed error message to an external UI element, such as a "Toast" notification
                     toast.error(errorMessage)
                     // This string returned to and displayed in json-edit-react UI
-                    return 'Schema invalid'
+                    return 'Schema invalid: ' + errorMessage
                   }
                 }}
                 defaultValue={'data'}
