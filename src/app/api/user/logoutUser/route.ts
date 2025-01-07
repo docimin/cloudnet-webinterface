@@ -7,21 +7,16 @@ export async function POST(request: NextRequest) {
   const cookie = await cookies()
   try {
     // Delete all cookies
-    const domainUrl = new URL(
-      process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost'
-    )
-    const domain = domainUrl.hostname.startsWith('www.')
-      ? domainUrl.hostname.slice(4)
-      : domainUrl.hostname
+    const domainUrl = new URL(process.env.NEXT_PUBLIC_DOMAIN)
+    const isSecure = domainUrl.protocol === 'https:'
 
     const setCookie = async (name: string, value: string) => {
       cookie.set(name, value, {
         httpOnly: true,
-        secure: true,
+        secure: isSecure,
         sameSite: 'strict',
         maxAge: 0,
         path: '/',
-        //domain: domain,
       })
     }
 

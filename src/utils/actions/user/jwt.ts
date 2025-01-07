@@ -1,13 +1,17 @@
 'use server'
-import { cookies, type UnsafeUnwrappedCookies } from 'next/headers'
+import { cookies } from 'next/headers'
 import { getCookies } from '@/lib/server-calls'
 
 export async function checkToken() {
   const cookie = await cookies()
+
+  const domainUrl = new URL(process.env.NEXT_PUBLIC_DOMAIN)
+  const isSecure = domainUrl.protocol === 'https:'
+
   const setCookie = (name: string, value: string, expiresIn: number) => {
     cookie.set(name, value, {
       httpOnly: true,
-      secure: true,
+      secure: isSecure,
       sameSite: 'strict',
       maxAge: Number(new Date(Date.now() + expiresIn)),
       path: '/',

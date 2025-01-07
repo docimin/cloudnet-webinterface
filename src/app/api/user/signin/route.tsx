@@ -13,21 +13,16 @@ export async function POST(request: NextRequest) {
     return NextResponse.json({ error: 'No body provided', status: 400 })
   }
 
-  const domainUrl = new URL(
-    process.env.NEXT_PUBLIC_DOMAIN || 'http://localhost'
-  )
-  const domain = domainUrl.hostname.startsWith('www.')
-    ? domainUrl.hostname.slice(4)
-    : domainUrl.hostname
+  const domainUrl = new URL(process.env.NEXT_PUBLIC_DOMAIN)
+  const isSecure = domainUrl.protocol === 'https:'
 
   const setCookie = async (name: string, value: string, expiresIn: number) => {
     cookie.set(name, value, {
       httpOnly: true,
-      secure: true,
+      secure: isSecure,
       sameSite: 'strict',
       maxAge: expiresIn,
       path: '/',
-      //domain: domain,
     })
   }
 
