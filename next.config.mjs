@@ -23,10 +23,6 @@ const cspHeader = `
 const nextConfig = {
   reactStrictMode: true,
   compress: false,
-  devIndicators: {
-    buildActivityPosition: 'bottom-right',
-    buildActivity: true,
-  },
   // output: 'standalone', // This is needed if you want to use docker
   compiler: {
     styledComponents: true,
