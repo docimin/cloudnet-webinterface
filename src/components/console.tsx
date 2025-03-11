@@ -19,14 +19,17 @@ interface ServiceConsoleProps {
 }
 
 const applyStyles = (text: string) => {
-  if (text.includes('INFO')) {
-    return <span style={{ color: 'darkcyan' }}>{text}</span>
-  } else if (text.includes('WARN')) {
-    return <span style={{ color: 'orange' }}>{text}</span>
-  } else if (text.includes('ERROR')) {
-    return <span style={{ color: 'red' }}>{text}</span>
+  // Remove ASCII escape sequences
+  const cleanText = text.replace(/\x1b\[[0-9;]*m/g, '')
+
+  if (cleanText.includes('INFO')) {
+    return <span style={{ color: 'darkcyan' }}>{cleanText}</span>
+  } else if (cleanText.includes('WARN')) {
+    return <span style={{ color: 'orange' }}>{cleanText}</span>
+  } else if (cleanText.includes('ERROR')) {
+    return <span style={{ color: 'red' }}>{cleanText}</span>
   }
-  return <span>{text}</span>
+  return <span>{cleanText}</span>
 }
 
 export default function ServiceConsole({
