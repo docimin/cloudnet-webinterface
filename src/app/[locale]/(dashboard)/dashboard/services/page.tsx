@@ -15,7 +15,7 @@ import { getServices } from '@/utils/server-api/services/getServices'
 import { formatBytes } from '@/components/formatBytes'
 import NoRecords from '@/components/static/noRecords'
 import AutoRefresh from '@/components/autoRefresh'
-import { Link } from '@/i18n/routing'
+import Link from 'next/link'
 
 export const runtime = 'edge'
 
@@ -93,13 +93,7 @@ export default async function ServicesPage(props) {
                   ) && (
                     <TableCell>
                       <Link
-                        href={{
-                          pathname: '/dashboard/services/[serviceId]',
-                          params: {
-                            serviceId:
-                              service?.configuration.serviceId.uniqueId,
-                          },
-                        }}
+                        href={`/dashboard/services/${service?.configuration.serviceId.uniqueId}`}
                       >
                         <Button
                           size={'sm'}

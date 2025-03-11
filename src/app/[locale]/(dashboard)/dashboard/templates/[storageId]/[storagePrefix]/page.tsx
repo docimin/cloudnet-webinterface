@@ -14,7 +14,7 @@ import NoAccess from '@/components/static/noAccess'
 import { Templates, TemplatesList } from '@/utils/types/templateStorages'
 import { getTemplates } from '@/utils/server-api/templates/getTemplates'
 import NoRecords from '@/components/static/noRecords'
-import { Link } from '@/i18n/routing'
+import Link from 'next/link'
 
 export const runtime = 'edge'
 
@@ -88,15 +88,7 @@ export default async function ServicesPage(props) {
                 {hasEditPermissions && (
                   <TableCell>
                     <Link
-                      href={{
-                        pathname:
-                          '/dashboard/templates/[storageId]/[storagePrefix]/[templateId]',
-                        params: {
-                          storageId: storageId,
-                          storagePrefix: storagePrefix,
-                          templateId: template.name,
-                        },
-                      }}
+                      href={`/dashboard/templates/${storageId}/${storagePrefix}/${template.name}`}
                     >
                       <Button
                         size={'sm'}

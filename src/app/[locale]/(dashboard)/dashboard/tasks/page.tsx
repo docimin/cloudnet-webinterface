@@ -13,7 +13,7 @@ import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import NoRecords from '@/components/static/noRecords'
 import { getTasks } from '@/utils/server-api/tasks/getTasks'
-import { Link } from '@/i18n/routing'
+import Link from 'next/link'
 
 export const runtime = 'edge'
 
@@ -76,12 +76,7 @@ export default async function TasksPage(props) {
                 <TableCell>{task?.staticServices ? 'True' : 'False'}</TableCell>
                 {hasEditPermissions && (
                   <TableCell>
-                    <Link
-                      href={{
-                        pathname: '/dashboard/tasks/[taskId]',
-                        params: { taskId: task?.name },
-                      }}
-                    >
+                    <Link href={`/dashboard/tasks/${task?.name}`}>
                       <Button
                         size={'sm'}
                         variant={'link'}

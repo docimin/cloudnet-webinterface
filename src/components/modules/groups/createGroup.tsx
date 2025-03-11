@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { updateGroup } from '@/utils/actions/groups/updateGroup'
-import { useRouter } from '@/i18n/routing'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 export default function CreateGroup() {

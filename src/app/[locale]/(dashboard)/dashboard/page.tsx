@@ -13,7 +13,7 @@ import { getGroups } from '@/utils/server-api/groups/getGroups'
 import { getLoadedModules } from '@/utils/server-api/modules/getLoadedModules'
 import { getUsers } from '@/utils/server-api/users/getUsers'
 import { DashboardCard } from '@/components/dashboardCard'
-import { Link } from '@/i18n/routing'
+import Link from 'next/link'
 import AutoRefresh from '@/components/autoRefresh'
 
 export const runtime = 'edge'

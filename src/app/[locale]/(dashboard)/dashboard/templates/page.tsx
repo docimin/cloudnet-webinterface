@@ -14,7 +14,7 @@ import NoAccess from '@/components/static/noAccess'
 import { getStorages } from '@/utils/server-api/templates/getStorages'
 import { Storages } from '@/utils/types/templateStorages'
 import NoRecords from '@/components/static/noRecords'
-import { Link } from '@/i18n/routing'
+import Link from 'next/link'
 
 export const runtime = 'edge'
 
@@ -72,12 +72,7 @@ export default async function ServicesPage(props) {
                   permissions.includes(permission)
                 ) && (
                   <TableCell>
-                    <Link
-                      href={{
-                        pathname: '/dashboard/templates/[storageId]',
-                        params: { storageId: storage },
-                      }}
-                    >
+                    <Link href={`/dashboard/templates/${storage}`}>
                       <Button
                         size={'sm'}
                         variant={'link'}

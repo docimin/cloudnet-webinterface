@@ -14,7 +14,7 @@ import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import NoRecords from '@/components/static/noRecords'
-import { Link } from '@/i18n/routing'
+import Link from 'next/link'
 
 export const runtime = 'edge'
 
@@ -92,12 +92,7 @@ export default async function NodesPage(props) {
                 </TableCell>
                 {hasEditPermissions && (
                   <TableCell>
-                    <Link
-                      href={{
-                        pathname: '/dashboard/nodes/[nodeId]',
-                        params: { nodeId: node.node.uniqueId },
-                      }}
-                    >
+                    <Link href={`/dashboard/nodes/${node.node.uniqueId}`}>
                       <Button
                         size={'sm'}
                         variant={'link'}

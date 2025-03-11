@@ -1,7 +1,7 @@
 import Header from '@/components/header/header-server'
-import { redirect } from '@/i18n/routing'
+import { redirect } from 'next/navigation'
 import { checkAuthToken } from '@/lib/server-calls'
-import { getTranslations } from 'next-intl/server'
+import { getDict } from 'gt-next/server'
 
 export default async function LocaleLayout(props) {
   const params = await props.params
@@ -10,10 +10,10 @@ export default async function LocaleLayout(props) {
 
   const accountData = await checkAuthToken()
   if (accountData.status === 401) {
-    redirect({ href: '/', locale })
+    redirect('/')
   }
 
-  const navigation = await getTranslations({ locale, namespace: 'Navigation' })
+  const navigation = await getDict('Navigation')
 
   return (
     <>

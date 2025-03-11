@@ -1,10 +1,17 @@
-import createMiddleware from 'next-intl/middleware'
-import { routing } from './i18n/routing'
+import { createNextMiddleware } from 'gt-next/middleware'
 
-export default createMiddleware(routing)
+export default createNextMiddleware({
+  prefixDefaultLocale: true,
+})
 
 export const config = {
-  // Skip all paths that should not be internationalized. This example skips
-  // certain folders and all pathnames with a dot (e.g. favicon.ico)
-  matcher: ['/((?!api|_next|_vercel|.*\\..*).*)'],
+  matcher: [
+    /*
+     * Match all request paths except for the ones starting with:
+     * - api (API routes)
+     * - _next (internal files)
+     * - static files
+     */
+    '/((?!api|static|.*\\..*|_next).*)',
+  ],
 }

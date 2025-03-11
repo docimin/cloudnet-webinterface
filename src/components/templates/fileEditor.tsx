@@ -5,7 +5,7 @@ import React, { useEffect, useState } from 'react'
 import { getFile } from '@/utils/server-api/templates/getFile'
 import { updateFile } from '@/utils/actions/templates/updateFile'
 import * as Sentry from '@sentry/nextjs'
-import { useRouter } from '@/i18n/routing'
+import { useRouter } from 'next/navigation'
 import { deleteFile } from '@/utils/actions/templates/deleteFile'
 import { toast } from 'sonner'
 

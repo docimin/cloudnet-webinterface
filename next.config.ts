@@ -1,9 +1,8 @@
 /** @type {import('next').NextConfig} */
+import { withGTConfig } from 'gt-next/config'
 
-import createNextIntlPlugin from 'next-intl/plugin'
-
-const withNextIntl = createNextIntlPlugin()
-import { withSentryConfig } from '@sentry/nextjs'
+import { SentryBuildOptions, withSentryConfig } from '@sentry/nextjs'
+import { NextConfig } from 'next'
 
 const cspHeader = `
     default-src 'self';
@@ -20,7 +19,7 @@ const cspHeader = `
     block-all-mixed-content;
 `
 
-const nextConfig = {
+const nextConfig: NextConfig = {
   reactStrictMode: true,
   compress: false,
   // output: 'standalone', // This is needed if you want to use docker
@@ -29,6 +28,9 @@ const nextConfig = {
     //removeConsole: {
     //  exclude: ['error'],
     //},
+  },
+  devIndicators: {
+    position: 'bottom-right',
   },
   images: {
     remotePatterns: [
@@ -90,37 +92,24 @@ const nextConfig = {
   },
 }
 
-/*
 // Injected content via Sentry wizard below
 
-const sentryConfig = {
+const sentryOptions: SentryBuildOptions = {
   // For all available options, see:
-  // https://github.com/getsentry/sentry-webpack-plugin#options
+  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
-  // Suppresses source map uploading logs during build
   silent: true,
   org: 'CloudNet',
   project: 'javascript-nextjs',
-  url: 'https://sentry.fayevr.dev/',
-}
-
-const sentryOptions = {
-  // For all available options, see:
-  // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
+  sentryUrl: 'https://sentry.fayevr.dev/',
 
   // Upload a larger set of source maps for prettier stack traces (increases build time)
   widenClientFileUpload: true,
 
-  // Transpiles SDK to be compatible with IE11 (increases bundle size)
-  transpileClientSDK: true,
-
   // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers. (increases server load)
   // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of
   // client-side errors will fail.
-  tunnelRoute: '/monitoring',
-
-  // Hides source maps from generated client bundles
-  hideSourceMaps: true,
+  tunnelRoute: '/api/monitoring',
 
   // Automatically tree-shake Sentry logger statements to reduce bundle size
   disableLogger: true,
@@ -132,13 +121,11 @@ const sentryOptions = {
   automaticVercelMonitors: false,
 }
 
-const sentryNextConfig = withSentryConfig(
-  nextConfig,
-  sentryConfig,
-  sentryOptions
-)
-const sentryIntlNextConfig = withNextIntl(sentryNextConfig)
+const sentryNextConfig = withSentryConfig(nextConfig, sentryOptions)
 
-export default sentryIntlNextConfig
- */
-export default withNextIntl(nextConfig)
+export default withGTConfig(sentryNextConfig, {
+  defaultLocale: 'en',
+  locales: ['nl', 'de', 'en'],
+  runtimeUrl: null,
+  loadDictionaryPath: './src/loadDictionary.ts',
+})

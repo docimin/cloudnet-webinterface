@@ -13,7 +13,7 @@ import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import { getListOnlinePlayers } from '@/utils/server-api/players/getListOnlinePlayers'
 import NoRecords from '@/components/static/noRecords'
-import { Link } from '@/i18n/routing'
+import Link from 'next/link'
 import AutoRefresh from '@/components/autoRefresh'
 
 export const runtime = 'edge'
@@ -92,12 +92,7 @@ export default async function PlayersPage(props) {
                 ) && (
                   <TableCell>
                     <Link
-                      href={{
-                        pathname: '/dashboard/players/[playerId]',
-                        params: {
-                          playerId: player?.networkPlayerProxyInfo.uniqueId,
-                        },
-                      }}
+                      href={`/dashboard/players/${player?.networkPlayerProxyInfo.uniqueId}`}
                     >
                       <Button
                         size={'sm'}

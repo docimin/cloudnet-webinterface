@@ -14,7 +14,7 @@ import NoAccess from '@/components/static/noAccess'
 import { getGroups } from '@/utils/server-api/groups/getGroups'
 import NoRecords from '@/components/static/noRecords'
 import CreateGroup from '@/components/modules/groups/createGroup'
-import { Link } from '@/i18n/routing'
+import Link from 'next/link'
 
 export const runtime = 'edge'
 
@@ -74,12 +74,7 @@ export default async function GroupsPage(props) {
                 <TableCell className="font-medium">{group.name}</TableCell>
                 {hasEditPermissions && (
                   <TableCell>
-                    <Link
-                      href={{
-                        pathname: '/dashboard/groups/[groupId]',
-                        params: { groupId: group.name },
-                      }}
-                    >
+                    <Link href={`/dashboard/groups/${group.name}`}>
                       <Button
                         size={'sm'}
                         variant={'link'}

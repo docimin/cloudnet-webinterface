@@ -1,7 +1,7 @@
 'use client'
 import { useEffect } from 'react'
 import { checkToken } from '@/utils/actions/user/jwt'
-import { useRouter } from '@/i18n/routing'
+import { useRouter } from 'next/navigation'
 
 export default function CheckAuth({ children }) {
   const router = useRouter()

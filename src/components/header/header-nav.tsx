@@ -9,7 +9,8 @@ import {
   TooltipContent,
   TooltipTrigger,
 } from '@/components/ui/tooltip'
-import { Link, usePathname } from '@/i18n/routing'
+import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 
 interface NavProps {
   isCollapsed: boolean

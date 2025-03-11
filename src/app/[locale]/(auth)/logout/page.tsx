@@ -1,6 +1,6 @@
 'use client'
 import { useMemo, useState } from 'react'
-import { useRouter } from '@/i18n/routing'
+import { useRouter } from 'next/navigation'
 
 export const runtime = 'edge'
 

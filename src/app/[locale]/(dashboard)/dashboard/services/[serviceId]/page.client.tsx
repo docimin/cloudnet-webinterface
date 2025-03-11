@@ -11,7 +11,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
-import { useRouter } from '@/i18n/routing'
+import { useRouter } from 'next/navigation'
 import { deleteService } from '@/utils/actions/services/deleteService'
 import { updateServiceLifecycle } from '@/utils/actions/services/updateServiceLifecycle'
 

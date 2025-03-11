@@ -14,7 +14,7 @@ import { getModules } from '@/utils/server-api/modules/getModules'
 import { Modules } from '@/utils/types/modules'
 import NoAccess from '@/components/static/noAccess'
 import NoRecords from '@/components/static/noRecords'
-import { Link } from '@/i18n/routing'
+import Link from 'next/link'
 
 export const runtime = 'edge'
 
@@ -75,10 +75,7 @@ export default async function NodesPage(props) {
                 ) && (
                   <TableCell>
                     <Link
-                      href={{
-                        pathname: '/dashboard/modules/[moduleId]',
-                        params: { moduleId: module.configuration.name },
-                      }}
+                      href={`/dashboard/modules/${module.configuration.name}`}
                     >
                       <Button
                         size={'sm'}

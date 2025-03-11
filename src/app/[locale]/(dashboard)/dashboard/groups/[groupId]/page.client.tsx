@@ -1,7 +1,7 @@
 'use client'
 import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
-import { useRouter } from '@/i18n/routing'
+import { useRouter } from 'next/navigation'
 import { Textarea } from '@/components/ui/textarea'
 import { useState } from 'react'
 import { updateGroup } from '@/utils/actions/groups/updateGroup'

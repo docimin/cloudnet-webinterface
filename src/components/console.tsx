@@ -18,6 +18,17 @@ interface ServiceConsoleProps {
   type?: 'service' | 'node'
 }
 
+const applyStyles = (text: string) => {
+  if (text.includes('INFO')) {
+    return <span style={{ color: 'darkcyan' }}>{text}</span>
+  } else if (text.includes('WARN')) {
+    return <span style={{ color: 'orange' }}>{text}</span>
+  } else if (text.includes('ERROR')) {
+    return <span style={{ color: 'red' }}>{text}</span>
+  }
+  return <span>{text}</span>
+}
+
 export default function ServiceConsole({
   webSocketPath,
   serviceName,
@@ -94,7 +105,7 @@ export default function ServiceConsole({
       <div className="flex-1 p-4 overflow-y-auto font-mono text-sm">
         {history.map((entry, index) => (
           <div key={index} className="mb-2">
-            <div className="text-gray-400">{entry.output}</div>
+            <div className="text-gray-400">{applyStyles(entry.output)}</div>
           </div>
         ))}
         <div ref={consoleEndRef} />

@@ -10,15 +10,10 @@ export async function generateMetadata() {
   return {
     title: {
       default: 'CloudNet Webinterface',
-      template: `%s - ERP`,
+      template: `%s - CloudNet`,
     },
     description: 'Modern webinterface for CloudNet v4',
-    keywords: [
-      process.env.NEXT_PUBLIC_NAME,
-      'cloudnet',
-      'minecraft',
-      'webinterface',
-    ],
+    keywords: ['cloudnet', 'minecraft', 'webinterface'],
     icons: {
       icon: '/logos/logo.svg',
     },

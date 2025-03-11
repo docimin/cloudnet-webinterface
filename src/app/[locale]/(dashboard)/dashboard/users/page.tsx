@@ -15,7 +15,7 @@ import { getUsers } from '@/utils/server-api/users/getUsers'
 import { Users } from '@/utils/types/users'
 import { formatDate } from '@/components/formatDate'
 import NoRecords from '@/components/static/noRecords'
-import { Link } from '@/i18n/routing'
+import Link from 'next/link'
 
 export const runtime = 'edge'
 
@@ -71,12 +71,7 @@ export default async function UsersPage(props) {
                   permissions.includes(permission)
                 ) && (
                   <TableCell>
-                    <Link
-                      href={{
-                        pathname: '/dashboard/users/[userId]',
-                        params: { userId: user.id },
-                      }}
-                    >
+                    <Link href={`/dashboard/users/${user.id}`}>
                       <Button
                         size={'sm'}
                         variant={'link'}

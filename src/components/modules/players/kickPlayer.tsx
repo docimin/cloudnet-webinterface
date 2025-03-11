@@ -12,7 +12,7 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { kickPlayer } from '@/utils/actions/players/kickPlayer'
-import { useRouter } from '@/i18n/routing'
+import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 
 export default function KickPlayer({ player }: { player: OnlinePlayer }) {
