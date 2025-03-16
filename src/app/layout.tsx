@@ -1,7 +1,6 @@
 import '../../css/globals.css'
 import { Inter } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
-import ContextMenuProvider from '@/components/system/contextMenu'
 import { Toaster } from 'sonner'
 
 const inter = Inter({ subsets: ['latin'] })
@@ -9,18 +8,18 @@ const inter = Inter({ subsets: ['latin'] })
 export async function generateMetadata() {
   return {
     title: {
-      default: 'CloudNet Webinterface',
-      template: `%s - CloudNet`,
+      default: `${process.env.NEXT_PUBLIC_NAME || 'CloudNet'} Webinterface`,
+      template: `%s - ${process.env.NEXT_PUBLIC_NAME || 'CloudNet'}`,
     },
-    description: 'Modern webinterface for CloudNet v4',
+    description: `Modern webinterface for ${process.env.NEXT_PUBLIC_NAME || 'CloudNet'} v4`,
     keywords: ['cloudnet', 'minecraft', 'webinterface'],
     icons: {
-      icon: '/logos/logo.svg',
+      icon: process.env.NEXT_PUBLIC_LOGO_PATH || '/logos/logo.svg',
     },
     openGraph: {
-      title: 'CloudNet Webinterface',
-      description: 'Modern webinterface for CloudNet v4',
-      siteName: 'CloudNet Webinterface',
+      title: `${process.env.NEXT_PUBLIC_NAME || 'CloudNet'} Webinterface`,
+      description: `Modern webinterface for ${process.env.NEXT_PUBLIC_NAME || 'CloudNet'} v4`,
+      siteName: `${process.env.NEXT_PUBLIC_NAME || 'CloudNet'} Webinterface`,
       type: 'website',
     },
   }
@@ -38,9 +37,7 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <ContextMenuProvider>
-            <div className="w-full h-full">{children}</div>
-          </ContextMenuProvider>
+          <div className="w-full h-full">{children}</div>
         </ThemeProvider>
         <Toaster
           toastOptions={{

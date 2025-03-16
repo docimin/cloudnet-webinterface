@@ -4,21 +4,6 @@ import { withGTConfig } from 'gt-next/config'
 import { SentryBuildOptions, withSentryConfig } from '@sentry/nextjs'
 import { NextConfig } from 'next'
 
-const cspHeader = `
-    default-src 'self';
-    script-src 'self' 'unsafe-eval' 'unsafe-inline' https://js.stripe.com https://static.cloudflareinsights.com blob:;
-    connect-src 'self' *;
-    style-src 'self' 'unsafe-inline';
-    img-src 'self' blob: data: https://q.stripe.com;
-    font-src 'self';
-    frame-src 'self' https://js.stripe.com;
-    object-src 'none';
-    base-uri 'self';
-    form-action 'self';
-    frame-ancestors 'none';
-    block-all-mixed-content;
-`
-
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   compress: false,
@@ -41,18 +26,6 @@ const nextConfig: NextConfig = {
     ],
   },
   poweredByHeader: false,
-  async rewrites() {
-    return [
-      {
-        source: '/:path*/blog/:slug',
-        destination: '/:path*/blog/',
-      },
-      {
-        source: '/sitemap.xml',
-        destination: '/api/sitemap',
-      },
-    ]
-  },
   async headers() {
     return [
       {
@@ -82,10 +55,6 @@ const nextConfig: NextConfig = {
             key: 'X-XSS-Protection',
             value: '1; mode=block',
           },
-          {
-            key: 'Content-Security-Policy',
-            value: cspHeader.replace(/\n/g, ''),
-          },
         ],
       },
     ]
@@ -98,13 +67,17 @@ const sentryOptions: SentryBuildOptions = {
   // For all available options, see:
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
-  silent: true,
+  silent: !process.env.CI,
   org: 'CloudNet',
-  project: 'javascript-nextjs',
+  project: 'cloudnet-webinterface',
   sentryUrl: 'https://sentry.fayevr.dev/',
 
   // Upload a larger set of source maps for prettier stack traces (increases build time)
   widenClientFileUpload: true,
+
+  sourcemaps: {
+    deleteSourcemapsAfterUpload: true,
+  },
 
   // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers. (increases server load)
   // Note: Check that the configured route will not match with your Next.js middleware, otherwise reporting of

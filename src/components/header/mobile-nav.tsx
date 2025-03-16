@@ -45,13 +45,15 @@ export default function MobileNav({
         <div className={'flex align-middle justify-between items-center px-2'}>
           <div className={'flex h-[52px] items-center ml-2'}>
             <Image
-              src={`/logos/logo.svg`}
+              src={process.env.NEXT_PUBLIC_LOGO_PATH || '/logos/logo.svg'}
               width={32}
               height={32}
-              alt={'CloudNet logo'}
+              alt={`${process.env.NEXT_PUBLIC_NAME || 'CloudNet'} logo`}
               className={'rounded-full'}
             />
-            <span className={'ml-2'}>CloudNet</span>
+            <span className={'ml-2'}>
+              ${process.env.NEXT_PUBLIC_NAME || 'CloudNet'}
+            </span>
           </div>
           <Sheet onOpenChange={(open) => setIsOpen(open)} open={isOpen}>
             <SheetTrigger asChild>
