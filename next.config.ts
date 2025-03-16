@@ -70,7 +70,7 @@ const sentryOptions: SentryBuildOptions = {
   silent: !process.env.CI,
   org: 'CloudNet',
   project: 'cloudnet-webinterface',
-  sentryUrl: 'https://sentry.fayevr.dev/',
+  sentryUrl: 'https://sentry.fayevr.dev',
 
   // Upload a larger set of source maps for prettier stack traces (increases build time)
   widenClientFileUpload: true,
