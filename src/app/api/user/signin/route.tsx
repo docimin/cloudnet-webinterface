@@ -59,9 +59,7 @@ export async function POST(request: NextRequest) {
 
     const dataResponse = await response.json()
 
-    if (dataResponse.status) {
-      return NextResponse.json(dataResponse)
-    } else if (dataResponse.name === 'SyntaxError') {
+    if (dataResponse.name === 'SyntaxError') {
       return NextResponse.json({ error: 'Invalid response', status: 404 })
     }
 
@@ -87,6 +85,15 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(dataResponse)
   } catch (error) {
-    return NextResponse.json(error)
+    if (error.message === 'fetch failed') {
+      return NextResponse.json(
+        { error: 'Incorrect address!', status: 404 },
+        { status: 404 }
+      )
+    }
+    return NextResponse.json(
+      { error: error.message || 'Internal server error' },
+      { status: 500 }
+    )
   }
 }

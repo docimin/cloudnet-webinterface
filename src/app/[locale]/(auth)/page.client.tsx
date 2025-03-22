@@ -49,15 +49,20 @@ export default function Client() {
       if (dataResponse.accessToken) {
         toast.success('You have successfully logged in')
 
+        Sentry.addBreadcrumb({
+          category: 'auth',
+          message: 'Authenticated user',
+          level: 'info',
+        })
+
         router.push('/dashboard')
       } else if (dataResponse.cause) {
         toast.error("Can't connect to the server. Please check the address")
       } else if (dataResponse.status === 401) {
         toast.error('Invalid username or password')
       } else if (dataResponse.status === 404) {
-        toast.error('Invalid response')
+        toast.error('Incorrect address!')
       } else {
-        console.log('An error occurred')
         toast.error('An error occurred')
         Sentry.captureException('An error occurred while logging in', {
           extra: dataResponse,
