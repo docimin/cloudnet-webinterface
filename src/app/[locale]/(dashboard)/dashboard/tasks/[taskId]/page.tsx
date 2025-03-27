@@ -4,9 +4,11 @@ import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
 import {
   CaseLowerIcon,
+  ChevronsLeftRightIcon,
   ConstructionIcon,
-  FolderXIcon,
+  MemoryStickIcon,
   RefreshCcwIcon,
+  ScaleIcon,
   SplitIcon,
 } from 'lucide-react'
 import { DashboardCard } from '@/components/dashboardCard'
@@ -111,7 +113,7 @@ export default async function UserPage(props) {
             />
             <DashboardCard
               title="Min. Service count"
-              icon={<FolderXIcon className="w-4 h-4" />}
+              icon={<ScaleIcon className="w-4 h-4" />}
               value={task?.minServiceCount}
               permissions={[
                 'cloudnet_rest:task_read',
@@ -121,7 +123,7 @@ export default async function UserPage(props) {
             />
             <DashboardCard
               title="Start port"
-              icon={<FolderXIcon className="w-4 h-4" />}
+              icon={<ChevronsLeftRightIcon className="w-4 h-4" />}
               value={task?.startPort}
               permissions={[
                 'cloudnet_rest:task_read',
@@ -131,7 +133,7 @@ export default async function UserPage(props) {
             />
             <DashboardCard
               title="Max. Memory"
-              icon={<FolderXIcon className="w-4 h-4" />}
+              icon={<MemoryStickIcon className="w-4 h-4" />}
               value={`${task?.processConfiguration?.maxHeapMemorySize} MB`}
               permissions={[
                 'cloudnet_rest:task_read',

@@ -54,6 +54,9 @@ const config = {
         success: {
           DEFAULT: 'hsl(var(--success))',
         },
+        loading: {
+          DEFAULT: 'hsl(var(--loading))',
+        },
       },
       minWidth: {
         0: '0',
