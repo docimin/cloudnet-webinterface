@@ -1,7 +1,7 @@
 'use server'
 import { postWithPermissions } from '@/utils/actions/postWithPermissions'
 
-export async function updateTask(taskId: string, body: any) {
+export async function updateTask(body: any) {
   const requiredPermissions = [
     'cloudnet_rest:task_write',
     'cloudnet_rest:task_create',
@@ -15,5 +15,5 @@ export async function updateTask(taskId: string, body: any) {
     false,
     false
   )
-  return data.ok
+  return data
 }

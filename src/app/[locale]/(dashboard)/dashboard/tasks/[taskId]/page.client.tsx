@@ -20,6 +20,7 @@ import { useRouter } from 'next/navigation'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Terminal } from 'lucide-react'
 import { toast } from 'sonner'
+import { taskApi } from '@/lib/client-api'
 
 function DeleteButton({ taskId }: { taskId: string }) {
   const router = useRouter()
@@ -54,13 +55,13 @@ function DeleteButton({ taskId }: { taskId: string }) {
 }
 
 function UpdateButton({
-  taskId,
   body,
   originalName,
+  router,
 }: {
-  taskId: string
   body: any
   originalName: string
+  router: any
 }) {
   const handleUpdate = async () => {
     try {
@@ -71,8 +72,13 @@ function UpdateButton({
         return // Stop the update process or handle accordingly
       }
       // Proceed with your update logic here if the name hasn't changed
-      await updateTask(taskId, updatedTask)
-      toast.success('Task updated successfully')
+      const response = await taskApi.update(updatedTask)
+      if (response.status === 204) {
+        toast.success('Task updated successfully')
+        router.refresh()
+      } else {
+        toast.error('Failed to update task')
+      }
     } catch (error) {
       toast.error('Invalid JSON format.')
     }
@@ -97,12 +103,13 @@ export default function TaskClientPage({
   children: any
 }) {
   const [body, setBody] = useState(taskConfigData)
+  const router = useRouter()
 
   return (
     <div>
       <div className={'flex items-center justify-between'}>
         {hasEditPermissions && (
-          <UpdateButton taskId={taskId} body={body} originalName={taskName} />
+          <UpdateButton body={body} originalName={taskName} router={router} />
         )}
         {hasDeletePermissions && <DeleteButton taskId={taskId} />}
       </div>

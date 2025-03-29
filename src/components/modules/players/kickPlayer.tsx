@@ -11,9 +11,9 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { kickPlayer } from '@/utils/actions/players/kickPlayer'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { playerApi } from '@/lib/client-api'
 
 export default function KickPlayer({ player }: { player: OnlinePlayer }) {
   const [kickReason, setKickReason] = useState('')
@@ -22,12 +22,12 @@ export default function KickPlayer({ player }: { player: OnlinePlayer }) {
   const router = useRouter()
   const handleKick = async (event: any) => {
     event.preventDefault()
-    const data = await kickPlayer(
+    const response = await playerApi.kick(
       player.networkPlayerProxyInfo.uniqueId,
       kickReason ? kickReason : 'Bye!'
     )
 
-    if (data === 204) {
+    if (response.status === 204) {
       router.push('/dashboard/players')
       toast.success('Player has been kicked')
     } else {

@@ -4,10 +4,10 @@ import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { User } from '@/utils/types/users'
 import { useState } from 'react'
-import { updateUser } from '@/utils/actions/users/updateUser'
 import MultipleSelector, { Option } from '@/components/ui/custom/multi-select'
 import { OPTIONS } from './options'
 import { toast } from 'sonner'
+import { userApi } from '@/lib/client-api'
 
 export default function UserClientPage({ user }: { user: User }) {
   const [username, setUsername] = useState(user.username)
@@ -43,7 +43,7 @@ export default function UserClientPage({ user }: { user: User }) {
       body = { ...body, password: password }
     }
 
-    const response = await updateUser(user.id, body)
+    const response = await userApi.update(user.id, body)
 
     if (response.status === 200) {
       toast.success('User updated successfully')

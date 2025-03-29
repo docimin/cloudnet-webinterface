@@ -20,7 +20,7 @@ export const runtime = 'edge'
 export default async function UserPage(props) {
   const params = await props.params
 
-  const { locale, taskId } = params
+  const { taskId } = params
 
   const task: Task = await getTask(taskId)
   const taskConfigData = JSON.stringify(task, null, 2)
