@@ -1,6 +1,7 @@
 'use client'
 import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
+import * as Sentry from '@sentry/nextjs'
 
 export const runtime = 'edge'
 
@@ -9,7 +10,7 @@ export default function LogoutPage() {
   const router = useRouter()
 
   useMemo(() => {
-    fetch(`/api/user/logoutUser`, {
+    fetch(`/api/auth/logout`, {
       method: 'POST',
     })
       .then((response) => {
@@ -19,6 +20,11 @@ export default function LogoutPage() {
         return response.json() // we only get here if there is no error
       })
       .then(() => {
+        Sentry.addBreadcrumb({
+          category: 'auth',
+          message: 'Logged out',
+          level: 'info',
+        })
         router.push('/')
       })
       .catch((err) => {

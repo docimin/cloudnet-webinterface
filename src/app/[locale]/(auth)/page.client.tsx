@@ -25,12 +25,11 @@ export default function Client() {
     })
   }, [router])
 
-  const handleEmailLogin = async (e) => {
+  const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
-    console.log('Logging in...')
 
     try {
-      const response = await fetch(`/api/user/signin`, {
+      const response = await fetch(`/api/auth/signin`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
