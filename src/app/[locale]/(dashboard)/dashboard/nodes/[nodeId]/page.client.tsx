@@ -31,7 +31,7 @@ export default function NodeClientPage({
       return
     }
     const response = await nodeApi.update(nodeId, ip, port)
-    if (response.success) {
+    if (response.status === 200) {
       toast.success('Node updated successfully')
     } else {
       toast.error('Failed to update node')

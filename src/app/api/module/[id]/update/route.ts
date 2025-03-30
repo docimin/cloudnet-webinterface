@@ -6,9 +6,10 @@ import {
 } from '@/lib/api-helpers'
 
 export const POST = createApiRoute(async (req, { params }) => {
+  const { id } = await params
   const requiredPermissions = [
     'cloudnet_rest:module_write',
-    'cloudnet_rest:module_update',
+    'cloudnet_rest:module_config_update',
     'global:admin',
   ]
 
@@ -20,6 +21,6 @@ export const POST = createApiRoute(async (req, { params }) => {
   }
 
   const body = await req.json()
-  const response = await makeApiRequest(`/module/${params.id}`, 'PUT', body)
-  return NextResponse.json(response, { status: response.status })
+  const response = await makeApiRequest(`/module/${id}/config`, 'PUT', body)
+  return NextResponse.json(response)
 })

@@ -5,9 +5,9 @@ import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import Image from 'next/image'
-import { checkToken } from '@/utils/actions/user/jwt'
 import * as Sentry from '@sentry/nextjs'
 import { toast } from 'sonner'
+import { authApi } from '@/lib/client-api'
 
 export default function Client() {
   const [data, setData] = useState({
@@ -18,7 +18,7 @@ export default function Client() {
   const router = useRouter()
 
   useEffect(() => {
-    checkToken().then((response) => {
+    authApi.checkToken().then((response) => {
       if (response.status === 200) {
         router.push('/dashboard')
       }

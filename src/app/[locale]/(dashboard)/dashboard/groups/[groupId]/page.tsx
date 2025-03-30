@@ -8,9 +8,7 @@ import GroupClientPage from '@/app/[locale]/(dashboard)/dashboard/groups/[groupI
 export const runtime = 'edge'
 
 export default async function GroupPage(props) {
-  const params = await props.params
-
-  const { locale, groupId } = params
+  const { groupId } = await props.params
 
   const group: Group = await getGroup(groupId)
   const permissions: any = await getPermissions()
@@ -19,16 +17,6 @@ export default async function GroupPage(props) {
     'cloudnet_rest:group_get',
     'global:admin',
   ]
-  const requiredDeletePermissions = [
-    'cloudnet_rest:module_read',
-    'cloudnet_rest:module_config_get',
-    'global:admin',
-  ]
-
-  // Check if user has required permissions to view module config
-  const hasDeletePermission = requiredDeletePermissions.some((permission) =>
-    permissions.includes(permission)
-  )
 
   // check if user has required permissions
   const hasPermissions = requiredPermissions.some((permission) =>

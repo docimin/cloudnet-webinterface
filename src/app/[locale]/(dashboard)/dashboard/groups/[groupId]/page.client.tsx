@@ -4,11 +4,10 @@ import { Label } from '@/components/ui/label'
 import { useRouter } from 'next/navigation'
 import { Textarea } from '@/components/ui/textarea'
 import { useState } from 'react'
-import { updateGroup } from '@/utils/actions/groups/updateGroup'
-import { deleteGroup } from '@/utils/actions/groups/deleteGroup'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Terminal } from 'lucide-react'
 import { toast } from 'sonner'
+import { groupApi } from '@/lib/client-api'
 
 export default function GroupClientPage({
   group,
@@ -35,7 +34,7 @@ export default function GroupClientPage({
         return
       }
 
-      const response = await updateGroup(updatedGroup)
+      const response = await groupApi.update(updatedGroup)
 
       if (response) {
         toast.success('Group config updated successfully')
@@ -47,7 +46,7 @@ export default function GroupClientPage({
   }
 
   const handleUninstall = async () => {
-    const response = await deleteGroup(groupId)
+    const response = await groupApi.delete(groupId)
     if (response.status === 204) {
       toast.success('Group has been uninstalled.')
       router.push('.')

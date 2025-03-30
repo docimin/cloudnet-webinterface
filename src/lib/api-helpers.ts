@@ -82,13 +82,13 @@ export async function makeApiRequest<T = any>(
 
 type RouteHandler = (
   req: Request,
-  context: { params: { [key: string]: string } }
+  context: { params: Promise<{ [key: string]: string }> }
 ) => Promise<Response>
 
 export function createApiRoute(handler: RouteHandler) {
   return async (
     req: Request,
-    context: { params: { [key: string]: string } }
+    context: { params: Promise<{ [key: string]: string }> }
   ) => {
     try {
       const response = await handler(req, context)

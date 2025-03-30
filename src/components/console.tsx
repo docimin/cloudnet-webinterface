@@ -3,9 +3,9 @@
 import React, { useState, useRef, useEffect } from 'react'
 import { ChevronRight } from 'lucide-react'
 import { getCookie } from '@/lib/server-calls'
-import { createTicket } from '@/utils/actions/user/createTicket'
-import { executeCommand } from '@/utils/actions/commands/executeCommand'
 import { getCachedServiceLog } from '@/utils/server-api/services/getCachedServiceLog'
+import { serviceApi } from '@/lib/client-api'
+import { authApi } from '@/lib/client-api'
 
 interface ConsoleEntry {
   output: string
@@ -55,7 +55,7 @@ export default function ServiceConsole({
     }
 
     const initializeSocket = async () => {
-      const ticket = await createTicket(type)
+      const ticket = await authApi.createTicket(type)
       const cookieAddress = await getCookie('add')
       const protocol = cookieAddress.startsWith('https') ? 'wss' : 'ws'
       const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
@@ -83,18 +83,8 @@ export default function ServiceConsole({
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    const requiredPermissions = [
-      'cloudnet_rest:service_write',
-      'cloudnet_rest:service_send_commands',
-      'global:admin',
-    ]
-
     if (input.trim()) {
-      await executeCommand(
-        `/service/${serviceName}/command`,
-        input,
-        requiredPermissions
-      )
+      await serviceApi.execute(`/service/${serviceName}/command`, input)
       setInput('')
     }
   }

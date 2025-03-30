@@ -8,8 +8,8 @@ import {
 export const POST = createApiRoute(async (req, { params }) => {
   const { id } = await params
   const requiredPermissions = [
-    'cloudnet_rest:module_write',
-    'cloudnet_rest:module_uninstall',
+    'cloudnet_bridge:player_write',
+    'cloudnet_bridge:player_message',
     'global:admin',
   ]
 
@@ -20,6 +20,11 @@ export const POST = createApiRoute(async (req, { params }) => {
     })
   }
 
-  const response = await makeApiRequest(`/module/${id}/uninstall`, 'POST', {})
-  return NextResponse.json(response)
+  const body = await req.json()
+  const response = await makeApiRequest(
+    `/player/online/${id}/message`,
+    'POST',
+    body
+  )
+  return NextResponse.json(response, { status: response.status })
 })

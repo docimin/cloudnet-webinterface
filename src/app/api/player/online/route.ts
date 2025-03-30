@@ -5,11 +5,10 @@ import {
   createApiRoute,
 } from '@/lib/api-helpers'
 
-export const POST = createApiRoute(async (req, { params }) => {
-  const { id } = await params
+export const GET = createApiRoute(async () => {
   const requiredPermissions = [
-    'cloudnet_rest:module_write',
-    'cloudnet_rest:module_uninstall',
+    'cloudnet_bridge:player_read',
+    'cloudnet_bridge:player_get_bulk',
     'global:admin',
   ]
 
@@ -20,6 +19,6 @@ export const POST = createApiRoute(async (req, { params }) => {
     })
   }
 
-  const response = await makeApiRequest(`/module/${id}/uninstall`, 'POST', {})
+  const response = await makeApiRequest('/player/online', 'GET')
   return NextResponse.json(response)
 })

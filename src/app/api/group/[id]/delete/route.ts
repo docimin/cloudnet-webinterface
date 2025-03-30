@@ -6,6 +6,7 @@ import {
 } from '@/lib/api-helpers'
 
 export const POST = createApiRoute(async (req, { params }) => {
+  const { id } = await params
   const requiredPermissions = [
     'cloudnet_rest:group_write',
     'cloudnet_rest:group_delete',
@@ -19,6 +20,6 @@ export const POST = createApiRoute(async (req, { params }) => {
     })
   }
 
-  const response = await makeApiRequest(`/group/${params.id}`, 'DELETE')
-  return NextResponse.json(response, { status: response.status })
+  const response = await makeApiRequest(`/group/${id}`, 'DELETE')
+  return NextResponse.json(response)
 })

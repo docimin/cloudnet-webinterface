@@ -11,9 +11,10 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { updateGroup } from '@/utils/actions/groups/updateGroup'
+
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
+import { groupApi } from '@/lib/client-api'
 
 export default function CreateGroup() {
   const router = useRouter()
@@ -22,7 +23,7 @@ export default function CreateGroup() {
 
   const handleSubmit = async (event: any) => {
     event.preventDefault()
-    const data = await updateGroup({
+    const data = await groupApi.update({
       name: name,
       jvmOptions: [],
       processParameters: [],

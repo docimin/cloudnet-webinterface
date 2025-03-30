@@ -5,11 +5,10 @@ import {
   createApiRoute,
 } from '@/lib/api-helpers'
 
-export const POST = createApiRoute(async (req, { params }) => {
-  const { id } = await params
+export const POST = createApiRoute(async (req) => {
   const requiredPermissions = [
-    'cloudnet_rest:module_write',
-    'cloudnet_rest:module_uninstall',
+    'cloudnet_rest:group_write',
+    'cloudnet_rest:group_update',
     'global:admin',
   ]
 
@@ -20,6 +19,10 @@ export const POST = createApiRoute(async (req, { params }) => {
     })
   }
 
-  const response = await makeApiRequest(`/module/${id}/uninstall`, 'POST', {})
+  const body = await req.json()
+  const response = await makeApiRequest(`/group`, 'POST', body, {
+    returnJson: false,
+    stringifyBody: true,
+  })
   return NextResponse.json(response)
 })

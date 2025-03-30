@@ -15,8 +15,12 @@ async function handleResponse(response: Response): Promise<ApiResponse> {
   }
 }
 
-export async function apiGet<T = any>(url: string): Promise<ApiResponse<T>> {
-  const response = await fetch(url)
+export async function apiGet<T = any>(
+  url: string,
+  params?: Record<string, any>
+): Promise<ApiResponse<T>> {
+  const queryString = params ? '?' + new URLSearchParams(params).toString() : ''
+  const response = await fetch(url + queryString)
   return handleResponse(response)
 }
 
@@ -74,17 +78,38 @@ export const authApi = {
 // Player API
 export const playerApi = {
   sendMessage: (id: string, message: string) =>
-    apiPost(`/api/player/online/${id}/message`, { message }),
+    apiPost(`/api/player/${id}/message`, { message }),
   kick: (id: string, message: string) =>
-    apiPost(`/api/player/online/${id}/kick`, { message }),
+    apiPost(`/api/player/${id}/kick`, { message }),
+  execute: (id: string, command: string) =>
+    apiPost(`/api/player/${id}/command`, { command }),
+  sendTaskGroup: (id: string, taskGroup: string) =>
+    apiPost(`/api/player/${id}/connect`, { taskGroup }),
+  sendFallback: (id: string) =>
+    apiPost(`/api/player/${id}/connectFallback`, {}),
+  sendService: (id: string, service: string) =>
+    apiPost(`/api/player/${id}/connectService`, { service }),
+  online: (params?: {
+    limit?: number
+    offset?: number
+    sort?: 'asc' | 'desc'
+  }) => apiGet('/api/player/online', params),
+  onlineAmount: () => apiGet('/api/player/online/amount'),
 }
 
 // Module API
 export const moduleApi = {
-  get: (id: string) => apiGet(`/api/module/${id}/get`),
+  getAll: () => apiGet('/api/module/loaded'),
+  getAvailable: () => apiGet('/api/module/available'),
+  getInfo: (id: string) => apiGet(`/api/module/${id}`),
+  getConfig: (id: string) => apiGet(`/api/module/${id}/config`),
+  present: () => apiGet('/api/module/present'),
+  updateLifecycle: (id: string, body: any) =>
+    apiPost(`/api/module/${id}/lifecycle`, body),
   updateConfig: (id: string, body: any) =>
-    apiPost(`/api/module/${id}/update`, body),
+    apiPost(`/api/module/${id}/config`, body),
   uninstall: (id: string) => apiPost(`/api/module/${id}/uninstall`, {}),
+  reload: () => apiPost(`/api/module/reload`, {}),
 }
 
 // Task API
@@ -99,8 +124,7 @@ export const taskApi = {
 export const groupApi = {
   list: () => apiGet('/api/group/list'),
   get: (id: string) => apiGet(`/api/group/${id}/get`),
-  create: (body: any) => apiPost('/api/group/create', body),
-  update: (id: string, body: any) => apiPost(`/api/group/${id}/update`, body),
+  update: (body: any) => apiPost(`/api/group/update`, body),
   delete: (id: string) => apiPost(`/api/group/${id}/delete`, {}),
 }
 
@@ -109,12 +133,8 @@ export const serviceApi = {
   list: () => apiGet('/api/service/list'),
   get: (id: string) => apiGet(`/api/service/${id}/get`),
   delete: (id: string) => apiPost(`/api/service/${id}/delete`, {}),
-}
-
-// Command API
-export const commandApi = {
-  execute: (path: string, command: string) =>
-    apiPost('/api/command/execute', { path, command }),
+  execute: (id: string, command: string) =>
+    apiPost(`/api/service/${id}/command`, { command }),
 }
 
 // Node API
