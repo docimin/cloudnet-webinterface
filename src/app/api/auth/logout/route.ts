@@ -3,7 +3,10 @@ import { cookies } from 'next/headers'
 
 export const runtime = 'edge'
 
-export async function POST(request: NextRequest) {
+/**
+ * This route is used to logout the user and delete all cookies.
+ */
+export async function POST() {
   const cookie = await cookies()
   try {
     // Delete all cookies

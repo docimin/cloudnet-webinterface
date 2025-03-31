@@ -21,7 +21,7 @@ export const runtime = 'edge'
 export default async function ServicesPage(props) {
   const params = await props.params
 
-  const { storageId, lang } = params
+  const { storageId } = params
 
   const templates: TemplatesList = await getTemplates(storageId)
   const permissions: string[] = await getPermissions()

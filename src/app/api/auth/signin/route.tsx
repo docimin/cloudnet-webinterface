@@ -3,6 +3,9 @@ import { NextRequest, NextResponse } from 'next/server'
 
 export const runtime = 'edge'
 
+/**
+ * This route is used to sign in the user and set the cookies.
+ */
 export async function POST(request: NextRequest) {
   const cookie = await cookies()
   // if POST is not json, return 400
@@ -16,9 +19,14 @@ export async function POST(request: NextRequest) {
   const domainUrl = new URL(process.env.NEXT_PUBLIC_DOMAIN)
   const isSecure = domainUrl.protocol === 'https:'
 
-  const setCookie = async (name: string, value: string, expiresIn: number) => {
+  const setCookie = async (
+    name: string,
+    value: string,
+    expiresIn: number,
+    httpOnly: boolean = true
+  ) => {
     cookie.set(name, value, {
-      httpOnly: true,
+      httpOnly: httpOnly,
       secure: isSecure,
       sameSite: 'strict',
       maxAge: expiresIn,

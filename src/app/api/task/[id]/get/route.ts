@@ -21,5 +21,5 @@ export const GET = createApiRoute(async (req, { params }) => {
   }
 
   const response = await makeApiRequest(`/task/${id}`, 'GET')
-  return NextResponse.json(response, { status: response.status })
+  return NextResponse.json(response)
 })

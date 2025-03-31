@@ -1,19 +1,10 @@
 import { NextResponse } from 'next/server'
-import {
-  checkPermissions,
-  makeApiRequest,
-  createApiRoute,
-} from '@/lib/api-helpers'
+import { makeApiRequest, createApiRoute } from '@/lib/api-helpers'
 
+/**
+ * This route is used to create a ticket for the user.
+ */
 export const POST = createApiRoute(async (req) => {
-  const requiredPermissions = []
-  const permissionCheck = await checkPermissions(requiredPermissions)
-  if (permissionCheck) {
-    return NextResponse.json(permissionCheck, {
-      status: permissionCheck.status,
-    })
-  }
-
   const body = await req.json()
   const { type } = body
 
@@ -23,5 +14,5 @@ export const POST = createApiRoute(async (req) => {
       : ['cloudnet_rest:service_live_log']
 
   const response = await makeApiRequest('/auth/ticket', 'POST', { scopes })
-  return NextResponse.json(response, { status: response.status })
+  return NextResponse.json(response.data.secret)
 })

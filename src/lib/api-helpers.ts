@@ -1,4 +1,5 @@
-import { NextResponse } from 'next/server'
+import { NextRequest, NextResponse } from 'next/server'
+import { getCookies } from '@/lib/server-calls'
 import { cookies } from 'next/headers'
 
 export type ApiResponse<T = any> = {
@@ -11,9 +12,14 @@ export type ApiResponse<T = any> = {
 export async function checkPermissions(
   requiredPermissions: string[]
 ): Promise<ApiResponse | null> {
-  const cookie = await cookies()
-  const perms = cookie.get('permissions')?.value
-  const permissions = perms ? JSON.parse(perms) : []
+  const cookies = await getCookies()
+  const perms = cookies['permissions']
+  console.log('Raw permissions:', perms)
+  const decodedPerms = perms ? decodeURIComponent(perms) : ''
+  console.log('Decoded permissions:', decodedPerms)
+  const permissions = perms ? JSON.parse(decodeURIComponent(perms)) : []
+  console.log('Parsed permissions:', permissions)
+  console.log('Required permissions:', requiredPermissions)
 
   if (
     !requiredPermissions.some((permission) => permissions.includes(permission))
@@ -21,8 +27,8 @@ export async function checkPermissions(
     return { status: 401, error: 'Unauthorized' }
   }
 
-  const accessToken = cookie.get('at')?.value
-  const address = cookie.get('add')?.value
+  const accessToken = cookies['at']
+  const address = cookies['add']
 
   if (!accessToken || !address) {
     return { status: 401, error: 'Unauthorized' }
@@ -40,9 +46,9 @@ export async function makeApiRequest<T = any>(
     stringifyBody?: boolean
   } = {}
 ): Promise<{ data: T; status: number }> {
-  const cookie = await cookies()
-  const accessToken = cookie.get('at')?.value
-  const address = cookie.get('add')?.value
+  const cookies = await getCookies()
+  const accessToken = cookies['at']
+  const address = cookies['add']
 
   if (!accessToken || !address) {
     throw new Error('Unauthorized')
@@ -60,7 +66,6 @@ export async function makeApiRequest<T = any>(
         revalidate: 0,
       },
     })
-
     const responseText = await response.text()
 
     try {
@@ -81,13 +86,13 @@ export async function makeApiRequest<T = any>(
 }
 
 type RouteHandler = (
-  req: Request,
+  req: NextRequest,
   context: { params: Promise<{ [key: string]: string }> }
-) => Promise<Response>
+) => Promise<NextResponse>
 
 export function createApiRoute(handler: RouteHandler) {
   return async (
-    req: Request,
+    req: NextRequest,
     context: { params: Promise<{ [key: string]: string }> }
   ) => {
     try {

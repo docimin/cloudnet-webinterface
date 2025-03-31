@@ -11,10 +11,10 @@ import PageLayout from '@/components/pageLayout'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
 import ServiceClientPage from '@/app/[locale]/(dashboard)/dashboard/services/[serviceId]/page.client'
-import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import ServiceConsole from '@/components/console'
+import { getPermissions } from '@/utils/server-api/user/getPermissions'
 
 export const runtime = 'edge'
 

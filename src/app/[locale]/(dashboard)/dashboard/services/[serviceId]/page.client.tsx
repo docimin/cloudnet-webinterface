@@ -12,14 +12,13 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { useRouter } from 'next/navigation'
-import { deleteService } from '@/utils/actions/services/deleteService'
-import { updateServiceLifecycle } from '@/utils/actions/services/updateServiceLifecycle'
+import { moduleApi, serviceApi } from '@/lib/client-api'
 
 function DeleteButton({ serviceId }: { serviceId: string }) {
   const router = useRouter()
 
   const handleDelete = async () => {
-    const data = await deleteService(serviceId)
+    const data = await serviceApi.delete(serviceId)
     if (data.status === 204) {
       router.push('/dashboard/services')
     }
@@ -55,7 +54,7 @@ function StartButton({
 }) {
   const handleStart = async () => {
     if (lifeCycle !== 'RUNNING') {
-      await updateServiceLifecycle(serviceId, 'start')
+      await moduleApi.updateLifecycle(serviceId, 'start')
     }
   }
   return (
@@ -67,7 +66,7 @@ function StartButton({
 
 function RestartButton({ serviceId }: { serviceId: string }) {
   const handleRestart = async () =>
-    await updateServiceLifecycle(serviceId, 'restart')
+    await moduleApi.updateLifecycle(serviceId, 'restart')
   return (
     <Button variant={'default'} onClick={handleRestart}>
       Restart service
@@ -78,7 +77,7 @@ function RestartButton({ serviceId }: { serviceId: string }) {
 function StopButton({ serviceId }: { serviceId: string }) {
   const router = useRouter()
   const handleStop = async () => {
-    const data = await updateServiceLifecycle(
+    const data = await moduleApi.updateLifecycle(
       serviceId,
       'stop' as ServiceLifeCycleUpdate
     )

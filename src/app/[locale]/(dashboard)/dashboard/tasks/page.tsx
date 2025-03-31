@@ -12,21 +12,17 @@ import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import NoRecords from '@/components/static/noRecords'
-import { getTasks } from '@/utils/server-api/tasks/getTasks'
 import Link from 'next/link'
+import { serverTaskApi } from '@/lib/server-api'
 
 export const runtime = 'edge'
 
-export default async function TasksPage(props) {
-  const params = await props.params
-
-  const { locale } = params
-
-  const tasks: TasksType = await getTasks()
-  const permissions: string[] = await getPermissions()
+export default async function TasksPage() {
+  const tasks = await serverTaskApi.list()
+  const permissions = await getPermissions()
   const requiredPermissions = [
-    'cloudnet_rest:user_read',
-    'cloudnet_rest:user_get_all',
+    'cloudnet_rest:task_read',
+    'cloudnet_rest:task_list',
     'global:admin',
   ]
 
@@ -48,7 +44,7 @@ export default async function TasksPage(props) {
     return <NoAccess />
   }
 
-  if (tasks.tasks.length === 0) {
+  if (!tasks?.tasks || tasks.tasks.length === 0) {
     return <NoRecords />
   }
 
@@ -67,7 +63,7 @@ export default async function TasksPage(props) {
           </TableRow>
         </TableHeader>
         <TableBody>
-          {tasks?.tasks
+          {tasks.tasks
             .sort((a, b) => a.name.localeCompare(b.name))
             .map((task) => (
               <TableRow key={task?.name}>

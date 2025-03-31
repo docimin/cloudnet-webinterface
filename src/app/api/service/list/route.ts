@@ -20,5 +20,5 @@ export const GET = createApiRoute(async (req) => {
   }
 
   const response = await makeApiRequest('/service', 'GET')
-  return NextResponse.json(response, { status: response.status })
+  return NextResponse.json(response)
 })

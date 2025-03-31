@@ -15,11 +15,12 @@ import { getGroups } from '@/utils/server-api/groups/getGroups'
 import NoRecords from '@/components/static/noRecords'
 import CreateGroup from '@/components/modules/groups/createGroup'
 import Link from 'next/link'
+import { serverGroupApi } from '@/lib/server-api'
 
 export const runtime = 'edge'
 
 export default async function GroupsPage() {
-  const groups: GroupsType = await getGroups()
+  const groups = await serverGroupApi.list()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:group_read',

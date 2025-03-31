@@ -21,5 +21,5 @@ export const POST = createApiRoute(async (req) => {
 
   const body = await req.json()
   const response = await makeApiRequest('/user', 'POST', body)
-  return NextResponse.json(response, { status: response.status })
+  return NextResponse.json(response)
 })

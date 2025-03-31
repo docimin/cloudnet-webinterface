@@ -18,11 +18,7 @@ import Link from 'next/link'
 
 export const runtime = 'edge'
 
-export default async function ServicesPage(props) {
-  const params = await props.params
-
-  const { locale } = params
-
+export default async function ServicesPage() {
   const storages: Storages = await getStorages()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [

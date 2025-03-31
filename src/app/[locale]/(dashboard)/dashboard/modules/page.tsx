@@ -1,4 +1,7 @@
 import PageLayout from '@/components/pageLayout'
+import NoAccess from '@/components/static/noAccess'
+import NoRecords from '@/components/static/noRecords'
+import { Button } from '@/components/ui/button'
 import {
   Table,
   TableBody,
@@ -8,26 +11,19 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { Button } from '@/components/ui/button'
+import { serverModuleApi } from '@/lib/server-api'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
-import { getModules } from '@/utils/server-api/modules/getModules'
-import { Modules } from '@/utils/types/modules'
-import NoAccess from '@/components/static/noAccess'
-import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 
 export const runtime = 'edge'
 
-export default async function NodesPage(props) {
-  const params = await props.params
-
-  const { locale } = params
-
-  const modules: Modules = await getModules()
+export default async function NodesPage() {
+  const modules = await serverModuleApi.getLoaded()
+  console.log(modules)
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [
-    'cloudnet_rest:cluster_read',
-    'cloudnet_rest:cluster_node_get',
+    'cloudnet_rest:module_read',
+    'cloudnet_rest:module_list_available',
     'global:admin',
   ]
 

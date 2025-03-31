@@ -2,15 +2,15 @@ import PageLayout from '@/components/pageLayout'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
-import { getGroup } from '@/utils/server-api/groups/getGroup'
-import GroupClientPage from '@/app/[locale]/(dashboard)/dashboard/groups/[groupId]/page.client'
+import GroupClientPage from './page.client'
+import { serverGroupApi } from '@/lib/server-api'
 
 export const runtime = 'edge'
 
 export default async function GroupPage(props) {
   const { groupId } = await props.params
 
-  const group: Group = await getGroup(groupId)
+  const group = await serverGroupApi.get(groupId)
   const permissions: any = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:group_read',

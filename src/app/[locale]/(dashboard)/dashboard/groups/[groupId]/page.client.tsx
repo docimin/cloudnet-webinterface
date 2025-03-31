@@ -3,7 +3,7 @@ import { Button } from '@/components/ui/button'
 import { Label } from '@/components/ui/label'
 import { useRouter } from 'next/navigation'
 import { Textarea } from '@/components/ui/textarea'
-import { useState } from 'react'
+import { useState, FormEvent } from 'react'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Terminal } from 'lucide-react'
 import { toast } from 'sonner'
@@ -20,17 +20,13 @@ export default function GroupClientPage({
   const [groupConfigData, setGroupConfigData] = useState(
     JSON.stringify(group, null, 2)
   )
-  const [originalName, setOriginalName] = useState(group.name)
-
-  const handleModuleConfigSave = async (event) => {
+  const handleModuleConfigSave = async (event: FormEvent) => {
     event.preventDefault()
 
     try {
       const updatedGroup = JSON.parse(groupConfigData)
-      if (updatedGroup.name !== originalName) {
+      if (updatedGroup.name !== group.name) {
         toast.warning('Group name has been changed!')
-        // Optionally, update the original name to the new name
-        setOriginalName(updatedGroup.name)
         return
       }
 

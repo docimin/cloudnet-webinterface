@@ -5,10 +5,12 @@ import {
   createApiRoute,
 } from '@/lib/api-helpers'
 
-export const GET = createApiRoute(async () => {
+export const POST = createApiRoute(async (req, { params }) => {
+  const { id } = await params
+
   const requiredPermissions = [
-    'cloudnet_rest:task_read',
-    'cloudnet_rest:task_list',
+    'cloudnet_rest:service_write',
+    'cloudnet_rest:service_delete',
     'global:admin',
   ]
 
@@ -19,6 +21,15 @@ export const GET = createApiRoute(async () => {
     })
   }
 
-  const response = await makeApiRequest(`/task`, 'GET')
+  const body = await req.json()
+  const response = await makeApiRequest(
+    `/service/${id}/command`,
+    'POST',
+    body,
+    {
+      returnJson: false,
+      stringifyBody: true,
+    }
+  )
   return NextResponse.json(response)
 })

@@ -1,7 +1,5 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { deleteTask } from '@/utils/actions/tasks/deleteTask'
-import { updateTask } from '@/utils/actions/tasks/updateTask'
 import { useState } from 'react'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -26,7 +24,7 @@ function DeleteButton({ taskId }: { taskId: string }) {
   const router = useRouter()
 
   const handleDelete = async () => {
-    const data = await deleteTask(taskId)
+    const data = await taskApi.delete(taskId)
     if (data.status === 204) {
       router.push('/dashboard/tasks')
     }

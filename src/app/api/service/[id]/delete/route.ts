@@ -5,7 +5,9 @@ import {
   createApiRoute,
 } from '@/lib/api-helpers'
 
-export const POST = createApiRoute(async (req, { params }) => {
+export const DELETE = createApiRoute(async (req, { params }) => {
+  const { id } = await params
+
   const requiredPermissions = [
     'cloudnet_rest:service_write',
     'cloudnet_rest:service_delete',
@@ -19,6 +21,6 @@ export const POST = createApiRoute(async (req, { params }) => {
     })
   }
 
-  const response = await makeApiRequest(`/service/${params.id}`, 'DELETE')
-  return NextResponse.json(response, { status: response.status })
+  const response = await makeApiRequest(`/service/${id}`, 'DELETE')
+  return NextResponse.json(response)
 })

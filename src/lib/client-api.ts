@@ -1,17 +1,28 @@
-type ApiResponse<T = any> = {
-  detail: string
+import { Task, TasksType } from '@/utils/types/tasks'
+
+export type ApiResponse<T = any, K extends keyof T = keyof T> = {
+  [P in K]: T[P]
+} & {
   status: number
-  title: string
-  type: string
+  title?: string
+  type?: string
+  detail?: string
 }
 
-async function handleResponse(response: Response): Promise<ApiResponse> {
-  const responseData = await response.json()
+async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
+  if (!response.ok) {
+    throw new Error(`HTTP error! status: ${response.status}`)
+  }
+
+  const text = await response.text()
+  if (!text) {
+    throw new Error('Empty response received')
+  }
 
   try {
-    return responseData
-  } catch (error) {
-    return responseData
+    return JSON.parse(text)
+  } catch (e) {
+    throw new Error(`Failed to parse JSON response: ${text}`)
   }
 }
 
@@ -20,7 +31,9 @@ export async function apiGet<T = any>(
   params?: Record<string, any>
 ): Promise<ApiResponse<T>> {
   const queryString = params ? '?' + new URLSearchParams(params).toString() : ''
-  const response = await fetch(url + queryString)
+  const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
+
+  const response = await fetch(baseUrl + url + queryString)
   return handleResponse(response)
 }
 
@@ -28,7 +41,9 @@ export async function apiPost<T = any>(
   url: string,
   body: any
 ): Promise<ApiResponse<T>> {
-  const response = await fetch(url, {
+  const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
+
+  const response = await fetch(baseUrl + url, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -42,7 +57,9 @@ export async function apiPut<T = any>(
   url: string,
   body: any
 ): Promise<ApiResponse<T>> {
-  const response = await fetch(url, {
+  const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
+
+  const response = await fetch(baseUrl + url, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -53,7 +70,9 @@ export async function apiPut<T = any>(
 }
 
 export async function apiDelete<T = any>(url: string): Promise<ApiResponse<T>> {
-  const response = await fetch(url, {
+  const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
+
+  const response = await fetch(baseUrl + url, {
     method: 'DELETE',
   })
   return handleResponse(response)
@@ -73,6 +92,8 @@ export const authApi = {
   checkToken: () => apiPost('/api/auth/jwt', {}),
   createTicket: (type: 'service' | 'node') =>
     apiPost('/api/auth/ticket', { type }),
+  getCookies: () => apiGet('/api/auth/getCookies'),
+  getPermissions: () => apiGet<string[]>('/api/auth/getPermissions'),
 }
 
 // Player API
@@ -114,8 +135,8 @@ export const moduleApi = {
 
 // Task API
 export const taskApi = {
-  list: () => apiGet('/api/task/list'),
-  get: (id: string) => apiGet(`/api/task/${id}/get`),
+  list: () => apiGet<{ tasks: TasksType }>('/api/task/list'),
+  get: (id: string) => apiGet<{ task: Task }>(`/api/task/${id}/get`),
   update: (body: any) => apiPost('/api/task/update', body),
   delete: (id: string) => apiPost(`/api/task/${id}/delete`, {}),
 }
@@ -130,8 +151,10 @@ export const groupApi = {
 
 // Service API
 export const serviceApi = {
-  list: () => apiGet('/api/service/list'),
-  get: (id: string) => apiGet(`/api/service/${id}/get`),
+  list: () => apiGet<Service[]>('/api/service/list'),
+  get: (id: string) => apiGet<Service>(`/api/service/${id}/get`),
+  logLines: (id: string) =>
+    apiGet<ServiceLogCache>(`/api/service/${id}/logLines`),
   delete: (id: string) => apiPost(`/api/service/${id}/delete`, {}),
   execute: (id: string, command: string) =>
     apiPost(`/api/service/${id}/command`, { command }),

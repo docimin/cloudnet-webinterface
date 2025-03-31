@@ -3,6 +3,9 @@ import { cookies } from 'next/headers'
 import { getCookies } from '@/lib/server-calls'
 import { createApiRoute } from '@/lib/api-helpers'
 
+/**
+ * This route is used to verify the JWT token and refresh it if it is expired.
+ */
 export const POST = createApiRoute(async () => {
   const cookie = await cookies()
   const domainUrl = new URL(process.env.NEXT_PUBLIC_DOMAIN)
