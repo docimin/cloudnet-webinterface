@@ -10,8 +10,8 @@ export const POST = createApiRoute(async (req, { params }) => {
   const { target } = await req.json()
 
   const requiredPermissions = [
-    'cloudnet_rest:module_write',
-    'cloudnet_rest:module_lifecycle',
+    'cloudnet_rest:service_write',
+    'cloudnet_rest:service_lifecycle',
     'global:admin',
   ]
 
@@ -24,7 +24,7 @@ export const POST = createApiRoute(async (req, { params }) => {
 
   console.log(target)
   const response = await makeApiRequest(
-    `/module/${id}/lifecycle?target=${target}`,
+    `/service/${id}/lifecycle?target=${target}`,
     'PATCH'
   )
   console.log(response)

@@ -1,7 +1,6 @@
 import PageLayout from '@/components/pageLayout'
-import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import { getPermissions } from '@/utils/server-api/getPermissions'
 import { Module } from '@/utils/types/modules'
-import { getModule } from '@/utils/server-api/modules/getModule'
 import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
 import ModuleClientPage from './page.client'
@@ -14,7 +13,7 @@ export default async function NodePage(props) {
 
   const { moduleId } = params
 
-  const moduleSingle: Module = await getModule(moduleId)
+  const moduleSingle: Module = await serverModuleApi.get(moduleId)
   const permissions: any = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:module_read',

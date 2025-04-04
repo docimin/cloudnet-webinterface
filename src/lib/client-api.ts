@@ -1,3 +1,4 @@
+import { Target } from '@/utils/types/modules'
 import { Task, TasksType } from '@/utils/types/tasks'
 
 export type ApiResponse<T = any, K extends keyof T = keyof T> = {
@@ -40,12 +41,32 @@ export async function apiGet<T = any>(
 
 export async function apiPost<T = any>(
   url: string,
-  body: any
+  body: any,
+  params?: Record<string, any>
 ): Promise<ApiResponse<T>> {
   const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
+  const queryString = params ? '?' + new URLSearchParams(params).toString() : ''
 
-  const response = await fetch(baseUrl + url, {
+  const response = await fetch(baseUrl + url + queryString, {
     method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify(body),
+  })
+  return handleResponse(response)
+}
+
+export async function apiPatch<T = any>(
+  url: string,
+  body: any,
+  params?: Record<string, any>
+): Promise<ApiResponse<T>> {
+  const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
+  const queryString = params ? '?' + new URLSearchParams(params).toString() : ''
+
+  const response = await fetch(baseUrl + url + queryString, {
+    method: 'PATCH',
     headers: {
       'Content-Type': 'application/json',
     },
@@ -56,11 +77,13 @@ export async function apiPost<T = any>(
 
 export async function apiPut<T = any>(
   url: string,
-  body: any
+  body: any,
+  params?: Record<string, any>
 ): Promise<ApiResponse<T>> {
   const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
+  const queryString = params ? '?' + new URLSearchParams(params).toString() : ''
 
-  const response = await fetch(baseUrl + url, {
+  const response = await fetch(baseUrl + url + queryString, {
     method: 'PUT',
     headers: {
       'Content-Type': 'application/json',
@@ -70,10 +93,14 @@ export async function apiPut<T = any>(
   return handleResponse(response)
 }
 
-export async function apiDelete<T = any>(url: string): Promise<ApiResponse<T>> {
+export async function apiDelete<T = any>(
+  url: string,
+  params?: Record<string, any>
+): Promise<ApiResponse<T>> {
   const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
+  const queryString = params ? '?' + new URLSearchParams(params).toString() : ''
 
-  const response = await fetch(baseUrl + url, {
+  const response = await fetch(baseUrl + url + queryString, {
     method: 'DELETE',
   })
   return handleResponse(response)
@@ -135,8 +162,8 @@ export const moduleApi = {
   getInfo: (id: string) => apiGet(`/api/module/${id}`),
   getConfig: (id: string) => apiGet(`/api/module/${id}/config`),
   present: () => apiGet('/api/module/present'),
-  updateLifecycle: (id: string, body: any) =>
-    apiPost(`/api/module/${id}/lifecycle`, body),
+  updateLifecycle: (id: string, target: Target) =>
+    apiPost(`/api/module/${id}/lifecycle`, { target }),
   updateConfig: (id: string, body: any) =>
     apiPost(`/api/module/${id}/update`, body),
   uninstall: (id: string) => apiPost(`/api/module/${id}/uninstall`, {}),
@@ -163,6 +190,8 @@ export const groupApi = {
 export const serviceApi = {
   list: () => apiGet<Service[]>('/api/service/list'),
   get: (id: string) => apiGet<Service>(`/api/service/${id}/get`),
+  updateLifecycle: (id: string, target: ServiceLifeCycleUpdate) =>
+    apiPatch(`/api/service/${id}/lifecycle`, { target }),
   logLines: (id: string) =>
     apiGet<ServiceLogCache>(`/api/service/${id}/logLines`),
   delete: (id: string) => apiPost(`/api/service/${id}/delete`, {}),
@@ -176,4 +205,61 @@ export const nodeApi = {
   get: (id: string) => apiGet(`/api/node/${id}/get`),
   update: (id: string, ip: string, port: string) =>
     apiPost(`/api/node/${id}/update`, { ip, port }),
+}
+
+// Template Storage API
+export const templateStorageApi = {
+  getStorages: () => apiGet('/api/templateStorage/list'),
+  getTemplates: (id: string) => apiGet(`/api/templateStorage/${id}/list`),
+  getTemplateFiles: (
+    storageId: string,
+    prefixId: string,
+    templateId: string,
+    filePath?: string[],
+    deep?: boolean
+  ) =>
+    apiGet<FileType[]>(
+      `/api/templates/${storageId}/${prefixId}/${templateId}/directory/list`,
+      {
+        directory: filePath,
+        deep: deep,
+      }
+    ),
+  getFile: (
+    storageId: string,
+    prefixId: string,
+    templateId: string,
+    filePath: string[]
+  ) =>
+    apiGet<string>(
+      `/api/templates/${storageId}/${prefixId}/${templateId}/file`,
+      {
+        filePath,
+      }
+    ),
+  deleteTemplate: (storageId: string, prefixId: string, templateId: string) =>
+    apiDelete(`/api/templates/${storageId}/${prefixId}/${templateId}`),
+  deleteFile: (
+    storageId: string,
+    prefixId: string,
+    templateId: string,
+    filePath: string[]
+  ) =>
+    apiDelete(`/api/templates/${storageId}/${prefixId}/${templateId}/file`, {
+      filePath,
+    }),
+  updateFile: (
+    storageId: string,
+    prefixId: string,
+    templateId: string,
+    filePath: string[],
+    content: string
+  ) =>
+    apiPost(
+      `/api/templates/${storageId}/${prefixId}/${templateId}/file/update`,
+      {
+        filePath,
+        content,
+      }
+    ),
 }

@@ -1,6 +1,6 @@
 import PageLayout from '@/components/pageLayout'
 import FileBrowser from '@/components/templates/fileBrowser'
-import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import { getPermissions } from '@/utils/server-api/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
 import FileEditor from '@/components/templates/fileEditor'
@@ -42,7 +42,7 @@ export default async function TemplatePage(props) {
 
   return (
     <PageLayout title={'File browser'}>
-      <FileBrowser params={params} permissions={permissions} />
+      <FileBrowser params={params} />
     </PageLayout>
   )
 }

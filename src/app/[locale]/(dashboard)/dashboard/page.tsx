@@ -1,8 +1,5 @@
 import PageLayout from '@/components/pageLayout'
 import { UsersIcon } from 'lucide-react'
-import { getLocalTemplates } from '@/utils/server-api/templates/getLocalTemplates'
-import { getS3Templates } from '@/utils/server-api/templates/getS3Templates'
-import { getSFTPTemplates } from '@/utils/server-api/templates/getSFTPTemplates'
 import { DashboardCard } from '@/components/dashboardCard'
 import Link from 'next/link'
 import AutoRefresh from '@/components/autoRefresh'
@@ -26,19 +23,20 @@ export default async function DashboardPage() {
   let onlinePlayers: OnlinePlayersCount = { onlineCount: 0 }
   let registeredPlayers: RegisteredPlayersCount = { registeredCount: 0 }
   let nodes: NodesType = { nodes: [] }
-  let availableModules: Modules = { modules: [] }
+  let loadedModules: Modules = { modules: [] }
   let groups: GroupsType = { groups: [] }
   let totalTasks: TasksType = { tasks: [] }
   let services: Services = { services: [] }
   let users: Users = { users: [] }
   let templateStorages: Storages = { storages: [] }
+  let totalTemplates = 0
 
   try {
     ;[
       onlinePlayers,
       registeredPlayers,
       nodes,
-      availableModules,
+      loadedModules,
       groups,
       totalTasks,
       services,
@@ -48,31 +46,33 @@ export default async function DashboardPage() {
       serverPlayerApi.onlineAmount().catch(() => ({ onlineCount: 0 })),
       serverPlayerApi.registeredAmount().catch(() => ({ registeredCount: 0 })),
       serverNodeApi.list().catch(() => ({ nodes: [] })),
-      serverModuleApi.getAvailable().catch(() => ({ modules: [] })),
+      serverModuleApi.getLoaded().catch(() => ({ modules: [] })),
       serverGroupApi.list().catch(() => ({ groups: [] })),
       serverTaskApi.list().catch(() => ({ tasks: [] })),
       serverServiceApi.list().catch(() => ({ services: [] })),
       serverUserApi.list().catch(() => ({ users: [] })),
       serverStorageApi.getStorages().catch(() => ({ storages: [] })),
+      serverStorageApi
+        .getLocalTemplates()
+        .catch(() => ({ templates: [] }))
+        .then((templates) => {
+          totalTemplates += templates?.templates?.length
+        }),
+      serverStorageApi
+        .getS3Templates()
+        .catch(() => ({ templates: [] }))
+        .then((templates) => {
+          totalTemplates += templates?.templates?.length
+        }),
+      serverStorageApi
+        .getSFTPTemplates()
+        .catch(() => ({ templates: [] }))
+        .then((templates) => {
+          totalTemplates += templates?.templates?.length
+        }),
     ])
   } catch (error) {
     console.error('Error fetching dashboard data:', error)
-  }
-
-  let totalTemplates = 0
-  if (templateStorages?.storages?.includes('local')) {
-    const localTemplates = await getLocalTemplates()
-    totalTemplates += localTemplates?.templates?.length
-  }
-
-  if (templateStorages?.storages?.includes('s3')) {
-    const s3Templates = await getS3Templates()
-    totalTemplates += s3Templates?.templates?.length
-  }
-
-  if (templateStorages?.storages?.includes('sftp')) {
-    const sftpTemplates = await getSFTPTemplates()
-    totalTemplates += sftpTemplates?.templates?.length
   }
 
   return (
@@ -118,7 +118,7 @@ export default async function DashboardPage() {
               <DashboardCard
                 title="Loaded modules"
                 icon={<UsersIcon className="w-4 h-4" />}
-                value={availableModules?.modules?.length || 0}
+                value={loadedModules?.modules?.length || 0}
                 permissions={[
                   'cloudnet_rest:module_read',
                   'cloudnet_rest:module_list_loaded',

@@ -9,9 +9,8 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import { getPermissions } from '@/utils/server-api/getPermissions'
 import NoAccess from '@/components/static/noAccess'
-import { getGroups } from '@/utils/server-api/groups/getGroups'
 import NoRecords from '@/components/static/noRecords'
 import CreateGroup from '@/components/modules/groups/createGroup'
 import Link from 'next/link'

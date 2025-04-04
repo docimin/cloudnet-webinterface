@@ -108,9 +108,9 @@ export const serverPlayerApi = {
 
 // Module API
 export const serverModuleApi = {
+  get: (id: string) => serverApiGet<Module>(`/module/${id}`),
   getLoaded: () => serverApiGet<Modules>('/module/loaded'),
   getAvailable: () => serverApiGet<Modules>('/module/available'),
-  getInfo: (id: string) => serverApiGet<Module>(`/module/${id}`),
   getConfig: (id: string) => serverApiGet<Module>(`/module/${id}/config`),
   present: () => serverApiGet<Modules>('/module/present'),
 }
@@ -146,4 +146,10 @@ export const serverStorageApi = {
   getStorages: () => serverApiGet<Storages>('/templateStorage'),
   getTemplates: (id: string) =>
     serverApiGet<TemplatesList>(`/templateStorage/${id}/templates`),
+  getLocalTemplates: () =>
+    serverApiGet<TemplatesList>('/templateStorage/local/templates'),
+  getSFTPTemplates: () =>
+    serverApiGet<TemplatesList>('/templateStorage/sftp/templates'),
+  getS3Templates: () =>
+    serverApiGet<TemplatesList>('/templateStorage/s3/templates'),
 }

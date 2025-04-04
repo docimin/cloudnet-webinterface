@@ -9,17 +9,13 @@ import {
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
-import { getTemplateFiles } from '@/utils/actions/templates/getTemplateFiles'
-import { FileType } from '@/utils/types/templates'
 import { formatBytes } from '@/components/formatBytes'
 import { formatDate } from '@/components/formatDate'
 import { useRouter, usePathname } from 'next/navigation'
-import { deleteFile } from '@/utils/actions/templates/deleteFile'
 import Link from 'next/link'
-
+import { templateStorageApi } from '@/lib/client-api'
 export default function FileBrowser({
   params,
-  permissions,
 }: {
   params: {
     storageId: string
@@ -27,24 +23,29 @@ export default function FileBrowser({
     templateId: string
     fileId: string[]
   }
-  permissions: string[]
 }) {
   const [files, setFiles] = useState<FileType[]>([])
   const router = useRouter()
   const pathname = usePathname()
 
   const fetchFiles = async () => {
-    return (await getTemplateFiles(
+    return await templateStorageApi.getTemplateFiles(
       params.storageId,
       params.storagePrefix,
       params.templateId,
       params.fileId
-    )) as { files: FileType[] }
+    )
   }
 
   useEffect(() => {
     fetchFiles().then((fetchedFiles) => {
-      const sortedFiles = fetchedFiles?.files?.sort((a, b) => {
+      console.log(fetchedFiles)
+      // Ensure we have an array to sort
+      const filesArray = Array.isArray(fetchedFiles?.data)
+        ? fetchedFiles.data
+        : []
+
+      const sortedFiles = filesArray.sort((a, b) => {
         // Put directories at the top
         if (a?.directory !== b?.directory) {
           return a?.directory ? -1 : 1
@@ -59,14 +60,14 @@ export default function FileBrowser({
         return !(pathParts?.length > 2 && !file?.directory)
       })
 
-      setFiles(filteredFiles || [])
+      setFiles(filteredFiles)
     })
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [])
 
   const handleDelete = async (file: string) => {
     const newFileId = [...params.fileId, file]
-    await deleteFile(
+    await templateStorageApi.deleteFile(
       params.storageId,
       params.storagePrefix,
       params.templateId,

@@ -2,7 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { Module } from '@/utils/types/modules'
+import { Module, Target } from '@/utils/types/modules'
 import { useRouter } from 'next/navigation'
 import { Textarea } from '@/components/ui/textarea'
 import { useState } from 'react'
@@ -23,7 +23,9 @@ export default function ModuleClientPage({
     JSON.stringify(moduleConfig, null, 2)
   )
 
-  const handleModuleConfigSave = async (event) => {
+  const handleModuleConfigSave = async (
+    event: React.FormEvent<HTMLFormElement>
+  ) => {
     event.preventDefault()
 
     const response = await moduleApi.updateConfig(
@@ -36,10 +38,8 @@ export default function ModuleClientPage({
     }
   }
 
-  const handleLifecycle = async (event: string) => {
-    const response = await moduleApi.updateLifecycle(moduleId, {
-      lifecycle: event,
-    })
+  const handleLifecycle = async (event: Target) => {
+    const response = await moduleApi.updateLifecycle(moduleId, event)
     if (response.status === 204) {
       toast.success('Lifecycle updated successfully')
       router.refresh()
@@ -48,9 +48,9 @@ export default function ModuleClientPage({
 
   const handleUninstall = async () => {
     const response = await moduleApi.uninstall(moduleId)
-    if (response.status === 201) {
+    if (response.status === 204) {
       toast.success('Module has been uninstalled.')
-      router.push('.')
+      router.push('/dashboard/modules')
     }
   }
 
@@ -67,30 +67,36 @@ export default function ModuleClientPage({
           </div>
           <div className={'flex gap-4 items-center'}>
             <span>STATUS: {module.lifecycle}</span>
+            {module.lifecycle !== 'STARTED' && (
+              <Button
+                variant="outline"
+                onClick={() => handleLifecycle(Target.START)}
+                type={'button'}
+              >
+                Start
+              </Button>
+            )}
+            {module.lifecycle === 'STARTED' && (
+              <Button
+                variant="outline"
+                onClick={() => handleLifecycle(Target.RELOAD)}
+                type={'button'}
+              >
+                Reload
+              </Button>
+            )}
+            {module.lifecycle !== 'STOPPED' && (
+              <Button
+                variant="outline"
+                onClick={() => handleLifecycle(Target.STOP)}
+                type={'button'}
+              >
+                Stop
+              </Button>
+            )}
             <Button
               variant="outline"
-              onClick={() => handleLifecycle('start')}
-              type={'button'}
-            >
-              Start
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => handleLifecycle('reload')}
-              type={'button'}
-            >
-              Reload
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => handleLifecycle('stop')}
-              type={'button'}
-            >
-              Stop
-            </Button>
-            <Button
-              variant="outline"
-              onClick={() => handleLifecycle('unload')}
+              onClick={() => handleLifecycle(Target.UNLOAD)}
               type={'button'}
             >
               Unload

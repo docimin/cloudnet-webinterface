@@ -9,22 +9,20 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import { getPermissions } from '@/utils/server-api/getPermissions'
 import NoAccess from '@/components/static/noAccess'
-import { Templates, TemplatesList } from '@/utils/types/templateStorages'
-import { getTemplates } from '@/utils/server-api/templates/getTemplates'
+import { serverStorageApi } from '@/lib/server-api'
 import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 
 export const runtime = 'edge'
 
-export default async function ServicesPage(props) {
+export default async function TemplatesPage(props) {
   const params = await props.params
 
-  const { storageId, storagePrefix, lang } = params
+  const { storageId, storagePrefix } = params
 
-  const templates: TemplatesList = await getTemplates(storageId)
-  const permissions: string[] = await getPermissions()
+  const permissions = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:template_storage_read',
     'cloudnet_rest:template_storage_template_list',
@@ -47,6 +45,13 @@ export default async function ServicesPage(props) {
 
   if (!hasPermissions) {
     return <NoAccess />
+  }
+
+  let templates: TemplatesList
+  try {
+    templates = await serverStorageApi.getTemplates(storageId)
+  } catch {
+    return <NoRecords />
   }
 
   if (!templates.templates) {

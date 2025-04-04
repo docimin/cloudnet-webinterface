@@ -6,12 +6,13 @@ import {
 } from '@/lib/api-helpers'
 
 export const POST = createApiRoute(async (req, { params }) => {
-  const { id } = await params
-  const { target } = await req.json()
+  const { storageId, prefixId, name } = await params
+  const body = await req.json()
+  const { filePath, content } = body
 
   const requiredPermissions = [
-    'cloudnet_rest:module_write',
-    'cloudnet_rest:module_lifecycle',
+    'cloudnet_rest:template_write',
+    'cloudnet_rest:template_file_append',
     'global:admin',
   ]
 
@@ -22,11 +23,13 @@ export const POST = createApiRoute(async (req, { params }) => {
     })
   }
 
-  console.log(target)
+  // Join the filePath array with '/' to create the path parameter
+  const path = filePath.join('/')
+
   const response = await makeApiRequest(
-    `/module/${id}/lifecycle?target=${target}`,
-    'PATCH'
+    `/template/${storageId}/${prefixId}/${name}/file/create?path=${path}`,
+    'POST',
+    content
   )
-  console.log(response)
   return NextResponse.json(response)
 })

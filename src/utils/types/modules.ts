@@ -12,6 +12,13 @@ export enum Lifecycle {
   UNUSEABLE = 'UNUSEABLE',
 }
 
+export enum Target {
+  START = 'START',
+  STOP = 'STOP',
+  RELOAD = 'RELOAD',
+  UNLOAD = 'UNLOAD',
+}
+
 interface Repository {
   name: string
   url: string

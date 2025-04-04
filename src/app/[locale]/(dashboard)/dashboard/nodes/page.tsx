@@ -10,7 +10,7 @@ import {
 } from '@/components/ui/table'
 import { serverNodeApi } from '@/lib/server-api'
 import { Button } from '@/components/ui/button'
-import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import { getPermissions } from '@/utils/server-api/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'

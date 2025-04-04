@@ -12,7 +12,7 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { serverModuleApi } from '@/lib/server-api'
-import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import { getPermissions } from '@/utils/server-api/getPermissions'
 import Link from 'next/link'
 
 export const runtime = 'edge'

@@ -13,7 +13,7 @@ import ServiceClientPage from '@/app/[locale]/(dashboard)/dashboard/services/[se
 import NoAccess from '@/components/static/noAccess'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import ServiceConsole from '@/components/console'
-import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import { getPermissions } from '@/utils/server-api/getPermissions'
 import { serverServiceApi } from '@/lib/server-api'
 import DoesNotExist from '@/components/static/doesNotExist'
 
@@ -111,7 +111,7 @@ export default async function UserPage(props) {
       canEdit: false,
       value1: service?.properties.Version || 'N/A',
       value2: '',
-      value1Name: 'MC Version',
+      value1Name: 'Version',
       value2Name: '',
     },
     {

@@ -54,7 +54,7 @@ function StartButton({
 }) {
   const handleStart = async () => {
     if (lifeCycle !== 'RUNNING') {
-      await moduleApi.updateLifecycle(serviceId, 'start')
+      await serviceApi.updateLifecycle(serviceId, 'start')
     }
   }
   return (
@@ -66,7 +66,7 @@ function StartButton({
 
 function RestartButton({ serviceId }: { serviceId: string }) {
   const handleRestart = async () =>
-    await moduleApi.updateLifecycle(serviceId, 'restart')
+    await serviceApi.updateLifecycle(serviceId, 'restart')
   return (
     <Button variant={'default'} onClick={handleRestart}>
       Restart service
@@ -77,10 +77,7 @@ function RestartButton({ serviceId }: { serviceId: string }) {
 function StopButton({ serviceId }: { serviceId: string }) {
   const router = useRouter()
   const handleStop = async () => {
-    const data = await moduleApi.updateLifecycle(
-      serviceId,
-      'stop' as ServiceLifeCycleUpdate
-    )
+    const data = await serviceApi.updateLifecycle(serviceId, 'stop')
     if (data.status === 204) {
       router.push('/dashboard/services')
     }
