@@ -11,16 +11,18 @@ import {
 import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
-import { getStorages } from '@/utils/server-api/templates/getStorages'
-import { Storages } from '@/utils/types/templateStorages'
 import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
+import { serverStorageApi } from '@/lib/server-api'
 
 export const runtime = 'edge'
 
 export default async function ServicesPage() {
-  const storages: Storages = await getStorages()
-  const permissions: string[] = await getPermissions()
+  let storages: Storages = { storages: [] }
+  try {
+    storages = await serverStorageApi.getStorages()
+  } catch {}
+  const permissions = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:template_storage_read',
     'cloudnet_rest:template_storage_list',

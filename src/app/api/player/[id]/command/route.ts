@@ -7,6 +7,7 @@ import {
 
 export const POST = createApiRoute(async (req, { params }) => {
   const { id } = await params
+  const { command, isProxy } = await req.json()
   const requiredPermissions = [
     'cloudnet_bridge:player_write',
     'cloudnet_bridge:player_send_command',
@@ -20,11 +21,11 @@ export const POST = createApiRoute(async (req, { params }) => {
     })
   }
 
-  const body = await req.json()
   const response = await makeApiRequest(
-    `/player/online/${id}/command`,
+    `/player/online/${id}/command?redirectToServer=${isProxy ? 'false' : 'true'}`,
     'POST',
-    body
+    { command: command }
   )
+  console.log(response.status, response.data)
   return NextResponse.json(response)
 })

@@ -19,7 +19,6 @@ export const runtime = 'edge'
 
 export default async function NodesPage() {
   const modules = await serverModuleApi.getLoaded()
-  console.log(modules)
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:module_read',

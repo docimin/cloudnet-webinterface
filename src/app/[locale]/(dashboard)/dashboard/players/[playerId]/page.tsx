@@ -2,7 +2,6 @@ import PageLayout from '@/components/pageLayout'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
-import { getPlayer } from '@/utils/server-api/players/getPlayer'
 import {
   CalendarIcon,
   CaseLowerIcon,
@@ -16,16 +15,16 @@ import SendToService from '@/components/modules/players/sendToService'
 import KickPlayer from '@/components/modules/players/kickPlayer'
 import SendChatMessage from '@/components/modules/players/sendChatMessage'
 import ExecuteCommand from '@/components/modules/players/executeCommand'
+import { serverPlayerApi } from '@/lib/server-api'
 
 export const runtime = 'edge'
 
 export default async function UserPage(props) {
   const params = await props.params
 
-  const { locale, playerId } = params
+  const { playerId } = params
 
-  const player: OnlinePlayer = await getPlayer(playerId)
-  const permissions: any = await getPermissions()
+  const permissions = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:player_read',
     'cloudnet_rest:player_get',
@@ -41,8 +40,11 @@ export default async function UserPage(props) {
     return <NoAccess />
   }
 
-  if (!player?.name) {
-    return <DoesNotExist name={'User'} />
+  let player: OnlinePlayer | null = null
+  try {
+    player = await serverPlayerApi.get(playerId)
+  } catch {
+    return <DoesNotExist name={'Player'} />
   }
 
   return (

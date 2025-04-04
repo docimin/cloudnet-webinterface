@@ -1,19 +1,17 @@
 import PageLayout from '@/components/pageLayout'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
-import { getUser } from '@/utils/server-api/users/getUser'
-import { User } from '@/utils/types/users'
 import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
 import UserClientPage from '@/app/[locale]/(dashboard)/dashboard/users/[userId]/page.client'
+import { serverUserApi } from '@/lib/server-api'
 
 export const runtime = 'edge'
 
 export default async function UserPage(props) {
   const params = await props.params
 
-  const { locale, userId } = params
+  const { userId } = params
 
-  const user: User = await getUser(userId)
   const permissions: any = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:user_read',
@@ -30,7 +28,10 @@ export default async function UserPage(props) {
     return <NoAccess />
   }
 
-  if (!user?.id) {
+  let user: User | null = null
+  try {
+    user = await serverUserApi.get(userId)
+  } catch {
     return <DoesNotExist name={'User'} />
   }
 

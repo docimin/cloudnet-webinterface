@@ -3,6 +3,7 @@ import { Task, TasksType } from '@/utils/types/tasks'
 export type ApiResponse<T = any, K extends keyof T = keyof T> = {
   [P in K]: T[P]
 } & {
+  data?: T
   status: number
   title?: string
   type?: string
@@ -102,14 +103,23 @@ export const playerApi = {
     apiPost(`/api/player/${id}/message`, { message }),
   kick: (id: string, message: string) =>
     apiPost(`/api/player/${id}/kick`, { message }),
-  execute: (id: string, command: string) =>
-    apiPost(`/api/player/${id}/command`, { command }),
-  sendTaskGroup: (id: string, taskGroup: string) =>
-    apiPost(`/api/player/${id}/connect`, { taskGroup }),
+  execute: (id: string, command: string, isProxy: boolean) =>
+    apiPost(`/api/player/${id}/command`, { command, isProxy }),
+  sendTaskGroup: (
+    id: string,
+    target: string,
+    serverSelector: ServerSelector,
+    type: Type
+  ) =>
+    apiPost(`/api/player/${id}/connect`, {
+      target,
+      serverSelector,
+      type,
+    }),
   sendFallback: (id: string) =>
     apiPost(`/api/player/${id}/connectFallback`, {}),
-  sendService: (id: string, service: string) =>
-    apiPost(`/api/player/${id}/connectService`, { service }),
+  sendService: (id: string, target: string) =>
+    apiPost(`/api/player/${id}/connectService`, { target }),
   online: (params?: {
     limit?: number
     offset?: number
@@ -128,7 +138,7 @@ export const moduleApi = {
   updateLifecycle: (id: string, body: any) =>
     apiPost(`/api/module/${id}/lifecycle`, body),
   updateConfig: (id: string, body: any) =>
-    apiPost(`/api/module/${id}/config`, body),
+    apiPost(`/api/module/${id}/update`, body),
   uninstall: (id: string) => apiPost(`/api/module/${id}/uninstall`, {}),
   reload: () => apiPost(`/api/module/reload`, {}),
 }

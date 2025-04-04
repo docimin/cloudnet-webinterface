@@ -11,8 +11,8 @@ import {
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-import { sendMessage } from '@/utils/actions/players/sendMessage'
 import { toast } from 'sonner'
+import { playerApi } from '@/lib/client-api'
 
 export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
   const [message, setMessage] = useState<string>('')
@@ -21,7 +21,10 @@ export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
   const handleSend = async (event: any) => {
     event.preventDefault()
     try {
-      await sendMessage(player.networkPlayerProxyInfo.uniqueId, message)
+      await playerApi.sendMessage(
+        player.networkPlayerProxyInfo.uniqueId,
+        message
+      )
       toast.success('Message has been sent')
     } catch (error) {
       toast.error('Failed to send message')

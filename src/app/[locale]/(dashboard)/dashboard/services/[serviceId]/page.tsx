@@ -6,7 +6,6 @@ import {
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { formatBytes } from '@/components/formatBytes'
-import { getService } from '@/utils/server-api/services/getService'
 import PageLayout from '@/components/pageLayout'
 import { Label } from '@/components/ui/label'
 import { Textarea } from '@/components/ui/textarea'
@@ -15,6 +14,8 @@ import NoAccess from '@/components/static/noAccess'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import ServiceConsole from '@/components/console'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import { serverServiceApi } from '@/lib/server-api'
+import DoesNotExist from '@/components/static/doesNotExist'
 
 export const runtime = 'edge'
 
@@ -23,9 +24,7 @@ export default async function UserPage(props) {
 
   const { serviceId } = params
 
-  const service: Service = await getService(serviceId)
-  const serviceConfigData = JSON.stringify(service, null, 2)
-  const permissions: any = await getPermissions()
+  const permissions = await getPermissions()
 
   const requiredPermissions = [
     'cloudnet_rest:service_read',
@@ -63,6 +62,14 @@ export default async function UserPage(props) {
   if (!hasPermissions) {
     return <NoAccess />
   }
+
+  let service: Service | null = null
+  try {
+    service = await serverServiceApi.get(serviceId)
+  } catch {
+    return <DoesNotExist name={'Service'} />
+  }
+  const serviceConfigData = JSON.stringify(service, null, 2)
 
   const stats = [
     {

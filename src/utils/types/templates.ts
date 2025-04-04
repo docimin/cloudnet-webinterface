@@ -1,4 +1,4 @@
-export interface FileType {
+interface FileType {
   path: string
   name: string
   directory: boolean

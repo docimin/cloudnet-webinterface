@@ -18,11 +18,14 @@ export default function Client() {
   const router = useRouter()
 
   useEffect(() => {
-    authApi.checkToken().then((response) => {
-      if (response.status === 200) {
-        router.push('/dashboard')
-      }
-    })
+    authApi
+      .checkToken()
+      .then((response) => {
+        if (response.status === 200) {
+          router.push('/dashboard')
+        }
+      })
+      .catch(() => {})
   }, [router])
 
   const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {

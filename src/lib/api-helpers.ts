@@ -14,12 +14,7 @@ export async function checkPermissions(
 ): Promise<ApiResponse | null> {
   const cookies = await getCookies()
   const perms = cookies['permissions']
-  console.log('Raw permissions:', perms)
-  const decodedPerms = perms ? decodeURIComponent(perms) : ''
-  console.log('Decoded permissions:', decodedPerms)
   const permissions = perms ? JSON.parse(decodeURIComponent(perms)) : []
-  console.log('Parsed permissions:', permissions)
-  console.log('Required permissions:', requiredPermissions)
 
   if (
     !requiredPermissions.some((permission) => permissions.includes(permission))

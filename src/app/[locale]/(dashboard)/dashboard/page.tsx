@@ -1,37 +1,63 @@
 import PageLayout from '@/components/pageLayout'
 import { UsersIcon } from 'lucide-react'
-import { getNumberOnlinePlayers } from '@/utils/server-api/players/getNumberOnlinePlayers'
-import { getTasks } from '@/utils/server-api/tasks/getTasks'
-import { getNumberRegisteredPlayers } from '@/utils/server-api/players/getNumberRegisteredPlayers'
-import { getNodes } from '@/utils/server-api/nodes/getNodes'
 import { getLocalTemplates } from '@/utils/server-api/templates/getLocalTemplates'
 import { getS3Templates } from '@/utils/server-api/templates/getS3Templates'
-import { getServices } from '@/utils/server-api/services/getServices'
 import { getSFTPTemplates } from '@/utils/server-api/templates/getSFTPTemplates'
-import { getStorages } from '@/utils/server-api/templates/getStorages'
-import { getGroups } from '@/utils/server-api/groups/getGroups'
-import { getLoadedModules } from '@/utils/server-api/modules/getLoadedModules'
-import { getUsers } from '@/utils/server-api/users/getUsers'
 import { DashboardCard } from '@/components/dashboardCard'
 import Link from 'next/link'
 import AutoRefresh from '@/components/autoRefresh'
+import {
+  serverPlayerApi,
+  serverNodeApi,
+  serverModuleApi,
+  serverGroupApi,
+  serverTaskApi,
+  serverServiceApi,
+  serverUserApi,
+  serverStorageApi,
+} from '@/lib/server-api'
+import { Modules } from '@/utils/types/modules'
+import { NodesType } from '@/utils/types/nodes'
+import { TasksType } from '@/utils/types/tasks'
 
 export const runtime = 'edge'
 
-export default async function DashboardPage(props) {
-  const params = await props.params
+export default async function DashboardPage() {
+  let onlinePlayers: OnlinePlayersCount = { onlineCount: 0 }
+  let registeredPlayers: RegisteredPlayersCount = { registeredCount: 0 }
+  let nodes: NodesType = { nodes: [] }
+  let availableModules: Modules = { modules: [] }
+  let groups: GroupsType = { groups: [] }
+  let totalTasks: TasksType = { tasks: [] }
+  let services: Services = { services: [] }
+  let users: Users = { users: [] }
+  let templateStorages: Storages = { storages: [] }
 
-  const { locale } = params
-
-  const onlinePlayers = await getNumberOnlinePlayers()
-  const registeredPlayers = await getNumberRegisteredPlayers()
-  const nodes = await getNodes()
-  const availableModules = await getLoadedModules()
-  const groups = await getGroups()
-  const totalTasks = await getTasks()
-  const templateStorages = await getStorages()
-  const services = await getServices()
-  const users = await getUsers()
+  try {
+    ;[
+      onlinePlayers,
+      registeredPlayers,
+      nodes,
+      availableModules,
+      groups,
+      totalTasks,
+      services,
+      users,
+      templateStorages,
+    ] = await Promise.all([
+      serverPlayerApi.onlineAmount().catch(() => ({ onlineCount: 0 })),
+      serverPlayerApi.registeredAmount().catch(() => ({ registeredCount: 0 })),
+      serverNodeApi.list().catch(() => ({ nodes: [] })),
+      serverModuleApi.getAvailable().catch(() => ({ modules: [] })),
+      serverGroupApi.list().catch(() => ({ groups: [] })),
+      serverTaskApi.list().catch(() => ({ tasks: [] })),
+      serverServiceApi.list().catch(() => ({ services: [] })),
+      serverUserApi.list().catch(() => ({ users: [] })),
+      serverStorageApi.getStorages().catch(() => ({ storages: [] })),
+    ])
+  } catch (error) {
+    console.error('Error fetching dashboard data:', error)
+  }
 
   let totalTemplates = 0
   if (templateStorages?.storages?.includes('local')) {

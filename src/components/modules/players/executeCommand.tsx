@@ -18,7 +18,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { executeCommand } from '@/utils/actions/commands/executeCommand'
+import { playerApi } from '@/lib/client-api'
 import { toast } from 'sonner'
 
 export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
@@ -29,16 +29,10 @@ export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
   const handleSend = async (event: any) => {
     event.preventDefault()
 
-    const requiredPermissions = [
-      'cloudnet_bridge:player_write',
-      'cloudnet_bridge:player_disconnect',
-      'global:admin',
-    ]
-
-    const data = await executeCommand(
-      `/player/online/${player.networkPlayerProxyInfo.uniqueId}/command?redirectToServer=${isProxy ? 'false' : 'true'}`,
+    const data = await playerApi.execute(
+      player.networkPlayerProxyInfo.uniqueId,
       command,
-      requiredPermissions
+      isProxy
     )
 
     if (data) {

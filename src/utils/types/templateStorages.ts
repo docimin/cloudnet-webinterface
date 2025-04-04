@@ -1,12 +1,12 @@
-export interface Storages {
+interface Storages {
   storages: string[]
 }
 
-export interface TemplatesList {
+interface TemplatesList {
   templates: Templates[]
 }
 
-export interface Templates {
+interface Templates {
   prefix: string
   name: string
   storage: string

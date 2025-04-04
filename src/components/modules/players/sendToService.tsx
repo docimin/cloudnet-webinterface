@@ -15,30 +15,29 @@ import {
   SelectContent,
   SelectGroup,
   SelectItem,
-  SelectLabel,
   SelectTrigger,
   SelectValue,
 } from '@/components/ui/select'
-import { connectPlayerToService } from '@/utils/actions/players/connectPlayerToService'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
-import { connectPlayerToTaskOrGroup } from '@/utils/actions/players/connectPlayerToTaskOrGroup'
+import { playerApi } from '@/lib/client-api'
 
 export default function SendToService({ player }: { player: OnlinePlayer }) {
   const [dialogOpen, setDialogOpen] = useState(false)
   const [target, setTarget] = useState('')
-  const [type, setType] = useState('service')
-  const [serverSelector, setServerSelector] = useState('')
+  const [type, setType] = useState<Type>('service')
+  const [serverSelector, setServerSelector] =
+    useState<ServerSelector>('HIGHEST_PLAYERS')
 
   const handleSend = async () => {
     if (type === 'service') {
-      await connectPlayerToService(
+      await playerApi.sendService(
         player.networkPlayerProxyInfo.uniqueId,
         target
       )
       toast.success('Player sent to service')
     } else if (type === 'task' || type === 'group') {
-      await connectPlayerToTaskOrGroup(
+      await playerApi.sendTaskGroup(
         player.networkPlayerProxyInfo.uniqueId,
         target,
         serverSelector,

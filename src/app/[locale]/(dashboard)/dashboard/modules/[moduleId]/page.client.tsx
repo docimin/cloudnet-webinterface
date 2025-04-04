@@ -31,7 +31,7 @@ export default function ModuleClientPage({
       JSON.parse(moduleConfigData)
     )
 
-    if (response.status === 200) {
+    if (response.status === 204) {
       toast.success('Module config updated successfully')
     }
   }

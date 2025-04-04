@@ -1,20 +1,19 @@
 import PageLayout from '@/components/pageLayout'
-import { Nodes } from '@/utils/types/nodes'
-import { getNode } from '@/utils/server-api/nodes/getNode'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
 import NodeClientPage from '@/app/[locale]/(dashboard)/dashboard/nodes/[nodeId]/page.client'
 import AutoRefresh from '@/components/autoRefresh'
+import { serverNodeApi } from '@/lib/server-api'
 
 export const runtime = 'edge'
 
 export default async function NodePage(props) {
   const params = await props.params
 
-  const { locale, nodeId } = params
+  const { nodeId } = params
 
-  const node: Nodes = await getNode(nodeId)
+  const node = await serverNodeApi.get(nodeId)
   const permissions: any = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:cluster_read',

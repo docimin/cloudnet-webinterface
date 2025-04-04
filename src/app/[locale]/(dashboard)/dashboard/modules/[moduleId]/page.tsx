@@ -3,19 +3,18 @@ import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import { Module } from '@/utils/types/modules'
 import { getModule } from '@/utils/server-api/modules/getModule'
 import NoAccess from '@/components/static/noAccess'
-import { getModuleConfig } from '@/utils/server-api/modules/getModuleConfig'
 import DoesNotExist from '@/components/static/doesNotExist'
-import ModuleClientPage from '@/app/[locale]/(dashboard)/dashboard/modules/[moduleId]/page.client'
+import ModuleClientPage from './page.client'
+import { serverModuleApi } from '@/lib/server-api'
 
 export const runtime = 'edge'
 
 export default async function NodePage(props) {
   const params = await props.params
 
-  const { locale, moduleId } = params
+  const { moduleId } = params
 
   const moduleSingle: Module = await getModule(moduleId)
-  let moduleConfig = {}
   const permissions: any = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:module_read',
@@ -33,8 +32,9 @@ export default async function NodePage(props) {
     permissions.includes(permission)
   )
 
+  let moduleConfig = {}
   if (hasConfigPermissions) {
-    moduleConfig = await getModuleConfig(moduleId)
+    moduleConfig = await serverModuleApi.getConfig(moduleId)
   }
 
   // check if user has required permissions

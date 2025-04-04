@@ -1,10 +1,12 @@
 import { cookies } from 'next/headers'
 import { Task, TasksType } from '@/utils/types/tasks'
 import { Module, Modules } from '@/utils/types/modules'
+import { Nodes, NodesType } from '@/utils/types/nodes'
 
 export type ApiResponse<T = any, K extends keyof T = keyof T> = {
   [P in K]: T[P]
 } & {
+  data?: T
   status?: number
   title?: string
   type?: string
@@ -78,12 +80,8 @@ export async function serverApiPost<T = any>(
 
 // User API
 export const serverUserApi = {
-  list: () => serverApiGet('/api/user/list'),
-  get: (id: string) => serverApiGet(`/api/user/${id}/get`),
-  create: (body: any) => serverApiPost('/api/user/create', body),
-  update: (id: string, body: any) =>
-    serverApiPost(`/api/user/${id}/update`, body),
-  delete: (id: string) => serverApiPost(`/api/user/${id}/delete`, {}),
+  list: () => serverApiGet<Users>('/user'),
+  get: (id: string) => serverApiGet<User>(`/user/${id}`),
 }
 
 // Auth API
@@ -97,72 +95,55 @@ export const serverAuthApi = {
 
 // Player API
 export const serverPlayerApi = {
-  sendMessage: (id: string, message: string) =>
-    serverApiPost(`/api/player/${id}/message`, { message }),
-  kick: (id: string, message: string) =>
-    serverApiPost(`/api/player/${id}/kick`, { message }),
-  execute: (id: string, command: string) =>
-    serverApiPost(`/api/player/${id}/command`, { command }),
-  sendTaskGroup: (id: string, taskGroup: string) =>
-    serverApiPost(`/api/player/${id}/connect`, { taskGroup }),
-  sendFallback: (id: string) =>
-    serverApiPost(`/api/player/${id}/connectFallback`, {}),
-  sendService: (id: string, service: string) =>
-    serverApiPost(`/api/player/${id}/connectService`, { service }),
   online: (params?: {
     limit?: number
     offset?: number
     sort?: 'asc' | 'desc'
-  }) => serverApiGet('/api/player/online', params),
-  onlineAmount: () => serverApiGet('/api/player/online/amount'),
+  }) => serverApiGet<OnlinePlayersSchema>('/player/online', params),
+  onlineAmount: () => serverApiGet<OnlinePlayersCount>('/player/onlineCount'),
+  get: (id: string) => serverApiGet<OnlinePlayer>(`/player/online/${id}`),
+  registeredAmount: () =>
+    serverApiGet<RegisteredPlayersCount>('/player/registeredCount'),
 }
 
 // Module API
 export const serverModuleApi = {
-  getLoaded: () => serverApiGet<Modules>('/api/module/loaded'),
-  getAvailable: () => serverApiGet<Modules>('/api/module/available'),
-  getInfo: (id: string) => serverApiGet<Module>(`/api/module/${id}`),
-  getConfig: (id: string) => serverApiGet<Module>(`/api/module/${id}/config`),
-  present: () => serverApiGet<Modules>('/api/module/present'),
-  updateLifecycle: (id: string, body: any) =>
-    serverApiPost(`/api/module/${id}/lifecycle`, body),
-  updateConfig: (id: string, body: any) =>
-    serverApiPost(`/api/module/${id}/config`, body),
-  uninstall: (id: string) => serverApiPost(`/api/module/${id}/uninstall`, {}),
-  reload: () => serverApiPost(`/api/module/reload`, {}),
+  getLoaded: () => serverApiGet<Modules>('/module/loaded'),
+  getAvailable: () => serverApiGet<Modules>('/module/available'),
+  getInfo: (id: string) => serverApiGet<Module>(`/module/${id}`),
+  getConfig: (id: string) => serverApiGet<Module>(`/module/${id}/config`),
+  present: () => serverApiGet<Modules>('/module/present'),
 }
 
 // Task API
 export const serverTaskApi = {
   list: () => serverApiGet<TasksType>('/task'),
   get: (id: string) => serverApiGet<Task>(`/task/${id}`),
-  update: (body: any) => serverApiPost('/task/update', body),
-  delete: (id: string) => serverApiPost(`/task/${id}/delete`, {}),
 }
 
 // Group API
 export const serverGroupApi = {
-  list: () => serverApiGet<GroupsType>('/api/group/list'),
-  get: (id: string) => serverApiGet<Group>(`/api/group/${id}/get`),
-  update: (body: any) => serverApiPost(`/api/group/update`, body),
-  delete: (id: string) => serverApiPost(`/api/group/${id}/delete`, {}),
+  list: () => serverApiGet<GroupsType>('/group'),
+  get: (id: string) => serverApiGet<Group>(`/group/${id}`),
 }
 
 // Service API
 export const serverServiceApi = {
-  list: () => serverApiGet<Service[]>('/api/service/list'),
-  get: (id: string) => serverApiGet<Service>(`/api/service/${id}/get`),
+  list: () => serverApiGet<Services>('/service'),
+  get: (id: string) => serverApiGet<Service>(`/service/${id}`),
   logLines: (id: string) =>
-    serverApiGet<ServiceLogCache>(`/api/service/${id}/logLines`),
-  delete: (id: string) => serverApiPost(`/api/service/${id}/delete`, {}),
-  execute: (id: string, command: string) =>
-    serverApiPost(`/api/service/${id}/command`, { command }),
+    serverApiGet<ServiceLogCache>(`/service/${id}/logLines`),
 }
 
 // Node API
 export const serverNodeApi = {
-  list: () => serverApiGet('/api/node/list'),
-  get: (id: string) => serverApiGet(`/api/node/${id}/get`),
-  update: (id: string, ip: string, port: string) =>
-    serverApiPost(`/api/node/${id}/update`, { ip, port }),
+  list: () => serverApiGet<NodesType>('/cluster'),
+  get: (id: string) => serverApiGet<Nodes>(`/cluster/${id}`),
+}
+
+// Template Storage API
+export const serverStorageApi = {
+  getStorages: () => serverApiGet<Storages>('/templateStorage'),
+  getTemplates: (id: string) =>
+    serverApiGet<TemplatesList>(`/templateStorage/${id}/templates`),
 }

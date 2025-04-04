@@ -58,3 +58,14 @@ interface OnlinePlayer {
 interface OnlinePlayersSchema {
   onlinePlayers: OnlinePlayer[]
 }
+
+interface RegisteredPlayersCount {
+  registeredCount: number
+}
+
+interface OnlinePlayersCount {
+  onlineCount: number
+}
+
+type Type = 'service' | 'task' | 'group'
+type ServerSelector = 'HIGHEST_PLAYERS' | 'LOWEST_PLAYERS' | 'RANDOM'

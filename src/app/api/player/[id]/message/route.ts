@@ -7,6 +7,8 @@ import {
 
 export const POST = createApiRoute(async (req, { params }) => {
   const { id } = await params
+  const { message } = await req.json()
+
   const requiredPermissions = [
     'cloudnet_bridge:player_write',
     'cloudnet_bridge:player_message',
@@ -20,11 +22,12 @@ export const POST = createApiRoute(async (req, { params }) => {
     })
   }
 
-  const body = await req.json()
   const response = await makeApiRequest(
-    `/player/online/${id}/message`,
+    `/player/online/${id}/sendChat`,
     'POST',
-    body
+    {
+      chatMessage: message,
+    }
   )
-  return NextResponse.json(response, { status: response.status })
+  return NextResponse.json(response)
 })

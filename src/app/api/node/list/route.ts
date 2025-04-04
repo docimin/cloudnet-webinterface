@@ -19,6 +19,6 @@ export const GET = createApiRoute(async (req) => {
     })
   }
 
-  const response = await makeApiRequest('/node', 'GET')
-  return NextResponse.json(response, { status: response.status })
+  const response = await makeApiRequest('/cluster', 'GET')
+  return NextResponse.json(response)
 })

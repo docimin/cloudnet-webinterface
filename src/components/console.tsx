@@ -4,6 +4,7 @@ import React, { useState, useRef, useEffect } from 'react'
 import { ChevronRight, Terminal } from 'lucide-react'
 import { authApi, serviceApi } from '@/lib/client-api'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
+import { toast } from 'sonner'
 
 interface ConsoleEntry {
   output: string
@@ -46,8 +47,12 @@ export default function ServiceConsole({
 
     const cachedLogLines = async () => {
       if (type === 'service' && serviceName) {
-        const cache = await serviceApi.logLines(serviceName)
-        setHistory(cache.data.lines.map((line) => ({ output: line })))
+        try {
+          const cache = (await serviceApi.logLines(serviceName)).data
+          setHistory(cache.lines.map((line) => ({ output: line })))
+        } catch (error) {
+          toast.error('An error occurred while fetching the log lines.')
+        }
       }
     }
 
@@ -77,6 +82,7 @@ export default function ServiceConsole({
       }
       socket.onerror = (event) => {
         console.error('WebSocket error:', event)
+        toast.error('An error occurred while connecting to the console.')
       }
     }
 

@@ -11,23 +11,19 @@ import {
 import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
-import { getListOnlinePlayers } from '@/utils/server-api/players/getListOnlinePlayers'
 import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 import AutoRefresh from '@/components/autoRefresh'
+import { serverPlayerApi } from '@/lib/server-api'
 
 export const runtime = 'edge'
 
-export default async function PlayersPage(props) {
-  const params = await props.params
-
-  const { locale } = params
-
-  const onlinePlayers: OnlinePlayersSchema = await getListOnlinePlayers(0)
-  const permissions: string[] = await getPermissions()
+export default async function PlayersPage() {
+  const onlinePlayers = await serverPlayerApi.online()
+  const permissions = await getPermissions()
   const requiredPermissions = [
-    'cloudnet_rest:user_read',
-    'cloudnet_rest:user_get_all',
+    'cloudnet_bridge:player_read',
+    'cloudnet_bridge:player_online_count',
     'global:admin',
   ]
 

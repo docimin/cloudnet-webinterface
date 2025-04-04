@@ -2,7 +2,6 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { User } from '@/utils/types/users'
 import { useState } from 'react'
 import MultipleSelector, { Option } from '@/components/ui/custom/multi-select'
 import { OPTIONS } from './options'
@@ -28,6 +27,8 @@ export default function UserClientPage({ user }: { user: User }) {
   const handleSave = async (event: any) => {
     event.preventDefault()
 
+    // Check if username is empty
+    // TODO: Use zod later
     if (username === '') {
       toast.error('Username cannot be empty.')
       return
@@ -39,7 +40,7 @@ export default function UserClientPage({ user }: { user: User }) {
       scopes: scopes.map((scope) => scope.value),
     }
     if (password !== '') {
-      // @ts-ignore
+      // @ts-expect-error: TODO: Use zod later
       body = { ...body, password: password }
     }
 

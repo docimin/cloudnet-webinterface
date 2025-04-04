@@ -8,8 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table'
-import { getNodes } from '@/utils/server-api/nodes/getNodes'
-import { NodesType } from '@/utils/types/nodes'
+import { serverNodeApi } from '@/lib/server-api'
 import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/user/getPermissions'
 import NoAccess from '@/components/static/noAccess'
@@ -18,12 +17,8 @@ import Link from 'next/link'
 
 export const runtime = 'edge'
 
-export default async function NodesPage(props) {
-  const params = await props.params
-
-  const { locale } = params
-
-  const nodes: NodesType = await getNodes()
+export default async function NodesPage() {
+  const nodes = await serverNodeApi.list()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:cluster_read',

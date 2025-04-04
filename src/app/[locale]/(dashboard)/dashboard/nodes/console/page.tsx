@@ -5,12 +5,8 @@ import ServiceConsole from '@/components/console'
 
 export const runtime = 'edge'
 
-export default async function NodeConsolePage(props) {
-  const params = await props.params
-
-  const { locale } = params
-
-  const permissions: any = await getPermissions()
+export default async function NodeConsolePage() {
+  const permissions = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:node_read',
     'cloudnet_rest:node_live_console',

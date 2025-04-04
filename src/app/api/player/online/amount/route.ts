@@ -19,6 +19,6 @@ export const GET = createApiRoute(async () => {
     })
   }
 
-  const response = await makeApiRequest('/player/online/amount', 'GET')
+  const response = await makeApiRequest('/player/onlineCount', 'GET')
   return NextResponse.json(response)
 })

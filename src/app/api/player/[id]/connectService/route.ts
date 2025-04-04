@@ -7,6 +7,8 @@ import {
 
 export const POST = createApiRoute(async (req, { params }) => {
   const { id } = await params
+  const { target } = await req.json()
+
   const requiredPermissions = [
     'cloudnet_bridge:player_write',
     'cloudnet_bridge:player_connect_service',
@@ -21,7 +23,7 @@ export const POST = createApiRoute(async (req, { params }) => {
   }
 
   const response = await makeApiRequest(
-    `/player/online/${id}/connectService`,
+    `/player/online/${id}/connectService?target=${encodeURIComponent(target)}`,
     'POST'
   )
   return NextResponse.json(response)
