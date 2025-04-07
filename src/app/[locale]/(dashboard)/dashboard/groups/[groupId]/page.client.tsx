@@ -35,7 +35,6 @@ export default function GroupClientPage({
       if (response) {
         toast.success('Group config updated successfully')
       }
-      // Proceed with the rest of your logic for a valid updatedGroup
     } catch (error) {
       toast.error('Invalid JSON format.')
     }
