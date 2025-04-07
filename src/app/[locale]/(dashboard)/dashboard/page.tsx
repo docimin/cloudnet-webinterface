@@ -30,6 +30,9 @@ export default async function DashboardPage() {
   let users: Users = { users: [] }
   let templateStorages: Storages = { storages: [] }
   let totalTemplates = 0
+  let localTemplates: { templates?: any[] } = { templates: [] }
+  let s3Templates: { templates?: any[] } = { templates: [] }
+  let sftpTemplates: { templates?: any[] } = { templates: [] }
 
   try {
     ;[
@@ -42,6 +45,9 @@ export default async function DashboardPage() {
       services,
       users,
       templateStorages,
+      localTemplates,
+      s3Templates,
+      sftpTemplates,
     ] = await Promise.all([
       serverPlayerApi.onlineAmount().catch(() => ({ onlineCount: 0 })),
       serverPlayerApi.registeredAmount().catch(() => ({ registeredCount: 0 })),
@@ -52,25 +58,15 @@ export default async function DashboardPage() {
       serverServiceApi.list().catch(() => ({ services: [] })),
       serverUserApi.list().catch(() => ({ users: [] })),
       serverStorageApi.getStorages().catch(() => ({ storages: [] })),
-      serverStorageApi
-        .getLocalTemplates()
-        .catch(() => ({ templates: [] }))
-        .then((templates) => {
-          totalTemplates += templates?.templates?.length
-        }),
-      serverStorageApi
-        .getS3Templates()
-        .catch(() => ({ templates: [] }))
-        .then((templates) => {
-          totalTemplates += templates?.templates?.length
-        }),
-      serverStorageApi
-        .getSFTPTemplates()
-        .catch(() => ({ templates: [] }))
-        .then((templates) => {
-          totalTemplates += templates?.templates?.length
-        }),
+      serverStorageApi.getLocalTemplates().catch(() => ({ templates: [] })),
+      serverStorageApi.getS3Templates().catch(() => ({ templates: [] })),
+      serverStorageApi.getSFTPTemplates().catch(() => ({ templates: [] })),
     ])
+
+    totalTemplates =
+      (localTemplates?.templates?.length || 0) +
+      (s3Templates?.templates?.length || 0) +
+      (sftpTemplates?.templates?.length || 0)
   } catch (error) {
     console.error('Error fetching dashboard data:', error)
   }
