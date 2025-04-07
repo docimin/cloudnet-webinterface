@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { updateNode } from '@/utils/actions/nodes/updateNode'
+import { nodeApi } from '@/lib/client-api'
 import {
   CableIcon,
   DatabaseZapIcon,
@@ -23,14 +23,17 @@ export default function NodeClientPage({
     event.preventDefault()
     const formData = new FormData(event.target)
     const data = Object.fromEntries(formData.entries())
-    if (data.IP === '' || data.Port === '') {
+    const ip = data.IP?.toString() || ''
+    const port = data.Port?.toString() || ''
+
+    if (ip === '' || port === '') {
       toast.error('IP and Port are required to update node')
       return
     }
-    const response = await updateNode(nodeId, data.IP, data.Port)
+    const response = await nodeApi.update(nodeId, ip, port)
     if (response.status === 200) {
       toast.success('Node updated successfully')
-    } else if (response.status === 500) {
+    } else {
       toast.error('Failed to update node')
     }
   }

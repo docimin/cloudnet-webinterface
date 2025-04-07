@@ -2,12 +2,11 @@
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
-import { User } from '@/utils/types/users'
 import { useState } from 'react'
-import { updateUser } from '@/utils/actions/users/updateUser'
 import MultipleSelector, { Option } from '@/components/ui/custom/multi-select'
 import { OPTIONS } from './options'
 import { toast } from 'sonner'
+import { userApi } from '@/lib/client-api'
 
 export default function UserClientPage({ user }: { user: User }) {
   const [username, setUsername] = useState(user.username)
@@ -28,6 +27,8 @@ export default function UserClientPage({ user }: { user: User }) {
   const handleSave = async (event: any) => {
     event.preventDefault()
 
+    // Check if username is empty
+    // TODO: Use zod later
     if (username === '') {
       toast.error('Username cannot be empty.')
       return
@@ -39,11 +40,11 @@ export default function UserClientPage({ user }: { user: User }) {
       scopes: scopes.map((scope) => scope.value),
     }
     if (password !== '') {
-      // @ts-ignore
+      // @ts-expect-error: TODO: Use zod later
       body = { ...body, password: password }
     }
 
-    const response = await updateUser(user.id, body)
+    const response = await userApi.update(user.id, body)
 
     if (response.status === 200) {
       toast.success('User updated successfully')

@@ -93,7 +93,7 @@ export default function SidebarResizable({
                   className={'rounded-full'}
                 />
                 <span className={cn('ml-2', isCollapsed && 'hidden')}>
-                  ${process.env.NEXT_PUBLIC_NAME || 'CloudNet'}
+                  {process.env.NEXT_PUBLIC_NAME || 'CloudNet'}
                 </span>
               </div>
               <Separator />

@@ -1,4 +1,4 @@
-import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import { getPermissions } from '@/utils/server-api/getPermissions'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
 
 export const DashboardCard = async ({ title, icon, value, permissions }) => {

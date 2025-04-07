@@ -51,6 +51,7 @@ export default function RootLayout({ children }) {
                 'border border-success dark:text-foreground text-background bg-gradient-to-r from-success via-black to-black items-center',
               loading:
                 'border dark:border-muted dark:text-foreground text-background bg-gradient-to-r from-loading via-black to-black items-center',
+              info: 'border dark:border-muted dark:text-foreground text-background bg-gradient-to-r from-loading via-black to-black items-center',
             },
           }}
           icons={{

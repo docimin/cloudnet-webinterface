@@ -1,7 +1,7 @@
 import { cookies } from 'next/headers'
 import SidebarResizable from '@/components/header/header-resizable'
 import MobileNav from '@/components/header/mobile-nav'
-import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import { getPermissions } from '@/utils/server-api/getPermissions'
 
 export default async function HeaderServer({
   children,

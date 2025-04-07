@@ -52,7 +52,7 @@ export default function MobileNav({
               className={'rounded-full'}
             />
             <span className={'ml-2'}>
-              ${process.env.NEXT_PUBLIC_NAME || 'CloudNet'}
+              {process.env.NEXT_PUBLIC_NAME || 'CloudNet'}
             </span>
           </div>
           <Sheet onOpenChange={(open) => setIsOpen(open)} open={isOpen}>

@@ -2,12 +2,10 @@
 import { Button } from '@/components/ui/button'
 import { Textarea } from '@/components/ui/textarea'
 import React, { useEffect, useState } from 'react'
-import { getFile } from '@/utils/server-api/templates/getFile'
-import { updateFile } from '@/utils/actions/templates/updateFile'
 import * as Sentry from '@sentry/nextjs'
 import { useRouter } from 'next/navigation'
-import { deleteFile } from '@/utils/actions/templates/deleteFile'
 import { toast } from 'sonner'
+import { templateStorageApi } from '@/lib/client-api'
 
 export default function FileEditor({ params }) {
   const [data, setData] = useState<string>('')
@@ -15,13 +13,13 @@ export default function FileEditor({ params }) {
 
   useEffect(() => {
     const fetchData = async () => {
-      const fileData = await getFile(
+      const fileData = await templateStorageApi.getFile(
         params.storageId,
         params.storagePrefix,
         params.templateId,
         params.fileId
       )
-      setData(fileData)
+      setData(fileData.data)
     }
 
     fetchData().then()
@@ -30,7 +28,7 @@ export default function FileEditor({ params }) {
   const handleSave = async () => {
     try {
       // Validate if the data is valid JSON
-      await updateFile(
+      await templateStorageApi.updateFile(
         params.storageId,
         params.storagePrefix,
         params.templateId,
@@ -51,7 +49,7 @@ export default function FileEditor({ params }) {
   }
 
   const handleDelete = async () => {
-    await deleteFile(
+    await templateStorageApi.deleteFile(
       params.storageId,
       params.storagePrefix,
       params.templateId,

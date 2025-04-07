@@ -1,12 +1,12 @@
 'use client'
 import { useEffect } from 'react'
-import { checkToken } from '@/utils/actions/user/jwt'
+import { authApi } from '@/lib/client-api'
 import { useRouter } from 'next/navigation'
 
 export default function CheckAuth({ children }) {
   const router = useRouter()
   useEffect(() => {
-    checkToken().then((response) => {
+    authApi.checkToken().then((response) => {
       if (response.status === 401) {
         router.push('/')
       }

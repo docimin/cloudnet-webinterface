@@ -1,4 +1,4 @@
-export interface User {
+interface User {
   id: string
   username: string
   scopes: string[]
@@ -8,6 +8,6 @@ export interface User {
   modifiedBy: string
 }
 
-export interface Users {
+interface Users {
   users: User[]
 }

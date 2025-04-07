@@ -9,23 +9,18 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import { getPermissions } from '@/utils/server-api/getPermissions'
 import NoAccess from '@/components/static/noAccess'
-import { getUsers } from '@/utils/server-api/users/getUsers'
-import { Users } from '@/utils/types/users'
 import { formatDate } from '@/components/formatDate'
 import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
+import { serverUserApi } from '@/lib/server-api'
 
 export const runtime = 'edge'
 
-export default async function UsersPage(props) {
-  const params = await props.params
-
-  const { locale } = params
-
-  const users: Users = await getUsers()
-  const permissions: string[] = await getPermissions()
+export default async function UsersPage() {
+  const users: Users = await serverUserApi.list()
+  const permissions = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:user_read',
     'cloudnet_rest:user_get_all',

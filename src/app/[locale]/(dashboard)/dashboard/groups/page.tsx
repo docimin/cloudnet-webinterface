@@ -9,21 +9,17 @@ import {
   TableRow,
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
-import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import { getPermissions } from '@/utils/server-api/getPermissions'
 import NoAccess from '@/components/static/noAccess'
-import { getGroups } from '@/utils/server-api/groups/getGroups'
 import NoRecords from '@/components/static/noRecords'
 import CreateGroup from '@/components/modules/groups/createGroup'
 import Link from 'next/link'
+import { serverGroupApi } from '@/lib/server-api'
 
 export const runtime = 'edge'
 
-export default async function GroupsPage(props) {
-  const params = await props.params
-
-  const { locale } = params
-
-  const groups: GroupsType = await getGroups()
+export default async function GroupsPage() {
+  const groups = await serverGroupApi.list()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:group_read',

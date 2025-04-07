@@ -1,4 +1,4 @@
-interface Task {
+export interface Task {
   properties: Record<string, unknown>
   templates: Template[]
   deployments: Deployment[]
@@ -20,7 +20,7 @@ interface Task {
   minServiceCount: number
 }
 
-interface Template {
+export interface Template {
   prefix: string
   name: string
   storage: string
@@ -28,19 +28,19 @@ interface Template {
   alwaysCopyToStaticServices: boolean
 }
 
-interface Deployment {
+export interface Deployment {
   properties: Record<string, unknown>
   template: Template
   excludes: string[]
 }
 
-interface Include {
+export interface Include {
   properties: Record<string, unknown>
   url: string
   destination: string
 }
 
-interface ProcessConfiguration {
+export interface ProcessConfiguration {
   environment: string
   maxHeapMemorySize: number
   jvmOptions: string[]
@@ -48,6 +48,6 @@ interface ProcessConfiguration {
   environmentVariables: Record<string, string>
 }
 
-interface TasksType {
+export interface TasksType {
   tasks: Task[]
 }

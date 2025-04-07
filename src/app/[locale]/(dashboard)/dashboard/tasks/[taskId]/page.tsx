@@ -1,5 +1,5 @@
 import PageLayout from '@/components/pageLayout'
-import { getPermissions } from '@/utils/server-api/user/getPermissions'
+import { getPermissions } from '@/utils/server-api/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
 import {
@@ -12,19 +12,18 @@ import {
   SplitIcon,
 } from 'lucide-react'
 import { DashboardCard } from '@/components/dashboardCard'
-import { getTask } from '@/utils/server-api/tasks/getTask'
-import TaskClientPage from '@/app/[locale]/(dashboard)/dashboard/tasks/[taskId]/page.client'
+import TaskClientPage from './page.client'
+import { serverTaskApi } from '@/lib/server-api'
+import { Task } from '@/utils/types/tasks'
 
 export const runtime = 'edge'
 
 export default async function UserPage(props) {
   const params = await props.params
 
-  const { locale, taskId } = params
+  const { taskId } = params
 
-  const task: Task = await getTask(taskId)
-  const taskConfigData = JSON.stringify(task, null, 2)
-  const permissions: any = await getPermissions()
+  const permissions = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:task_read',
     'cloudnet_rest:task_get',
@@ -56,9 +55,13 @@ export default async function UserPage(props) {
     return <NoAccess />
   }
 
-  if (!task?.name) {
+  let task: Task | null = null
+  try {
+    task = await serverTaskApi.get(taskId)
+  } catch {
     return <DoesNotExist name={'Task'} />
   }
+  const taskConfigData = JSON.stringify(task, null, 2)
 
   return (
     <PageLayout title={`Edit ${task?.name}`}>
