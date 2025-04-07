@@ -6,6 +6,8 @@ import {
 } from '@/lib/api-helpers'
 
 export const GET = createApiRoute(async (req, { params }) => {
+  const { id } = await params
+
   const requiredPermissions = [
     'cloudnet_rest:group_read',
     'cloudnet_rest:group_get',
@@ -19,6 +21,6 @@ export const GET = createApiRoute(async (req, { params }) => {
     })
   }
 
-  const response = await makeApiRequest(`/group/${params.id}`, 'GET')
-  return NextResponse.json(response, { status: response.status })
+  const response = await makeApiRequest(`/group/${id}`, 'GET')
+  return NextResponse.json(response)
 })

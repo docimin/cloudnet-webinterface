@@ -5,7 +5,7 @@ import {
   createApiRoute,
 } from '@/lib/api-helpers'
 
-export const GET = createApiRoute(async (req) => {
+export const GET = createApiRoute(async () => {
   const requiredPermissions = [
     'cloudnet_rest:user_read',
     'cloudnet_rest:user_list',
@@ -20,5 +20,5 @@ export const GET = createApiRoute(async (req) => {
   }
 
   const response = await makeApiRequest('/user', 'GET')
-  return NextResponse.json(response, { status: response.status })
+  return NextResponse.json(response)
 })
