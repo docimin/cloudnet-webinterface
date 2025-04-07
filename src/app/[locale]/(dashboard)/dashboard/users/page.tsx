@@ -15,6 +15,7 @@ import { formatDate } from '@/components/formatDate'
 import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 import { serverUserApi } from '@/lib/server-api'
+import CreateUser from '@/components/modules/users/createUser'
 
 export const runtime = 'edge'
 
@@ -42,6 +43,7 @@ export default async function UsersPage() {
 
   return (
     <PageLayout title={'Users'}>
+      <CreateUser />
       <Table>
         <TableCaption>A list of your users.</TableCaption>
         <TableHeader>

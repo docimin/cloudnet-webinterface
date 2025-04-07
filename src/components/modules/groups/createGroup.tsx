@@ -8,23 +8,38 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
-import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
-
+import { useForm } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { z } from 'zod'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { groupApi } from '@/lib/client-api'
+import { Form } from '@/components/ui/form'
+import InputField from '@/components/fields/InputField'
+
+const groupSchema = z.object({
+  name: z.string().min(1, 'Name is required'),
+  jvmOptions: z.array(z.string()).default([]),
+  processParameters: z.array(z.string()).default([]),
+  environmentVariables: z.record(z.string()).default({}),
+  targetEnvironments: z.array(z.string()).default([]),
+  templates: z.array(z.string()).default([]),
+  deployments: z.array(z.string()).default([]),
+  includes: z.array(z.string()).default([]),
+  properties: z.record(z.string()).default({}),
+})
+
+type GroupFormData = z.infer<typeof groupSchema>
 
 export default function CreateGroup() {
   const router = useRouter()
-  const [name, setName] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
 
-  const handleSubmit = async (event: any) => {
-    event.preventDefault()
-    const data = await groupApi.update({
-      name: name,
+  const form = useForm<GroupFormData>({
+    resolver: zodResolver(groupSchema),
+    defaultValues: {
+      name: '',
       jvmOptions: [],
       processParameters: [],
       environmentVariables: {},
@@ -33,14 +48,23 @@ export default function CreateGroup() {
       deployments: [],
       includes: [],
       properties: {},
-    })
-    if (data) {
-      toast.success('Group has been created')
-    } else {
+    },
+  })
+
+  const onSubmit = async (data: GroupFormData) => {
+    try {
+      const response = await groupApi.update(data)
+      if (response) {
+        toast.success('Group has been created')
+        form.reset()
+        setDialogOpen(false)
+        router.refresh()
+      } else {
+        toast.error('Failed to create group')
+      }
+    } catch (error) {
       toast.error('Failed to create group')
     }
-    router.refresh()
-    setDialogOpen(false)
   }
 
   return (
@@ -54,15 +78,18 @@ export default function CreateGroup() {
           <DialogDescription className={'pb-4'}>
             Are you sure you want to add a new group?
           </DialogDescription>
-          <Label htmlFor={'name'}>Name</Label>
-          <Input
-            id={'name'}
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-            type={'text'}
-          />
+          <Form {...form}>
+            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+              <InputField
+                label="Name"
+                description="Enter the name of the group"
+                placeholder="Enter group name"
+                field={form.register('name')}
+              />
+              <Button type="submit">Create</Button>
+            </form>
+          </Form>
         </DialogHeader>
-        <Button onClick={handleSubmit}>Create</Button>
       </DialogContent>
     </Dialog>
   )

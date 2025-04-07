@@ -13,20 +13,43 @@ export type ApiResponse<T = any, K extends keyof T = keyof T> = {
   detail?: string
 }
 
+class ApiError extends Error {
+  constructor(
+    public status: number,
+    public title: string,
+    public detail: string
+  ) {
+    super(detail)
+    this.name = 'ApiError'
+  }
+}
+
 async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
   if (!response.ok) {
-    throw new Error(`HTTP error! status: ${response.status}`)
+    throw new ApiError(
+      response.status,
+      response.statusText,
+      response.statusText
+    )
   }
 
   const text = await response.text()
   if (!text) {
-    throw new Error('Empty response received')
+    throw new ApiError(
+      response.status,
+      response.statusText,
+      response.statusText
+    )
   }
 
   try {
     return JSON.parse(text)
   } catch (e) {
-    throw new Error(`Failed to parse JSON response: ${text}`)
+    throw new ApiError(
+      response.status,
+      response.statusText,
+      response.statusText
+    )
   }
 }
 
