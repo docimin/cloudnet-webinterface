@@ -123,8 +123,8 @@ importers:
         specifier: ^8.6.0
         version: 8.6.0(react@19.0.0)
       gt-next:
-        specifier: ^5.2.19
-        version: 5.2.19(next@15.3.0(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+        specifier: ^5.2.22
+        version: 5.2.22(next@15.3.0(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       import-in-the-middle:
         specifier: ^1.13.1
         version: 1.13.1
@@ -2640,15 +2640,15 @@ packages:
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
-  gt-next@5.2.19:
-    resolution: {integrity: sha512-CcEU0Hi10X4lnDTGJT+KGZ8aqz7dvUQ+JIKOZXlm/McHiuvUiwr/Z14YmqfxlRIz//+c9OSMf6pf76NzWSMxBg==}
+  gt-next@5.2.22:
+    resolution: {integrity: sha512-nNeBHsYjZJcfF4C1ZkSUWZY1Nvy+U4zkj8k0DIYFs8A3hcvFSOXWfycUsYK/VMRNljzkDpLCwUmm+aWqjFpMTA==}
     peerDependencies:
       next: '>=13.0.0 <15.2.1 || >15.2.2'
       react: '>=16.8.0 <20.0.0'
       react-dom: '>=16.8.0 <20.0.0'
 
-  gt-react@9.2.14:
-    resolution: {integrity: sha512-opNEb6zCOfCGAkxzDWKO0igM8w+gNvK0WBo2EGUp+eo6KD23PzFfDlk+5xO8HDjQWIx+b9oW8dwEXkcNj/sukQ==}
+  gt-react@9.2.16:
+    resolution: {integrity: sha512-MxZQlTL/6e1Icx9iCOPCKOaifnX6QMWuj2YEgAnPF6inJzUhsa5u65lHIPEjbumerz+l0VjqmoUUcUUH22yRMg==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -6689,16 +6689,16 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  gt-next@5.2.19(next@15.3.0(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  gt-next@5.2.22(next@15.3.0(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0))(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       '@generaltranslation/supported-locales': 2.0.7
       generaltranslation: 6.2.2
-      gt-react: 9.2.14(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
+      gt-react: 9.2.16(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       next: 15.3.0(@babel/core@7.26.10)(@opentelemetry/api@1.9.0)(react-dom@19.0.0(react@19.0.0))(react@19.0.0)
       react: 19.0.0
       react-dom: 19.0.0(react@19.0.0)
 
-  gt-react@9.2.14(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
+  gt-react@9.2.16(react-dom@19.0.0(react@19.0.0))(react@19.0.0):
     dependencies:
       '@generaltranslation/supported-locales': 2.0.7
       generaltranslation: 6.2.2
