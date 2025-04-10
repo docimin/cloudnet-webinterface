@@ -4,10 +4,6 @@ import { checkAuthToken } from '@/lib/server-calls'
 import { getDict } from 'gt-next/server'
 
 export default async function LocaleLayout(props) {
-  const params = await props.params
-
-  const { locale } = params
-
   const accountData = await checkAuthToken()
   if (accountData.status === 401) {
     redirect('/')
@@ -17,7 +13,7 @@ export default async function LocaleLayout(props) {
 
   return (
     <>
-      <Header locale={locale} dashboard={navigation('dashboard')}>
+      <Header dashboard={navigation('dashboard')}>
         {props.children}
       </Header>
     </>

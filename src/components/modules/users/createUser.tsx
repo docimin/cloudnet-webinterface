@@ -18,7 +18,7 @@ import { userApi } from '@/lib/client-api'
 import { Form, FormField } from '@/components/ui/form'
 import InputField from '@/components/fields/InputField'
 import MultiSelectField from '@/components/fields/MultiSelectField'
-import { OPTIONS } from '@/app/[locale]/(dashboard)/dashboard/users/[userId]/options'
+import { getOptions } from '@/app/[locale]/(dashboard)/dashboard/users/[userId]/options'
 
 const userSchema = z.object({
   username: z.string().min(1, 'Username is required'),
@@ -115,7 +115,7 @@ export default function CreateUser() {
                   <MultiSelectField
                     label="Scopes"
                     description="Select the scopes of the user"
-                    options={OPTIONS}
+                    options={getOptions()}
                     field={field}
                     placeholder="Select scopes"
                     groupBy="group"

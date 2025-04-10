@@ -8,6 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { moduleApi } from '@/lib/client-api'
+import { useDict } from 'gt-next/client'
 
 export default function ModuleClientPage({
   module,
@@ -19,6 +20,8 @@ export default function ModuleClientPage({
   moduleConfig: any
 }) {
   const router = useRouter()
+  const modulesT = useDict('Modules')
+  const mainT = useDict('Main')
   const [moduleConfigData, setModuleConfigData] = useState(
     JSON.stringify(moduleConfig, null, 2)
   )
@@ -34,14 +37,14 @@ export default function ModuleClientPage({
     )
 
     if (response.status === 204) {
-      toast.success('Module config updated successfully')
+      toast.success(modulesT('moduleConfigUpdated'))
     }
   }
 
   const handleLifecycle = async (event: Target) => {
     const response = await moduleApi.updateLifecycle(moduleId, event)
     if (response.status === 204) {
-      toast.success('Lifecycle updated successfully')
+      toast.success(modulesT('lifecycleUpdated'))
       router.refresh()
     }
   }
@@ -49,7 +52,7 @@ export default function ModuleClientPage({
   const handleUninstall = async () => {
     const response = await moduleApi.uninstall(moduleId)
     if (response.status === 204) {
-      toast.success('Module has been uninstalled.')
+      toast.success(modulesT('moduleUninstalled'))
       router.push('/dashboard/modules')
     }
   }
@@ -61,19 +64,19 @@ export default function ModuleClientPage({
           <div>
             {moduleConfigData && (
               <Button variant="outline" type="submit">
-                Save
+                {mainT('save')}
               </Button>
             )}
           </div>
           <div className={'flex gap-4 items-center'}>
-            <span>STATUS: {module.lifecycle}</span>
+            <span>{modulesT('status')}: {module.lifecycle}</span>
             {module.lifecycle !== 'STARTED' && (
               <Button
                 variant="outline"
                 onClick={() => handleLifecycle(Target.START)}
                 type={'button'}
               >
-                Start
+                {modulesT('start')}
               </Button>
             )}
             {module.lifecycle === 'STARTED' && (
@@ -82,7 +85,7 @@ export default function ModuleClientPage({
                 onClick={() => handleLifecycle(Target.RELOAD)}
                 type={'button'}
               >
-                Reload
+                {modulesT('reload')}
               </Button>
             )}
             {module.lifecycle !== 'STOPPED' && (
@@ -91,7 +94,7 @@ export default function ModuleClientPage({
                 onClick={() => handleLifecycle(Target.STOP)}
                 type={'button'}
               >
-                Stop
+                {modulesT('stop')}
               </Button>
             )}
             <Button
@@ -99,16 +102,16 @@ export default function ModuleClientPage({
               onClick={() => handleLifecycle(Target.UNLOAD)}
               type={'button'}
             >
-              Unload
+              {modulesT('unload')}
             </Button>
             <Button variant="destructive" onClick={handleUninstall}>
-              Uninstall
+              {mainT('delete')}
             </Button>
           </div>
         </div>
         <div className="mt-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-x-6 gap-y-8">
           <div className="col-span-6 sm:col-span-6 md:col-span-2">
-            <Label htmlFor="lifecycle">Lifecycle</Label>
+            <Label htmlFor="lifecycle">{modulesT('lifecycle')}</Label>
             <div className="mt-2">
               <Input
                 type="text"
@@ -120,7 +123,7 @@ export default function ModuleClientPage({
             </div>
           </div>
           <div className="col-span-6 sm:col-span-6 md:col-span-2">
-            <Label htmlFor="version">Version</Label>
+            <Label htmlFor="version">{modulesT('version')}</Label>
             <div className="mt-2">
               <Input
                 type="text"
@@ -132,7 +135,7 @@ export default function ModuleClientPage({
             </div>
           </div>
           <div className="col-span-6 sm:col-span-6 md:col-span-2">
-            <Label htmlFor="author">Author</Label>
+            <Label htmlFor="author">{modulesT('author')}</Label>
             <div className="mt-2">
               <Input
                 type="text"
@@ -144,7 +147,7 @@ export default function ModuleClientPage({
             </div>
           </div>
           <div className="col-span-6 sm:col-span-6 md:col-span-2">
-            <Label htmlFor="group">Group</Label>
+            <Label htmlFor="group">{modulesT('group')}</Label>
             <div className="mt-2">
               <Input
                 type="text"
@@ -157,7 +160,7 @@ export default function ModuleClientPage({
           </div>
         </div>
         <div className="w-full mt-8">
-          <Label htmlFor="description">Description</Label>
+          <Label htmlFor="description">{modulesT('description')}</Label>
           <div className="mt-2">
             <Input
               type="text"
@@ -170,7 +173,7 @@ export default function ModuleClientPage({
         </div>
         {moduleConfigData && (
           <div className="w-full mt-8">
-            <Label htmlFor="json">JSON</Label>
+            <Label htmlFor="json">{modulesT('json')}</Label>
             <div className="mt-2">
               <Textarea
                 name="json"

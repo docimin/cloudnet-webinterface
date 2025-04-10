@@ -20,8 +20,10 @@ import {
 } from '@/components/ui/select'
 import { playerApi } from '@/lib/client-api'
 import { toast } from 'sonner'
+import { useDict } from 'gt-next/client'
 
 export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
+  const playersT = useDict('Players')
   const [command, setCommand] = useState<string>('')
   const [isProxy, setIsProxy] = useState<boolean>(false)
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
@@ -36,9 +38,9 @@ export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
     )
 
     if (data) {
-      toast.success('Command has been executed')
+      toast.success(playersT('commandExecuted'))
     } else {
-      toast.error('Failed to execute command')
+      toast.error(playersT('commandFailed'))
     }
     setDialogOpen(false)
     setCommand('')
@@ -47,16 +49,16 @@ export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
   return (
     <Dialog open={dialogOpen} onOpenChange={(open) => setDialogOpen(open)}>
       <DialogTrigger asChild>
-        <Button>Execute command</Button>
+        <Button>{playersT('executeCommand')}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Execute command for {player?.name}</DialogTitle>
+          <DialogTitle>{playersT('executeCommandTitle', { variables: { playerName: player?.name } })}</DialogTitle>
           <DialogDescription className={'pb-4'}>
-            You are about to execute a command for {player?.name}
+            {playersT('confirmExecuteCommand', { variables: { playerName: player?.name } })}
           </DialogDescription>
           <div className={'pb-4'}>
-            <Label htmlFor={'command'}>Command:</Label>
+            <Label htmlFor={'command'}>{playersT('command')}:</Label>
             <div className="flex rounded-md bg-background ring-1 ring-offset-background ring-inset focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-black/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 dark:ring-white/10">
               <span className="flex select-none items-center pl-3 text-gray-400 sm:text-sm">
                 /
@@ -71,7 +73,7 @@ export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
             </div>
           </div>
           <div>
-            <Label htmlFor={'command'}>Proxy command?</Label>
+            <Label htmlFor={'command'}>{playersT('proxyCommand')}</Label>
             <Select
               defaultValue={'false'}
               onValueChange={(value) => setIsProxy(value === 'true')}
@@ -80,14 +82,14 @@ export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="true">True</SelectItem>
-                <SelectItem value="false">False</SelectItem>
+                <SelectItem value="true">{playersT('true')}</SelectItem>
+                <SelectItem value="false">{playersT('false')}</SelectItem>
               </SelectContent>
             </Select>
           </div>
         </DialogHeader>
         <Button variant={'destructive'} onClick={handleSend}>
-          Execute
+          {playersT('execute')}
         </Button>
       </DialogContent>
     </Dialog>

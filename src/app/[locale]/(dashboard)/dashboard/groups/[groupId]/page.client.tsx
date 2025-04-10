@@ -8,6 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Terminal } from 'lucide-react'
 import { toast } from 'sonner'
 import { groupApi } from '@/lib/client-api'
+import { useDict } from 'gt-next/client'
 
 export default function GroupClientPage({
   group,
@@ -16,6 +17,9 @@ export default function GroupClientPage({
   group: Group
   groupId: string
 }) {
+  const groupsT = useDict('Groups')
+  const mainT = useDict('Main')
+
   const router = useRouter()
   const [groupConfigData, setGroupConfigData] = useState(
     JSON.stringify(group, null, 2)
@@ -26,25 +30,25 @@ export default function GroupClientPage({
     try {
       const updatedGroup = JSON.parse(groupConfigData)
       if (updatedGroup.name !== group.name) {
-        toast.warning('Group name has been changed!')
+        toast.warning(groupsT('groupNameChanged'))
         return
       }
 
       const response = await groupApi.update(updatedGroup)
 
       if (response) {
-        toast.success('Group config updated successfully')
+        toast.success(groupsT('groupConfigUpdated'))
       }
     } catch (error) {
-      toast.error('Invalid JSON format.')
+      toast.error(mainT('invalidJson'))
     }
   }
 
   const handleUninstall = async () => {
     const response = await groupApi.delete(groupId)
     if (response.status === 204) {
-      toast.success('Group has been uninstalled.')
-      router.push('.')
+      toast.success(groupsT('groupUninstalled'))
+      router.push('/dashboard/groups')
     }
   }
 
@@ -58,7 +62,7 @@ export default function GroupClientPage({
               type="button"
               onClick={handleModuleConfigSave}
             >
-              Save
+              {mainT('save')}
             </Button>
           )}
         </div>
@@ -68,17 +72,16 @@ export default function GroupClientPage({
             variant="destructive"
             onClick={handleUninstall}
           >
-            Delete
+            {mainT('delete')}
           </Button>
         </div>
       </div>
 
       <Alert className={'mt-8'}>
         <Terminal className="h-4 w-4" />
-        <AlertTitle>Heads up!</AlertTitle>
+        <AlertTitle>{groupsT('headsUp')}</AlertTitle>
         <AlertDescription>
-          Editing the &quot;name&quot; field will not change the group name.
-          Instead, it will create a new group with the new name.
+          {groupsT('editingGroupName')}
         </AlertDescription>
       </Alert>
 

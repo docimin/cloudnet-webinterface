@@ -16,10 +16,14 @@ import {
 import { Modules } from '@/utils/types/modules'
 import { NodesType } from '@/utils/types/nodes'
 import { TasksType } from '@/utils/types/tasks'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function DashboardPage() {
+  const navigationT = await getDict('Navigation')
+  const homeT = await getDict('Home')
+
   let onlinePlayers: OnlinePlayersCount = { onlineCount: 0 }
   let registeredPlayers: RegisteredPlayersCount = { registeredCount: 0 }
   let nodes: NodesType = { nodes: [] }
@@ -72,13 +76,13 @@ export default async function DashboardPage() {
   }
 
   return (
-    <PageLayout title={'Dashboard'}>
+    <PageLayout title={navigationT('dashboard')}>
       <AutoRefresh>
         <main className="flex flex-1 flex-col gap-4 p-4 md:gap-8 md:p-6">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <Link href={'/dashboard/players'}>
               <DashboardCard
-                title="Active players"
+                title={navigationT('players')}
                 icon={<UsersIcon className="w-4 h-4" />}
                 value={onlinePlayers.onlineCount || 0}
                 permissions={[
@@ -89,7 +93,7 @@ export default async function DashboardPage() {
               />
             </Link>
             <DashboardCard
-              title="Registered players"
+              title={homeT('registeredPlayers')}
               icon={<UsersIcon className="w-4 h-4" />}
               value={registeredPlayers.registeredCount || 0}
               permissions={[
@@ -100,7 +104,7 @@ export default async function DashboardPage() {
             />
             <Link href={'/dashboard/nodes'}>
               <DashboardCard
-                title="Total nodes"
+                title={navigationT('nodes')}
                 icon={<UsersIcon className="w-4 h-4" />}
                 value={nodes?.nodes?.length || 0}
                 permissions={[
@@ -112,7 +116,7 @@ export default async function DashboardPage() {
             </Link>
             <Link href={'/dashboard/modules'}>
               <DashboardCard
-                title="Loaded modules"
+                title={navigationT('modules')}
                 icon={<UsersIcon className="w-4 h-4" />}
                 value={loadedModules?.modules?.length || 0}
                 permissions={[
@@ -125,7 +129,7 @@ export default async function DashboardPage() {
             {/* TODO: Wait for new API - cc: 0utplay && klaro
             <Link href={'/dashboard/templates'}>
               <DashboardCard
-                title="Total templates"
+                title={navigationT('templates')}
                 icon={<UsersIcon className="w-4 h-4" />}
                 value={totalTemplates}
                 permissions={[
@@ -138,7 +142,7 @@ export default async function DashboardPage() {
             */}
             <Link href={'/dashboard/groups'}>
               <DashboardCard
-                title="Total groups"
+                title={navigationT('groups')}
                 icon={<UsersIcon className="w-4 h-4" />}
                 value={groups?.groups?.length || 0}
                 permissions={[
@@ -150,7 +154,7 @@ export default async function DashboardPage() {
             </Link>
             <Link href={'/dashboard/tasks'}>
               <DashboardCard
-                title="Total tasks"
+                title={navigationT('tasks')}
                 icon={<UsersIcon className="w-4 h-4" />}
                 value={totalTasks?.tasks?.length || 0}
                 permissions={[
@@ -162,7 +166,7 @@ export default async function DashboardPage() {
             </Link>
             <Link href={'/dashboard/services'}>
               <DashboardCard
-                title="Total services"
+                title={navigationT('services')}
                 icon={<UsersIcon className="w-4 h-4" />}
                 value={services?.services?.length || 0}
                 permissions={[
@@ -174,7 +178,7 @@ export default async function DashboardPage() {
             </Link>
             <Link href={'/dashboard/users'}>
               <DashboardCard
-                title="REST Users"
+                title={navigationT('users')}
                 icon={<UsersIcon className="w-4 h-4" />}
                 value={users?.users?.length || 0}
                 permissions={[
@@ -186,9 +190,9 @@ export default async function DashboardPage() {
             </Link>
             <Link href={'/dashboard/nodes/console'}>
               <DashboardCard
-                title="Node Console"
+                title={homeT('nodeConsole')}
                 icon={<UsersIcon className="w-4 h-4" />}
-                value={'View'}
+                value={homeT('view')}
                 permissions={[
                   'cloudnet_rest:user_read',
                   'cloudnet_rest:user_get_all',

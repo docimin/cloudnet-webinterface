@@ -11,6 +11,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Nodes } from '@/utils/types/nodes'
 import { toast } from 'sonner'
+import { useDict } from 'gt-next/client'
 
 export default function NodeClientPage({
   node,
@@ -19,6 +20,9 @@ export default function NodeClientPage({
   node: Nodes
   nodeId: string
 }) {
+  const nodesT = useDict('Nodes')
+  const mainT = useDict('Main')
+
   const handleSave = async (event) => {
     event.preventDefault()
     const formData = new FormData(event.target)
@@ -27,20 +31,20 @@ export default function NodeClientPage({
     const port = data.Port?.toString() || ''
 
     if (ip === '' || port === '') {
-      toast.error('IP and Port are required to update node')
+      toast.error(nodesT('ipPortRequired'))
       return
     }
     const response = await nodeApi.update(nodeId, ip, port)
     if (response.status === 200) {
-      toast.success('Node updated successfully')
+      toast.success(nodesT('nodeUpdated'))
     } else {
-      toast.error('Failed to update node')
+      toast.error(nodesT('updateFailed'))
     }
   }
 
   const stats = [
     {
-      name: 'CPU Usage',
+      name: nodesT('cpuUsage'),
       icon: MemoryStickIcon,
       canEdit: false,
       value1: node?.nodeInfoSnapshot?.processSnapshot?.cpuUsage
@@ -49,11 +53,11 @@ export default function NodeClientPage({
       value2: node?.nodeInfoSnapshot?.processSnapshot?.systemCpuUsage
         ? node.nodeInfoSnapshot.processSnapshot.systemCpuUsage.toFixed(2) + '%'
         : 'N/A',
-      value1Name: 'Node Usage',
-      value2Name: 'System Usage',
+      value1Name: nodesT('nodeUsage'),
+      value2Name: nodesT('systemUsage'),
     },
     {
-      name: 'Memory',
+      name: nodesT('memory'),
       icon: MemoryStickIcon,
       canEdit: false,
       value1: node?.nodeInfoSnapshot?.usedMemory
@@ -62,44 +66,44 @@ export default function NodeClientPage({
       value2: node?.nodeInfoSnapshot?.maxMemory
         ? node.nodeInfoSnapshot.maxMemory + ' MB'
         : 'N/A',
-      value1Name: 'Used Memory',
-      value2Name: 'Max Memory',
+      value1Name: nodesT('usedMemory'),
+      value2Name: nodesT('maxMemory'),
     },
     {
-      name: 'Amount of services',
+      name: nodesT('servicesCount'),
       icon: DatabaseZapIcon,
       canEdit: false,
       value1: node?.nodeInfoSnapshot?.currentServicesCount || 0,
       value2: '',
-      value1Name: 'Current Services Count',
+      value1Name: nodesT('currentServicesCount'),
       value2Name: '',
     },
     {
-      name: 'Drain Status',
+      name: nodesT('drainStatus'),
       icon: ServerOffIcon,
       canEdit: false,
-      value1: node?.nodeInfoSnapshot?.drain ? 'Draining' : 'Not Draining',
+      value1: node?.nodeInfoSnapshot?.drain ? nodesT('draining') : nodesT('notDraining'),
       value2: '',
-      value1Name: 'Drain status',
+      value1Name: nodesT('drainStatus'),
       value2Name: '',
     },
     {
-      name: 'Version',
+      name: nodesT('version'),
       icon: GitBranchIcon,
       canEdit: false,
       value1: node?.nodeInfoSnapshot?.version?.major || 'N/A',
       value2: node?.nodeInfoSnapshot?.version?.versionType,
-      value1Name: 'Major version',
-      value2Name: 'Type',
+      value1Name: nodesT('version'),
+      value2Name: nodesT('version'),
     },
     {
-      name: 'Connection details',
+      name: nodesT('connectionDetails'),
       icon: CableIcon,
       canEdit: true,
       value1: node?.node?.listeners?.[0].host,
       value2: node?.node?.listeners?.[0].port,
-      value1Name: 'IP',
-      value2Name: 'Port',
+      value1Name: nodesT('ip'),
+      value2Name: nodesT('port'),
     },
   ]
 
@@ -107,7 +111,7 @@ export default function NodeClientPage({
     <form onSubmit={handleSave}>
       <div>
         <Button variant="outline" type="submit">
-          Save
+          {mainT('save')}
         </Button>
       </div>
       <ul

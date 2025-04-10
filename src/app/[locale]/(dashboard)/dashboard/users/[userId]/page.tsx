@@ -4,11 +4,13 @@ import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
 import UserClientPage from '@/app/[locale]/(dashboard)/dashboard/users/[userId]/page.client'
 import { serverUserApi } from '@/lib/server-api'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function UserPage(props) {
   const params = await props.params
+  const usersT = await getDict('Users')
 
   const { userId } = params
 
@@ -32,11 +34,17 @@ export default async function UserPage(props) {
   try {
     user = await serverUserApi.get(userId)
   } catch {
-    return <DoesNotExist name={'User'} />
+    return <DoesNotExist name={usersT('title')} />
   }
 
   return (
-    <PageLayout title={`Edit ${user.username}`}>
+    <PageLayout
+      title={usersT('editTitle', {
+        variables: {
+          name: user?.username,
+        },
+      })}
+    >
       <UserClientPage user={user} />
     </PageLayout>
   )

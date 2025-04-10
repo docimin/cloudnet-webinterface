@@ -19,9 +19,11 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Terminal } from 'lucide-react'
 import { toast } from 'sonner'
 import { taskApi } from '@/lib/client-api'
+import { useDict } from 'gt-next/client'
 
 function DeleteButton({ taskId }: { taskId: string }) {
   const router = useRouter()
+  const taskT = useDict('Tasks')
 
   const handleDelete = async () => {
     const data = await taskApi.delete(taskId)
@@ -33,19 +35,18 @@ function DeleteButton({ taskId }: { taskId: string }) {
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
-        <Button variant={'destructive'}>Delete task</Button>
+        <Button variant={'destructive'}>{taskT('deleteTask')}</Button>
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
-          <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+          <AlertDialogTitle>{taskT('deleteConfirmTitle')}</AlertDialogTitle>
           <AlertDialogDescription>
-            This action cannot be undone. This will permanently delete your task
-            and remove your data.
+            {taskT('deleteConfirmDescription')}
           </AlertDialogDescription>
         </AlertDialogHeader>
         <AlertDialogFooter>
-          <AlertDialogCancel>Cancel</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
+          <AlertDialogCancel>{taskT('cancel')}</AlertDialogCancel>
+          <AlertDialogAction onClick={handleDelete}>{taskT('delete')}</AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -61,28 +62,28 @@ function UpdateButton({
   originalName: string
   router: any
 }) {
+  const taskT = useDict('Tasks')
+
   const handleUpdate = async () => {
     try {
-      const updatedTask = JSON.parse(body) // Assuming `body` is a JSON string of your task data
+      const updatedTask = JSON.parse(body)
       if (updatedTask.name !== originalName) {
-        toast.warning('Task name has been changed!')
-        // Optionally, update the original name to the new name here or handle accordingly
-        return // Stop the update process or handle accordingly
+        toast.warning(taskT('taskNameChanged'))
+        return
       }
-      // Proceed with your update logic here if the name hasn't changed
       const response = await taskApi.update(updatedTask)
       if (response.status === 204) {
-        toast.success('Task updated successfully')
+        toast.success(taskT('taskUpdated'))
         router.refresh()
       } else {
-        toast.error('Failed to update task')
+        toast.error(taskT('updateFailed'))
       }
     } catch (error) {
-      toast.error('Invalid JSON format.')
+      toast.error(taskT('invalidJson'))
     }
   }
 
-  return <Button onClick={handleUpdate}>Update task</Button>
+  return <Button onClick={handleUpdate}>{taskT('updateTask')}</Button>
 }
 
 export default function TaskClientPage({
@@ -102,6 +103,7 @@ export default function TaskClientPage({
 }) {
   const [body, setBody] = useState(taskConfigData)
   const router = useRouter()
+  const taskT = useDict('Tasks')
 
   return (
     <div>
@@ -113,15 +115,14 @@ export default function TaskClientPage({
       </div>
       <Alert className={'mt-8'}>
         <Terminal className="h-4 w-4" />
-        <AlertTitle>Heads up!</AlertTitle>
+        <AlertTitle>{taskT('headsUp')}</AlertTitle>
         <AlertDescription>
-          Editing the &quot;name&quot; field will not change the task name.
-          Instead, it will create a new task with the new name.
+          {taskT('nameChangeWarning')}
         </AlertDescription>
       </Alert>
       {children}
       <div className="w-full mt-8">
-        <Label htmlFor="json">JSON</Label>
+        <Label htmlFor="json">{taskT('json')}</Label>
         <div className="mt-2">
           <Textarea
             name="json"

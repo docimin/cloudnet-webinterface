@@ -11,6 +11,7 @@ import {
 } from '@/components/ui/tooltip'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
+import { useDict } from 'gt-next/client'
 
 interface NavProps {
   isCollapsed: boolean
@@ -22,11 +23,11 @@ interface NavProps {
     href: string
   }[]
   setIsOpen?: any
-  translations: any
 }
 
-export function Nav({ isCollapsed, links, setIsOpen, translations }: NavProps) {
+export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {
   const currentPath = usePathname()
+  const navigationT = useDict('Navigation')
 
   return (
     <div
@@ -36,7 +37,7 @@ export function Nav({ isCollapsed, links, setIsOpen, translations }: NavProps) {
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
         {links.map((link, index) => {
           const isActive =
-            link.title === translations.dashboard
+            link.title === navigationT('dashboard')
               ? currentPath === link.href.replace(/\/$/, '')
               : currentPath.startsWith(link.href)
 

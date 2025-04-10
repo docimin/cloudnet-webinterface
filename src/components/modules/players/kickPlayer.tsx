@@ -14,8 +14,10 @@ import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
 import { playerApi } from '@/lib/client-api'
+import { useDict } from 'gt-next/client'
 
 export default function KickPlayer({ player }: { player: OnlinePlayer }) {
+  const playersT = useDict('Players')
   const [kickReason, setKickReason] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
 
@@ -29,9 +31,9 @@ export default function KickPlayer({ player }: { player: OnlinePlayer }) {
 
     if (response.status === 204) {
       router.push('/dashboard/players')
-      toast.success('Player has been kicked')
+      toast.success(playersT('playerKicked'))
     } else {
-      toast.error('Failed to kick player')
+      toast.error(playersT('kickFailed'))
     }
     setDialogOpen(false)
   }
@@ -39,15 +41,15 @@ export default function KickPlayer({ player }: { player: OnlinePlayer }) {
   return (
     <Dialog open={dialogOpen} onOpenChange={(open) => setDialogOpen(open)}>
       <DialogTrigger asChild>
-        <Button variant={'destructive'}>Kick player</Button>
+        <Button variant={'destructive'}>{playersT('kickPlayer')}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Kick {player?.name}</DialogTitle>
+          <DialogTitle>{playersT('kickPlayerTitle', { variables: { playerName: player?.name } })}</DialogTitle>
           <DialogDescription className={'pb-4'}>
-            Are you sure you want to kick {player?.name}?
+            {playersT('confirmKickPlayer', { variables: { playerName: player?.name } })}
           </DialogDescription>
-          <Label htmlFor={'kickReason'}>Kick reason</Label>
+          <Label htmlFor={'kickReason'}>{playersT('kickReason')}</Label>
           <Input
             id={'kickReason'}
             value={kickReason}
@@ -56,7 +58,7 @@ export default function KickPlayer({ player }: { player: OnlinePlayer }) {
           />
         </DialogHeader>
         <Button variant={'destructive'} onClick={handleKick}>
-          Kick
+          {playersT('kickPlayer')}
         </Button>
       </DialogContent>
     </Dialog>

@@ -21,8 +21,13 @@ import {
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { playerApi } from '@/lib/client-api'
+import { useDict } from 'gt-next/client'
+
+type Type = 'service' | 'task' | 'group'
+type ServerSelector = 'LOWEST_PLAYERS' | 'HIGHEST_PLAYERS' | 'RANDOM'
 
 export default function SendToService({ player }: { player: OnlinePlayer }) {
+  const playersT = useDict('Players')
   const [dialogOpen, setDialogOpen] = useState(false)
   const [target, setTarget] = useState('')
   const [type, setType] = useState<Type>('service')
@@ -35,7 +40,7 @@ export default function SendToService({ player }: { player: OnlinePlayer }) {
         player.networkPlayerProxyInfo.uniqueId,
         target
       )
-      toast.success('Player sent to service')
+      toast.success(playersT('playerSentToService'))
     } else if (type === 'task' || type === 'group') {
       await playerApi.sendTaskGroup(
         player.networkPlayerProxyInfo.uniqueId,
@@ -43,7 +48,7 @@ export default function SendToService({ player }: { player: OnlinePlayer }) {
         serverSelector,
         type
       )
-      toast.success(`Player sent to ${type}`)
+      toast.success(playersT('playerSentToType', { variables: { type } }))
     }
     setDialogOpen(false)
   }
@@ -51,62 +56,62 @@ export default function SendToService({ player }: { player: OnlinePlayer }) {
   return (
     <Dialog open={dialogOpen} onOpenChange={(open) => setDialogOpen(open)}>
       <DialogTrigger asChild>
-        <Button>Send to server</Button>
+        <Button>{playersT('sendToService')}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Send {player?.name} to somewhere..</DialogTitle>
+          <DialogTitle>{playersT('sendPlayerToServer', { variables: { playerName: player?.name } })}</DialogTitle>
           <DialogDescription className={'pb-4'}>
-            Are you sure you want to send {player?.name} to a different server?
+            {playersT('confirmSendPlayer', { variables: { playerName: player?.name } })}
           </DialogDescription>
           <div>
-            <Label htmlFor={'target'}>Target</Label>
+            <Label htmlFor={'target'}>{playersT('selectService')}</Label>
             <Input
               name={'target'}
               type={'text'}
-              placeholder={'Enter a target'}
+              placeholder={playersT('enterServiceName')}
               onChange={(e) => setTarget(e.target.value)}
             />
           </div>
           <div>
-            <Label htmlFor={'type'}>Type</Label>
+            <Label htmlFor={'type'}>{playersT('type')}</Label>
             <Select
               name={'type'}
               defaultValue={'service'}
-              onValueChange={setType}
+              onValueChange={(value) => setType(value as Type)}
             >
               <SelectTrigger className="w-full">
-                <SelectValue placeholder="Select a type" />
+                <SelectValue placeholder={playersT('selectType')} />
               </SelectTrigger>
               <SelectContent>
                 <SelectGroup>
-                  <SelectItem value="service">Service</SelectItem>
-                  <SelectItem value="task">Task</SelectItem>
-                  <SelectItem value="group">Group</SelectItem>
+                  <SelectItem value="service">{playersT('service')}</SelectItem>
+                  <SelectItem value="task">{playersT('task')}</SelectItem>
+                  <SelectItem value="group">{playersT('group')}</SelectItem>
                 </SelectGroup>
               </SelectContent>
             </Select>
           </div>
           {(type === 'task' || type === 'group') && (
             <div>
-              <Label htmlFor={'serverSelector'}>Server Selector</Label>
+              <Label htmlFor={'serverSelector'}>{playersT('serverSelector')}</Label>
               <Select
                 name={'serverSelector'}
                 defaultValue={'LOWEST_PLAYERS'}
-                onValueChange={(e) => setServerSelector(e)}
+                onValueChange={(value) => setServerSelector(value as ServerSelector)}
               >
                 <SelectTrigger className="w-full">
-                  <SelectValue placeholder="Select a type" />
+                  <SelectValue placeholder={playersT('selectType')} />
                 </SelectTrigger>
                 <SelectContent>
                   <SelectGroup>
                     <SelectItem value="LOWEST_PLAYERS">
-                      Lowest Players
+                      {playersT('lowestPlayers')}
                     </SelectItem>
                     <SelectItem value="HIGHEST_PLAYERS">
-                      Highest Players
+                      {playersT('highestPlayers')}
                     </SelectItem>
-                    <SelectItem value="RANDOM">Random</SelectItem>
+                    <SelectItem value="RANDOM">{playersT('random')}</SelectItem>
                   </SelectGroup>
                 </SelectContent>
               </Select>
@@ -114,7 +119,7 @@ export default function SendToService({ player }: { player: OnlinePlayer }) {
           )}
         </DialogHeader>
         <Button variant={'destructive'} type={'button'} onClick={handleSend}>
-          Send to server
+          {playersT('send')}
         </Button>
       </DialogContent>
     </Dialog>

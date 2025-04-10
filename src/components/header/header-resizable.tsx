@@ -19,22 +19,21 @@ export default function SidebarResizable({
   defaultCollapsed = false,
   navCollapsedSize,
   permissions,
-  translations,
   children,
 }) {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(defaultCollapsed)
 
-  const filteredNav1 = Nav1(translations).filter((link) =>
+  const filteredNav1 = Nav1().filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
   )
-  const filteredNav2 = Nav2(translations).filter((link) =>
+  const filteredNav2 = Nav2().filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
   )
-  const filteredNav3 = Nav3(translations).filter((link) =>
+  const filteredNav3 = Nav3().filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
@@ -104,7 +103,6 @@ export default function SidebarResizable({
                   <Nav
                     isCollapsed={isCollapsed}
                     links={filteredNav1}
-                    translations={translations}
                   />
                 )}
                 {filteredNav1.length > 0 && filteredNav2.length > 0 && (
@@ -114,7 +112,6 @@ export default function SidebarResizable({
                   <Nav
                     isCollapsed={isCollapsed}
                     links={filteredNav2}
-                    translations={translations}
                   />
                 )}
                 {filteredNav2.length > 0 && filteredNav3.length > 0 && (
@@ -124,7 +121,6 @@ export default function SidebarResizable({
                   <Nav
                     isCollapsed={isCollapsed}
                     links={filteredNav3}
-                    translations={translations}
                   />
                 )}
               </div>
@@ -133,8 +129,7 @@ export default function SidebarResizable({
               <Separator />
               <Nav
                 isCollapsed={isCollapsed}
-                links={NavFooter(translations)}
-                translations={translations}
+                links={NavFooter()}
               />
             </div>
           </div>

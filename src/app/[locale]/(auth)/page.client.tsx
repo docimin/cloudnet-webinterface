@@ -8,6 +8,7 @@ import Image from 'next/image'
 import * as Sentry from '@sentry/nextjs'
 import { toast } from 'sonner'
 import { authApi } from '@/lib/client-api'
+import { useDict } from 'gt-next/client'
 
 export default function Client() {
   const [data, setData] = useState({
@@ -16,6 +17,7 @@ export default function Client() {
     password: '',
   })
   const router = useRouter()
+  const authT = useDict('Auth')
 
   useEffect(() => {
     authApi
@@ -49,7 +51,7 @@ export default function Client() {
       const dataResponse = await response.json()
 
       if (dataResponse.accessToken) {
-        toast.success('You have successfully logged in')
+        toast.success(authT('loginSuccess'))
 
         Sentry.addBreadcrumb({
           category: 'auth',
@@ -59,13 +61,13 @@ export default function Client() {
 
         router.push('/dashboard')
       } else if (dataResponse.cause) {
-        toast.error("Can't connect to the server. Please check the address")
+        toast.error(authT('connectionError'))
       } else if (dataResponse.status === 401) {
-        toast.error('Invalid username or password')
+        toast.error(authT('invalidCredentials'))
       } else if (dataResponse.status === 404) {
-        toast.error('Incorrect address!')
+        toast.error(authT('incorrectAddress'))
       } else {
-        toast.error('An error occurred')
+        toast.error(authT('loginError'))
         Sentry.captureException('An error occurred while logging in', {
           extra: dataResponse,
         })
@@ -87,19 +89,19 @@ export default function Client() {
           <div className="flex items-center justify-center py-12">
             <div className="mx-auto grid w-[350px] gap-6">
               <div className="grid gap-2 text-center">
-                <h1 className="text-3xl font-bold">Login</h1>
+                <h1 className="text-3xl font-bold">{authT('login')}</h1>
                 <p className="text-balance text-muted-foreground">
-                  Enter your username below to login to your account
+                  {authT('loginDescription')}
                 </p>
               </div>
               <div className="grid gap-4">
                 {process.env.NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN !== 'true' && (
                   <div className="grid gap-2">
-                    <Label htmlFor="address">Address</Label>
+                    <Label htmlFor="address">{authT('address')}</Label>
                     <Input
                       id="address"
                       type="text"
-                      placeholder="127.0.0.1:2812"
+                      placeholder={'127.0.0.1:2812'}
                       onChange={(e) =>
                         setData({ ...data, address: e.target.value })
                       }
@@ -109,11 +111,11 @@ export default function Client() {
                   </div>
                 )}
                 <div className="grid gap-2">
-                  <Label htmlFor="email">Username</Label>
+                  <Label htmlFor="email">{authT('username')}</Label>
                   <Input
                     id="username"
                     type="text"
-                    placeholder="derklaro"
+                    placeholder={'derklaro'}
                     onChange={(e) =>
                       setData({ ...data, username: e.target.value })
                     }
@@ -122,7 +124,7 @@ export default function Client() {
                   />
                 </div>
                 <div className="grid gap-2 mt-2">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{authT('password')}</Label>
                   <Input
                     id="password"
                     type="password"
@@ -134,7 +136,7 @@ export default function Client() {
                   />
                 </div>
                 <Button type="submit" className="w-full">
-                  Login
+                  {authT('loginButton')}
                 </Button>
               </div>
             </div>

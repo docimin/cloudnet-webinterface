@@ -16,10 +16,14 @@ import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 import { serverUserApi } from '@/lib/server-api'
 import CreateUser from '@/components/modules/users/createUser'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function UsersPage() {
+  const usersT = await getDict('Users')
+  const mainT = await getDict('Main')
+  
   const users: Users = await serverUserApi.list()
   const permissions = await getPermissions()
   const requiredPermissions = [
@@ -42,18 +46,18 @@ export default async function UsersPage() {
   }
 
   return (
-    <PageLayout title={'Users'}>
+    <PageLayout title={usersT('title')}>
       <CreateUser />
       <Table>
-        <TableCaption>A list of your users.</TableCaption>
+        <TableCaption>{usersT('tableCaption')}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Name</TableHead>
-            <TableHead>Created at</TableHead>
-            <TableHead>Modified at</TableHead>
+            <TableHead className="w-[100px]">{usersT('name')}</TableHead>
+            <TableHead>{usersT('createdAt')}</TableHead>
+            <TableHead>{usersT('modifiedAt')}</TableHead>
             {requiredPermissions.some((permission) =>
               permissions.includes(permission)
-            ) && <TableHead className="sr-only">Edit</TableHead>}
+            ) && <TableHead className="sr-only">{mainT('edit')}</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -74,7 +78,7 @@ export default async function UsersPage() {
                         variant={'link'}
                         className={'p-0 text-right'}
                       >
-                        Edit
+                        {mainT('edit')}
                       </Button>
                     </Link>
                   </TableCell>

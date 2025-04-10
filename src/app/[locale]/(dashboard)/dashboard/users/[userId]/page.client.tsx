@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { OPTIONS } from './options'
+import { getOptions } from './options'
 import { toast } from 'sonner'
 import { userApi } from '@/lib/client-api'
 import { useForm } from 'react-hook-form'
@@ -38,7 +38,7 @@ export default function UserClientPage({ user }: { user: User }) {
       username: user.username,
       password: '',
       scopes: user.scopes.map((scope) => {
-        const option = OPTIONS.find((opt) => opt.value === scope)
+        const option = getOptions().find((opt) => opt.value === scope)
         return {
           label: option?.label || scope,
           value: scope,
@@ -141,7 +141,7 @@ export default function UserClientPage({ user }: { user: User }) {
               <MultiSelectField
                 label="Permissions / Scopes"
                 description="Select the scopes for this user"
-                options={OPTIONS}
+                options={getOptions()}
                 field={field}
                 placeholder="Select scopes..."
                 groupBy="group"

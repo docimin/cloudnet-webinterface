@@ -14,10 +14,14 @@ import {
 import { serverModuleApi } from '@/lib/server-api'
 import { getPermissions } from '@/utils/server-api/getPermissions'
 import Link from 'next/link'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function NodesPage() {
+  const modulesT = await getDict('Modules')
+  const mainT = await getDict('Main')
+
   const modules = await serverModuleApi.getLoaded()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [
@@ -40,17 +44,17 @@ export default async function NodesPage() {
   }
 
   return (
-    <PageLayout title={'Modules'}>
+    <PageLayout title={modulesT('title')}>
       <Table>
-        <TableCaption>A list of your modules.</TableCaption>
+        <TableCaption>{modulesT('tableCaption')}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[300px]">Name</TableHead>
-            <TableHead>Author</TableHead>
-            <TableHead>Version</TableHead>
+            <TableHead className="w-[300px]">{modulesT('name')}</TableHead>
+            <TableHead>{modulesT('author')}</TableHead>
+            <TableHead>{modulesT('version')}</TableHead>
             {requiredPermissions.some((permission) =>
               permissions.includes(permission)
-            ) && <TableHead className="sr-only">Edit</TableHead>}
+            ) && <TableHead className="sr-only">{mainT('edit')}</TableHead>}
           </TableRow>
         </TableHeader>
         <TableBody>
@@ -77,7 +81,7 @@ export default async function NodesPage() {
                         variant={'link'}
                         className={'p-0 text-right'}
                       >
-                        Edit
+                        {mainT('edit')}
                       </Button>
                     </Link>
                   </TableCell>

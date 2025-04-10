@@ -2,12 +2,14 @@
 import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import * as Sentry from '@sentry/nextjs'
+import { useDict } from 'gt-next/client'
 
 export const runtime = 'edge'
 
 export default function LogoutPage() {
   const [error, setError] = useState(null)
   const router = useRouter()
+  const authT = useDict('Auth')
 
   useMemo(() => {
     fetch(`/api/auth/logout`, {
@@ -33,7 +35,7 @@ export default function LogoutPage() {
   }, [router])
 
   if (error) {
-    return <div>Error: {error.message}</div>
+    return <div>{authT('logoutError')}: {error.message}</div>
   }
 
   return null

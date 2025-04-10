@@ -15,10 +15,14 @@ import NoRecords from '@/components/static/noRecords'
 import CreateGroup from '@/components/modules/groups/createGroup'
 import Link from 'next/link'
 import { serverGroupApi } from '@/lib/server-api'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function GroupsPage() {
+  const groupsT = await getDict('Groups')
+  const mainT = await getDict('Main')
+
   const groups = await serverGroupApi.list()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [
@@ -50,15 +54,15 @@ export default async function GroupsPage() {
   }
 
   return (
-    <PageLayout title={'Groups'}>
+    <PageLayout title={groupsT('title')}>
       <CreateGroup />
       <Table className={'mt-4'}>
-        <TableCaption>A list of your groups.</TableCaption>
+        <TableCaption>{groupsT('tableCaption')}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-full">Name</TableHead>
+            <TableHead className="w-full">{groupsT('name')}</TableHead>
             {hasEditPermissions && (
-              <TableHead className="sr-only">Edit</TableHead>
+              <TableHead className="sr-only">{mainT('edit')}</TableHead>
             )}
           </TableRow>
         </TableHeader>
@@ -76,7 +80,7 @@ export default async function GroupsPage() {
                         variant={'link'}
                         className={'p-0 text-right'}
                       >
-                        Edit
+                        {mainT('edit')}
                       </Button>
                     </Link>
                   </TableCell>

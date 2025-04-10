@@ -3,6 +3,7 @@ import { Inter } from 'next/font/google'
 import { ThemeProvider } from 'next-themes'
 import { Toaster } from 'sonner'
 import { AlertCircle, CheckCircle, Loader2 } from 'lucide-react'
+import { GTProvider } from 'gt-next/server'
 const inter = Inter({ subsets: ['latin'] })
 
 export async function generateMetadata() {
@@ -37,7 +38,9 @@ export default function RootLayout({ children }) {
           enableSystem
           disableTransitionOnChange
         >
-          <div className="w-full h-full">{children}</div>
+          <GTProvider>
+            <div className="w-full h-full">{children}</div>
+          </GTProvider>
         </ThemeProvider>
         <Toaster
           toastOptions={{

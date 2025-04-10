@@ -15,10 +15,12 @@ import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 import AutoRefresh from '@/components/autoRefresh'
 import { serverPlayerApi } from '@/lib/server-api'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function PlayersPage() {
+  const playersT = await getDict('Players')
   const onlinePlayers = await serverPlayerApi.online()
   const permissions = await getPermissions()
   const requiredPermissions = [
@@ -34,7 +36,7 @@ export default async function PlayersPage() {
 
   if (!hasPermissions) {
     return (
-      <PageLayout title={'Players'}>
+      <PageLayout title={playersT('title')}>
         <NoAccess />
       </PageLayout>
     )
@@ -42,7 +44,7 @@ export default async function PlayersPage() {
 
   if (onlinePlayers.onlinePlayers.length === 0) {
     return (
-      <PageLayout title={'Players'}>
+      <PageLayout title={playersT('title')}>
         <AutoRefresh>
           <NoRecords />
         </AutoRefresh>
@@ -51,19 +53,19 @@ export default async function PlayersPage() {
   }
 
   return (
-    <PageLayout title={'Players'}>
+    <PageLayout title={playersT('title')}>
       <AutoRefresh>
         <Table>
-          <TableCaption>A list of your online players.</TableCaption>
+          <TableCaption>{playersT('tableCaption')}</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[250px]">Name</TableHead>
-              <TableHead>Downstream Service</TableHead>
-              <TableHead>Proxy Service</TableHead>
-              <TableHead>Proxy Node</TableHead>
+              <TableHead className="w-[250px]">{playersT('name')}</TableHead>
+              <TableHead>{playersT('downstreamService')}</TableHead>
+              <TableHead>{playersT('proxyService')}</TableHead>
+              <TableHead>{playersT('proxyNode')}</TableHead>
               {requiredPermissions.some((permission) =>
                 permissions.includes(permission)
-              ) && <TableHead className="sr-only">Details</TableHead>}
+              ) && <TableHead className="sr-only">{playersT('details')}</TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -95,7 +97,7 @@ export default async function PlayersPage() {
                         variant={'link'}
                         className={'p-0 text-right'}
                       >
-                        Details
+                        {playersT('details')}
                       </Button>
                     </Link>
                   </TableCell>

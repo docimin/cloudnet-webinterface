@@ -14,10 +14,14 @@ import { getPermissions } from '@/utils/server-api/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function NodesPage() {
+  const nodesT = await getDict('Nodes')
+  const mainT = await getDict('Main')
+
   const nodes = await serverNodeApi.list()
   const permissions: string[] = await getPermissions()
   const requiredPermissions = [
@@ -48,17 +52,17 @@ export default async function NodesPage() {
   }
 
   return (
-    <PageLayout title={'Nodes'}>
+    <PageLayout title={nodesT('title')}>
       <Table>
-        <TableCaption>A list of your nodes.</TableCaption>
+        <TableCaption>{nodesT('tableCaption')}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[100px]">Name</TableHead>
-            <TableHead>Status</TableHead>
-            <TableHead>Memory</TableHead>
-            <TableHead>Version</TableHead>
+            <TableHead className="w-[100px]">{nodesT('name')}</TableHead>
+            <TableHead>{nodesT('status')}</TableHead>
+            <TableHead>{nodesT('memory')}</TableHead>
+            <TableHead>{nodesT('version')}</TableHead>
             {hasEditPermissions && (
-              <TableHead className="sr-only">Edit</TableHead>
+              <TableHead className="sr-only">{mainT('edit')}</TableHead>
             )}
           </TableRow>
         </TableHeader>
@@ -93,7 +97,7 @@ export default async function NodesPage() {
                         variant={'link'}
                         className={'p-0 text-right'}
                       >
-                        Edit
+                        {mainT('edit')}
                       </Button>
                     </Link>
                   </TableCell>

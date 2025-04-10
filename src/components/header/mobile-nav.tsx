@@ -15,25 +15,26 @@ import { Nav1, Nav2, Nav3, NavFooter } from '@/components/header/data'
 import { Nav } from '@/components/header/header-nav'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import Image from 'next/image'
+import { useDict } from 'gt-next/client'
 
 export default function MobileNav({
   permissions,
-  translations,
   children,
 }): React.JSX.Element {
   const [isOpen, setIsOpen] = React.useState(false)
+  const mainT = useDict('Main')
 
-  const filteredNav1 = Nav1(translations).filter((link) =>
+  const filteredNav1 = Nav1().filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
   )
-  const filteredNav2 = Nav2(translations).filter((link) =>
+  const filteredNav2 = Nav2().filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
   )
-  const filteredNav3 = Nav3(translations).filter((link) =>
+  const filteredNav3 = Nav3().filter((link) =>
     link.permission.some(
       (permission) => permissions.includes(permission) || permission === 'any'
     )
@@ -66,9 +67,9 @@ export default function MobileNav({
               className={'min-w-full lg:min-w-[800px] flex flex-col'}
             >
               <SheetHeader>
-                <SheetTitle>Menu</SheetTitle>
+                <SheetTitle>{mainT('menu')}</SheetTitle>
                 <SheetDescription>
-                  Interested in checking stuff out? Click on a link!
+                  {mainT('menuDescription')}
                 </SheetDescription>
               </SheetHeader>
 
@@ -80,14 +81,13 @@ export default function MobileNav({
                     'mt-8 w-full h-full justify-items-center text-center'
                   }
                 >
-                  <h1 className={'border-b pb-2'}>Pages</h1>
+                  <h1 className={'border-b pb-2'}>{mainT('pages')}</h1>
                   <div>
                     {filteredNav1.length > 0 && (
                       <Nav
                         isCollapsed={false}
                         links={filteredNav1}
                         setIsOpen={setIsOpen}
-                        translations={translations}
                       />
                     )}
                     {filteredNav1.length > 0 && filteredNav2.length > 0 && (
@@ -98,7 +98,6 @@ export default function MobileNav({
                         isCollapsed={false}
                         links={filteredNav2}
                         setIsOpen={setIsOpen}
-                        translations={translations}
                       />
                     )}
                     {filteredNav2.length > 0 && filteredNav3.length > 0 && (
@@ -109,7 +108,6 @@ export default function MobileNav({
                         isCollapsed={false}
                         links={filteredNav3}
                         setIsOpen={setIsOpen}
-                        translations={translations}
                       />
                     )}
                   </div>
@@ -119,9 +117,8 @@ export default function MobileNav({
                 <Separator className={'mb-2'} />
                 <Nav
                   isCollapsed={false}
-                  links={NavFooter(translations)}
+                  links={NavFooter()}
                   setIsOpen={setIsOpen}
-                  translations={translations}
                 />
               </div>
             </SheetContent>

@@ -5,6 +5,7 @@ import { ChevronRight, Terminal } from 'lucide-react'
 import { authApi, serviceApi } from '@/lib/client-api'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { toast } from 'sonner'
+import { useDict } from 'gt-next/client'
 
 interface ConsoleEntry {
   output: string
@@ -41,6 +42,7 @@ export default function ServiceConsole({
   const [input, setInput] = useState('')
   const consoleEndRef = useRef<HTMLDivElement>(null)
   const [socketBlocked, setSocketBlocked] = useState(false)
+  const consoleT = useDict('Console')
 
   useEffect(() => {
     let socket: WebSocket | null = null
@@ -51,7 +53,7 @@ export default function ServiceConsole({
           const cache = (await serviceApi.logLines(serviceName)).data
           setHistory(cache.lines.map((line) => ({ output: line })))
         } catch (error) {
-          toast.error('An error occurred while fetching the log lines.')
+          toast.error(consoleT('fetchError'))
         }
       }
     }
@@ -82,7 +84,7 @@ export default function ServiceConsole({
       }
       socket.onerror = (event) => {
         console.error('WebSocket error:', event)
-        toast.error('An error occurred while connecting to the console.')
+        toast.error(consoleT('connectionError'))
       }
     }
 
@@ -113,10 +115,9 @@ export default function ServiceConsole({
       {socketBlocked && (
         <Alert className="my-4">
           <Terminal className="h-4 w-4" />
-          <AlertTitle>Heads up!</AlertTitle>
+          <AlertTitle>{consoleT('headsUp')}</AlertTitle>
           <AlertDescription>
-            The WebSocket protocol does not match the domain protocol. Both must
-            use either HTTP/WS or HTTPS/WSS.
+            {consoleT('protocolMismatch')}
           </AlertDescription>
         </Alert>
       )}
@@ -138,7 +139,7 @@ export default function ServiceConsole({
                 value={input}
                 onChange={(e) => setInput(e.target.value)}
                 className="flex-1 bg-transparent outline-none text-gray-200 font-mono"
-                placeholder="Type your command..."
+                placeholder={consoleT('commandPlaceholder')}
               />
             </div>
           </form>

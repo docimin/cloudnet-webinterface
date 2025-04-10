@@ -5,13 +5,15 @@ import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
 import ModuleClientPage from './page.client'
 import { serverModuleApi } from '@/lib/server-api'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function NodePage(props) {
   const params = await props.params
-
   const { moduleId } = params
+
+  const navigationT = await getDict('Navigation')
 
   const moduleSingle: Module = await serverModuleApi.get(moduleId)
   const permissions: any = await getPermissions()
@@ -46,7 +48,7 @@ export default async function NodePage(props) {
   }
 
   if (!moduleSingle?.configuration?.name) {
-    return <DoesNotExist name={'Module'} />
+    return <DoesNotExist name={navigationT('modules')} />
   }
 
   return (

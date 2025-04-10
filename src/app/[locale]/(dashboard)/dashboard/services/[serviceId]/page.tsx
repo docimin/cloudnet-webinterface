@@ -16,13 +16,14 @@ import ServiceConsole from '@/components/console'
 import { getPermissions } from '@/utils/server-api/getPermissions'
 import { serverServiceApi } from '@/lib/server-api'
 import DoesNotExist from '@/components/static/doesNotExist'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function UserPage(props) {
   const params = await props.params
-
   const { serviceId } = params
+  const serviceT = await getDict('Services')
 
   const permissions = await getPermissions()
 
@@ -67,13 +68,13 @@ export default async function UserPage(props) {
   try {
     service = await serverServiceApi.get(serviceId)
   } catch {
-    return <DoesNotExist name={'Service'} />
+    return <DoesNotExist name={serviceT('name')} />
   }
   const serviceConfigData = JSON.stringify(service, null, 2)
 
   const stats = [
     {
-      name: 'Memory',
+      name: serviceT('memory'),
       icon: MemoryStickIcon,
       canEdit: false,
       value1: service?.processSnapshot?.cpuUsage
@@ -82,62 +83,62 @@ export default async function UserPage(props) {
       value2: service?.processSnapshot.maxHeapMemory
         ? formatBytes(service?.processSnapshot.maxHeapMemory)
         : 'N/A',
-      value1Name: 'Used Memory',
-      value2Name: 'Max Memory',
+      value1Name: serviceT('usedMemory'),
+      value2Name: serviceT('maxMemory'),
     },
     {
-      name: 'CPU',
+      name: serviceT('cpu'),
       icon: DatabaseZapIcon,
       canEdit: false,
       value1: service?.processSnapshot.cpuUsage.toFixed(2) + '%' || 'N/A',
       value2: '',
-      value1Name: 'Service CPU Usage',
+      value1Name: serviceT('serviceCpuUsage'),
       value2Name: '',
     },
     {
-      name: 'Created',
+      name: serviceT('created'),
       icon: ServerOffIcon,
       canEdit: false,
       value1: service?.connectedTime
         ? new Date(service?.connectedTime).toLocaleString()
         : 'N/A',
       value2: '',
-      value1Name: 'Created at',
+      value1Name: serviceT('createdAt'),
       value2Name: '',
     },
     {
-      name: 'Version',
+      name: serviceT('version'),
       icon: ServerOffIcon,
       canEdit: false,
       value1: service?.properties.Version || 'N/A',
       value2: '',
-      value1Name: 'Version',
+      value1Name: serviceT('version'),
       value2Name: '',
     },
     {
-      name: 'Players',
+      name: serviceT('players'),
       icon: UsersIcon,
       canEdit: false,
       value1: service?.properties['Online-Count'] || '0',
       value2: service?.properties['Max-Players'] || '0',
-      value1Name: 'Online Players',
-      value2Name: 'Max Players',
+      value1Name: serviceT('onlinePlayers'),
+      value2Name: serviceT('maxPlayers'),
     },
   ]
 
   const name =
     service?.configuration.serviceId.taskName +
       service?.configuration.serviceId.nameSplitter +
-      service?.configuration.serviceId.taskServiceId || 'Service'
+      service?.configuration.serviceId.taskServiceId || serviceT('name')
 
   return (
     <PageLayout title={name}>
       <Tabs defaultValue={'config'}>
         <TabsList>
-          <TabsTrigger value={'config'}>Configuration</TabsTrigger>
+          <TabsTrigger value={'config'}>{serviceT('configuration')}</TabsTrigger>
           {requiredConsolePermissions.some((permission) =>
             permissions.includes(permission)
-          ) && <TabsTrigger value={'console'}>Console</TabsTrigger>}
+          ) && <TabsTrigger value={'console'}>{serviceT('console')}</TabsTrigger>}
         </TabsList>
         <TabsContent value={'config'}>
           <ServiceClientPage
@@ -161,7 +162,7 @@ export default async function UserPage(props) {
                       {stats.name}
                     </div>
                     <div className="ml-auto">
-                      {stats.canEdit ? 'Can edit' : 'View only'}
+                      {stats.canEdit ? serviceT('canEdit') : serviceT('viewOnly')}
                     </div>
                   </div>
                   <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
@@ -204,7 +205,7 @@ export default async function UserPage(props) {
 
             {serviceConfigData && (
               <div className="w-full mt-8">
-                <Label htmlFor="json">JSON</Label>
+                <Label htmlFor="json">{serviceT('json')}</Label>
                 <div className="mt-2">
                   <Textarea
                     name="json"

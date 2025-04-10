@@ -5,13 +5,15 @@ import DoesNotExist from '@/components/static/doesNotExist'
 import NodeClientPage from '@/app/[locale]/(dashboard)/dashboard/nodes/[nodeId]/page.client'
 import AutoRefresh from '@/components/autoRefresh'
 import { serverNodeApi } from '@/lib/server-api'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function NodePage(props) {
   const params = await props.params
-
   const { nodeId } = params
+
+  const navigationT = await getDict('Navigation')
 
   const node = await serverNodeApi.get(nodeId)
   const permissions: any = await getPermissions()
@@ -31,7 +33,7 @@ export default async function NodePage(props) {
   }
 
   if (!node?.node?.uniqueId) {
-    return <DoesNotExist name={'Node'} />
+    return <DoesNotExist name={navigationT('nodes')} />
   }
 
   return (

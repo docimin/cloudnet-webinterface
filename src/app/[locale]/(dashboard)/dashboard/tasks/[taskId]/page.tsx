@@ -15,13 +15,14 @@ import { DashboardCard } from '@/components/dashboardCard'
 import TaskClientPage from './page.client'
 import { serverTaskApi } from '@/lib/server-api'
 import { Task } from '@/utils/types/tasks'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function UserPage(props) {
   const params = await props.params
-
   const { taskId } = params
+  const taskT = await getDict('Tasks')
 
   const permissions = await getPermissions()
   const requiredPermissions = [
@@ -59,12 +60,12 @@ export default async function UserPage(props) {
   try {
     task = await serverTaskApi.get(taskId)
   } catch {
-    return <DoesNotExist name={'Task'} />
+    return <DoesNotExist name={taskT('name')} />
   }
   const taskConfigData = JSON.stringify(task, null, 2)
 
   return (
-    <PageLayout title={`Edit ${task?.name}`}>
+    <PageLayout title={taskT('editTitle', { variables: { name: task?.name } })}>
       <TaskClientPage
         taskName={task?.name}
         taskId={taskId}
@@ -75,7 +76,7 @@ export default async function UserPage(props) {
         <div className="flex flex-1 flex-col gap-4 md:gap-8 mt-8">
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
             <DashboardCard
-              title="Name"
+              title={taskT('name')}
               icon={<CaseLowerIcon className="w-4 h-4" />}
               value={task?.name}
               permissions={[
@@ -85,7 +86,7 @@ export default async function UserPage(props) {
               ]}
             />
             <DashboardCard
-              title="Splitter"
+              title={taskT('splitter')}
               icon={<SplitIcon className="w-4 h-4" />}
               value={task?.nameSplitter}
               permissions={[
@@ -95,9 +96,9 @@ export default async function UserPage(props) {
               ]}
             />
             <DashboardCard
-              title="Maintenance"
+              title={taskT('maintenance')}
               icon={<ConstructionIcon className="w-4 h-4" />}
-              value={task?.maintenance ? 'Yes' : 'No'}
+              value={task?.maintenance ? taskT('yes') : taskT('no')}
               permissions={[
                 'cloudnet_rest:task_read',
                 'cloudnet_rest:task_get',
@@ -105,9 +106,9 @@ export default async function UserPage(props) {
               ]}
             />
             <DashboardCard
-              title="Is Static"
+              title={taskT('isStatic')}
               icon={<RefreshCcwIcon className="w-4 h-4" />}
-              value={task?.staticServices ? 'Yes' : 'No'}
+              value={task?.staticServices ? taskT('yes') : taskT('no')}
               permissions={[
                 'cloudnet_rest:task_read',
                 'cloudnet_rest:task_get',
@@ -115,7 +116,7 @@ export default async function UserPage(props) {
               ]}
             />
             <DashboardCard
-              title="Min. Service count"
+              title={taskT('minServiceCount')}
               icon={<ScaleIcon className="w-4 h-4" />}
               value={task?.minServiceCount}
               permissions={[
@@ -125,7 +126,7 @@ export default async function UserPage(props) {
               ]}
             />
             <DashboardCard
-              title="Start port"
+              title={taskT('startPort')}
               icon={<ChevronsLeftRightIcon className="w-4 h-4" />}
               value={task?.startPort}
               permissions={[
@@ -135,7 +136,7 @@ export default async function UserPage(props) {
               ]}
             />
             <DashboardCard
-              title="Max. Memory"
+              title={taskT('maxMemory')}
               icon={<MemoryStickIcon className="w-4 h-4" />}
               value={`${task?.processConfiguration?.maxHeapMemorySize} MB`}
               permissions={[

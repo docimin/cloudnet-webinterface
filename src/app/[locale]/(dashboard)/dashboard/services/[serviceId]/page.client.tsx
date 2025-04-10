@@ -12,7 +12,7 @@ import {
   AlertDialogTrigger,
 } from '@/components/ui/alert-dialog'
 import { useRouter } from 'next/navigation'
-import { moduleApi, serviceApi } from '@/lib/client-api'
+import { serviceApi } from '@/lib/client-api'
 
 function DeleteButton({ serviceId }: { serviceId: string }) {
   const router = useRouter()

@@ -16,10 +16,12 @@ import NoRecords from '@/components/static/noRecords'
 import AutoRefresh from '@/components/autoRefresh'
 import Link from 'next/link'
 import { serverServiceApi } from '@/lib/server-api'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function ServicesPage() {
+  const servicesT = await getDict('Services')
   const services = await serverServiceApi.list()
   const permissions = await getPermissions()
   const requiredPermissions = [
@@ -42,20 +44,20 @@ export default async function ServicesPage() {
   }
 
   return (
-    <PageLayout title={'Services'}>
+    <PageLayout title={servicesT('title')}>
       <AutoRefresh>
         <Table>
-          <TableCaption>A list of your services.</TableCaption>
+          <TableCaption>{servicesT('tableCaption')}</TableCaption>
           <TableHeader>
             <TableRow>
-              <TableHead className="w-[300px]">Name</TableHead>
-              <TableHead>State</TableHead>
-              <TableHead>CPU Usage</TableHead>
-              <TableHead>RAM Usage</TableHead>
-              <TableHead>Players</TableHead>
+              <TableHead className="w-[300px]">{servicesT('name')}</TableHead>
+              <TableHead>{servicesT('state')}</TableHead>
+              <TableHead>{servicesT('cpuUsage')}</TableHead>
+              <TableHead>{servicesT('ramUsage')}</TableHead>
+              <TableHead>{servicesT('players')}</TableHead>
               {requiredPermissions.some((permission) =>
                 permissions.includes(permission)
-              ) && <TableHead className="sr-only">Details</TableHead>}
+              ) && <TableHead className="sr-only">{servicesT('details')}</TableHead>}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -77,12 +79,20 @@ export default async function ServicesPage() {
                     {service?.processSnapshot.cpuUsage.toFixed(2) + '%'}
                   </TableCell>
                   <TableCell>
-                    {formatBytes(service?.processSnapshot.heapUsageMemory)} /{' '}
-                    {formatBytes(service?.processSnapshot.maxHeapMemory)}
+                    {servicesT('ramUsageFormat', {
+                      variables: {
+                        used: formatBytes(service?.processSnapshot.heapUsageMemory),
+                        max: formatBytes(service?.processSnapshot.maxHeapMemory)
+                      }
+                    })}
                   </TableCell>
                   <TableCell>
-                    {service?.properties['Online-Count'] || '0'} /{' '}
-                    {service?.properties['Max-Players'] || '0'}
+                    {servicesT('onlineCount', {
+                      variables: {
+                        current: service?.properties['Online-Count'] || '0',
+                        max: service?.properties['Max-Players'] || '0'
+                      }
+                    })}
                   </TableCell>
                   {requiredPermissions.some((permission) =>
                     permissions.includes(permission)
@@ -96,7 +106,7 @@ export default async function ServicesPage() {
                           variant={'link'}
                           className={'p-0 text-right'}
                         >
-                          Details
+                          {servicesT('details')}
                         </Button>
                       </Link>
                     </TableCell>

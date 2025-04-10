@@ -14,12 +14,15 @@ import NoAccess from '@/components/static/noAccess'
 import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 import { serverTaskApi } from '@/lib/server-api'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function TasksPage() {
   const tasks = await serverTaskApi.list()
   const permissions = await getPermissions()
+  const taskT = await getDict('Tasks')
+
   const requiredPermissions = [
     'cloudnet_rest:task_read',
     'cloudnet_rest:task_list',
@@ -49,16 +52,16 @@ export default async function TasksPage() {
   }
 
   return (
-    <PageLayout title={'Tasks'}>
+    <PageLayout title={taskT('title')}>
       <Table>
-        <TableCaption>A list of your tasks.</TableCaption>
+        <TableCaption>{taskT('tableCaption')}</TableCaption>
         <TableHeader>
           <TableRow>
-            <TableHead className="w-[250px]">Name</TableHead>
-            <TableHead>Maintenance</TableHead>
-            <TableHead>Static</TableHead>
+            <TableHead className="w-[250px]">{taskT('name')}</TableHead>
+            <TableHead>{taskT('maintenance')}</TableHead>
+            <TableHead>{taskT('static')}</TableHead>
             {hasEditPermissions && (
-              <TableHead className="sr-only">Edit</TableHead>
+              <TableHead className="sr-only">{taskT('edit')}</TableHead>
             )}
           </TableRow>
         </TableHeader>
@@ -68,8 +71,8 @@ export default async function TasksPage() {
             .map((task) => (
               <TableRow key={task?.name}>
                 <TableCell className="font-medium">{task?.name}</TableCell>
-                <TableCell>{task?.maintenance ? 'True' : 'False'}</TableCell>
-                <TableCell>{task?.staticServices ? 'True' : 'False'}</TableCell>
+                <TableCell>{task?.maintenance ? taskT('yes') : taskT('no')}</TableCell>
+                <TableCell>{task?.staticServices ? taskT('yes') : taskT('no')}</TableCell>
                 {hasEditPermissions && (
                   <TableCell>
                     <Link href={`/dashboard/tasks/${task?.name}`}>
@@ -78,7 +81,7 @@ export default async function TasksPage() {
                         variant={'link'}
                         className={'p-0 text-right'}
                       >
-                        Edit
+                        {taskT('edit')}
                       </Button>
                     </Link>
                   </TableCell>

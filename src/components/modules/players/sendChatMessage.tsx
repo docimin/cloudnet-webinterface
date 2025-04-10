@@ -13,8 +13,10 @@ import { Input } from '@/components/ui/input'
 import { Button } from '@/components/ui/button'
 import { toast } from 'sonner'
 import { playerApi } from '@/lib/client-api'
+import { useDict } from 'gt-next/client'
 
 export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
+  const playersT = useDict('Players')
   const [message, setMessage] = useState<string>('')
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 
@@ -25,9 +27,9 @@ export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
         player.networkPlayerProxyInfo.uniqueId,
         message
       )
-      toast.success('Message has been sent')
+      toast.success(playersT('messageSent'))
     } catch (error) {
-      toast.error('Failed to send message')
+      toast.error(playersT('messageFailed'))
     }
     setDialogOpen(false)
     setMessage('')
@@ -42,15 +44,15 @@ export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
   return (
     <Dialog open={dialogOpen} onOpenChange={(open) => setDialogOpen(open)}>
       <DialogTrigger asChild>
-        <Button>Send message</Button>
+        <Button>{playersT('sendChatMessage')}</Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Message {player?.name}</DialogTitle>
+          <DialogTitle>{playersT('messagePlayer', { variables: { playerName: player?.name } })}</DialogTitle>
           <DialogDescription className={'pb-4'}>
-            You are about to send a message to {player?.name}
+            {playersT('confirmMessagePlayer', { variables: { playerName: player?.name } })}
           </DialogDescription>
-          <Label htmlFor={'message'}>Message:</Label>
+          <Label htmlFor={'message'}>{playersT('message')}:</Label>
           <Input
             id={'message'}
             value={message}
@@ -59,7 +61,7 @@ export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
           />
         </DialogHeader>
         <Button variant={'destructive'} onClick={handleSend}>
-          Send
+          {playersT('send')}
         </Button>
       </DialogContent>
     </Dialog>

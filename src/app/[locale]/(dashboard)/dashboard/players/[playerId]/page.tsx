@@ -16,13 +16,14 @@ import KickPlayer from '@/components/modules/players/kickPlayer'
 import SendChatMessage from '@/components/modules/players/sendChatMessage'
 import ExecuteCommand from '@/components/modules/players/executeCommand'
 import { serverPlayerApi } from '@/lib/server-api'
+import { getDict } from 'gt-next/server'
 
 export const runtime = 'edge'
 
 export default async function UserPage(props) {
   const params = await props.params
-
   const { playerId } = params
+  const playersT = await getDict('Players')
 
   const permissions = await getPermissions()
   const requiredPermissions = [
@@ -31,7 +32,6 @@ export default async function UserPage(props) {
     'global:admin',
   ]
 
-  // check if user has required permissions
   const hasPermissions = requiredPermissions.some((permission) =>
     permissions.includes(permission)
   )
@@ -44,11 +44,11 @@ export default async function UserPage(props) {
   try {
     player = await serverPlayerApi.get(playerId)
   } catch {
-    return <DoesNotExist name={'Player'} />
+    return <DoesNotExist name={playersT('name')} />
   }
 
   return (
-    <PageLayout title={`Edit ${player.name}`}>
+    <PageLayout title={playersT('editTitle', { variables: { playerName: player.name } })}>
       <div className={'flex items-center justify-between'}>
         <div className={'flex gap-4'}>
           <SendToService player={player} />
@@ -61,7 +61,7 @@ export default async function UserPage(props) {
       <div className="flex flex-1 flex-col gap-4 md:gap-8 mt-8">
         <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           <DashboardCard
-            title="Name"
+            title={playersT('name')}
             icon={<CaseLowerIcon className="w-4 h-4" />}
             value={player.name}
             permissions={[
@@ -71,7 +71,7 @@ export default async function UserPage(props) {
             ]}
           />
           <DashboardCard
-            title="First time login"
+            title={playersT('firstLogin')}
             icon={<CaseLowerIcon className="w-4 h-4" />}
             value={formatDate(new Date(player.firstLoginTimeMillis))}
             permissions={[
@@ -81,7 +81,7 @@ export default async function UserPage(props) {
             ]}
           />
           <DashboardCard
-            title="Last time login"
+            title={playersT('lastLogin')}
             icon={<CaseLowerIcon className="w-4 h-4" />}
             value={formatDate(new Date(player.lastLoginTimeMillis))}
             permissions={[
@@ -91,7 +91,7 @@ export default async function UserPage(props) {
             ]}
           />
           <DashboardCard
-            title="Last server"
+            title={playersT('lastServer')}
             icon={<ServerIcon className="w-4 h-4" />}
             value={
               player.connectedService.serviceId.taskName +
@@ -105,7 +105,7 @@ export default async function UserPage(props) {
             ]}
           />
           <DashboardCard
-            title="Last Node"
+            title={playersT('lastNode')}
             icon={<ServerIcon className="w-4 h-4" />}
             value={player.connectedService.serviceId.nodeUniqueId}
             permissions={[
@@ -122,9 +122,9 @@ export default async function UserPage(props) {
           <div>
             <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
               <DashboardCard
-                title="Labymod version"
+                title={playersT('labymodVersion')}
                 icon={<HistoryIcon className="w-4 h-4" />}
-                value={player?.properties?.labyModOptions?.version || 'Unknown'}
+                value={player?.properties?.labyModOptions?.version || playersT('unknown')}
                 permissions={[
                   'cloudnet_bridge:player_read',
                   'cloudnet_bridge:player_get',
@@ -132,12 +132,12 @@ export default async function UserPage(props) {
                 ]}
               />
               <DashboardCard
-                title="Labymod creation date"
+                title={playersT('labymodCreationDate')}
                 icon={<CalendarIcon className="w-4 h-4" />}
                 value={
                   formatDate(
                     new Date(player?.properties?.labyModOptions?.creationTime)
-                  ) || 'Unknown'
+                  ) || playersT('unknown')
                 }
                 permissions={[
                   'cloudnet_bridge:player_read',
