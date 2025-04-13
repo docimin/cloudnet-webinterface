@@ -57,7 +57,11 @@ export default async function ServicesPage() {
               <TableHead>{servicesT('players')}</TableHead>
               {requiredPermissions.some((permission) =>
                 permissions.includes(permission)
-              ) && <TableHead className="sr-only">{servicesT('details')}</TableHead>}
+              ) && (
+                <TableHead className="sr-only">
+                  {servicesT('details')}
+                </TableHead>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -81,17 +85,21 @@ export default async function ServicesPage() {
                   <TableCell>
                     {servicesT('ramUsageFormat', {
                       variables: {
-                        used: formatBytes(service?.processSnapshot.heapUsageMemory),
-                        max: formatBytes(service?.processSnapshot.maxHeapMemory)
-                      }
+                        used: formatBytes(
+                          service?.processSnapshot?.heapUsageMemory
+                        ),
+                        max: formatBytes(
+                          service?.processSnapshot?.maxHeapMemory
+                        ),
+                      },
                     })}
                   </TableCell>
                   <TableCell>
                     {servicesT('onlineCount', {
                       variables: {
                         current: service?.properties['Online-Count'] || '0',
-                        max: service?.properties['Max-Players'] || '0'
-                      }
+                        max: service?.properties['Max-Players'] || '0',
+                      },
                     })}
                   </TableCell>
                   {requiredPermissions.some((permission) =>

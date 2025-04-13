@@ -59,31 +59,45 @@ export default function ServiceConsole({
     }
 
     const initializeSocket = async () => {
-      const ticket = await authApi.createTicket(type)
-      const cookies = await authApi.getCookies()
-      const cookieAddress = decodeURIComponent(cookies['add'])
-      const protocol = cookieAddress.startsWith('https') ? 'wss' : 'ws'
-      const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
-      const domainUrlProtocol = window.location.origin.startsWith('https')
-        ? 'wss'
-        : 'ws'
+      try {
+        const ticket = await authApi.createTicket(type)
+        const cookies = await authApi.getCookies()
+        const cookieAddress = decodeURIComponent(cookies['add'])
+        const protocol = cookieAddress.startsWith('https') ? 'wss' : 'ws'
+        const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
+        const domainUrlProtocol = window.location.origin.startsWith('https')
+          ? 'wss'
+          : 'ws'
 
-      if (protocol !== domainUrlProtocol) {
-        setSocketBlocked(true)
-        return
-      }
-
-      socket = new WebSocket(
-        `${protocol}://${address}${webSocketPath}?ticket=${ticket}`
-      )
-      socket.onmessage = (event) => {
-        const newEntry: ConsoleEntry = {
-          output: event.data,
+        if (protocol !== domainUrlProtocol) {
+          setSocketBlocked(true)
+          return
         }
-        setHistory((prev) => [...prev, newEntry])
-      }
-      socket.onerror = (event) => {
-        console.error('WebSocket error:', event)
+
+        const socketUrl = `${protocol}://${address}${webSocketPath}?ticket=${ticket}`
+
+        try {
+          socket = new WebSocket(socketUrl)
+        } catch (error) {
+          console.error('WebSocket construction error:', error)
+          setSocketBlocked(true)
+          toast.error(consoleT('connectionError'))
+          return
+        }
+
+        socket.onmessage = (event) => {
+          const newEntry: ConsoleEntry = {
+            output: event.data,
+          }
+          setHistory((prev) => [...prev, newEntry])
+        }
+        socket.onerror = (event) => {
+          console.error('WebSocket error:', event)
+          toast.error(consoleT('connectionError'))
+        }
+      } catch (error) {
+        console.error('Socket initialization error:', error)
+        setSocketBlocked(true)
         toast.error(consoleT('connectionError'))
       }
     }
@@ -116,9 +130,7 @@ export default function ServiceConsole({
         <Alert className="my-4">
           <Terminal className="h-4 w-4" />
           <AlertTitle>{consoleT('headsUp')}</AlertTitle>
-          <AlertDescription>
-            {consoleT('protocolMismatch')}
-          </AlertDescription>
+          <AlertDescription>{consoleT('protocolMismatch')}</AlertDescription>
         </Alert>
       )}
       <div className="w-full mx-auto h-[80vh] bg-gray-800 text-gray-200 rounded-lg overflow-hidden flex flex-col">

@@ -80,8 +80,8 @@ export default async function UserPage(props) {
       value1: service?.processSnapshot?.cpuUsage
         ? formatBytes(service?.processSnapshot.heapUsageMemory)
         : 'N/A',
-      value2: service?.processSnapshot.maxHeapMemory
-        ? formatBytes(service?.processSnapshot.maxHeapMemory)
+      value2: service?.processSnapshot?.maxHeapMemory
+        ? formatBytes(service?.processSnapshot?.maxHeapMemory)
         : 'N/A',
       value1Name: serviceT('usedMemory'),
       value2Name: serviceT('maxMemory'),
@@ -135,10 +135,14 @@ export default async function UserPage(props) {
     <PageLayout title={name}>
       <Tabs defaultValue={'config'}>
         <TabsList>
-          <TabsTrigger value={'config'}>{serviceT('configuration')}</TabsTrigger>
+          <TabsTrigger value={'config'}>
+            {serviceT('configuration')}
+          </TabsTrigger>
           {requiredConsolePermissions.some((permission) =>
             permissions.includes(permission)
-          ) && <TabsTrigger value={'console'}>{serviceT('console')}</TabsTrigger>}
+          ) && (
+            <TabsTrigger value={'console'}>{serviceT('console')}</TabsTrigger>
+          )}
         </TabsList>
         <TabsContent value={'config'}>
           <ServiceClientPage
@@ -162,7 +166,9 @@ export default async function UserPage(props) {
                       {stats.name}
                     </div>
                     <div className="ml-auto">
-                      {stats.canEdit ? serviceT('canEdit') : serviceT('viewOnly')}
+                      {stats.canEdit
+                        ? serviceT('canEdit')
+                        : serviceT('viewOnly')}
                     </div>
                   </div>
                   <dl className="-my-3 divide-y divide-gray-100 px-6 py-4 text-sm leading-6">
