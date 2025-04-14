@@ -1,6 +1,6 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { getOptions } from './options'
+import { useOptions } from './options'
 import { toast } from 'sonner'
 import { userApi } from '@/lib/client-api'
 import { useForm } from 'react-hook-form'
@@ -30,7 +30,8 @@ const userSchema = z.object({
 type UserFormData = z.infer<typeof userSchema>
 
 export default function UserClientPage({ user }: { user: User }) {
-  const router = useRouter()
+  const router = useRouter();
+  const options = useOptions();
 
   const form = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
@@ -38,12 +39,12 @@ export default function UserClientPage({ user }: { user: User }) {
       username: user.username,
       password: '',
       scopes: user.scopes.map((scope) => {
-        const option = getOptions().find((opt) => opt.value === scope)
+        const option = options.find((opt) => opt.value === scope);
         return {
           label: option?.label || scope,
           value: scope,
           group: option?.group || 'Other',
-        }
+        };
       }),
     },
   })
@@ -141,7 +142,7 @@ export default function UserClientPage({ user }: { user: User }) {
               <MultiSelectField
                 label="Permissions / Scopes"
                 description="Select the scopes for this user"
-                options={getOptions()}
+                options={options}
                 field={field}
                 placeholder="Select scopes..."
                 groupBy="group"

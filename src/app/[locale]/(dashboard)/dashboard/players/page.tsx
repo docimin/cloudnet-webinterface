@@ -42,7 +42,7 @@ export default async function PlayersPage() {
     )
   }
 
-  if (onlinePlayers.onlinePlayers.length === 0) {
+  if (onlinePlayers?.onlinePlayers?.length === 0) {
     return (
       <PageLayout title={playersT('title')}>
         <AutoRefresh>

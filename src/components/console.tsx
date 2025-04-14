@@ -109,7 +109,7 @@ export default function ServiceConsole({
         socket.close()
       }
     }
-  }, [webSocketPath, serviceName, type])
+  }, [consoleT, webSocketPath, serviceName, type])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()

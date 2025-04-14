@@ -1,7 +1,7 @@
 import { Option } from '@/components/ui/custom/multi-select'
 import { useDict } from 'gt-next/client'
 
-export function getOptions(): Option[] {
+export function useOptions(): Option[] {
   const permissionsT = useDict('Permissions')
 
   return [
@@ -55,25 +55,25 @@ export function getOptions(): Option[] {
       value: 'cloudnet_rest:node_write',
       group: permissionsT('node'),
     },
-    { 
-      label: permissionsT('nodeInfo'), 
-      value: 'cloudnet_rest:node_info', 
-      group: permissionsT('node') 
+    {
+      label: permissionsT('nodeInfo'),
+      value: 'cloudnet_rest:node_info',
+      group: permissionsT('node'),
     },
-    { 
-      label: permissionsT('nodePing'), 
-      value: 'cloudnet_rest:node_ping', 
-      group: permissionsT('node') 
+    {
+      label: permissionsT('nodePing'),
+      value: 'cloudnet_rest:node_ping',
+      group: permissionsT('node'),
     },
     {
       label: permissionsT('nodeLiveConsole'),
       value: 'cloudnet_rest:node_live_console',
       group: permissionsT('node'),
     },
-    { 
-      label: permissionsT('nodeReload'), 
-      value: 'cloudnet_rest:node_reload', 
-      group: permissionsT('node') 
+    {
+      label: permissionsT('nodeReload'),
+      value: 'cloudnet_rest:node_reload',
+      group: permissionsT('node'),
     },
     {
       label: permissionsT('getCurrentConfigurationOfNode'),
