@@ -8,6 +8,19 @@ const nextConfig: NextConfig = {
   reactStrictMode: true,
   compress: false,
   // output: 'standalone', // This is needed if you want to use docker
+  turbopack: {
+    resolveExtensions: [
+      '.ts',
+      '.tsx',
+      '.js',
+      '.jsx',
+      '.json',
+      '.css',
+      '.scss',
+      '.md',
+      '.mdx',
+    ],
+  },
   compiler: {
     styledComponents: true,
     //removeConsole: {

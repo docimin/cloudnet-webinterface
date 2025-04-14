@@ -43,11 +43,60 @@ export default function ServiceConsole({
   const consoleEndRef = useRef<HTMLDivElement>(null)
   const [socketBlocked, setSocketBlocked] = useState(false)
   const consoleT = useDict('Console')
+  const hasFetchedLogsRef = useRef(false)
+  const socketRef = useRef<WebSocket | null>(null)
+
+  const initializeSocket = async () => {
+    if (socketRef.current) return // Prevent re-initialization
+
+    try {
+      const ticket = await authApi.createTicket(type)
+      const cookies = await authApi.getCookies()
+      const cookieAddress = decodeURIComponent(cookies['add'])
+      const protocol = cookieAddress.startsWith('https') ? 'wss' : 'ws'
+      const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
+      const domainUrlProtocol = window.location.origin.startsWith('https')
+        ? 'wss'
+        : 'ws'
+
+      if (protocol !== domainUrlProtocol) {
+        setSocketBlocked(true)
+        return
+      }
+
+      const socketUrl = `${protocol}://${address}${webSocketPath}?ticket=${ticket}`
+
+      try {
+        socketRef.current = new WebSocket(socketUrl)
+      } catch (error) {
+        console.error('WebSocket construction error:', error)
+        setSocketBlocked(true)
+        toast.error(consoleT('connectionError'))
+        return
+      }
+
+      socketRef.current.onmessage = (event) => {
+        const newEntry: ConsoleEntry = {
+          output: event.data,
+        }
+        setHistory((prev) => [...prev, newEntry])
+      }
+      socketRef.current.onerror = (event) => {
+        console.error('WebSocket error:', event)
+        toast.error(consoleT('connectionError'))
+      }
+    } catch (error) {
+      console.error('Socket initialization error:', error)
+      setSocketBlocked(true)
+      toast.error(consoleT('connectionError'))
+    }
+  }
 
   useEffect(() => {
-    let socket: WebSocket | null = null
-
     const cachedLogLines = async () => {
+      if (hasFetchedLogsRef.current) return
+      hasFetchedLogsRef.current = true
+
       if (type === 'service' && serviceName) {
         try {
           const cache = (await serviceApi.logLines(serviceName)).data
@@ -58,55 +107,11 @@ export default function ServiceConsole({
       }
     }
 
-    const initializeSocket = async () => {
-      try {
-        const ticket = await authApi.createTicket(type)
-        const cookies = await authApi.getCookies()
-        const cookieAddress = decodeURIComponent(cookies['add'])
-        const protocol = cookieAddress.startsWith('https') ? 'wss' : 'ws'
-        const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
-        const domainUrlProtocol = window.location.origin.startsWith('https')
-          ? 'wss'
-          : 'ws'
-
-        if (protocol !== domainUrlProtocol) {
-          setSocketBlocked(true)
-          return
-        }
-
-        const socketUrl = `${protocol}://${address}${webSocketPath}?ticket=${ticket}`
-
-        try {
-          socket = new WebSocket(socketUrl)
-        } catch (error) {
-          console.error('WebSocket construction error:', error)
-          setSocketBlocked(true)
-          toast.error(consoleT('connectionError'))
-          return
-        }
-
-        socket.onmessage = (event) => {
-          const newEntry: ConsoleEntry = {
-            output: event.data,
-          }
-          setHistory((prev) => [...prev, newEntry])
-        }
-        socket.onerror = (event) => {
-          console.error('WebSocket error:', event)
-          toast.error(consoleT('connectionError'))
-        }
-      } catch (error) {
-        console.error('Socket initialization error:', error)
-        setSocketBlocked(true)
-        toast.error(consoleT('connectionError'))
-      }
-    }
-
     cachedLogLines().then(initializeSocket)
 
     return () => {
-      if (socket) {
-        socket.close()
+      if (socketRef.current) {
+        socketRef.current.close()
       }
     }
   }, [consoleT, webSocketPath, serviceName, type])
@@ -115,8 +120,12 @@ export default function ServiceConsole({
     e.preventDefault()
 
     if (input.trim() && serviceName) {
-      await serviceApi.execute(serviceName, input)
-      setInput('')
+      try {
+        await serviceApi.execute(serviceName, input)
+        setInput('')
+      } catch (error) {
+        toast.error(consoleT('commandError'))
+      }
     }
   }
 
