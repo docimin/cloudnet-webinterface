@@ -71,56 +71,80 @@ export default async function ServicesPage() {
                   b.configuration.serviceId.nodeUniqueId
                 )
               )
-              .map((service) => (
-                <TableRow key={service?.configuration.serviceId.uniqueId}>
-                  <TableCell className="font-medium">
-                    {service?.configuration.serviceId.taskName}
-                    {service?.configuration.serviceId.nameSplitter}
-                    {service?.configuration.serviceId.taskServiceId}
-                  </TableCell>
-                  <TableCell>{service?.lifeCycle}</TableCell>
-                  <TableCell>
-                    {service?.processSnapshot.cpuUsage.toFixed(2) + '%'}
-                  </TableCell>
-                  <TableCell>
-                    {servicesT('ramUsageFormat', {
-                      variables: {
-                        used: formatBytes(
-                          service?.processSnapshot?.heapUsageMemory
-                        ),
-                        max: formatBytes(
-                          service?.processSnapshot?.maxHeapMemory
-                        ),
-                      },
-                    })}
-                  </TableCell>
-                  <TableCell>
-                    {servicesT('onlineCount', {
-                      variables: {
-                        current: service?.properties['Online-Count'] || '0',
-                        max: service?.properties['Max-Players'] || '0',
-                      },
-                    })}
-                  </TableCell>
-                  {requiredPermissions.some((permission) =>
-                    permissions.includes(permission)
-                  ) && (
-                    <TableCell>
-                      <Link
-                        href={`/dashboard/services/${service?.configuration.serviceId.uniqueId}`}
-                      >
-                        <Button
-                          size={'sm'}
-                          variant={'link'}
-                          className={'p-0 text-right'}
-                        >
-                          {servicesT('details')}
-                        </Button>
-                      </Link>
+              .map((service) => {
+                const cpuUsage = service?.processSnapshot.cpuUsage || 0
+                const ramUsagePercentage =
+                  (service?.processSnapshot.heapUsageMemory /
+                    service?.processSnapshot.maxHeapMemory) *
+                  100
+
+                return (
+                  <TableRow key={service?.configuration.serviceId.uniqueId}>
+                    <TableCell className="font-medium">
+                      {service?.configuration.serviceId.taskName}
+                      {service?.configuration.serviceId.nameSplitter}
+                      {service?.configuration.serviceId.taskServiceId}
                     </TableCell>
-                  )}
-                </TableRow>
-              ))}
+                    <TableCell>{service?.lifeCycle}</TableCell>
+                    <TableCell
+                      className={
+                        cpuUsage < 50
+                          ? 'text-green-500'
+                          : cpuUsage < 80
+                            ? 'text-yellow-500'
+                            : 'text-red-500'
+                      }
+                    >
+                      {cpuUsage.toFixed(2) + '%'}
+                    </TableCell>
+                    <TableCell
+                      className={
+                        ramUsagePercentage < 50
+                          ? 'text-green-500'
+                          : ramUsagePercentage < 80
+                            ? 'text-yellow-500'
+                            : 'text-red-500'
+                      }
+                    >
+                      {servicesT('ramUsageFormat', {
+                        variables: {
+                          used: formatBytes(
+                            service?.processSnapshot?.heapUsageMemory
+                          ),
+                          max: formatBytes(
+                            service?.processSnapshot?.maxHeapMemory
+                          ),
+                        },
+                      })}
+                    </TableCell>
+                    <TableCell>
+                      {servicesT('onlineCount', {
+                        variables: {
+                          current: service?.properties['Online-Count'] || '0',
+                          max: service?.properties['Max-Players'] || '0',
+                        },
+                      })}
+                    </TableCell>
+                    {requiredPermissions.some((permission) =>
+                      permissions.includes(permission)
+                    ) && (
+                      <TableCell>
+                        <Link
+                          href={`/dashboard/services/${service?.configuration.serviceId.uniqueId}`}
+                        >
+                          <Button
+                            size={'sm'}
+                            variant={'link'}
+                            className={'p-0 text-right'}
+                          >
+                            {servicesT('details')}
+                          </Button>
+                        </Link>
+                      </TableCell>
+                    )}
+                  </TableRow>
+                )
+              })}
           </TableBody>
         </Table>
       </AutoRefresh>
