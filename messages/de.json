@@ -52,12 +52,12 @@
     "view": "View"
   },
   "Groups": {
-    "title": "Groups",
-    "tableCaption": "Eine liste von deinen groups.",
+    "title": "Gruppen",
+    "tableCaption": "Eine Liste von deinen Gruppen.",
     "name": "Name",
-    "groupNameChanged": "Group name wurde geändert!",
-    "groupConfigUpdated": "Group config wurde aktualisiert!",
-    "groupUninstalled": "Group wurde deinstalliert!",
+    "groupNameChanged": "Der Gruppen name wurde geändert!",
+    "groupConfigUpdated": "Die Gruppen config wurde aktualisiert!",
+    "groupUninstalled": "Gruppe wurde deinstalliert!",
     "headsUp": "Kopf hoch!",
     "editingGroupName": "Durch Bearbeiten des Felds 'name' wird der Gruppenname nicht geändert. Stattdessen wird eine neue Gruppe mit dem neuen Namen erstellt."
   },
@@ -197,7 +197,7 @@
     "editTitle": "Bearbeite {name}",
     "splitter": "Splitter",
     "isStatic": "Ist Statisch",
-    "minServiceCount": "Min. Server anzahl",
+    "minServiceCount": "Min. Server-Anzahl",
     "startPort": "Start port",
     "maxMemory": "Max. Arbeitsspeicher",
     "yes": "Ja",
@@ -217,7 +217,7 @@
   },
   "Users": {
     "title": "Benutzer",
-    "tableCaption": "Eine liste aus deinen Benutzern.",
+    "tableCaption": "Eine Liste aus deinen Benutzern.",
     "name": "Name",
     "createdAt": "Erstellt am",
     "modifiedAt": "Bearbeitet am",
