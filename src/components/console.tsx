@@ -27,6 +27,7 @@ interface ServiceConsoleProps {
 }
 
 const applyStyles = (text: string) => {
+  // Remove ASCII escape sequences
   const cleanText = text.replace(/\x1b\[[0-9;]*m/g, '')
 
   if (cleanText.includes('INFO')) {
@@ -34,17 +35,17 @@ const applyStyles = (text: string) => {
   } else if (cleanText.includes('WARN')) {
     return <span style={{ color: 'orange' }}>{cleanText}</span>
   } else if (cleanText.includes('ERROR')) {
-    return <span style={{ color: 'red' }}>{cleanText}</span>
+    return <span style={{ color: 'red', fontWeight: 'bold' }}>{cleanText}</span>
   }
   return <span>{cleanText}</span>
 }
 
 export default function ServiceConsole({
-  webSocketPath,
-  serviceName,
-  disableCommands = false,
-  type,
-}: ServiceConsoleProps) {
+                                         webSocketPath,
+                                         serviceName,
+                                         disableCommands = false,
+                                         type,
+                                       }: ServiceConsoleProps) {
   const [history, setHistory] = useState<ConsoleEntry[]>([])
   const [input, setInput] = useState('')
   const [filter, setFilter] = useState<string>('ALL')
@@ -55,7 +56,7 @@ export default function ServiceConsole({
   const socketRef = useRef<WebSocket | null>(null)
 
   const initializeSocket = async () => {
-    if (socketRef.current) return
+    if (socketRef.current) return // Prevent re-initialization
 
     try {
       const ticket = await authApi.createTicket(type)
@@ -146,6 +147,8 @@ export default function ServiceConsole({
     element.download = 'console-logs.txt'
     document.body.appendChild(element)
     element.click()
+    document.body.removeChild(element)
+    URL.revokeObjectURL(element.href)
   }
 
   const clearLogs = () => setHistory([])
