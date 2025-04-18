@@ -129,6 +129,24 @@ export default function ServiceConsole({
     }
   }
 
+  const downloadLogs = () => {
+    const element = document.createElement('a')
+    const file = new Blob([history.map((entry) => entry.output).join('\n')], {
+      type: 'text/plain',
+    })
+    element.href = URL.createObjectURL(file)
+    element.download = 'console-logs.txt'
+    document.body.appendChild(element)
+    element.click()
+  }
+
+  const clearLogs = () => setHistory([])
+
+  const filteredHistory = history.filter((entry) => {
+    if (filter === 'ALL') return true
+    return entry.output.includes(filter)
+  })
+
   useEffect(() => {
     consoleEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [history])
