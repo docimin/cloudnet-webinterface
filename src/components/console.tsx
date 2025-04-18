@@ -155,7 +155,7 @@ export default function ServiceConsole({
 
   const filteredHistory = history.filter((entry) => {
     if (filter === 'ALL') return true
-    return entry.output.includes(filter)
+    return entry.output.toLowerCase().includes(filter.toLowerCase())
   })
 
   useEffect(() => {
