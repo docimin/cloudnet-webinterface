@@ -7,7 +7,13 @@ import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { toast } from 'sonner'
 import { useDict } from 'gt-next/client'
 import { Button } from '@/components/ui/button'
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select' // ShadCN Select
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 interface ConsoleEntry {
   output: string
