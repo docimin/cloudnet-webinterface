@@ -1,11 +1,19 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { ChevronRight, Terminal } from 'lucide-react'
+import { ChevronRight, Download, Terminal, Trash } from 'lucide-react'
 import { authApi, serviceApi } from '@/lib/client-api'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { toast } from 'sonner'
 import { useDict } from 'gt-next/client'
+import { Button } from '@/components/ui/button'
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select'
 
 interface ConsoleEntry {
   output: string
@@ -27,7 +35,7 @@ const applyStyles = (text: string) => {
   } else if (cleanText.includes('WARN')) {
     return <span style={{ color: 'orange' }}>{cleanText}</span>
   } else if (cleanText.includes('ERROR')) {
-    return <span style={{ color: 'red' }}>{cleanText}</span>
+    return <span style={{ color: 'red', fontWeight: 'bold' }}>{cleanText}</span>
   }
   return <span>{cleanText}</span>
 }
@@ -40,6 +48,7 @@ export default function ServiceConsole({
 }: ServiceConsoleProps) {
   const [history, setHistory] = useState<ConsoleEntry[]>([])
   const [input, setInput] = useState('')
+  const [filter, setFilter] = useState<string>('ALL')
   const consoleEndRef = useRef<HTMLDivElement>(null)
   const [socketBlocked, setSocketBlocked] = useState(false)
   const consoleT = useDict('Console')
@@ -129,6 +138,26 @@ export default function ServiceConsole({
     }
   }
 
+  const downloadLogs = () => {
+    const element = document.createElement('a')
+    const file = new Blob([history.map((entry) => entry.output).join('\n')], {
+      type: 'text/plain',
+    })
+    element.href = URL.createObjectURL(file)
+    element.download = 'console-logs.txt'
+    document.body.appendChild(element)
+    element.click()
+    document.body.removeChild(element)
+    URL.revokeObjectURL(element.href)
+  }
+
+  const clearLogs = () => setHistory([])
+
+  const filteredHistory = history.filter((entry) => {
+    if (filter === 'ALL') return true
+    return entry.output.toLowerCase().includes(filter.toLowerCase())
+  })
+
   useEffect(() => {
     consoleEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [history])
@@ -142,9 +171,32 @@ export default function ServiceConsole({
           <AlertDescription>{consoleT('protocolMismatch')}</AlertDescription>
         </Alert>
       )}
+      <div className="p-4 bg-gray-900 text-gray-200 flex items-center justify-between">
+        <Select value={filter} onValueChange={(value) => setFilter(value)}>
+          <SelectTrigger className="w-full max-w-xs">
+            <SelectValue placeholder="Filter Logs" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">All Logs</SelectItem>
+            <SelectItem value="INFO">INFO</SelectItem>
+            <SelectItem value="WARN">WARN</SelectItem>
+            <SelectItem value="ERROR">ERROR</SelectItem>
+          </SelectContent>
+        </Select>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={downloadLogs}>
+            <Download className="w-4 h-4 mr-1" />
+            {consoleT('downloadLogs')}
+          </Button>
+          <Button variant="outline" onClick={clearLogs}>
+            <Trash className="w-4 h-4 mr-1" />
+            {consoleT('clearLogs')}
+          </Button>
+        </div>
+      </div>
       <div className="w-full mx-auto h-[80vh] bg-gray-800 text-gray-200 rounded-lg overflow-hidden flex flex-col">
         <div className="flex-1 p-4 overflow-y-auto font-mono text-sm">
-          {history.map((entry, index) => (
+          {filteredHistory.map((entry, index) => (
             <div key={index} className="mb-2">
               <div className="text-gray-400">{applyStyles(entry.output)}</div>
             </div>
