@@ -7,7 +7,7 @@ import { FrownIcon } from 'lucide-react'
 export default function NoRecords() {
   const router = useRouter()
   const mainT = useDict('Main')
-  
+
   return (
     <div className="h-svh flex flex-col items-center justify-center gap-4 text-center">
       <FrownIcon className="h-24 w-24 text-muted-foreground" />
