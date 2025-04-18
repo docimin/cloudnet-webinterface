@@ -41,10 +41,10 @@ const applyStyles = (text: string) => {
 }
 
 export default function ServiceConsole({
-    webSocketPath,
-    serviceName,
-    disableCommands =  false,
-    type,
+  webSocketPath,
+  serviceName,
+  disableCommands = false,
+  type,
 }: ServiceConsoleProps) {
   const [history, setHistory] = useState<ConsoleEntry[]>([])
   const [input, setInput] = useState('')
