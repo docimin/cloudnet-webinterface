@@ -160,6 +160,29 @@ export default function ServiceConsole({
           <AlertDescription>{consoleT('protocolMismatch')}</AlertDescription>
         </Alert>
       )}
+      <div className="p-4 bg-gray-900 text-gray-200 flex items-center justify-between">
+        <Select value={filter} onValueChange={(value) => setFilter(value)}>
+          <SelectTrigger className="w-full max-w-xs">
+            <SelectValue placeholder="Filter Logs" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="ALL">All Logs</SelectItem>
+            <SelectItem value="INFO">INFO</SelectItem>
+            <SelectItem value="WARN">WARN</SelectItem>
+            <SelectItem value="ERROR">ERROR</SelectItem>
+          </SelectContent>
+        </Select>
+        <div className="flex gap-2">
+          <Button variant="outline" onClick={downloadLogs}>
+            <Download className="w-4 h-4 mr-1" />
+            {consoleT('downloadLogs')}
+          </Button>
+          <Button variant="outline" onClick={clearLogs}>
+            <Trash className="w-4 h-4 mr-1" />
+            {consoleT('clearLogs')}
+          </Button>
+        </div>
+      </div>
       <div className="w-full mx-auto h-[80vh] bg-gray-800 text-gray-200 rounded-lg overflow-hidden flex flex-col">
         <div className="flex-1 p-4 overflow-y-auto font-mono text-sm">
           {history.map((entry, index) => (
