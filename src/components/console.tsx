@@ -1,11 +1,13 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { ChevronRight, Terminal } from 'lucide-react'
+import { ChevronRight, Download, Terminal, Trash } from 'lucide-react'
 import { authApi, serviceApi } from '@/lib/client-api'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { toast } from 'sonner'
 import { useDict } from 'gt-next/client'
+import { Button } from '@/components/ui/button'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select' // ShadCN Select
 
 interface ConsoleEntry {
   output: string
@@ -19,7 +21,6 @@ interface ServiceConsoleProps {
 }
 
 const applyStyles = (text: string) => {
-  // Remove ASCII escape sequences
   const cleanText = text.replace(/\x1b\[[0-9;]*m/g, '')
 
   if (cleanText.includes('INFO')) {
@@ -33,13 +34,14 @@ const applyStyles = (text: string) => {
 }
 
 export default function ServiceConsole({
-  webSocketPath,
-  serviceName,
-  disableCommands = false,
-  type,
-}: ServiceConsoleProps) {
+                                         webSocketPath,
+                                         serviceName,
+                                         disableCommands = false,
+                                         type,
+                                       }: ServiceConsoleProps) {
   const [history, setHistory] = useState<ConsoleEntry[]>([])
   const [input, setInput] = useState('')
+  const [filter, setFilter] = useState<string>('ALL')
   const consoleEndRef = useRef<HTMLDivElement>(null)
   const [socketBlocked, setSocketBlocked] = useState(false)
   const consoleT = useDict('Console')
@@ -47,7 +49,7 @@ export default function ServiceConsole({
   const socketRef = useRef<WebSocket | null>(null)
 
   const initializeSocket = async () => {
-    if (socketRef.current) return // Prevent re-initialization
+    if (socketRef.current) return
 
     try {
       const ticket = await authApi.createTicket(type)
@@ -185,7 +187,7 @@ export default function ServiceConsole({
       </div>
       <div className="w-full mx-auto h-[80vh] bg-gray-800 text-gray-200 rounded-lg overflow-hidden flex flex-col">
         <div className="flex-1 p-4 overflow-y-auto font-mono text-sm">
-          {history.map((entry, index) => (
+          {filteredHistory.map((entry, index) => (
             <div key={index} className="mb-2">
               <div className="text-gray-400">{applyStyles(entry.output)}</div>
             </div>
