@@ -2,6 +2,7 @@
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { useDict } from 'gt-next/client'
+import { LockIcon } from 'lucide-react'
 
 export default function NoAccess() {
   const router = useRouter()
