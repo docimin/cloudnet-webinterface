@@ -1,9 +1,11 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { ChevronRight, Terminal } from 'lucide-react'
+import { ChevronRight, Terminal, Download, Trash, Filter } from 'lucide-react'
 import { authApi, serviceApi } from '@/lib/client-api'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
+import { Button } from './ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { toast } from 'sonner'
 import { useDict } from 'gt-next/client'
 
@@ -40,6 +42,7 @@ export default function ServiceConsole({
 }: ServiceConsoleProps) {
   const [history, setHistory] = useState<ConsoleEntry[]>([])
   const [input, setInput] = useState('')
+  const [filter, setFilter] = useState<'ALL' | 'INFO' | 'WARN' | 'ERROR'>('ALL') // Default filter is ALL
   const consoleEndRef = useRef<HTMLDivElement>(null)
   const [socketBlocked, setSocketBlocked] = useState(false)
   const consoleT = useDict('Console')
@@ -208,13 +211,14 @@ export default function ServiceConsole({
         </div>
         {/* Console Content */}
         <div className="flex-1 p-4 overflow-y-auto font-mono text-sm">
-          {history.map((entry, index) => (
+          {filteredHistory.map((entry, index) => (
             <div key={index} className="mb-2">
               <div className="text-gray-400">{applyStyles(entry.output)}</div>
             </div>
           ))}
           <div ref={consoleEndRef} />
         </div>
+        {/* Command Input */}
         {disableCommands ? null : (
           <form onSubmit={handleSubmit} className="p-2 bg-gray-900">
             <div className="flex items-center">
