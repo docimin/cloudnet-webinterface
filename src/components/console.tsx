@@ -166,6 +166,47 @@ export default function ServiceConsole({
         </Alert>
       )}
       <div className="w-full mx-auto h-[80vh] bg-gray-800 text-gray-200 rounded-lg overflow-hidden flex flex-col">
+        {/* Dropdown Menu for Filter on the Left and Buttons on the Right */}
+        <div className="flex justify-between items-center p-2 bg-gray-900">
+          {/* Dropdown Menu for Filter */}
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                  <Filter className="mr-2 h-4 w-4" />
+                  {consoleT('filter')}: {filter}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => setFilter('ALL')}>
+                  {consoleT('filterAll') || 'ALL'}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setFilter('INFO')}>
+                  INFO
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setFilter('WARN')}>
+                  WARN
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setFilter('ERROR')}>
+                  ERROR
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          {/* Buttons for Clear and Download */}
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={handleClearLogs}>
+              <Trash className="mr-2 h-4 w-4" />
+              {consoleT('clearLogs')}
+            </Button>
+            <Button variant="outline" onClick={handleDownloadLogs}>
+              <Download className="mr-2 h-4 w-4" />
+              {consoleT('downloadLogs')}
+            </Button>
+          </div>
+        </div>
+        {/* Console Content */}
         <div className="flex-1 p-4 overflow-y-auto font-mono text-sm">
           {history.map((entry, index) => (
             <div key={index} className="mb-2">
