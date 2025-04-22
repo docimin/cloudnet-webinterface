@@ -133,6 +133,29 @@ export default function ServiceConsole({
     consoleEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [history])
 
+  // Function to download console logs
+  const handleDownloadLogs = () => {
+    const logContent = history.map((entry) => entry.output).join('\n')
+    const blob = new Blob([logContent], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${serviceName || 'console'}-logs.txt`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  // Function to clear console logs
+  const handleClearLogs = () => {
+    setHistory([])
+  }
+
+  // Function to filter logs
+  const filteredHistory = history.filter((entry) => {
+    if (filter === 'ALL') return true
+    return entry.output.toLowerCase().includes(filter.toLowerCase())
+  })
+
   return (
     <>
       {socketBlocked && (
