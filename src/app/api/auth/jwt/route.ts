@@ -98,6 +98,12 @@ export const POST = createApiRoute(async () => {
       )
 
       return NextResponse.json({ status: 200 })
+    } else {
+      // Handle any other status codes
+      return NextResponse.json(
+        { status: accessResponse.status, error: 'Authentication failed' },
+        { status: accessResponse.status }
+      )
     }
   } catch (error) {
     cookie.delete('add')
