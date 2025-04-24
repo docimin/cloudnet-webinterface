@@ -1,9 +1,11 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { ChevronRight, Terminal } from 'lucide-react'
+import { ChevronRight, Terminal, Download, Trash, Filter } from 'lucide-react'
 import { authApi, serviceApi } from '@/lib/client-api'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
+import { Button } from './ui/button'
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
 import { toast } from 'sonner'
 import { useDict } from 'gt-next/client'
 
@@ -40,6 +42,7 @@ export default function ServiceConsole({
 }: ServiceConsoleProps) {
   const [history, setHistory] = useState<ConsoleEntry[]>([])
   const [input, setInput] = useState('')
+  const [filter, setFilter] = useState<'ALL' | 'INFO' | 'WARN' | 'ERROR'>('ALL') // Default filter is ALL
   const consoleEndRef = useRef<HTMLDivElement>(null)
   const [socketBlocked, setSocketBlocked] = useState(false)
   const consoleT = useDict('Console')
@@ -133,6 +136,29 @@ export default function ServiceConsole({
     consoleEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [history])
 
+  // Function to download console logs
+  const handleDownloadLogs = () => {
+    const logContent = history.map((entry) => entry.output).join('\n')
+    const blob = new Blob([logContent], { type: 'text/plain;charset=utf-8' })
+    const url = URL.createObjectURL(blob)
+    const link = document.createElement('a')
+    link.href = url
+    link.download = `${serviceName || 'console'}-logs.txt`
+    link.click()
+    URL.revokeObjectURL(url)
+  }
+
+  // Function to clear console logs
+  const handleClearLogs = () => {
+    setHistory([])
+  }
+
+  // Function to filter logs
+  const filteredHistory = history.filter((entry) => {
+    if (filter === 'ALL') return true
+    return entry.output.toLowerCase().includes(filter.toLowerCase())
+  })
+
   return (
     <>
       {socketBlocked && (
@@ -143,14 +169,56 @@ export default function ServiceConsole({
         </Alert>
       )}
       <div className="w-full mx-auto h-[80vh] bg-gray-800 text-gray-200 rounded-lg overflow-hidden flex flex-col">
+        {/* Dropdown Menu for Filter on the Left and Buttons on the Right */}
+        <div className="flex justify-between items-center p-2 bg-gray-900">
+          {/* Dropdown Menu for Filter */}
+          <div className="flex items-center gap-2">
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <Button variant="outline">
+                  <Filter className="mr-2 h-4 w-4" />
+                  {consoleT('filter')}: {filter}
+                </Button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent>
+                <DropdownMenuItem onClick={() => setFilter('ALL')}>
+                  {consoleT('filterAll') || 'ALL'}
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setFilter('INFO')}>
+                  INFO
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setFilter('WARN')}>
+                  WARN
+                </DropdownMenuItem>
+                <DropdownMenuItem onClick={() => setFilter('ERROR')}>
+                  ERROR
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
+
+          {/* Buttons for Clear and Download */}
+          <div className="flex items-center gap-2">
+            <Button variant="outline" onClick={handleClearLogs}>
+              <Trash className="mr-2 h-4 w-4" />
+              {consoleT('clearLogs')}
+            </Button>
+            <Button variant="outline" onClick={handleDownloadLogs}>
+              <Download className="mr-2 h-4 w-4" />
+              {consoleT('downloadLogs')}
+            </Button>
+          </div>
+        </div>
+        {/* Console Content */}
         <div className="flex-1 p-4 overflow-y-auto font-mono text-sm">
-          {history.map((entry, index) => (
+          {filteredHistory.map((entry, index) => (
             <div key={index} className="mb-2">
               <div className="text-gray-400">{applyStyles(entry.output)}</div>
             </div>
           ))}
           <div ref={consoleEndRef} />
         </div>
+        {/* Command Input */}
         {disableCommands ? null : (
           <form onSubmit={handleSubmit} className="p-2 bg-gray-900">
             <div className="flex items-center">
