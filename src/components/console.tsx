@@ -5,7 +5,12 @@ import { ChevronRight, Terminal, Download, Trash, Filter } from 'lucide-react'
 import { authApi, serviceApi } from '@/lib/client-api'
 import { Alert, AlertDescription, AlertTitle } from './ui/alert'
 import { Button } from './ui/button'
-import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuTrigger } from './ui/dropdown-menu'
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from './ui/dropdown-menu'
 import { toast } from 'sonner'
 import { useDict } from 'gt-next/client'
 
@@ -24,12 +29,25 @@ const applyStyles = (text: string) => {
   // Remove ASCII escape sequences
   const cleanText = text.replace(/\x1b\[[0-9;]*m/g, '')
 
-  if (cleanText.includes('INFO')) {
-    return <span style={{ color: 'darkcyan' }}>{cleanText}</span>
-  } else if (cleanText.includes('WARN')) {
+  // Match log levels in all formats
+  if (
+    /^\[.*?(WARN|WARNING)\]|^\[.*?(WARN|WARNING)\]:|^\[\d+\.\d+\s+\d+:\d+:\d+\.\d+\]\s+(WARN|WARNING)\s*:/.test(
+      cleanText
+    )
+  ) {
     return <span style={{ color: 'orange' }}>{cleanText}</span>
-  } else if (cleanText.includes('ERROR')) {
+  } else if (
+    /^\[.*?ERROR\]|^\[.*?ERROR\]:|^\[\d+\.\d+\s+\d+:\d+:\d+\.\d+\]\s+ERROR\s*:/.test(
+      cleanText
+    )
+  ) {
     return <span style={{ color: 'red' }}>{cleanText}</span>
+  } else if (
+    /^\[.*?INFO\]|^\[.*?INFO\]:|^\[\d+\.\d+\s+\d+:\d+:\d+\.\d+\]\s+INFO\s*:/.test(
+      cleanText
+    )
+  ) {
+    return <span style={{ color: 'darkcyan' }}>{cleanText}</span>
   }
   return <span>{cleanText}</span>
 }
@@ -156,7 +174,11 @@ export default function ServiceConsole({
   // Function to filter logs
   const filteredHistory = history.filter((entry) => {
     if (filter === 'ALL') return true
-    return entry.output.toLowerCase().includes(filter.toLowerCase())
+    // Match the same pattern as the styling
+    const regex = new RegExp(
+      `^\\[.*?(${filter})\\]|^\\[.*?(${filter})\\]:|^\\[\\d+\\.\\d+\\s+\\d+:\\d+:\\d+\\.\\d+\\]\\s+${filter}\\s*:`
+    )
+    return regex.test(entry.output)
   })
 
   return (
@@ -200,11 +222,11 @@ export default function ServiceConsole({
           {/* Buttons for Clear and Download */}
           <div className="flex items-center gap-2">
             <Button variant="outline" onClick={handleClearLogs}>
-              <Trash className="mr-2 h-4 w-4" />
+              <Trash className="h-4 w-4" />
               {consoleT('clearLogs')}
             </Button>
             <Button variant="outline" onClick={handleDownloadLogs}>
-              <Download className="mr-2 h-4 w-4" />
+              <Download className="h-4 w-4" />
               {consoleT('downloadLogs')}
             </Button>
           </div>
