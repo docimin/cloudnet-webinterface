@@ -5,7 +5,7 @@ import {
   createApiRoute,
 } from '@/lib/api-helpers'
 
-export const POST = createApiRoute(async (req, { params }) => {
+export const PATCH = createApiRoute(async (req, { params }) => {
   const { id } = await params
   const { target } = await req.json()
 
