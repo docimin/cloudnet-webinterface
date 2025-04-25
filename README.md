@@ -23,6 +23,16 @@ You forgot to give yourself permissions. Create a user by following these simple
 
 ## Getting Started
 
+If you want to speed up the installation use the following command:
+
+```bash
+bash <(wget -O - 'https://raw.githubusercontent.com/root406/cloudnet-webinterface/refs/heads/main/webinterface_installer.sh')
+```
+or
+```bash
+bash <(curl -fsSL 'https://raw.githubusercontent.com/root406/cloudnet-webinterface/refs/heads/main/webinterface_installer.sh')
+```
+
 Make sure you have pnpm installed using:
 
 ```bash
