@@ -1,18 +1,11 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
-import { ChevronRight, Terminal, Download, Trash, Filter } from 'lucide-react'
-import { authApi, serviceApi } from '@/lib/client-api'
-import { Alert, AlertDescription, AlertTitle } from './ui/alert'
-import { Button } from './ui/button'
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from './ui/dropdown-menu'
-import { toast } from 'sonner'
-import { useDict } from 'gt-next/client'
+import { ChevronRight } from 'lucide-react'
+import { getCookie } from '@/lib/server-calls'
+import { createTicket } from '@/utils/actions/user/createTicket'
+import { executeCommand } from '@/utils/actions/commands/executeCommand'
+import { getCachedServiceLog } from '@/utils/server-api/services/getCachedServiceLog'
 
 interface ConsoleEntry {
   output: string
@@ -29,25 +22,12 @@ const applyStyles = (text: string) => {
   // Remove ASCII escape sequences
   const cleanText = text.replace(/\x1b\[[0-9;]*m/g, '')
 
-  // Match log levels in all formats
-  if (
-    /^\[.*?(WARN|WARNING)\]|^\[.*?(WARN|WARNING)\]:|^\[\d+\.\d+\s+\d+:\d+:\d+\.\d+\]\s+(WARN|WARNING)\s*:/.test(
-      cleanText
-    )
-  ) {
-    return <span style={{ color: 'orange' }}>{cleanText}</span>
-  } else if (
-    /^\[.*?ERROR\]|^\[.*?ERROR\]:|^\[\d+\.\d+\s+\d+:\d+:\d+\.\d+\]\s+ERROR\s*:/.test(
-      cleanText
-    )
-  ) {
-    return <span style={{ color: 'red' }}>{cleanText}</span>
-  } else if (
-    /^\[.*?INFO\]|^\[.*?INFO\]:|^\[\d+\.\d+\s+\d+:\d+:\d+\.\d+\]\s+INFO\s*:/.test(
-      cleanText
-    )
-  ) {
+  if (cleanText.includes('INFO')) {
     return <span style={{ color: 'darkcyan' }}>{cleanText}</span>
+  } else if (cleanText.includes('WARN')) {
+    return <span style={{ color: 'orange' }}>{cleanText}</span>
+  } else if (cleanText.includes('ERROR')) {
+    return <span style={{ color: 'red' }}>{cleanText}</span>
   }
   return <span>{cleanText}</span>
 }
@@ -60,92 +40,98 @@ export default function ServiceConsole({
 }: ServiceConsoleProps) {
   const [history, setHistory] = useState<ConsoleEntry[]>([])
   const [input, setInput] = useState('')
-  const [filter, setFilter] = useState<'ALL' | 'INFO' | 'WARN' | 'ERROR'>('ALL') // Default filter is ALL
   const consoleEndRef = useRef<HTMLDivElement>(null)
-  const [socketBlocked, setSocketBlocked] = useState(false)
-  const consoleT = useDict('Console')
-  const hasFetchedLogsRef = useRef(false)
   const socketRef = useRef<WebSocket | null>(null)
 
-  const initializeSocket = async () => {
-    if (socketRef.current) return // Prevent re-initialization
+  useEffect(() => {
+    // Fetch cached logs for the service (if available)
+    const cachedLogLines = async () => {
+      if (type === 'service') {
+        const cache = await getCachedServiceLog(serviceName)
+        setHistory(
+          cache.lines.map((line) => ({ command: 'Server', output: line }))
+        )
+      }
+    }
 
-    try {
-      const ticket = await authApi.createTicket(type)
-      const cookies = await authApi.getCookies()
-      const cookieAddress = decodeURIComponent(cookies['add'])
-      const protocol = cookieAddress.startsWith('https') ? 'wss' : 'ws'
+    // Initialize WebSocket connection
+    const initializeSocket = async () => {
+      // Ensure we don't open a new connection if one already exists
+      if (socketRef.current) {
+        return
+      }
+
+      const ticket = await createTicket(type)
+
+      if (!ticket) {
+        console.error('Failed to create ticket!')
+        return
+      }
+
+      const cookieAddress = await getCookie('add')
+      const protocol = window.location.protocol === 'https:' ? 'wss' : 'ws'
       const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
-      const domainUrlProtocol = window.location.origin.startsWith('https')
-        ? 'wss'
-        : 'ws'
 
-      if (protocol !== domainUrlProtocol) {
-        setSocketBlocked(true)
+      if (!address) {
+        console.error('Invalid address:', cookieAddress)
         return
       }
 
-      const socketUrl = `${protocol}://${address}${webSocketPath}?ticket=${ticket}`
-
-      try {
-        socketRef.current = new WebSocket(socketUrl)
-      } catch (error) {
-        console.error('WebSocket construction error:', error)
-        setSocketBlocked(true)
-        toast.error(consoleT('connectionError'))
-        return
-      }
+      socketRef.current = new WebSocket(
+        `${protocol}://${address}${webSocketPath}?ticket=${ticket}`
+      )
 
       socketRef.current.onmessage = (event) => {
         const newEntry: ConsoleEntry = {
           output: event.data,
         }
-        setHistory((prev) => [...prev, newEntry])
+        setHistory((prev) => {
+          if (prev.length && prev[prev.length - 1].output === newEntry.output) {
+            return prev
+          }
+          return [...prev, newEntry]
+        })
       }
-      socketRef.current.onerror = (event) => {
-        console.error('WebSocket error:', event)
-        toast.error(consoleT('connectionError'))
+
+      socketRef.current.onerror = (error) => {
+        console.error('WebSocket Error:', error)
       }
-    } catch (error) {
-      console.error('Socket initialization error:', error)
-      setSocketBlocked(true)
-      toast.error(consoleT('connectionError'))
-    }
-  }
 
-  useEffect(() => {
-    const cachedLogLines = async () => {
-      if (hasFetchedLogsRef.current) return
-      hasFetchedLogsRef.current = true
-
-      if (type === 'service' && serviceName) {
-        try {
-          const cache = (await serviceApi.logLines(serviceName)).data
-          setHistory(cache.lines.map((line) => ({ output: line })))
-        } catch (error) {
-          toast.error(consoleT('fetchError'))
-        }
+      socketRef.current.onclose = (event) => {
+        console.log('WebSocket closed:', event)
       }
     }
 
     cachedLogLines().then(initializeSocket)
 
+    // Cleanup function to close socket when the component unmounts
     return () => {
       if (socketRef.current) {
         socketRef.current.close()
       }
     }
-  }, [consoleT, webSocketPath, serviceName, type])
+  }, [webSocketPath, serviceName, type])
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
 
-    if (input.trim() && serviceName) {
-      try {
-        await serviceApi.execute(serviceName, input)
+    const requiredPermissions = [
+      'cloudnet_rest:service_write',
+      'cloudnet_rest:service_send_commands',
+      'global:admin',
+    ]
+
+    if (input.trim()) {
+      // Check if the socket is open before trying to send a command
+      if (socketRef.current?.readyState === WebSocket.OPEN) {
+        await executeCommand(
+          `/service/${serviceName}/command`,
+          input,
+          requiredPermissions
+        )
         setInput('')
-      } catch (error) {
-        toast.error(consoleT('commandError'))
+      } else {
+        console.error('WebSocket is not open. Command cannot be sent.')
       }
     }
   }
@@ -154,108 +140,30 @@ export default function ServiceConsole({
     consoleEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [history])
 
-  // Function to download console logs
-  const handleDownloadLogs = () => {
-    const logContent = history.map((entry) => entry.output).join('\n')
-    const blob = new Blob([logContent], { type: 'text/plain;charset=utf-8' })
-    const url = URL.createObjectURL(blob)
-    const link = document.createElement('a')
-    link.href = url
-    link.download = `${serviceName || 'console'}-logs.txt`
-    link.click()
-    URL.revokeObjectURL(url)
-  }
-
-  // Function to clear console logs
-  const handleClearLogs = () => {
-    setHistory([])
-  }
-
-  // Function to filter logs
-  const filteredHistory = history.filter((entry) => {
-    if (filter === 'ALL') return true
-    // Match the same pattern as the styling
-    const regex = new RegExp(
-      `^\\[.*?(${filter})\\]|^\\[.*?(${filter})\\]:|^\\[\\d+\\.\\d+\\s+\\d+:\\d+:\\d+\\.\\d+\\]\\s+${filter}\\s*:`
-    )
-    return regex.test(entry.output)
-  })
-
   return (
-    <>
-      {socketBlocked && (
-        <Alert className="my-4">
-          <Terminal className="h-4 w-4" />
-          <AlertTitle>{consoleT('headsUp')}</AlertTitle>
-          <AlertDescription>{consoleT('protocolMismatch')}</AlertDescription>
-        </Alert>
-      )}
-      <div className="w-full mx-auto h-[80vh] bg-gray-800 text-gray-200 rounded-lg overflow-hidden flex flex-col">
-        {/* Dropdown Menu for Filter on the Left and Buttons on the Right */}
-        <div className="flex justify-between items-center p-2 bg-gray-900">
-          {/* Dropdown Menu for Filter */}
-          <div className="flex items-center gap-2">
-            <DropdownMenu>
-              <DropdownMenuTrigger asChild>
-                <Button variant="outline">
-                  <Filter className="mr-2 h-4 w-4" />
-                  {consoleT('filter')}: {filter}
-                </Button>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <DropdownMenuItem onClick={() => setFilter('ALL')}>
-                  {consoleT('filterAll') || 'ALL'}
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilter('INFO')}>
-                  INFO
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilter('WARN')}>
-                  WARN
-                </DropdownMenuItem>
-                <DropdownMenuItem onClick={() => setFilter('ERROR')}>
-                  ERROR
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+    <div className="w-full mx-auto h-[80vh] bg-gray-800 text-gray-200 rounded-lg overflow-hidden flex flex-col">
+      <div className="flex-1 p-4 overflow-y-auto font-mono text-sm">
+        {history.map((entry, index) => (
+          <div key={index} className="mb-2">
+            <div className="text-gray-400">{applyStyles(entry.output)}</div>
           </div>
-
-          {/* Buttons for Clear and Download */}
-          <div className="flex items-center gap-2">
-            <Button variant="outline" onClick={handleClearLogs}>
-              <Trash className="h-4 w-4" />
-              {consoleT('clearLogs')}
-            </Button>
-            <Button variant="outline" onClick={handleDownloadLogs}>
-              <Download className="h-4 w-4" />
-              {consoleT('downloadLogs')}
-            </Button>
-          </div>
-        </div>
-        {/* Console Content */}
-        <div className="flex-1 p-4 overflow-y-auto font-mono text-sm">
-          {filteredHistory.map((entry, index) => (
-            <div key={index} className="mb-2">
-              <div className="text-gray-400">{applyStyles(entry.output)}</div>
-            </div>
-          ))}
-          <div ref={consoleEndRef} />
-        </div>
-        {/* Command Input */}
-        {disableCommands ? null : (
-          <form onSubmit={handleSubmit} className="p-2 bg-gray-900">
-            <div className="flex items-center">
-              <ChevronRight className="w-5 h-5 mr-1 text-green-400" />
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                className="flex-1 bg-transparent outline-none text-gray-200 font-mono"
-                placeholder={consoleT('commandPlaceholder')}
-              />
-            </div>
-          </form>
-        )}
+        ))}
+        <div ref={consoleEndRef} />
       </div>
-    </>
+      {disableCommands ? null : (
+        <form onSubmit={handleSubmit} className="p-2 bg-gray-900">
+          <div className="flex items-center">
+            <ChevronRight className="w-5 h-5 mr-1 text-green-400" />
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              className="flex-1 bg-transparent outline-none text-gray-200 font-mono"
+              placeholder="Type your command..."
+            />
+          </div>
+        </form>
+      )}
+    </div>
   )
 }
