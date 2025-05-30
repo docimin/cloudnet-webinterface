@@ -18,8 +18,6 @@ import Link from 'next/link'
 import { serverServiceApi } from '@/lib/server-api'
 import { getDict } from 'gt-next/server'
 
-export const runtime = 'edge'
-
 export default async function ServicesPage() {
   const servicesT = await getDict('Services')
   const services = await serverServiceApi.list()
@@ -58,10 +56,10 @@ export default async function ServicesPage() {
               {requiredPermissions.some((permission) =>
                 permissions.includes(permission)
               ) && (
-                <TableHead className="sr-only">
-                  {servicesT('details')}
-                </TableHead>
-              )}
+                  <TableHead className="sr-only">
+                    {servicesT('details')}
+                  </TableHead>
+                )}
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -128,20 +126,20 @@ export default async function ServicesPage() {
                     {requiredPermissions.some((permission) =>
                       permissions.includes(permission)
                     ) && (
-                      <TableCell>
-                        <Link
-                          href={`/dashboard/services/${service?.configuration.serviceId.uniqueId}`}
-                        >
-                          <Button
-                            size={'sm'}
-                            variant={'link'}
-                            className={'p-0 text-right'}
+                        <TableCell>
+                          <Link
+                            href={`/dashboard/services/${service?.configuration.serviceId.uniqueId}`}
                           >
-                            {servicesT('details')}
-                          </Button>
-                        </Link>
-                      </TableCell>
-                    )}
+                            <Button
+                              size={'sm'}
+                              variant={'link'}
+                              className={'p-0 text-right'}
+                            >
+                              {servicesT('details')}
+                            </Button>
+                          </Link>
+                        </TableCell>
+                      )}
                   </TableRow>
                 )
               })}

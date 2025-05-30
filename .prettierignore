@@ -7,3 +7,4 @@ Dockerfile
 package.json
 package-lock.json
 pnpm-lock.yaml
+.open-next

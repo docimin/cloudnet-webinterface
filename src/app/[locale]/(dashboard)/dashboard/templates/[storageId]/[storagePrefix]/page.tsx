@@ -15,8 +15,6 @@ import { serverStorageApi } from '@/lib/server-api'
 import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 
-export const runtime = 'edge'
-
 export default async function TemplatesPage(props) {
   const params = await props.params
 

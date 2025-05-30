@@ -6,8 +6,6 @@ import UserClientPage from '@/app/[locale]/(dashboard)/dashboard/users/[userId]/
 import { serverUserApi } from '@/lib/server-api'
 import { getDict } from 'gt-next/server'
 
-export const runtime = 'edge'
-
 export default async function UserPage(props) {
   const params = await props.params
   const usersT = await getDict('Users')

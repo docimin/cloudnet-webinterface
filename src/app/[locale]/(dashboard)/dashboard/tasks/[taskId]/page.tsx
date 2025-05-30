@@ -17,8 +17,6 @@ import { serverTaskApi } from '@/lib/server-api'
 import { Task } from '@/utils/types/tasks'
 import { getDict } from 'gt-next/server'
 
-export const runtime = 'edge'
-
 export default async function UserPage(props) {
   const params = await props.params
   const { taskId } = params

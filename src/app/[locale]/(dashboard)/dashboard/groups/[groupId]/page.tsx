@@ -6,8 +6,6 @@ import GroupClientPage from './page.client'
 import { serverGroupApi } from '@/lib/server-api'
 import { getDict } from 'gt-next/server'
 
-export const runtime = 'edge'
-
 export default async function GroupPage(props) {
   const { groupId } = await props.params
   const navigationT = await getDict('Navigation')

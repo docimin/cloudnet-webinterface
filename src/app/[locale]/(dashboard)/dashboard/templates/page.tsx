@@ -15,13 +15,11 @@ import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 import { serverStorageApi } from '@/lib/server-api'
 
-export const runtime = 'edge'
-
 export default async function ServicesPage() {
   let storages: Storages = { storages: [] }
   try {
     storages = await serverStorageApi.getStorages()
-  } catch {}
+  } catch { }
   const permissions = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:template_storage_read',
@@ -69,18 +67,18 @@ export default async function ServicesPage() {
                 {requiredPermissions.some((permission) =>
                   permissions.includes(permission)
                 ) && (
-                  <TableCell>
-                    <Link href={`/dashboard/templates/${storage}`}>
-                      <Button
-                        size={'sm'}
-                        variant={'link'}
-                        className={'p-0 text-right'}
-                      >
-                        Edit
-                      </Button>
-                    </Link>
-                  </TableCell>
-                )}
+                    <TableCell>
+                      <Link href={`/dashboard/templates/${storage}`}>
+                        <Button
+                          size={'sm'}
+                          variant={'link'}
+                          className={'p-0 text-right'}
+                        >
+                          Edit
+                        </Button>
+                      </Link>
+                    </TableCell>
+                  )}
               </TableRow>
             ))}
         </TableBody>

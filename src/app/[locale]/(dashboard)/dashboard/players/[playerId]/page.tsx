@@ -18,8 +18,6 @@ import ExecuteCommand from '@/components/modules/players/executeCommand'
 import { serverPlayerApi } from '@/lib/server-api'
 import { getDict } from 'gt-next/server'
 
-export const runtime = 'edge'
-
 export default async function UserPage(props) {
   const params = await props.params
   const { playerId } = params

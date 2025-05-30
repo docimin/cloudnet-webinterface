@@ -1,8 +1,6 @@
 import { cookies } from 'next/headers'
 import { NextRequest, NextResponse } from 'next/server'
 
-export const runtime = 'edge'
-
 /**
  * This route is used to sign in the user and set the cookies.
  */

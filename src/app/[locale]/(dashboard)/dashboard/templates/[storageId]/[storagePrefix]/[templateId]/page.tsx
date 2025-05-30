@@ -4,8 +4,6 @@ import { getPermissions } from '@/utils/server-api/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
 
-export const runtime = 'edge'
-
 export default async function TemplatePage(props) {
   const params = await props.params
   const permissions = await getPermissions()

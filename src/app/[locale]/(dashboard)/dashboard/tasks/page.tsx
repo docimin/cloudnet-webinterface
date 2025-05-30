@@ -16,8 +16,6 @@ import Link from 'next/link'
 import { serverTaskApi } from '@/lib/server-api'
 import { getDict } from 'gt-next/server'
 
-export const runtime = 'edge'
-
 export default async function TasksPage() {
   const tasks = await serverTaskApi.list()
   const permissions = await getPermissions()

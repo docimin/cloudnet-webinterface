@@ -3,8 +3,6 @@ import { getPermissions } from '@/utils/server-api/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import ServiceConsole from '@/components/console'
 
-export const runtime = 'edge'
-
 export default async function NodeConsolePage() {
   const permissions = await getPermissions()
   const requiredPermissions = [

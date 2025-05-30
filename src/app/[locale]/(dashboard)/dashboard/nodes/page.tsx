@@ -16,8 +16,6 @@ import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 import { getDict } from 'gt-next/server'
 
-export const runtime = 'edge'
-
 export default async function NodesPage() {
   const nodesT = await getDict('Nodes')
   const mainT = await getDict('Main')

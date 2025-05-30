@@ -1,8 +1,6 @@
 import { headers } from 'next/headers'
 import { NextResponse } from 'next/server'
 
-export const runtime = 'edge'
-
 /**
  * This route is used to get the cookies.
  */

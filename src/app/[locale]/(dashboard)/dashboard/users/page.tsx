@@ -18,8 +18,6 @@ import { serverUserApi } from '@/lib/server-api'
 import CreateUser from '@/components/modules/users/createUser'
 import { getDict } from 'gt-next/server'
 
-export const runtime = 'edge'
-
 export default async function UsersPage() {
   const usersT = await getDict('Users')
   const mainT = await getDict('Main')
@@ -71,18 +69,18 @@ export default async function UsersPage() {
                 {requiredPermissions.some((permission) =>
                   permissions.includes(permission)
                 ) && (
-                  <TableCell>
-                    <Link href={`/dashboard/users/${user.id}`}>
-                      <Button
-                        size={'sm'}
-                        variant={'link'}
-                        className={'p-0 text-right'}
-                      >
-                        {mainT('edit')}
-                      </Button>
-                    </Link>
-                  </TableCell>
-                )}
+                    <TableCell>
+                      <Link href={`/dashboard/users/${user.id}`}>
+                        <Button
+                          size={'sm'}
+                          variant={'link'}
+                          className={'p-0 text-right'}
+                        >
+                          {mainT('edit')}
+                        </Button>
+                      </Link>
+                    </TableCell>
+                  )}
               </TableRow>
             ))}
         </TableBody>

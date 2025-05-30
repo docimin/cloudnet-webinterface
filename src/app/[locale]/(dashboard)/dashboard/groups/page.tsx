@@ -17,8 +17,6 @@ import Link from 'next/link'
 import { serverGroupApi } from '@/lib/server-api'
 import { getDict } from 'gt-next/server'
 
-export const runtime = 'edge'
-
 export default async function GroupsPage() {
   const groupsT = await getDict('Groups')
   const mainT = await getDict('Main')

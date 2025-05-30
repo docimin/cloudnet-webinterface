@@ -7,8 +7,6 @@ import ModuleClientPage from './page.client'
 import { serverModuleApi } from '@/lib/server-api'
 import { getDict } from 'gt-next/server'
 
-export const runtime = 'edge'
-
 export default async function NodePage(props) {
   const params = await props.params
   const { moduleId } = params

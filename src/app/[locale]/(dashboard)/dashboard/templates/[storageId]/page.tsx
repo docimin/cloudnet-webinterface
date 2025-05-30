@@ -15,8 +15,6 @@ import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 import { serverStorageApi } from '@/lib/server-api'
 
-export const runtime = 'edge'
-
 export default async function ServicesPage(props) {
   const params = await props.params
 
@@ -86,20 +84,20 @@ export default async function ServicesPage(props) {
                 {requiredPermissions.some((permission) =>
                   permissions.includes(permission)
                 ) && (
-                  <TableCell>
-                    <Link
-                      href={`/dashboard/templates/${storageId}/${template.prefix}`}
-                    >
-                      <Button
-                        size={'sm'}
-                        variant={'link'}
-                        className={'p-0 text-right'}
+                    <TableCell>
+                      <Link
+                        href={`/dashboard/templates/${storageId}/${template.prefix}`}
                       >
-                        Edit
-                      </Button>
-                    </Link>
-                  </TableCell>
-                )}
+                        <Button
+                          size={'sm'}
+                          variant={'link'}
+                          className={'p-0 text-right'}
+                        >
+                          Edit
+                        </Button>
+                      </Link>
+                    </TableCell>
+                  )}
               </TableRow>
             ))}
         </TableBody>

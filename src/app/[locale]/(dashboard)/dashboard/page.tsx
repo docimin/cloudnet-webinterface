@@ -18,8 +18,6 @@ import { NodesType } from '@/utils/types/nodes'
 import { TasksType } from '@/utils/types/tasks'
 import { getDict } from 'gt-next/server'
 
-export const runtime = 'edge'
-
 export default async function DashboardPage() {
   const navigationT = await getDict('Navigation')
   const homeT = await getDict('Home')
