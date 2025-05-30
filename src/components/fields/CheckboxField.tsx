@@ -3,14 +3,14 @@ import {
   FormControl,
   FormLabel,
   FormMessage,
-  FormItem,
+  FormItem
 } from '@/components/ui/form'
 import { Checkbox } from '@/components/ui/checkbox'
 import { Info } from 'lucide-react'
 import {
   HoverCard,
   HoverCardContent,
-  HoverCardTrigger,
+  HoverCardTrigger
 } from '@/components/ui/hover-card'
 
 interface CheckboxFieldProps {
@@ -22,7 +22,7 @@ interface CheckboxFieldProps {
 const CheckboxField: React.FC<CheckboxFieldProps> = ({
   label,
   description,
-  field,
+  field
 }) => {
   return (
     <FormItem>

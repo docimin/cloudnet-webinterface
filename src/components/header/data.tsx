@@ -9,7 +9,7 @@ import {
   PackageIcon,
   UngroupIcon,
   UsersIcon,
-  WorkflowIcon,
+  WorkflowIcon
 } from 'lucide-react'
 import { useDict } from 'gt-next/client'
 
@@ -22,7 +22,7 @@ export const Nav1 = () => {
       icon: LayoutDashboardIcon,
       variant: 'default' as const,
       href: `/dashboard`,
-      permission: ['any'],
+      permission: ['any']
     },
     {
       title: navigationT('nodes'),
@@ -33,8 +33,8 @@ export const Nav1 = () => {
       permission: [
         'global:admin',
         'cloudnet_rest:node_read',
-        'cloudnet_rest:node_info',
-      ],
+        'cloudnet_rest:node_info'
+      ]
     },
     {
       title: navigationT('modules'),
@@ -45,9 +45,9 @@ export const Nav1 = () => {
       permission: [
         'global:admin',
         'cloudnet_rest:module_read',
-        'cloudnet_rest:module_list_loaded',
-      ],
-    },
+        'cloudnet_rest:module_list_loaded'
+      ]
+    }
   ]
 }
 
@@ -60,7 +60,7 @@ export const Nav2 = () => {
       icon: BlendIcon,
       variant: 'ghost' as const,
       href: `/dashboard/players`,
-      permission: ['global:admin', 'owner', 'social-read'],
+      permission: ['global:admin', 'owner', 'social-read']
     },
     {
       title: navigationT('tasks'),
@@ -68,7 +68,7 @@ export const Nav2 = () => {
       icon: UngroupIcon,
       variant: 'ghost' as const,
       href: `/dashboard/tasks`,
-      permission: ['global:admin', 'owner', 'social-read'],
+      permission: ['global:admin', 'owner', 'social-read']
     },
     {
       title: navigationT('groups'),
@@ -76,7 +76,7 @@ export const Nav2 = () => {
       icon: GroupIcon,
       variant: 'ghost' as const,
       href: `/dashboard/groups`,
-      permission: ['global:admin', 'owner', 'social-read'],
+      permission: ['global:admin', 'owner', 'social-read']
     },
     {
       title: navigationT('services'),
@@ -87,9 +87,9 @@ export const Nav2 = () => {
       permission: [
         'global:admin',
         'cloudnet_rest:service_read',
-        'cloudnet_rest:service_list',
-      ],
-    },
+        'cloudnet_rest:service_list'
+      ]
+    }
     /*
     {
       title: navigationT('templates'),
@@ -119,9 +119,9 @@ export const Nav3 = () => {
       permission: [
         'global:admin',
         'cloudnet_rest:user_read',
-        'cloudnet_rest:user_get',
-      ],
-    },
+        'cloudnet_rest:user_get'
+      ]
+    }
   ]
 }
 
@@ -133,7 +133,7 @@ export const NavFooter = () => {
       label: '',
       icon: LogOutIcon,
       variant: 'ghost' as const,
-      href: `/logout`,
-    },
+      href: `/logout`
+    }
   ]
 }

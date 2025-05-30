@@ -6,7 +6,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -48,9 +48,15 @@ export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{playersT('messagePlayer', { variables: { playerName: player?.name } })}</DialogTitle>
+          <DialogTitle>
+            {playersT('messagePlayer', {
+              variables: { playerName: player?.name }
+            })}
+          </DialogTitle>
           <DialogDescription className={'pb-4'}>
-            {playersT('confirmMessagePlayer', { variables: { playerName: player?.name } })}
+            {playersT('confirmMessagePlayer', {
+              variables: { playerName: player?.name }
+            })}
           </DialogDescription>
           <Label htmlFor={'message'}>{playersT('message')}:</Label>
           <Input

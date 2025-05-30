@@ -6,7 +6,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
@@ -27,16 +27,16 @@ const userSchema = z.object({
     z.object({
       label: z.string(),
       value: z.string(),
-      group: z.string(),
+      group: z.string()
     })
-  ),
+  )
 })
 
 type UserFormData = z.infer<typeof userSchema>
 
 export default function CreateUser() {
   const router = useRouter()
-  const options = useOptions();
+  const options = useOptions()
   const [dialogOpen, setDialogOpen] = useState(false)
 
   const form = useForm<UserFormData>({
@@ -44,8 +44,8 @@ export default function CreateUser() {
     defaultValues: {
       username: '',
       password: '',
-      scopes: [],
-    },
+      scopes: []
+    }
   })
 
   const onSubmit = async (data: UserFormData) => {
@@ -53,7 +53,7 @@ export default function CreateUser() {
     const transformedData = {
       username: data.username,
       password: data.password,
-      scopes: data.scopes.map((scope) => scope.value),
+      scopes: data.scopes.map((scope) => scope.value)
     }
 
     try {

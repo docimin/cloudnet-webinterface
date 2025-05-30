@@ -20,7 +20,7 @@ export default async function NodePage(props) {
   const requiredPermissions = [
     'cloudnet_rest:cluster_read',
     'cloudnet_rest:cluster_node_get',
-    'global:admin',
+    'global:admin'
   ]
 
   // check if user has required permissions

@@ -3,14 +3,14 @@ import {
   FormControl,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from '@/components/ui/form'
 import { Textarea } from '@/components/ui/textarea'
 import { GlobeIcon, Info } from 'lucide-react'
 import {
   HoverCard,
   HoverCardContent,
-  HoverCardTrigger,
+  HoverCardTrigger
 } from '@/components/ui/hover-card'
 
 interface TextareaFieldProps {
@@ -27,7 +27,7 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
   description,
   placeholder,
   field,
-  resizable,
+  resizable
 }) => {
   return (
     <FormItem>

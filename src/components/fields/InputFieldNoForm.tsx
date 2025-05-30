@@ -4,7 +4,7 @@ import { Info } from 'lucide-react'
 import {
   HoverCard,
   HoverCardContent,
-  HoverCardTrigger,
+  HoverCardTrigger
 } from '@/components/ui/hover-card'
 import { Label } from '@/components/ui/label'
 
@@ -19,7 +19,7 @@ const InputFieldNoForm: React.FC<InputFieldProps> = ({
   label,
   description,
   placeholder,
-  maxLength,
+  maxLength
 }) => {
   return (
     <div className={'text-start'}>

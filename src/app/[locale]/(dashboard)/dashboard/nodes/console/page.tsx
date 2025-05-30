@@ -10,7 +10,7 @@ export default async function NodeConsolePage() {
   const requiredPermissions = [
     'cloudnet_rest:node_read',
     'cloudnet_rest:node_live_console',
-    'global:admin',
+    'global:admin'
   ]
 
   // check if user has required permissions

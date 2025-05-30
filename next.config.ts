@@ -7,7 +7,6 @@ import { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   compress: false,
-  // output: 'standalone', // This is needed if you want to use docker
   turbopack: {
     resolveExtensions: [
       '.ts',
@@ -18,25 +17,22 @@ const nextConfig: NextConfig = {
       '.css',
       '.scss',
       '.md',
-      '.mdx',
-    ],
+      '.mdx'
+    ]
   },
   compiler: {
-    styledComponents: true,
-    //removeConsole: {
-    //  exclude: ['error'],
-    //},
+    styledComponents: true
   },
   devIndicators: {
-    position: 'bottom-right',
+    position: 'bottom-right'
   },
   images: {
     remotePatterns: [
       {
         protocol: 'http',
-        hostname: 'localhost',
-      },
-    ],
+        hostname: 'localhost'
+      }
+    ]
   },
   poweredByHeader: false,
   async headers() {
@@ -46,32 +42,32 @@ const nextConfig: NextConfig = {
         headers: [
           {
             key: 'X-DNS-Prefetch-Control',
-            value: 'on',
+            value: 'on'
           },
           {
             key: 'Strict-Transport-Security',
-            value: 'max-age=63072000; includeSubDomains; preload',
+            value: 'max-age=63072000; includeSubDomains; preload'
           },
           {
             key: 'X-Content-Type-Options',
-            value: 'nosniff',
+            value: 'nosniff'
           },
           {
             key: 'Referrer-Policy',
-            value: 'origin-when-cross-origin',
+            value: 'origin-when-cross-origin'
           },
           {
             key: 'X-Frame-Options',
-            value: 'SAMEORIGIN',
+            value: 'SAMEORIGIN'
           },
           {
             key: 'X-XSS-Protection',
-            value: '1; mode=block',
-          },
-        ],
-      },
+            value: '1; mode=block'
+          }
+        ]
+      }
     ]
-  },
+  }
 }
 
 // Injected content via Sentry wizard below
@@ -81,15 +77,15 @@ const sentryOptions: SentryBuildOptions = {
   // https://docs.sentry.io/platforms/javascript/guides/nextjs/manual-setup/
 
   silent: !process.env.CI,
-  org: 'CloudNet',
-  project: 'cloudnet-webinterface',
-  sentryUrl: 'https://sentry.fayevr.dev',
+  org: process.env.SENTRY_ORG,
+  project: process.env.SENTRY_PROJECT,
+  sentryUrl: process.env.SENTRY_URL,
 
   // Upload a larger set of source maps for prettier stack traces (increases build time)
   widenClientFileUpload: true,
 
   sourcemaps: {
-    deleteSourcemapsAfterUpload: true,
+    deleteSourcemapsAfterUpload: true
   },
 
   // Routes browser requests to Sentry through a Next.js rewrite to circumvent ad-blockers. (increases server load)
@@ -104,7 +100,7 @@ const sentryOptions: SentryBuildOptions = {
   // See the following for more information:
   // https://docs.sentry.io/product/crons/
   // https://vercel.com/docs/cron-jobs
-  automaticVercelMonitors: false,
+  automaticVercelMonitors: false
 }
 
 const sentryNextConfig = withSentryConfig(nextConfig, sentryOptions)
@@ -113,5 +109,5 @@ export default withGTConfig(sentryNextConfig, {
   defaultLocale: 'en',
   locales: ['nl', 'de', 'en'],
   runtimeUrl: null,
-  loadDictionaryPath: './src/loadDictionary.ts',
+  loadDictionaryPath: './src/loadDictionary.ts'
 })

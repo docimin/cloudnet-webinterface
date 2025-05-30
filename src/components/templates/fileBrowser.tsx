@@ -5,7 +5,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { useEffect, useState } from 'react'
@@ -15,7 +15,7 @@ import { useRouter, usePathname } from 'next/navigation'
 import Link from 'next/link'
 import { templateStorageApi } from '@/lib/client-api'
 export default function FileBrowser({
-  params,
+  params
 }: {
   params: {
     storageId: string

@@ -45,8 +45,8 @@ export async function checkAuthToken() {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${cookies['at']}`,
-      },
+        Authorization: `Bearer ${cookies['at']}`
+      }
     })
 
     return await response.json()

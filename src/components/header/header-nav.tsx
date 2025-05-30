@@ -7,7 +7,7 @@ import { buttonVariants } from '@/components/ui/button'
 import {
   Tooltip,
   TooltipContent,
-  TooltipTrigger,
+  TooltipTrigger
 } from '@/components/ui/tooltip'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'

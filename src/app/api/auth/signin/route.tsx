@@ -30,7 +30,7 @@ export async function POST(request: NextRequest) {
       secure: isSecure,
       sameSite: 'strict',
       maxAge: expiresIn,
-      path: '/',
+      path: '/'
     })
   }
 
@@ -61,8 +61,8 @@ export async function POST(request: NextRequest) {
       method: 'POST',
       headers: {
         Authorization: `Basic ${btoa(`${username}:${password}`)}`,
-        'Content-Type': 'application/json',
-      },
+        'Content-Type': 'application/json'
+      }
     })
 
     const dataResponse = await response.json()

@@ -9,7 +9,7 @@ import {
   MemoryStickIcon,
   RefreshCcwIcon,
   ScaleIcon,
-  SplitIcon,
+  SplitIcon
 } from 'lucide-react'
 import { DashboardCard } from '@/components/dashboardCard'
 import TaskClientPage from './page.client'
@@ -28,17 +28,17 @@ export default async function UserPage(props) {
   const requiredPermissions = [
     'cloudnet_rest:task_read',
     'cloudnet_rest:task_get',
-    'global:admin',
+    'global:admin'
   ]
   const requiredEditPermissions = [
     'cloudnet_rest:task_write',
     'cloudnet_rest:task_create',
-    'global:admin',
+    'global:admin'
   ]
   const requiredDeletePermissions = [
     'cloudnet_rest:task_write',
     'cloudnet_rest:task_delete',
-    'global:admin',
+    'global:admin'
   ]
 
   // check if user has required permissions
@@ -82,7 +82,7 @@ export default async function UserPage(props) {
               permissions={[
                 'cloudnet_rest:task_read',
                 'cloudnet_rest:task_get',
-                'global:admin',
+                'global:admin'
               ]}
             />
             <DashboardCard
@@ -92,7 +92,7 @@ export default async function UserPage(props) {
               permissions={[
                 'cloudnet_rest:task_read',
                 'cloudnet_rest:task_get',
-                'global:admin',
+                'global:admin'
               ]}
             />
             <DashboardCard
@@ -102,7 +102,7 @@ export default async function UserPage(props) {
               permissions={[
                 'cloudnet_rest:task_read',
                 'cloudnet_rest:task_get',
-                'global:admin',
+                'global:admin'
               ]}
             />
             <DashboardCard
@@ -112,7 +112,7 @@ export default async function UserPage(props) {
               permissions={[
                 'cloudnet_rest:task_read',
                 'cloudnet_rest:task_get',
-                'global:admin',
+                'global:admin'
               ]}
             />
             <DashboardCard
@@ -122,7 +122,7 @@ export default async function UserPage(props) {
               permissions={[
                 'cloudnet_rest:task_read',
                 'cloudnet_rest:task_get',
-                'global:admin',
+                'global:admin'
               ]}
             />
             <DashboardCard
@@ -132,7 +132,7 @@ export default async function UserPage(props) {
               permissions={[
                 'cloudnet_rest:task_read',
                 'cloudnet_rest:task_get',
-                'global:admin',
+                'global:admin'
               ]}
             />
             <DashboardCard
@@ -142,7 +142,7 @@ export default async function UserPage(props) {
               permissions={[
                 'cloudnet_rest:task_read',
                 'cloudnet_rest:task_get',
-                'global:admin',
+                'global:admin'
               ]}
             />
           </div>

@@ -17,7 +17,7 @@ export const POST = createApiRoute(async () => {
       secure: isSecure,
       sameSite: 'strict',
       maxAge: Number(new Date(Date.now() + expiresIn)),
-      path: '/',
+      path: '/'
     })
   }
 
@@ -42,8 +42,8 @@ export const POST = createApiRoute(async () => {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${currentCookies['at']}`,
-      },
+        Authorization: `Bearer ${currentCookies['at']}`
+      }
     })
 
     if (accessResponse.status === 200) {
@@ -54,8 +54,8 @@ export const POST = createApiRoute(async () => {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
-          Authorization: `Bearer ${currentCookies['rt']}`,
-        },
+          Authorization: `Bearer ${currentCookies['rt']}`
+        }
       })
 
       if (refreshResponse.status === 401) {
@@ -75,8 +75,8 @@ export const POST = createApiRoute(async () => {
         method: 'POST',
         headers: {
           Authorization: `Bearer ${currentCookies['rt']}`,
-          'Content-Type': 'application/json',
-        },
+          'Content-Type': 'application/json'
+        }
       })
 
       const dataResponse = await responseRefresh.json()

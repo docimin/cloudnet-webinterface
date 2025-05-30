@@ -4,7 +4,7 @@ import { Info, XIcon } from 'lucide-react'
 import {
   HoverCard,
   HoverCardContent,
-  HoverCardTrigger,
+  HoverCardTrigger
 } from '@/components/ui/hover-card'
 import { Input } from '@/components/ui/input'
 import { Badge } from '@/components/ui/badge'
@@ -25,7 +25,7 @@ const TagsInputField: React.FC<TagInputFieldProps> = ({
   placeholder,
   field,
   error,
-  maxLength,
+  maxLength
 }) => {
   const [inputValue, setInputValue] = React.useState('')
 

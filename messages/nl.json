@@ -30,7 +30,9 @@
     "maintenance": "Page is under maintenance!",
     "maintenanceDescription": "This page is not available at the moment. We'll be back online shortly.",
     "notFound": "{name} not found!",
-    "notFoundDescription": "It looks like you're trying to access a {name} that doesn't exist."
+    "notFoundDescription": "It looks like you're trying to access a {name} that doesn't exist.",
+    "menu": "Menu",
+    "menuDescription": "Selecteer een pagina uit het menu om verder te gaan."
   },
   "Auth": {
     "login": "Login",

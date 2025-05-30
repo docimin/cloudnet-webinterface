@@ -12,7 +12,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 import { useRouter } from 'next/navigation'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
@@ -46,7 +46,9 @@ function DeleteButton({ taskId }: { taskId: string }) {
         </AlertDialogHeader>
         <AlertDialogFooter>
           <AlertDialogCancel>{taskT('cancel')}</AlertDialogCancel>
-          <AlertDialogAction onClick={handleDelete}>{taskT('delete')}</AlertDialogAction>
+          <AlertDialogAction onClick={handleDelete}>
+            {taskT('delete')}
+          </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>
     </AlertDialog>
@@ -56,7 +58,7 @@ function DeleteButton({ taskId }: { taskId: string }) {
 function UpdateButton({
   body,
   originalName,
-  router,
+  router
 }: {
   body: any
   originalName: string
@@ -92,7 +94,7 @@ export default function TaskClientPage({
   hasEditPermissions,
   hasDeletePermissions,
   taskConfigData,
-  children,
+  children
 }: {
   taskName: string
   taskId: string
@@ -116,9 +118,7 @@ export default function TaskClientPage({
       <Alert className={'mt-8'}>
         <Terminal className="h-4 w-4" />
         <AlertTitle>{taskT('headsUp')}</AlertTitle>
-        <AlertDescription>
-          {taskT('nameChangeWarning')}
-        </AlertDescription>
+        <AlertDescription>{taskT('nameChangeWarning')}</AlertDescription>
       </Alert>
       {children}
       <div className="w-full mt-8">

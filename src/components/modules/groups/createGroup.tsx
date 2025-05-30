@@ -6,7 +6,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from '@/components/ui/dialog'
 import { Button } from '@/components/ui/button'
 import { useForm } from 'react-hook-form'
@@ -27,7 +27,7 @@ const groupSchema = z.object({
   templates: z.array(z.string()).default([]),
   deployments: z.array(z.string()).default([]),
   includes: z.array(z.string()).default([]),
-  properties: z.record(z.string()).default({}),
+  properties: z.record(z.string()).default({})
 })
 
 type GroupFormData = z.infer<typeof groupSchema>
@@ -47,8 +47,8 @@ export default function CreateGroup() {
       templates: [],
       deployments: [],
       includes: [],
-      properties: {},
-    },
+      properties: {}
+    }
   })
 
   const onSubmit = async (data: GroupFormData) => {

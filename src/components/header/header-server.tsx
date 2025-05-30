@@ -3,10 +3,7 @@ import SidebarResizable from '@/components/header/header-resizable'
 import MobileNav from '@/components/header/mobile-nav'
 import { getPermissions } from '@/utils/server-api/getPermissions'
 
-export default async function HeaderServer({
-  children,
-  ...translations
-}) {
+export default async function HeaderServer({ children, ...translations }) {
   const layout = (await cookies()).get('react-resizable-panels:layout')
   const collapsed = (await cookies()).get('react-resizable-panels:collapsed')
 
@@ -19,9 +16,7 @@ export default async function HeaderServer({
     <>
       <div className={'min-h-full'}>
         <div className="md:hidden">
-          <MobileNav permissions={permissions}>
-            {children}
-          </MobileNav>
+          <MobileNav permissions={permissions}>{children}</MobileNav>
         </div>
         <div className="hidden flex-col md:flex">
           <SidebarResizable

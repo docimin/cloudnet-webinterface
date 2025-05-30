@@ -3,14 +3,14 @@ import {
   FormControl,
   FormLabel,
   FormMessage,
-  FormItem,
+  FormItem
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Info } from 'lucide-react'
 import {
   HoverCard,
   HoverCardContent,
-  HoverCardTrigger,
+  HoverCardTrigger
 } from '@/components/ui/hover-card'
 
 interface InputFieldProps {
@@ -32,7 +32,7 @@ const InputField: React.FC<InputFieldProps> = ({
   type = 'text',
   maxLength,
   className,
-  disabled,
+  disabled
 }) => {
   return (
     <FormItem className={className}>

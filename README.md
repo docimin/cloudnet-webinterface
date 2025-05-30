@@ -16,6 +16,7 @@ The current supported cloudnet versions. If your version is not supported, pleas
 ## My dashboard is empty
 
 You forgot to give yourself permissions. Create a user by following these simple steps:
+
 1. Install the "CloudNet-Rest" module using `modules install CloudNet-Rest` in your CloudNet console.
 2. Create a new user with the `rest user create <username> <password>` command in your CloudNet console. (Example: `rest user create notch foobar`, will create user "notch" with password "foobar")
 3. Assign the required permissions using `rest user <username> add scope global:admin` in your CloudNet console. (Example: `rest user notch add scope global:admin` will grant user "notch" admin permissions on your web interface)

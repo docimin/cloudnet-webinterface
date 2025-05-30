@@ -1,7 +1,7 @@
 import { createNextMiddleware } from 'gt-next/middleware'
 
 export default createNextMiddleware({
-  prefixDefaultLocale: true,
+  prefixDefaultLocale: true
 })
 
 export const config = {
@@ -12,6 +12,6 @@ export const config = {
      * - _next (internal files)
      * - static files
      */
-    '/((?!api|static|.*\\..*|_next).*)',
-  ],
+    '/((?!api|static|.*\\..*|_next).*)'
+  ]
 }

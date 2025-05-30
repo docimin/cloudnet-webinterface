@@ -54,12 +54,12 @@ export async function makeApiRequest<T = any>(
       method,
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
+        Authorization: `Bearer ${accessToken}`
       },
       body: options.stringifyBody !== false ? JSON.stringify(body) : body,
       next: {
-        revalidate: 0,
-      },
+        revalidate: 0
+      }
     })
     const responseText = await response.text()
 
@@ -67,12 +67,12 @@ export async function makeApiRequest<T = any>(
       const data = JSON.parse(responseText)
       return {
         data: data.data || data,
-        status: response.status,
+        status: response.status
       }
     } catch (e) {
       return {
         data: responseText as unknown as T,
-        status: response.status,
+        status: response.status
       }
     }
   } catch (error) {

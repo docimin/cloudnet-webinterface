@@ -17,21 +17,21 @@ const scopeSchema = z
     label: z.string(),
     group: z.union([z.string(), z.boolean()]).optional(),
     disable: z.boolean().optional(),
-    fixed: z.boolean().optional(),
+    fixed: z.boolean().optional()
   })
   .catchall(z.union([z.string(), z.boolean()]).optional())
 
 const userSchema = z.object({
   username: z.string().min(1, 'Username is required'),
   password: z.string().optional(),
-  scopes: z.array(scopeSchema),
+  scopes: z.array(scopeSchema)
 })
 
 type UserFormData = z.infer<typeof userSchema>
 
 export default function UserClientPage({ user }: { user: User }) {
-  const router = useRouter();
-  const options = useOptions();
+  const router = useRouter()
+  const options = useOptions()
 
   const form = useForm<UserFormData>({
     resolver: zodResolver(userSchema),
@@ -39,14 +39,14 @@ export default function UserClientPage({ user }: { user: User }) {
       username: user.username,
       password: '',
       scopes: user.scopes.map((scope) => {
-        const option = options.find((opt) => opt.value === scope);
+        const option = options.find((opt) => opt.value === scope)
         return {
           label: option?.label || scope,
           value: scope,
-          group: option?.group || 'Other',
-        };
-      }),
-    },
+          group: option?.group || 'Other'
+        }
+      })
+    }
   })
 
   const onSubmit = async (data: UserFormData) => {
@@ -54,7 +54,7 @@ export default function UserClientPage({ user }: { user: User }) {
     const transformedData = {
       id: user.id,
       scopes: data.scopes.map((scope) => scope.value),
-      ...(data.password && { password: data.password }),
+      ...(data.password && { password: data.password })
     }
 
     try {

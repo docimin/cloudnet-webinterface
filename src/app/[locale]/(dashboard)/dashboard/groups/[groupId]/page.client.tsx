@@ -12,7 +12,7 @@ import { useDict } from 'gt-next/client'
 
 export default function GroupClientPage({
   group,
-  groupId,
+  groupId
 }: {
   group: Group
   groupId: string
@@ -80,9 +80,7 @@ export default function GroupClientPage({
       <Alert className={'mt-8'}>
         <Terminal className="h-4 w-4" />
         <AlertTitle>{groupsT('headsUp')}</AlertTitle>
-        <AlertDescription>
-          {groupsT('editingGroupName')}
-        </AlertDescription>
+        <AlertDescription>{groupsT('editingGroupName')}</AlertDescription>
       </Alert>
 
       {groupConfigData && (

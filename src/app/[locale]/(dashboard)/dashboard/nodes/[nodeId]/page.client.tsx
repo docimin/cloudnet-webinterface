@@ -6,7 +6,7 @@ import {
   DatabaseZapIcon,
   GitBranchIcon,
   MemoryStickIcon,
-  ServerOffIcon,
+  ServerOffIcon
 } from 'lucide-react'
 import { Input } from '@/components/ui/input'
 import { Nodes } from '@/utils/types/nodes'
@@ -15,7 +15,7 @@ import { useDict } from 'gt-next/client'
 
 export default function NodeClientPage({
   node,
-  nodeId,
+  nodeId
 }: {
   node: Nodes
   nodeId: string
@@ -54,7 +54,7 @@ export default function NodeClientPage({
         ? node.nodeInfoSnapshot.processSnapshot.systemCpuUsage.toFixed(2) + '%'
         : 'N/A',
       value1Name: nodesT('nodeUsage'),
-      value2Name: nodesT('systemUsage'),
+      value2Name: nodesT('systemUsage')
     },
     {
       name: nodesT('memory'),
@@ -67,7 +67,7 @@ export default function NodeClientPage({
         ? node.nodeInfoSnapshot.maxMemory + ' MB'
         : 'N/A',
       value1Name: nodesT('usedMemory'),
-      value2Name: nodesT('maxMemory'),
+      value2Name: nodesT('maxMemory')
     },
     {
       name: nodesT('servicesCount'),
@@ -76,16 +76,18 @@ export default function NodeClientPage({
       value1: node?.nodeInfoSnapshot?.currentServicesCount || 0,
       value2: '',
       value1Name: nodesT('currentServicesCount'),
-      value2Name: '',
+      value2Name: ''
     },
     {
       name: nodesT('drainStatus'),
       icon: ServerOffIcon,
       canEdit: false,
-      value1: node?.nodeInfoSnapshot?.drain ? nodesT('draining') : nodesT('notDraining'),
+      value1: node?.nodeInfoSnapshot?.drain
+        ? nodesT('draining')
+        : nodesT('notDraining'),
       value2: '',
       value1Name: nodesT('drainStatus'),
-      value2Name: '',
+      value2Name: ''
     },
     {
       name: nodesT('version'),
@@ -94,7 +96,7 @@ export default function NodeClientPage({
       value1: node?.nodeInfoSnapshot?.version?.major || 'N/A',
       value2: node?.nodeInfoSnapshot?.version?.versionType,
       value1Name: nodesT('version'),
-      value2Name: nodesT('version'),
+      value2Name: nodesT('version')
     },
     {
       name: nodesT('connectionDetails'),
@@ -103,8 +105,8 @@ export default function NodeClientPage({
       value1: node?.node?.listeners?.[0].host,
       value2: node?.node?.listeners?.[0].port,
       value1Name: nodesT('ip'),
-      value2Name: nodesT('port'),
-    },
+      value2Name: nodesT('port')
+    }
   ]
 
   return (

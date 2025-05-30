@@ -3,14 +3,14 @@ import {
   FormControl,
   FormItem,
   FormLabel,
-  FormMessage,
+  FormMessage
 } from '@/components/ui/form'
 import { Input } from '@/components/ui/input'
 import { Info } from 'lucide-react'
 import {
   HoverCard,
   HoverCardContent,
-  HoverCardTrigger,
+  HoverCardTrigger
 } from '@/components/ui/hover-card'
 
 interface NumberFieldProps {
@@ -27,7 +27,7 @@ const NumberField: React.FC<NumberFieldProps> = ({
   label,
   description,
   placeholder,
-  field,
+  field
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value)

@@ -6,7 +6,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/getPermissions'
@@ -27,7 +27,7 @@ export default async function ServicesPage() {
   const requiredPermissions = [
     'cloudnet_rest:service_read',
     'cloudnet_rest:service_list',
-    'global:admin',
+    'global:admin'
   ]
 
   // check if user has required permissions
@@ -113,16 +113,16 @@ export default async function ServicesPage() {
                           ),
                           max: formatBytes(
                             service?.processSnapshot?.maxHeapMemory
-                          ),
-                        },
+                          )
+                        }
                       })}
                     </TableCell>
                     <TableCell>
                       {servicesT('onlineCount', {
                         variables: {
                           current: service?.properties['Online-Count'] || '0',
-                          max: service?.properties['Max-Players'] || '0',
-                        },
+                          max: service?.properties['Max-Players'] || '0'
+                        }
                       })}
                     </TableCell>
                     {requiredPermissions.some((permission) =>

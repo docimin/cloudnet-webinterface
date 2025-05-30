@@ -13,7 +13,7 @@ export default function LogoutPage() {
 
   useMemo(() => {
     fetch(`/api/auth/logout`, {
-      method: 'POST',
+      method: 'POST'
     })
       .then((response) => {
         if (!response.ok) {
@@ -25,7 +25,7 @@ export default function LogoutPage() {
         Sentry.addBreadcrumb({
           category: 'auth',
           message: 'Logged out',
-          level: 'info',
+          level: 'info'
         })
         router.push('/')
       })
@@ -35,7 +35,11 @@ export default function LogoutPage() {
   }, [router])
 
   if (error) {
-    return <div>{authT('logoutError')}: {error.message}</div>
+    return (
+      <div>
+        {authT('logoutError')}: {error.message}
+      </div>
+    )
   }
 
   return null

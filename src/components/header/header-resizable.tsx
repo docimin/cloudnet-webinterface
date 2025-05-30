@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils'
 import {
   ResizableHandle,
   ResizablePanel,
-  ResizablePanelGroup,
+  ResizablePanelGroup
 } from '@/components/ui/resizable'
 import { Separator } from '@/components/ui/separator'
 import { TooltipProvider } from '@/components/ui/tooltip'
@@ -19,7 +19,7 @@ export default function SidebarResizable({
   defaultCollapsed = false,
   navCollapsedSize,
   permissions,
-  children,
+  children
 }) {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(defaultCollapsed)
 
@@ -100,37 +100,25 @@ export default function SidebarResizable({
             <ScrollArea className={'h-full overflow-auto'}>
               <div>
                 {filteredNav1.length > 0 && (
-                  <Nav
-                    isCollapsed={isCollapsed}
-                    links={filteredNav1}
-                  />
+                  <Nav isCollapsed={isCollapsed} links={filteredNav1} />
                 )}
                 {filteredNav1.length > 0 && filteredNav2.length > 0 && (
                   <Separator />
                 )}
                 {filteredNav2.length > 0 && (
-                  <Nav
-                    isCollapsed={isCollapsed}
-                    links={filteredNav2}
-                  />
+                  <Nav isCollapsed={isCollapsed} links={filteredNav2} />
                 )}
                 {filteredNav2.length > 0 && filteredNav3.length > 0 && (
                   <Separator />
                 )}
                 {filteredNav3.length > 0 && (
-                  <Nav
-                    isCollapsed={isCollapsed}
-                    links={filteredNav3}
-                  />
+                  <Nav isCollapsed={isCollapsed} links={filteredNav3} />
                 )}
               </div>
             </ScrollArea>
             <div className={'mt-auto relative bottom-0 block'}>
               <Separator />
-              <Nav
-                isCollapsed={isCollapsed}
-                links={NavFooter()}
-              />
+              <Nav isCollapsed={isCollapsed} links={NavFooter()} />
             </div>
           </div>
         </ResizablePanel>

@@ -13,7 +13,7 @@ export default async function TemplatePage(props) {
   const requiredPermissions = [
     'cloudnet_rest:template_read',
     'cloudnet_rest:template_directory_list',
-    'global:admin',
+    'global:admin'
   ]
 
   // check if user has required permissions

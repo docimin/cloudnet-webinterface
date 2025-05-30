@@ -6,7 +6,7 @@ import {
   CalendarIcon,
   CaseLowerIcon,
   HistoryIcon,
-  ServerIcon,
+  ServerIcon
 } from 'lucide-react'
 import { DashboardCard } from '@/components/dashboardCard'
 import { Separator } from '@/components/ui/separator'
@@ -29,7 +29,7 @@ export default async function UserPage(props) {
   const requiredPermissions = [
     'cloudnet_rest:player_read',
     'cloudnet_rest:player_get',
-    'global:admin',
+    'global:admin'
   ]
 
   const hasPermissions = requiredPermissions.some((permission) =>
@@ -48,7 +48,9 @@ export default async function UserPage(props) {
   }
 
   return (
-    <PageLayout title={playersT('editTitle', { variables: { playerName: player.name } })}>
+    <PageLayout
+      title={playersT('editTitle', { variables: { playerName: player.name } })}
+    >
       <div className={'flex items-center justify-between'}>
         <div className={'flex gap-4'}>
           <SendToService player={player} />
@@ -67,7 +69,7 @@ export default async function UserPage(props) {
             permissions={[
               'cloudnet_bridge:player_read',
               'cloudnet_bridge:player_get',
-              'global:admin',
+              'global:admin'
             ]}
           />
           <DashboardCard
@@ -77,7 +79,7 @@ export default async function UserPage(props) {
             permissions={[
               'cloudnet_bridge:player_read',
               'cloudnet_bridge:player_get',
-              'global:admin',
+              'global:admin'
             ]}
           />
           <DashboardCard
@@ -87,7 +89,7 @@ export default async function UserPage(props) {
             permissions={[
               'cloudnet_bridge:player_read',
               'cloudnet_bridge:player_get',
-              'global:admin',
+              'global:admin'
             ]}
           />
           <DashboardCard
@@ -101,7 +103,7 @@ export default async function UserPage(props) {
             permissions={[
               'cloudnet_bridge:player_read',
               'cloudnet_bridge:player_get',
-              'global:admin',
+              'global:admin'
             ]}
           />
           <DashboardCard
@@ -111,7 +113,7 @@ export default async function UserPage(props) {
             permissions={[
               'cloudnet_bridge:player_read',
               'cloudnet_bridge:player_get',
-              'global:admin',
+              'global:admin'
             ]}
           />
         </div>
@@ -124,11 +126,14 @@ export default async function UserPage(props) {
               <DashboardCard
                 title={playersT('labymodVersion')}
                 icon={<HistoryIcon className="w-4 h-4" />}
-                value={player?.properties?.labyModOptions?.version || playersT('unknown')}
+                value={
+                  player?.properties?.labyModOptions?.version ||
+                  playersT('unknown')
+                }
                 permissions={[
                   'cloudnet_bridge:player_read',
                   'cloudnet_bridge:player_get',
-                  'global:admin',
+                  'global:admin'
                 ]}
               />
               <DashboardCard
@@ -142,7 +147,7 @@ export default async function UserPage(props) {
                 permissions={[
                   'cloudnet_bridge:player_read',
                   'cloudnet_bridge:player_get',
-                  'global:admin',
+                  'global:admin'
                 ]}
               />
             </div>

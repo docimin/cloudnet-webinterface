@@ -52,7 +52,7 @@ enum ThreadState {
   BLOCKED = 'BLOCKED',
   WAITING = 'WAITING',
   TIMED_WAITING = 'TIMED_WAITING',
-  TERMINATED = 'TERMINATED',
+  TERMINATED = 'TERMINATED'
 }
 
 interface Configuration {

@@ -4,7 +4,7 @@ import { useRouter } from 'next/navigation'
 
 export default function AutoRefresh({
   timer = 10000,
-  children,
+  children
 }: {
   timer?: number
   children: React.ReactNode

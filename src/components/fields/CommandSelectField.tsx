@@ -3,24 +3,24 @@ import {
   FormControl,
   FormLabel,
   FormMessage,
-  FormItem,
+  FormItem
 } from '@/components/ui/form'
 import {
   Popover,
   PopoverTrigger,
-  PopoverContent,
+  PopoverContent
 } from '@/components/ui/popover'
 import {
   Command,
   CommandInput,
   CommandList,
   CommandItem,
-  CommandGroup,
+  CommandGroup
 } from '@/components/ui/command'
 import {
   HoverCard,
   HoverCardContent,
-  HoverCardTrigger,
+  HoverCardTrigger
 } from '@/components/ui/hover-card'
 import { Check, ChevronsUpDown, Info } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -40,7 +40,7 @@ const CommandSelectField: React.FC<CommandSelectFieldProps> = ({
   label,
   description,
   options,
-  field,
+  field
 }) => {
   return (
     <FormItem>

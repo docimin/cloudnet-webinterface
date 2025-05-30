@@ -24,6 +24,6 @@ export async function GET() {
   const permissions = cookieObject['permissions']
 
   return NextResponse.json({
-    data: JSON.parse(decodeURIComponent(permissions)),
+    data: JSON.parse(decodeURIComponent(permissions))
   })
 }

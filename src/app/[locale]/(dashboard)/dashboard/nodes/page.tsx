@@ -6,7 +6,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '@/components/ui/table'
 import { serverNodeApi } from '@/lib/server-api'
 import { Button } from '@/components/ui/button'
@@ -27,12 +27,12 @@ export default async function NodesPage() {
   const requiredPermissions = [
     'cloudnet_rest:cluster_read',
     'cloudnet_rest:cluster_node_list',
-    'global:admin',
+    'global:admin'
   ]
   const requiredEditPermissions = [
     'cloudnet_rest:cluster_read',
     'cloudnet_rest:cluster_node_get',
-    'global:admin',
+    'global:admin'
   ]
 
   // check if user has required permissions

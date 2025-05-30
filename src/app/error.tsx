@@ -5,7 +5,7 @@ import { cn } from '@/lib/utils'
 
 export default function NotFoundComponent({
   error,
-  reset,
+  reset
 }: {
   error: Error & { digest?: string }
   reset: () => void

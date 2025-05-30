@@ -3,7 +3,7 @@ import {
   FormControl,
   FormLabel,
   FormMessage,
-  FormItem,
+  FormItem
 } from '@/components/ui/form'
 import {
   Select,
@@ -11,12 +11,12 @@ import {
   SelectGroup,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from '@/components/ui/select'
 import {
   HoverCard,
   HoverCardContent,
-  HoverCardTrigger,
+  HoverCardTrigger
 } from '@/components/ui/hover-card'
 import { Info } from 'lucide-react'
 import { Controller } from 'react-hook-form'
@@ -32,7 +32,7 @@ const SelectField: React.FC<SelectFieldProps> = ({
   label,
   description,
   options,
-  field,
+  field
 }) => {
   return (
     <FormItem>

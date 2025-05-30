@@ -73,9 +73,9 @@ export async function apiPost<T = any>(
   const response = await fetch(baseUrl + url + queryString, {
     method: 'POST',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body)
   })
   return handleResponse(response)
 }
@@ -91,9 +91,9 @@ export async function apiPatch<T = any>(
   const response = await fetch(baseUrl + url + queryString, {
     method: 'PATCH',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body)
   })
   return handleResponse(response)
 }
@@ -109,9 +109,9 @@ export async function apiPut<T = any>(
   const response = await fetch(baseUrl + url + queryString, {
     method: 'PUT',
     headers: {
-      'Content-Type': 'application/json',
+      'Content-Type': 'application/json'
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body)
   })
   return handleResponse(response)
 }
@@ -124,7 +124,7 @@ export async function apiDelete<T = any>(
   const queryString = params ? '?' + new URLSearchParams(params).toString() : ''
 
   const response = await fetch(baseUrl + url + queryString, {
-    method: 'DELETE',
+    method: 'DELETE'
   })
   return handleResponse(response)
 }
@@ -135,7 +135,7 @@ export const userApi = {
   get: (id: string) => apiGet(`/api/user/${id}/get`),
   create: (body: any) => apiPost('/api/user/create', body),
   update: (id: string, body: any) => apiPost(`/api/user/${id}/update`, body),
-  delete: (id: string) => apiPost(`/api/user/${id}/delete`, {}),
+  delete: (id: string) => apiPost(`/api/user/${id}/delete`, {})
 }
 
 // Auth API
@@ -144,7 +144,7 @@ export const authApi = {
   createTicket: (type: 'service' | 'node') =>
     apiPost('/api/auth/ticket', { type }),
   getCookies: () => apiGet('/api/auth/getCookies'),
-  getPermissions: () => apiGet<string[]>('/api/auth/getPermissions'),
+  getPermissions: () => apiGet<string[]>('/api/auth/getPermissions')
 }
 
 // Player API
@@ -164,7 +164,7 @@ export const playerApi = {
     apiPost(`/api/player/${id}/connect`, {
       target,
       serverSelector,
-      type,
+      type
     }),
   sendFallback: (id: string) =>
     apiPost(`/api/player/${id}/connectFallback`, {}),
@@ -175,7 +175,7 @@ export const playerApi = {
     offset?: number
     sort?: 'asc' | 'desc'
   }) => apiGet('/api/player/online', params),
-  onlineAmount: () => apiGet('/api/player/online/amount'),
+  onlineAmount: () => apiGet('/api/player/online/amount')
 }
 
 // Module API
@@ -190,7 +190,7 @@ export const moduleApi = {
   updateConfig: (id: string, body: any) =>
     apiPost(`/api/module/${id}/update`, body),
   uninstall: (id: string) => apiPost(`/api/module/${id}/uninstall`, {}),
-  reload: () => apiPost(`/api/module/reload`, {}),
+  reload: () => apiPost(`/api/module/reload`, {})
 }
 
 // Task API
@@ -198,7 +198,7 @@ export const taskApi = {
   list: () => apiGet<{ tasks: TasksType }>('/api/task/list'),
   get: (id: string) => apiGet<{ task: Task }>(`/api/task/${id}/get`),
   update: (body: any) => apiPost('/api/task/update', body),
-  delete: (id: string) => apiPost(`/api/task/${id}/delete`, {}),
+  delete: (id: string) => apiPost(`/api/task/${id}/delete`, {})
 }
 
 // Group API
@@ -206,7 +206,7 @@ export const groupApi = {
   list: () => apiGet('/api/group/list'),
   get: (id: string) => apiGet(`/api/group/${id}/get`),
   update: (body: any) => apiPost(`/api/group/update`, body),
-  delete: (id: string) => apiPost(`/api/group/${id}/delete`, {}),
+  delete: (id: string) => apiPost(`/api/group/${id}/delete`, {})
 }
 
 // Service API
@@ -219,7 +219,7 @@ export const serviceApi = {
     apiGet<ServiceLogCache>(`/api/service/${id}/logLines`),
   delete: (id: string) => apiPost(`/api/service/${id}/delete`, {}),
   execute: (id: string, command: string) =>
-    apiPost(`/api/service/${id}/command`, { command }),
+    apiPost(`/api/service/${id}/command`, { command })
 }
 
 // Node API
@@ -227,7 +227,7 @@ export const nodeApi = {
   list: () => apiGet('/api/node/list'),
   get: (id: string) => apiGet(`/api/node/${id}/get`),
   update: (id: string, ip: string, port: string) =>
-    apiPost(`/api/node/${id}/update`, { ip, port }),
+    apiPost(`/api/node/${id}/update`, { ip, port })
 }
 
 // Template Storage API
@@ -245,7 +245,7 @@ export const templateStorageApi = {
       `/api/templates/${storageId}/${prefixId}/${templateId}/directory/list`,
       {
         directory: filePath,
-        deep: deep,
+        deep: deep
       }
     ),
   getFile: (
@@ -257,7 +257,7 @@ export const templateStorageApi = {
     apiGet<string>(
       `/api/templates/${storageId}/${prefixId}/${templateId}/file`,
       {
-        filePath,
+        filePath
       }
     ),
   deleteTemplate: (storageId: string, prefixId: string, templateId: string) =>
@@ -269,7 +269,7 @@ export const templateStorageApi = {
     filePath: string[]
   ) =>
     apiDelete(`/api/templates/${storageId}/${prefixId}/${templateId}/file`, {
-      filePath,
+      filePath
     }),
   updateFile: (
     storageId: string,
@@ -282,7 +282,7 @@ export const templateStorageApi = {
       `/api/templates/${storageId}/${prefixId}/${templateId}/file/update`,
       {
         filePath,
-        content,
+        content
       }
-    ),
+    )
 }

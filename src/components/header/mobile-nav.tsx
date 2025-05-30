@@ -6,7 +6,7 @@ import {
   SheetDescription,
   SheetHeader,
   SheetTitle,
-  SheetTrigger,
+  SheetTrigger
 } from '../ui/sheet'
 import { MenuIcon } from 'lucide-react'
 import * as React from 'react'
@@ -19,7 +19,7 @@ import { useDict } from 'gt-next/client'
 
 export default function MobileNav({
   permissions,
-  children,
+  children
 }): React.JSX.Element {
   const [isOpen, setIsOpen] = React.useState(false)
   const mainT = useDict('Main')
@@ -68,9 +68,7 @@ export default function MobileNav({
             >
               <SheetHeader>
                 <SheetTitle>{mainT('menu')}</SheetTitle>
-                <SheetDescription>
-                  {mainT('menuDescription')}
-                </SheetDescription>
+                <SheetDescription>{mainT('menuDescription')}</SheetDescription>
               </SheetHeader>
 
               <Separator className={'mt-2'} />
@@ -81,7 +79,6 @@ export default function MobileNav({
                     'mt-8 w-full h-full justify-items-center text-center'
                   }
                 >
-                  <h1 className={'border-b pb-2'}>{mainT('pages')}</h1>
                   <div>
                     {filteredNav1.length > 0 && (
                       <Nav

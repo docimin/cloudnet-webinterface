@@ -10,19 +10,19 @@ export async function generateMetadata() {
   return {
     title: {
       default: `${process.env.NEXT_PUBLIC_NAME || 'CloudNet'} Webinterface`,
-      template: `%s - ${process.env.NEXT_PUBLIC_NAME || 'CloudNet'}`,
+      template: `%s - ${process.env.NEXT_PUBLIC_NAME || 'CloudNet'}`
     },
     description: `Modern webinterface for ${process.env.NEXT_PUBLIC_NAME || 'CloudNet'} v4`,
     keywords: ['cloudnet', 'minecraft', 'webinterface'],
     icons: {
-      icon: process.env.NEXT_PUBLIC_LOGO_PATH || '/logos/logo.svg',
+      icon: process.env.NEXT_PUBLIC_LOGO_PATH || '/logos/logo.svg'
     },
     openGraph: {
       title: `${process.env.NEXT_PUBLIC_NAME || 'CloudNet'} Webinterface`,
       description: `Modern webinterface for ${process.env.NEXT_PUBLIC_NAME || 'CloudNet'} v4`,
       siteName: `${process.env.NEXT_PUBLIC_NAME || 'CloudNet'} Webinterface`,
-      type: 'website',
-    },
+      type: 'website'
+    }
   }
 }
 
@@ -54,13 +54,13 @@ export default function RootLayout({ children }) {
                 'border border-success dark:text-foreground text-background bg-gradient-to-r from-success via-black to-black items-center',
               loading:
                 'border dark:border-muted dark:text-foreground text-background bg-gradient-to-r from-loading via-black to-black items-center',
-              info: 'border dark:border-muted dark:text-foreground text-background bg-gradient-to-r from-loading via-black to-black items-center',
-            },
+              info: 'border dark:border-muted dark:text-foreground text-background bg-gradient-to-r from-loading via-black to-black items-center'
+            }
           }}
           icons={{
             error: <AlertCircle className="size-4" />,
             success: <CheckCircle className="size-4" />,
-            loading: <Loader2 className="size-4 animate-spin" />,
+            loading: <Loader2 className="size-4 animate-spin" />
           }}
         />
       </body>

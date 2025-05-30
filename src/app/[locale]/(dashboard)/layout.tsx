@@ -13,9 +13,7 @@ export default async function LocaleLayout(props) {
 
   return (
     <>
-      <Header dashboard={navigation('dashboard')}>
-        {props.children}
-      </Header>
+      <Header dashboard={navigation('dashboard')}>{props.children}</Header>
     </>
   )
 }

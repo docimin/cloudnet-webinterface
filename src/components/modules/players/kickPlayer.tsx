@@ -6,7 +6,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -45,9 +45,15 @@ export default function KickPlayer({ player }: { player: OnlinePlayer }) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{playersT('kickPlayerTitle', { variables: { playerName: player?.name } })}</DialogTitle>
+          <DialogTitle>
+            {playersT('kickPlayerTitle', {
+              variables: { playerName: player?.name }
+            })}
+          </DialogTitle>
           <DialogDescription className={'pb-4'}>
-            {playersT('confirmKickPlayer', { variables: { playerName: player?.name } })}
+            {playersT('confirmKickPlayer', {
+              variables: { playerName: player?.name }
+            })}
           </DialogDescription>
           <Label htmlFor={'kickReason'}>{playersT('kickReason')}</Label>
           <Input

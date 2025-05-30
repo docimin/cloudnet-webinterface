@@ -71,8 +71,8 @@ export async function serverApiGet<T = any>(
     {
       headers: {
         'Content-Type': 'application/json',
-        Authorization: `Bearer ${accessToken}`,
-      },
+        Authorization: `Bearer ${accessToken}`
+      }
     }
   )
   return handleResponse(response)
@@ -94,9 +94,9 @@ export async function serverApiPost<T = any>(
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
-      Authorization: `Bearer ${accessToken}`,
+      Authorization: `Bearer ${accessToken}`
     },
-    body: JSON.stringify(body),
+    body: JSON.stringify(body)
   })
   return handleResponse(response)
 }
@@ -104,7 +104,7 @@ export async function serverApiPost<T = any>(
 // User API
 export const serverUserApi = {
   list: () => serverApiGet<Users>('/user'),
-  get: (id: string) => serverApiGet<User>(`/user/${id}`),
+  get: (id: string) => serverApiGet<User>(`/user/${id}`)
 }
 
 // Auth API
@@ -113,7 +113,7 @@ export const serverAuthApi = {
   createTicket: (type: 'service' | 'node') =>
     serverApiPost('/api/auth/ticket', { type }),
   getCookies: () => serverApiGet('/api/auth/getCookies'),
-  getPermissions: () => serverApiGet<string[]>('/api/auth/getPermissions'),
+  getPermissions: () => serverApiGet<string[]>('/api/auth/getPermissions')
 }
 
 // Player API
@@ -126,7 +126,7 @@ export const serverPlayerApi = {
   onlineAmount: () => serverApiGet<OnlinePlayersCount>('/player/onlineCount'),
   get: (id: string) => serverApiGet<OnlinePlayer>(`/player/online/${id}`),
   registeredAmount: () =>
-    serverApiGet<RegisteredPlayersCount>('/player/registeredCount'),
+    serverApiGet<RegisteredPlayersCount>('/player/registeredCount')
 }
 
 // Module API
@@ -135,19 +135,19 @@ export const serverModuleApi = {
   getLoaded: () => serverApiGet<Modules>('/module/loaded'),
   getAvailable: () => serverApiGet<Modules>('/module/available'),
   getConfig: (id: string) => serverApiGet<Module>(`/module/${id}/config`),
-  present: () => serverApiGet<Modules>('/module/present'),
+  present: () => serverApiGet<Modules>('/module/present')
 }
 
 // Task API
 export const serverTaskApi = {
   list: () => serverApiGet<TasksType>('/task'),
-  get: (id: string) => serverApiGet<Task>(`/task/${id}`),
+  get: (id: string) => serverApiGet<Task>(`/task/${id}`)
 }
 
 // Group API
 export const serverGroupApi = {
   list: () => serverApiGet<GroupsType>('/group'),
-  get: (id: string) => serverApiGet<Group>(`/group/${id}`),
+  get: (id: string) => serverApiGet<Group>(`/group/${id}`)
 }
 
 // Service API
@@ -155,13 +155,13 @@ export const serverServiceApi = {
   list: () => serverApiGet<Services>('/service'),
   get: (id: string) => serverApiGet<Service>(`/service/${id}`),
   logLines: (id: string) =>
-    serverApiGet<ServiceLogCache>(`/service/${id}/logLines`),
+    serverApiGet<ServiceLogCache>(`/service/${id}/logLines`)
 }
 
 // Node API
 export const serverNodeApi = {
   list: () => serverApiGet<NodesType>('/cluster'),
-  get: (id: string) => serverApiGet<Nodes>(`/cluster/${id}`),
+  get: (id: string) => serverApiGet<Nodes>(`/cluster/${id}`)
 }
 
 // Template Storage API
@@ -174,5 +174,5 @@ export const serverStorageApi = {
   getSFTPTemplates: () =>
     serverApiGet<TemplatesList>('/templateStorage/sftp/templates'),
   getS3Templates: () =>
-    serverApiGet<TemplatesList>('/templateStorage/s3/templates'),
+    serverApiGet<TemplatesList>('/templateStorage/s3/templates')
 }

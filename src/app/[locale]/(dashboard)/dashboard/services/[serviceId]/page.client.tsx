@@ -9,7 +9,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
+  AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 import { useRouter } from 'next/navigation'
 import { serviceApi } from '@/lib/client-api'
@@ -47,7 +47,7 @@ function DeleteButton({ serviceId }: { serviceId: string }) {
 
 function StartButton({
   serviceId,
-  lifeCycle,
+  lifeCycle
 }: {
   serviceId: string
   lifeCycle: LifeCycle
@@ -94,7 +94,7 @@ export default function ServiceClientPage({
   lifeCycle,
   hasLifecyclePermissions,
   hasDeletePermissions,
-  children,
+  children
 }: {
   serviceId: string
   lifeCycle: LifeCycle

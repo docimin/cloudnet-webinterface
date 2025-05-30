@@ -6,7 +6,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/getPermissions'
@@ -26,7 +26,7 @@ export default async function PlayersPage() {
   const requiredPermissions = [
     'cloudnet_bridge:player_read',
     'cloudnet_bridge:player_online_count',
-    'global:admin',
+    'global:admin'
   ]
 
   // check if user has required permissions
@@ -65,7 +65,9 @@ export default async function PlayersPage() {
               <TableHead>{playersT('proxyNode')}</TableHead>
               {requiredPermissions.some((permission) =>
                 permissions.includes(permission)
-              ) && <TableHead className="sr-only">{playersT('details')}</TableHead>}
+              ) && (
+                <TableHead className="sr-only">{playersT('details')}</TableHead>
+              )}
             </TableRow>
           </TableHeader>
           <TableBody>

@@ -6,7 +6,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Button } from '@/components/ui/button'
@@ -16,7 +16,7 @@ import {
   SelectGroup,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from '@/components/ui/select'
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
@@ -60,9 +60,15 @@ export default function SendToService({ player }: { player: OnlinePlayer }) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{playersT('sendPlayerToServer', { variables: { playerName: player?.name } })}</DialogTitle>
+          <DialogTitle>
+            {playersT('sendPlayerToServer', {
+              variables: { playerName: player?.name }
+            })}
+          </DialogTitle>
           <DialogDescription className={'pb-4'}>
-            {playersT('confirmSendPlayer', { variables: { playerName: player?.name } })}
+            {playersT('confirmSendPlayer', {
+              variables: { playerName: player?.name }
+            })}
           </DialogDescription>
           <div>
             <Label htmlFor={'target'}>{playersT('selectService')}</Label>
@@ -94,11 +100,15 @@ export default function SendToService({ player }: { player: OnlinePlayer }) {
           </div>
           {(type === 'task' || type === 'group') && (
             <div>
-              <Label htmlFor={'serverSelector'}>{playersT('serverSelector')}</Label>
+              <Label htmlFor={'serverSelector'}>
+                {playersT('serverSelector')}
+              </Label>
               <Select
                 name={'serverSelector'}
                 defaultValue={'LOWEST_PLAYERS'}
-                onValueChange={(value) => setServerSelector(value as ServerSelector)}
+                onValueChange={(value) =>
+                  setServerSelector(value as ServerSelector)
+                }
               >
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder={playersT('selectType')} />

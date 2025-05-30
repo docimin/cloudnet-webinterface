@@ -9,7 +9,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from './ui/dropdown-menu'
 import { toast } from 'sonner'
 import { useDict } from 'gt-next/client'
@@ -56,7 +56,7 @@ export default function ServiceConsole({
   webSocketPath,
   serviceName,
   disableCommands = false,
-  type,
+  type
 }: ServiceConsoleProps) {
   const [history, setHistory] = useState<ConsoleEntry[]>([])
   const [input, setInput] = useState('')
@@ -98,7 +98,7 @@ export default function ServiceConsole({
 
       socketRef.current.onmessage = (event) => {
         const newEntry: ConsoleEntry = {
-          output: event.data,
+          output: event.data
         }
         setHistory((prev) => [...prev, newEntry])
       }

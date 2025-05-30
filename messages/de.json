@@ -30,7 +30,9 @@
     "maintenance": "Die Seite steht derzeit unter Wartungsarbeiten!",
     "maintenanceDescription": "Diese Seite ist momentan nicht verfügbar. Wir sind in Kürze wieder online.",
     "notFound": "{name} nicht gefunden!",
-    "notFoundDescription": "Es sieht so aus, als ob Sie versuchen, auf einen {name} zuzugreifen, der nicht existiert."
+    "notFoundDescription": "Es sieht so aus, als ob Sie versuchen, auf einen {name} zuzugreifen, der nicht existiert.",
+    "menu": "Menü",
+    "menuDescription": "Wählen Sie eine Seite aus dem Menü, um fortzufahren."
   },
   "Auth": {
     "login": "Einloggen",

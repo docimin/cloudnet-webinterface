@@ -19,7 +19,7 @@ export async function POST() {
         secure: isSecure,
         sameSite: 'strict',
         maxAge: 0,
-        path: '/',
+        path: '/'
       })
     }
 

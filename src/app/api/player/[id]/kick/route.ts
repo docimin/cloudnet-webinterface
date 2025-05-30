@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import {
   checkPermissions,
   makeApiRequest,
-  createApiRoute,
+  createApiRoute
 } from '@/lib/api-helpers'
 
 export const POST = createApiRoute(async (req, { params }) => {
@@ -11,13 +11,13 @@ export const POST = createApiRoute(async (req, { params }) => {
   const requiredPermissions = [
     'cloudnet_bridge:player_write',
     'cloudnet_bridge:player_kick',
-    'global:admin',
+    'global:admin'
   ]
 
   const permissionCheck = await checkPermissions(requiredPermissions)
   if (permissionCheck) {
     return NextResponse.json(permissionCheck, {
-      status: permissionCheck.status,
+      status: permissionCheck.status
     })
   }
 

@@ -17,7 +17,7 @@ export default async function GroupPage(props) {
   const requiredPermissions = [
     'cloudnet_rest:group_read',
     'cloudnet_rest:group_get',
-    'global:admin',
+    'global:admin'
   ]
 
   // check if user has required permissions

@@ -6,7 +6,7 @@ import {
   DialogDescription,
   DialogHeader,
   DialogTitle,
-  DialogTrigger,
+  DialogTrigger
 } from '@/components/ui/dialog'
 import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
@@ -16,7 +16,7 @@ import {
   SelectContent,
   SelectItem,
   SelectTrigger,
-  SelectValue,
+  SelectValue
 } from '@/components/ui/select'
 import { playerApi } from '@/lib/client-api'
 import { toast } from 'sonner'
@@ -53,9 +53,15 @@ export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>{playersT('executeCommandTitle', { variables: { playerName: player?.name } })}</DialogTitle>
+          <DialogTitle>
+            {playersT('executeCommandTitle', {
+              variables: { playerName: player?.name }
+            })}
+          </DialogTitle>
           <DialogDescription className={'pb-4'}>
-            {playersT('confirmExecuteCommand', { variables: { playerName: player?.name } })}
+            {playersT('confirmExecuteCommand', {
+              variables: { playerName: player?.name }
+            })}
           </DialogDescription>
           <div className={'pb-4'}>
             <Label htmlFor={'command'}>{playersT('command')}:</Label>

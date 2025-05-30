@@ -2,7 +2,7 @@ import { NextResponse } from 'next/server'
 import {
   checkPermissions,
   makeApiRequest,
-  createApiRoute,
+  createApiRoute
 } from '@/lib/api-helpers'
 
 export const GET = createApiRoute(async (req, { params }) => {
@@ -11,13 +11,13 @@ export const GET = createApiRoute(async (req, { params }) => {
     'cloudnet_rest:module_read',
     'cloudnet_rest:module_config_get',
     'cloudnet_rest:module_config_get_sensitive',
-    'global:admin',
+    'global:admin'
   ]
 
   const permissionCheck = await checkPermissions(requiredPermissions)
   if (permissionCheck) {
     return NextResponse.json(permissionCheck, {
-      status: permissionCheck.status,
+      status: permissionCheck.status
     })
   }
 

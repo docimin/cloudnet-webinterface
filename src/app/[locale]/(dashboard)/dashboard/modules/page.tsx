@@ -9,7 +9,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '@/components/ui/table'
 import { serverModuleApi } from '@/lib/server-api'
 import { getPermissions } from '@/utils/server-api/getPermissions'
@@ -27,7 +27,7 @@ export default async function NodesPage() {
   const requiredPermissions = [
     'cloudnet_rest:module_read',
     'cloudnet_rest:module_list_available',
-    'global:admin',
+    'global:admin'
   ]
 
   // check if user has required permissions

@@ -14,7 +14,7 @@ export default function Client() {
   const [data, setData] = useState({
     address: process.env.NEXT_PUBLIC_CLOUDNET_ADDRESS || '',
     username: '',
-    password: '',
+    password: ''
   })
   const router = useRouter()
   const authT = useDict('Auth')
@@ -37,13 +37,13 @@ export default function Client() {
       const response = await fetch(`/api/auth/signin`, {
         method: 'POST',
         headers: {
-          'Content-Type': 'application/json',
+          'Content-Type': 'application/json'
         },
         body: JSON.stringify({
           address: data.address,
           username: data.username,
-          password: data.password,
-        }),
+          password: data.password
+        })
       })
 
       console.log('Tried to login')
@@ -56,7 +56,7 @@ export default function Client() {
         Sentry.addBreadcrumb({
           category: 'auth',
           message: 'Authenticated user',
-          level: 'info',
+          level: 'info'
         })
 
         router.push('/dashboard')
@@ -69,7 +69,7 @@ export default function Client() {
       } else {
         toast.error(authT('loginError'))
         Sentry.captureException('An error occurred while logging in', {
-          extra: dataResponse,
+          extra: dataResponse
         })
       }
     } catch (error) {

@@ -20,12 +20,12 @@ export default async function NodePage(props) {
   const requiredPermissions = [
     'cloudnet_rest:module_read',
     'cloudnet_rest:module_get',
-    'global:admin',
+    'global:admin'
   ]
   const requiredConfigPermissions = [
     'cloudnet_rest:module_read',
     'cloudnet_rest:module_config_get',
-    'global:admin',
+    'global:admin'
   ]
 
   // Check if user has required permissions to view module config

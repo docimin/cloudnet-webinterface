@@ -6,7 +6,7 @@ import {
   PaginationLink,
   PaginationNext,
   PaginationPrevious,
-  PaginationEllipsis,
+  PaginationEllipsis
 } from '@/components/ui/pagination'
 
 /**
@@ -15,7 +15,7 @@ import {
 export default function PaginationComponent({
   totalPages,
   currentPage,
-  handleInputChange,
+  handleInputChange
 }) {
   const pageNumbers = Array.from({ length: totalPages }, (_, i) => i + 1)
 
@@ -30,7 +30,7 @@ export default function PaginationComponent({
                 href="#"
                 onClick={() =>
                   handleInputChange({
-                    target: { name: 'page', value: 1 },
+                    target: { name: 'page', value: 1 }
                   })
                 }
               >
@@ -44,7 +44,7 @@ export default function PaginationComponent({
                 href={'#'}
                 onClick={() =>
                   handleInputChange({
-                    target: { name: 'page', value: currentPage - 1 },
+                    target: { name: 'page', value: currentPage - 1 }
                   })
                 }
               />
@@ -66,7 +66,7 @@ export default function PaginationComponent({
                     }`}
                     onClick={() =>
                       handleInputChange({
-                        target: { name: 'page', value: page },
+                        target: { name: 'page', value: page }
                       })
                     }
                   >
@@ -86,7 +86,7 @@ export default function PaginationComponent({
                 href={'#'}
                 onClick={() =>
                   handleInputChange({
-                    target: { name: 'page', value: currentPage + 1 },
+                    target: { name: 'page', value: currentPage + 1 }
                   })
                 }
               />
@@ -98,7 +98,7 @@ export default function PaginationComponent({
                 href="#"
                 onClick={() =>
                   handleInputChange({
-                    target: { name: 'page', value: totalPages },
+                    target: { name: 'page', value: totalPages }
                   })
                 }
               >

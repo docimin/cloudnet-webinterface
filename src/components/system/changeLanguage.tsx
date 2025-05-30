@@ -3,7 +3,7 @@ import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
-  DropdownMenuTrigger,
+  DropdownMenuTrigger
 } from '../ui/dropdown-menu'
 import { Button } from '../ui/button'
 import * as React from 'react'
@@ -19,16 +19,16 @@ export default function ChangeLanguage() {
   const languages = [
     {
       name: 'en',
-      fullName: 'English',
+      fullName: 'English'
     },
     {
       name: 'de',
-      fullName: 'Deutsch',
+      fullName: 'Deutsch'
     },
     {
       name: 'nl',
-      fullName: 'Nederlands',
-    },
+      fullName: 'Nederlands'
+    }
   ]
 
   const handleLanguageClick = (lang: string) => {

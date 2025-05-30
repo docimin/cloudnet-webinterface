@@ -13,7 +13,7 @@ import { useDict } from 'gt-next/client'
 export default function ModuleClientPage({
   module,
   moduleId,
-  moduleConfig,
+  moduleConfig
 }: {
   module: Module
   moduleId: string
@@ -69,7 +69,9 @@ export default function ModuleClientPage({
             )}
           </div>
           <div className={'flex gap-4 items-center'}>
-            <span>{modulesT('status')}: {module.lifecycle}</span>
+            <span>
+              {modulesT('status')}: {module.lifecycle}
+            </span>
             {module.lifecycle !== 'STARTED' && (
               <Button
                 variant="outline"

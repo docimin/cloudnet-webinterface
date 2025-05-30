@@ -4,7 +4,7 @@ import { useDict } from 'gt-next/client'
 
 export default function Maintenance() {
   const mainT = useDict('Main')
-  
+
   return (
     <div className="h-svh">
       <div className="m-auto flex h-full w-full flex-col items-center justify-center gap-2">

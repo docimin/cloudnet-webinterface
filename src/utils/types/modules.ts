@@ -9,14 +9,14 @@ export enum Lifecycle {
   RELOADING = 'RELOADING',
   STOPPED = 'STOPPED',
   UNLOADED = 'UNLOADED',
-  UNUSEABLE = 'UNUSEABLE',
+  UNUSEABLE = 'UNUSEABLE'
 }
 
 export enum Target {
   START = 'START',
   STOP = 'STOP',
   RELOAD = 'RELOAD',
-  UNLOAD = 'UNLOAD',
+  UNLOAD = 'UNLOAD'
 }
 
 interface Repository {

@@ -3,12 +3,12 @@ import {
   FormControl,
   FormLabel,
   FormMessage,
-  FormItem,
+  FormItem
 } from '@/components/ui/form'
 import {
   HoverCard,
   HoverCardContent,
-  HoverCardTrigger,
+  HoverCardTrigger
 } from '@/components/ui/hover-card'
 import { Info } from 'lucide-react'
 import { Controller } from 'react-hook-form'
@@ -47,7 +47,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
   defaultOptions,
   loadingIndicator,
   disabled,
-  className,
+  className
 }) => {
   return (
     <FormItem>

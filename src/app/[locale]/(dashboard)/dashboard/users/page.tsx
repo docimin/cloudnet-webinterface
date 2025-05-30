@@ -6,7 +6,7 @@ import {
   TableCell,
   TableHead,
   TableHeader,
-  TableRow,
+  TableRow
 } from '@/components/ui/table'
 import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/getPermissions'
@@ -23,13 +23,13 @@ export const runtime = 'edge'
 export default async function UsersPage() {
   const usersT = await getDict('Users')
   const mainT = await getDict('Main')
-  
+
   const users: Users = await serverUserApi.list()
   const permissions = await getPermissions()
   const requiredPermissions = [
     'cloudnet_rest:user_read',
     'cloudnet_rest:user_get_all',
-    'global:admin',
+    'global:admin'
   ]
 
   // check if user has required permissions
