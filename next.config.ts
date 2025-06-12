@@ -7,6 +7,7 @@ import { NextConfig } from 'next'
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   compress: false,
+  output: 'standalone',
   turbopack: {
     resolveExtensions: [
       '.ts',

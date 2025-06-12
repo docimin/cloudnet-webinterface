@@ -1,0 +1,44 @@
+name: Build and Push Docker Image
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Extract version from package.json
+        id: get_version
+        run: |
+          VERSION=$(jq -r .version package.json)
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Log in to Harbor Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ secrets.HARBOR_REGISTRY }}
+          username: ${{ secrets.HARBOR_USERNAME }}
+          password: ${{ secrets.HARBOR_PASSWORD }}
+
+      - name: Build and push Docker image
+        run: |
+          docker build \
+            --build-arg NEXT_PUBLIC_LOGO_PATH=${{ secrets.NEXT_PUBLIC_LOGO_PATH }} \
+            --build-arg NEXT_PUBLIC_NAME=${{ secrets.NEXT_PUBLIC_NAME }} \
+            --build-arg NEXT_PUBLIC_DOMAIN=${{ secrets.NEXT_PUBLIC_DOMAIN }} \
+            --build-arg NEXT_PUBLIC_CLOUDNET_ADDRESS=${{ secrets.NEXT_PUBLIC_CLOUDNET_ADDRESS }} \
+            --build-arg NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN=${{ secrets.NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN }} \
+            --build-arg SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
+            -t ${{ secrets.HARBOR_REGISTRY }}/fleet/cloudnet-webinterface:${{ steps.get_version.outputs.version }} \
+            -t ${{ secrets.HARBOR_REGISTRY }}/fleet/cloudnet-webinterface:latest \
+            -f Dockerfile .
+          docker push ${{ secrets.HARBOR_REGISTRY }}/fleet/cloudnet-webinterface:${{ steps.get_version.outputs.version }}
+          docker push ${{ secrets.HARBOR_REGISTRY }}/fleet/cloudnet-webinterface:latest
