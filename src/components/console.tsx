@@ -73,19 +73,17 @@ export default function ServiceConsole({
     try {
       const ticket = await authApi.createTicket(type)
       const cookies = await authApi.getCookies()
-      const cookieAddress = decodeURIComponent(cookies['add'])
+      
+      // Use alternative WebSocket address if configured (for Docker environments)
+      const alternativeAddress = process.env.NEXT_PUBLIC_WEBSOCKET_ADDRESS
+      const cookieAddress = alternativeAddress || decodeURIComponent(cookies['add'])
+      
       const protocol = cookieAddress.startsWith('https') ? 'wss' : 'ws'
       const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
-      const domainUrlProtocol = window.location.origin.startsWith('https')
-        ? 'wss'
-        : 'ws'
-
-      if (protocol !== domainUrlProtocol) {
-        setSocketBlocked(true)
-        return
-      }
 
       const socketUrl = `${protocol}://${address}${webSocketPath}?ticket=${ticket}`
+
+      console.log('Attempting WebSocket connection to:', socketUrl)
 
       try {
         socketRef.current = new WebSocket(socketUrl)
@@ -96,15 +94,29 @@ export default function ServiceConsole({
         return
       }
 
+      socketRef.current.onopen = () => {
+        console.log('WebSocket connection established')
+        setSocketBlocked(false)
+      }
+
       socketRef.current.onmessage = (event) => {
         const newEntry: ConsoleEntry = {
           output: event.data
         }
         setHistory((prev) => [...prev, newEntry])
       }
+      
       socketRef.current.onerror = (event) => {
         console.error('WebSocket error:', event)
-        toast.error(consoleT('connectionError'))
+        // Don't immediately show error, connection might still work
+      }
+
+      socketRef.current.onclose = (event) => {
+        console.log('WebSocket connection closed:', event.code, event.reason)
+        if (event.code !== 1000) { // Only show error if not normal closure
+          toast.error(consoleT('connectionError'))
+          setSocketBlocked(true)
+        }
       }
     } catch (error) {
       console.error('Socket initialization error:', error)
@@ -187,7 +199,14 @@ export default function ServiceConsole({
         <Alert className="my-4">
           <Terminal className="h-4 w-4" />
           <AlertTitle>{consoleT('headsUp')}</AlertTitle>
-          <AlertDescription>{consoleT('protocolMismatch')}</AlertDescription>
+          <AlertDescription>
+            {consoleT('connectionError')}
+            <br />
+            <small>
+              If running in Docker, ensure the CloudNet server is accessible from your browser, 
+              or configure NEXT_PUBLIC_WEBSOCKET_ADDRESS in your environment variables.
+            </small>
+          </AlertDescription>
         </Alert>
       )}
       <div className="w-full mx-auto h-[80vh] bg-gray-800 text-gray-200 rounded-lg overflow-hidden flex flex-col">

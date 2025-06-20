@@ -58,6 +58,26 @@ Fill in `NEXT_PUBLIC_CLOUDNET_ADDRESS` in your .env file, like for example: `NEX
 
 If you want to use a domain: `NEXT_PUBLIC_CLOUDNET_ADDRESS=https://cloudnet.example.com`.
 
+## Docker WebSocket Configuration
+
+If you're running the web interface in Docker and experiencing issues with the console WebSocket connections, you may need to configure the WebSocket address separately:
+
+1. **Expose CloudNet REST port to host**: Make sure port 2812 is accessible from the host machine where your browser runs
+2. **Configure WebSocket address**: If the CloudNet server has a different address for WebSocket connections, set `NEXT_PUBLIC_WEBSOCKET_ADDRESS` in your .env file:
+   ```
+   NEXT_PUBLIC_WEBSOCKET_ADDRESS=192.168.1.100:2812
+   ```
+3. **Network troubleshooting**: The console connects via WebSocket from your browser directly to the CloudNet server. Ensure the address is reachable from your browser, not just from within the Docker network.
+
+### Example Docker setup:
+```bash
+# If CloudNet runs on host 172.20.7.1:2812
+# Make sure the port is accessible from your browser
+ufw allow 2812
+# Or allow from specific IP ranges
+ufw allow from 192.168.0.0/16 to any port 2812
+```
+
 ## Bugs may occur!
 
 Meaning if you encounter any issues, please open up an issue. You are welcome to contribute to this project and create a PR.
