@@ -44,6 +44,22 @@ pnpm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+## Testing
+
+This project includes Jest and React Testing Library for testing. To run tests:
+
+```bash
+pnpm test
+```
+
+To run tests in watch mode:
+
+```bash
+pnpm run test:watch
+```
+
+Tests are located in the `src/__tests__` directory.
+
 ## .env
 
 Want to host the website yourself?
