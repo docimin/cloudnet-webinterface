@@ -65,7 +65,14 @@ If you're running the web interface in Docker and experiencing issues with the c
 1. **Expose CloudNet REST port to host**: Make sure port 2812 is accessible from the host machine where your browser runs
 2. **Configure WebSocket address**: If the CloudNet server has a different address for WebSocket connections, set `NEXT_PUBLIC_WEBSOCKET_ADDRESS` in your .env file:
    ```
+   # Option 1: Just host and port (will use ws://)
    NEXT_PUBLIC_WEBSOCKET_ADDRESS=192.168.1.100:2812
+   
+   # Option 2: Full WebSocket URL
+   NEXT_PUBLIC_WEBSOCKET_ADDRESS=ws://192.168.1.100:2812
+   
+   # Option 3: Secure WebSocket
+   NEXT_PUBLIC_WEBSOCKET_ADDRESS=wss://192.168.1.100:2812
    ```
 3. **Network troubleshooting**: The console connects via WebSocket from your browser directly to the CloudNet server. Ensure the address is reachable from your browser, not just from within the Docker network.
 

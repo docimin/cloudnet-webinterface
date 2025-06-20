@@ -76,12 +76,23 @@ export default function ServiceConsole({
       
       // Use alternative WebSocket address if configured (for Docker environments)
       const alternativeAddress = process.env.NEXT_PUBLIC_WEBSOCKET_ADDRESS
-      const cookieAddress = alternativeAddress || decodeURIComponent(cookies['add'])
+      let socketUrl: string
       
-      const protocol = cookieAddress.startsWith('https') ? 'wss' : 'ws'
-      const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
-
-      const socketUrl = `${protocol}://${address}${webSocketPath}?ticket=${ticket}`
+      if (alternativeAddress) {
+        // Alternative address is already formatted (e.g., "ws://host:port" or "host:port")
+        if (alternativeAddress.startsWith('ws://') || alternativeAddress.startsWith('wss://')) {
+          socketUrl = `${alternativeAddress}${webSocketPath}?ticket=${ticket}`
+        } else {
+          // Assume ws:// for alternative addresses without protocol
+          socketUrl = `ws://${alternativeAddress}${webSocketPath}?ticket=${ticket}`
+        }
+      } else {
+        // Use the original cookie address
+        const cookieAddress = decodeURIComponent(cookies['add'])
+        const protocol = cookieAddress.startsWith('https') ? 'wss' : 'ws'
+        const address = cookieAddress.replace(/^(http:\/\/|https:\/\/)/, '')
+        socketUrl = `${protocol}://${address}${webSocketPath}?ticket=${ticket}`
+      }
 
       console.log('Attempting WebSocket connection to:', socketUrl)
 
