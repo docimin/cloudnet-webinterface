@@ -1,7 +1,7 @@
 import Header from '@/components/header/header-server'
 import { redirect } from 'next/navigation'
 import { checkAuthToken } from '@/lib/server-calls'
-import { getDict } from 'gt-next/server'
+import { getTranslations } from 'gt-next/server'
 
 export default async function LocaleLayout(props) {
   const accountData = await checkAuthToken()
@@ -9,7 +9,7 @@ export default async function LocaleLayout(props) {
     redirect('/')
   }
 
-  const navigation = await getDict('Navigation')
+  const navigation = await getTranslations('Navigation')
 
   return (
     <>

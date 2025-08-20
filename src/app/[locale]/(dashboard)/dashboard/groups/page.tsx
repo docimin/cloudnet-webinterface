@@ -15,11 +15,11 @@ import NoRecords from '@/components/static/noRecords'
 import CreateGroup from '@/components/modules/groups/createGroup'
 import Link from 'next/link'
 import { serverGroupApi } from '@/lib/server-api'
-import { getDict } from 'gt-next/server'
+import { getTranslations } from 'gt-next/server'
 
 export default async function GroupsPage() {
-  const groupsT = await getDict('Groups')
-  const mainT = await getDict('Main')
+  const groupsT = await getTranslations('Groups')
+  const mainT = await getTranslations('Main')
 
   const groups = await serverGroupApi.list()
   const permissions: string[] = await getPermissions()

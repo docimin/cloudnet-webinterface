@@ -4,11 +4,11 @@ import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
 import UserClientPage from '@/app/[locale]/(dashboard)/dashboard/users/[userId]/page.client'
 import { serverUserApi } from '@/lib/server-api'
-import { getDict } from 'gt-next/server'
+import { getTranslations } from 'gt-next/server'
 
 export default async function UserPage(props) {
   const params = await props.params
-  const usersT = await getDict('Users')
+  const usersT = await getTranslations('Users')
 
   const { userId } = params
 

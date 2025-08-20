@@ -20,10 +20,10 @@ import {
 } from '@/components/ui/select'
 import { playerApi } from '@/lib/client-api'
 import { toast } from 'sonner'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
-  const playersT = useDict('Players')
+  const playersT = useTranslations('Players')
   const [command, setCommand] = useState<string>('')
   const [isProxy, setIsProxy] = useState<boolean>(false)
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)

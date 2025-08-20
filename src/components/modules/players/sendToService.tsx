@@ -21,13 +21,13 @@ import {
 import { toast } from 'sonner'
 import { Input } from '@/components/ui/input'
 import { playerApi } from '@/lib/client-api'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 type Type = 'service' | 'task' | 'group'
 type ServerSelector = 'LOWEST_PLAYERS' | 'HIGHEST_PLAYERS' | 'RANDOM'
 
 export default function SendToService({ player }: { player: OnlinePlayer }) {
-  const playersT = useDict('Players')
+  const playersT = useTranslations('Players')
   const [dialogOpen, setDialogOpen] = useState(false)
   const [target, setTarget] = useState('')
   const [type, setType] = useState<Type>('service')

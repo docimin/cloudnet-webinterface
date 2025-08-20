@@ -3,11 +3,11 @@
 import { Button } from '@/components/ui/button'
 import { useRouter } from 'next/navigation'
 import { toast } from 'sonner'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 export default function RefreshButton() {
   const router = useRouter()
-  const mainT = useDict('Main')
+  const mainT = useTranslations('Main')
 
   const refresh = () => {
     router.refresh()

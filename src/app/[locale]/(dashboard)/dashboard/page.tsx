@@ -16,11 +16,11 @@ import {
 import { Modules } from '@/utils/types/modules'
 import { NodesType } from '@/utils/types/nodes'
 import { TasksType } from '@/utils/types/tasks'
-import { getDict } from 'gt-next/server'
+import { getTranslations } from 'gt-next/server'
 
 export default async function DashboardPage() {
-  const navigationT = await getDict('Navigation')
-  const homeT = await getDict('Home')
+  const navigationT = await getTranslations('Navigation')
+  const homeT = await getTranslations('Home')
 
   let onlinePlayers: OnlinePlayersCount = { onlineCount: 0 }
   let registeredPlayers: RegisteredPlayersCount = { registeredCount: 0 }

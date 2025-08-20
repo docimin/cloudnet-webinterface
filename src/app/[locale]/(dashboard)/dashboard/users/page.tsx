@@ -16,11 +16,11 @@ import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 import { serverUserApi } from '@/lib/server-api'
 import CreateUser from '@/components/modules/users/createUser'
-import { getDict } from 'gt-next/server'
+import { getTranslations } from 'gt-next/server'
 
 export default async function UsersPage() {
-  const usersT = await getDict('Users')
-  const mainT = await getDict('Main')
+  const usersT = await getTranslations('Users')
+  const mainT = await getTranslations('Main')
 
   const users: Users = await serverUserApi.list()
   const permissions = await getPermissions()
@@ -69,18 +69,18 @@ export default async function UsersPage() {
                 {requiredPermissions.some((permission) =>
                   permissions.includes(permission)
                 ) && (
-                    <TableCell>
-                      <Link href={`/dashboard/users/${user.id}`}>
-                        <Button
-                          size={'sm'}
-                          variant={'link'}
-                          className={'p-0 text-right'}
-                        >
-                          {mainT('edit')}
-                        </Button>
-                      </Link>
-                    </TableCell>
-                  )}
+                  <TableCell>
+                    <Link href={`/dashboard/users/${user.id}`}>
+                      <Button
+                        size={'sm'}
+                        variant={'link'}
+                        className={'p-0 text-right'}
+                      >
+                        {mainT('edit')}
+                      </Button>
+                    </Link>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
         </TableBody>

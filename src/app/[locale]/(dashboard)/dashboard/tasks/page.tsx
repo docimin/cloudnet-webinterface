@@ -14,12 +14,12 @@ import NoAccess from '@/components/static/noAccess'
 import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 import { serverTaskApi } from '@/lib/server-api'
-import { getDict } from 'gt-next/server'
+import { getTranslations } from 'gt-next/server'
 
 export default async function TasksPage() {
   const tasks = await serverTaskApi.list()
   const permissions = await getPermissions()
-  const taskT = await getDict('Tasks')
+  const taskT = await getTranslations('Tasks')
 
   const requiredPermissions = [
     'cloudnet_rest:task_read',

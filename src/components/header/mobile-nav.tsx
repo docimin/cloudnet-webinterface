@@ -15,14 +15,14 @@ import { Nav1, Nav2, Nav3, NavFooter } from '@/components/header/data'
 import { Nav } from '@/components/header/header-nav'
 import { ScrollArea } from '@/components/ui/scroll-area'
 import Image from 'next/image'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 export default function MobileNav({
   permissions,
   children
 }): React.JSX.Element {
   const [isOpen, setIsOpen] = React.useState(false)
-  const mainT = useDict('Main')
+  const mainT = useTranslations('Main')
 
   const filteredNav1 = Nav1().filter((link) =>
     link.permission.some(

@@ -1,9 +1,9 @@
 'use client'
 import { Button } from '@/components/ui/button'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 export default function Maintenance() {
-  const mainT = useDict('Main')
+  const mainT = useTranslations('Main')
 
   return (
     <div className="h-svh">

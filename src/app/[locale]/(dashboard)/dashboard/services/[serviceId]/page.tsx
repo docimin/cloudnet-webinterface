@@ -16,12 +16,12 @@ import ServiceConsole from '@/components/console'
 import { getPermissions } from '@/utils/server-api/getPermissions'
 import { serverServiceApi } from '@/lib/server-api'
 import DoesNotExist from '@/components/static/doesNotExist'
-import { getDict } from 'gt-next/server'
+import { getTranslations } from 'gt-next/server'
 
 export default async function UserPage(props) {
   const params = await props.params
   const { serviceId } = params
-  const serviceT = await getDict('Services')
+  const serviceT = await getTranslations('Services')
 
   const permissions = await getPermissions()
 
@@ -126,8 +126,8 @@ export default async function UserPage(props) {
 
   const name =
     service?.configuration.serviceId.taskName +
-    service?.configuration.serviceId.nameSplitter +
-    service?.configuration.serviceId.taskServiceId || serviceT('name')
+      service?.configuration.serviceId.nameSplitter +
+      service?.configuration.serviceId.taskServiceId || serviceT('name')
 
   return (
     <PageLayout title={name}>
@@ -139,8 +139,8 @@ export default async function UserPage(props) {
           {requiredConsolePermissions.some((permission) =>
             permissions.includes(permission)
           ) && (
-              <TabsTrigger value={'console'}>{serviceT('console')}</TabsTrigger>
-            )}
+            <TabsTrigger value={'console'}>{serviceT('console')}</TabsTrigger>
+          )}
         </TabsList>
         <TabsContent value={'config'}>
           <ServiceClientPage
@@ -226,14 +226,14 @@ export default async function UserPage(props) {
         {requiredConsolePermissions.some((permission) =>
           permissions.includes(permission)
         ) && (
-            <TabsContent value={'console'}>
-              <ServiceConsole
-                serviceName={name}
-                webSocketPath={`/service/${name}/liveLog`}
-                type={'service'}
-              />
-            </TabsContent>
-          )}
+          <TabsContent value={'console'}>
+            <ServiceConsole
+              serviceName={name}
+              webSocketPath={`/service/${name}/liveLog`}
+              type={'service'}
+            />
+          </TabsContent>
+        )}
       </Tabs>
     </PageLayout>
   )

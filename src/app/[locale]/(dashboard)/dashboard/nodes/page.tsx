@@ -14,11 +14,11 @@ import { getPermissions } from '@/utils/server-api/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
-import { getDict } from 'gt-next/server'
+import { getTranslations } from 'gt-next/server'
 
 export default async function NodesPage() {
-  const nodesT = await getDict('Nodes')
-  const mainT = await getDict('Main')
+  const nodesT = await getTranslations('Nodes')
+  const mainT = await getTranslations('Main')
 
   const nodes = await serverNodeApi.list()
   const permissions: string[] = await getPermissions()

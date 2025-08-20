@@ -2,12 +2,12 @@
 import { useMemo, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import * as Sentry from '@sentry/nextjs'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 export default function LogoutPage() {
   const [error, setError] = useState(null)
   const router = useRouter()
-  const authT = useDict('Auth')
+  const authT = useTranslations('Auth')
 
   useMemo(() => {
     fetch(`/api/auth/logout`, {

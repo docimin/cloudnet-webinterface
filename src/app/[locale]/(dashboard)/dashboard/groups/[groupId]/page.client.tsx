@@ -8,7 +8,7 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Terminal } from 'lucide-react'
 import { toast } from 'sonner'
 import { groupApi } from '@/lib/client-api'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 export default function GroupClientPage({
   group,
@@ -17,8 +17,8 @@ export default function GroupClientPage({
   group: Group
   groupId: string
 }) {
-  const groupsT = useDict('Groups')
-  const mainT = useDict('Main')
+  const groupsT = useTranslations('Groups')
+  const mainT = useTranslations('Main')
 
   const router = useRouter()
   const [groupConfigData, setGroupConfigData] = useState(

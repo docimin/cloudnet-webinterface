@@ -8,7 +8,7 @@ import Image from 'next/image'
 import * as Sentry from '@sentry/nextjs'
 import { toast } from 'sonner'
 import { authApi } from '@/lib/client-api'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 export default function Client() {
   const [data, setData] = useState({
@@ -17,7 +17,7 @@ export default function Client() {
     password: ''
   })
   const router = useRouter()
-  const authT = useDict('Auth')
+  const authT = useTranslations('Auth')
 
   useEffect(() => {
     authApi

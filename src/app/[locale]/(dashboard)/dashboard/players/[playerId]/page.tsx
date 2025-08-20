@@ -16,12 +16,12 @@ import KickPlayer from '@/components/modules/players/kickPlayer'
 import SendChatMessage from '@/components/modules/players/sendChatMessage'
 import ExecuteCommand from '@/components/modules/players/executeCommand'
 import { serverPlayerApi } from '@/lib/server-api'
-import { getDict } from 'gt-next/server'
+import { getTranslations } from 'gt-next/server'
 
 export default async function UserPage(props) {
   const params = await props.params
   const { playerId } = params
-  const playersT = await getDict('Players')
+  const playersT = await getTranslations('Players')
 
   const permissions = await getPermissions()
   const requiredPermissions = [

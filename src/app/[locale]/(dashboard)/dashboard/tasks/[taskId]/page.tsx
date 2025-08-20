@@ -15,12 +15,12 @@ import { DashboardCard } from '@/components/dashboardCard'
 import TaskClientPage from './page.client'
 import { serverTaskApi } from '@/lib/server-api'
 import { Task } from '@/utils/types/tasks'
-import { getDict } from 'gt-next/server'
+import { getTranslations } from 'gt-next/server'
 
 export default async function UserPage(props) {
   const params = await props.params
   const { taskId } = params
-  const taskT = await getDict('Tasks')
+  const taskT = await getTranslations('Tasks')
 
   const permissions = await getPermissions()
   const requiredPermissions = [

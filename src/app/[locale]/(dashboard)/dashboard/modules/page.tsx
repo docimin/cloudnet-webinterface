@@ -14,11 +14,11 @@ import {
 import { serverModuleApi } from '@/lib/server-api'
 import { getPermissions } from '@/utils/server-api/getPermissions'
 import Link from 'next/link'
-import { getDict } from 'gt-next/server'
+import { getTranslations } from 'gt-next/server'
 
 export default async function NodesPage() {
-  const modulesT = await getDict('Modules')
-  const mainT = await getDict('Main')
+  const modulesT = await getTranslations('Modules')
+  const mainT = await getTranslations('Main')
 
   const modules = await serverModuleApi.getLoaded()
   const permissions: string[] = await getPermissions()
@@ -70,20 +70,20 @@ export default async function NodesPage() {
                 {requiredPermissions.some((permission) =>
                   permissions.includes(permission)
                 ) && (
-                    <TableCell>
-                      <Link
-                        href={`/dashboard/modules/${module.configuration.name}`}
+                  <TableCell>
+                    <Link
+                      href={`/dashboard/modules/${module.configuration.name}`}
+                    >
+                      <Button
+                        size={'sm'}
+                        variant={'link'}
+                        className={'p-0 text-right'}
                       >
-                        <Button
-                          size={'sm'}
-                          variant={'link'}
-                          className={'p-0 text-right'}
-                        >
-                          {mainT('edit')}
-                        </Button>
-                      </Link>
-                    </TableCell>
-                  )}
+                        {mainT('edit')}
+                      </Button>
+                    </Link>
+                  </TableCell>
+                )}
               </TableRow>
             ))}
         </TableBody>

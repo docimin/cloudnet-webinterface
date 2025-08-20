@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger
 } from './ui/dropdown-menu'
 import { toast } from 'sonner'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 interface ConsoleEntry {
   output: string
@@ -63,7 +63,7 @@ export default function ServiceConsole({
   const [filter, setFilter] = useState<'ALL' | 'INFO' | 'WARN' | 'ERROR'>('ALL') // Default filter is ALL
   const consoleEndRef = useRef<HTMLDivElement>(null)
   const [socketBlocked, setSocketBlocked] = useState(false)
-  const consoleT = useDict('Console')
+  const consoleT = useTranslations('Console')
   const hasFetchedLogsRef = useRef(false)
   const socketRef = useRef<WebSocket | null>(null)
 

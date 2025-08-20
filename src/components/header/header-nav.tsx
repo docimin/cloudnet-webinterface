@@ -11,7 +11,7 @@ import {
 } from '@/components/ui/tooltip'
 import { usePathname } from 'next/navigation'
 import Link from 'next/link'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 interface NavProps {
   isCollapsed: boolean
@@ -27,7 +27,7 @@ interface NavProps {
 
 export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {
   const currentPath = usePathname()
-  const navigationT = useDict('Navigation')
+  const navigationT = useTranslations('Navigation')
 
   return (
     <div

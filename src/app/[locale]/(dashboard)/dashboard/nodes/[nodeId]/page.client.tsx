@@ -11,7 +11,7 @@ import {
 import { Input } from '@/components/ui/input'
 import { Nodes } from '@/utils/types/nodes'
 import { toast } from 'sonner'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 export default function NodeClientPage({
   node,
@@ -20,8 +20,8 @@ export default function NodeClientPage({
   node: Nodes
   nodeId: string
 }) {
-  const nodesT = useDict('Nodes')
-  const mainT = useDict('Main')
+  const nodesT = useTranslations('Nodes')
+  const mainT = useTranslations('Main')
 
   const handleSave = async (event) => {
     event.preventDefault()

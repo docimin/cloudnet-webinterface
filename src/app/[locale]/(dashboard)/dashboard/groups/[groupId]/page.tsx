@@ -4,11 +4,11 @@ import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
 import GroupClientPage from './page.client'
 import { serverGroupApi } from '@/lib/server-api'
-import { getDict } from 'gt-next/server'
+import { getTranslations } from 'gt-next/server'
 
 export default async function GroupPage(props) {
   const { groupId } = await props.params
-  const navigationT = await getDict('Navigation')
+  const navigationT = await getTranslations('Navigation')
 
   const group = await serverGroupApi.get(groupId)
   const permissions: any = await getPermissions()

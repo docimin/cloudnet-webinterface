@@ -8,7 +8,7 @@ import { Textarea } from '@/components/ui/textarea'
 import { useState } from 'react'
 import { toast } from 'sonner'
 import { moduleApi } from '@/lib/client-api'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 export default function ModuleClientPage({
   module,
@@ -20,8 +20,8 @@ export default function ModuleClientPage({
   moduleConfig: any
 }) {
   const router = useRouter()
-  const modulesT = useDict('Modules')
-  const mainT = useDict('Main')
+  const modulesT = useTranslations('Modules')
+  const mainT = useTranslations('Main')
   const [moduleConfigData, setModuleConfigData] = useState(
     JSON.stringify(moduleConfig, null, 2)
   )

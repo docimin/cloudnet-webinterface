@@ -11,10 +11,10 @@ import {
   UsersIcon,
   WorkflowIcon
 } from 'lucide-react'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 export const Nav1 = () => {
-  const navigationT = useDict('Navigation')
+  const navigationT = useTranslations('Navigation')
   return [
     {
       title: navigationT('dashboard'),
@@ -52,7 +52,7 @@ export const Nav1 = () => {
 }
 
 export const Nav2 = () => {
-  const navigationT = useDict('Navigation')
+  const navigationT = useTranslations('Navigation')
   return [
     {
       title: navigationT('players'),
@@ -108,7 +108,7 @@ export const Nav2 = () => {
 }
 
 export const Nav3 = () => {
-  const navigationT = useDict('Navigation')
+  const navigationT = useTranslations('Navigation')
   return [
     {
       title: navigationT('users'),
@@ -126,7 +126,7 @@ export const Nav3 = () => {
 }
 
 export const NavFooter = () => {
-  const navigationT = useDict('Navigation')
+  const navigationT = useTranslations('Navigation')
   return [
     {
       title: navigationT('logout'),

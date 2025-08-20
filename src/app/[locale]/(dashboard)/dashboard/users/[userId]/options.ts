@@ -1,8 +1,8 @@
 import { Option } from '@/components/ui/custom/multi-select'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 export function useOptions(): Option[] {
-  const permissionsT = useDict('Permissions')
+  const permissionsT = useTranslations('Permissions')
 
   return [
     {

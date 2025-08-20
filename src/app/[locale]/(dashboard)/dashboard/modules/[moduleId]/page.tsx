@@ -5,13 +5,13 @@ import NoAccess from '@/components/static/noAccess'
 import DoesNotExist from '@/components/static/doesNotExist'
 import ModuleClientPage from './page.client'
 import { serverModuleApi } from '@/lib/server-api'
-import { getDict } from 'gt-next/server'
+import { getTranslations } from 'gt-next/server'
 
 export default async function NodePage(props) {
   const params = await props.params
   const { moduleId } = params
 
-  const navigationT = await getDict('Navigation')
+  const navigationT = await getTranslations('Navigation')
 
   const moduleSingle: Module = await serverModuleApi.get(moduleId)
   const permissions: any = await getPermissions()

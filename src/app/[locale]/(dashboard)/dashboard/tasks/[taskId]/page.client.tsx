@@ -19,11 +19,11 @@ import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Terminal } from 'lucide-react'
 import { toast } from 'sonner'
 import { taskApi } from '@/lib/client-api'
-import { useDict } from 'gt-next/client'
+import { useTranslations } from 'gt-next/client'
 
 function DeleteButton({ taskId }: { taskId: string }) {
   const router = useRouter()
-  const taskT = useDict('Tasks')
+  const taskT = useTranslations('Tasks')
 
   const handleDelete = async () => {
     const data = await taskApi.delete(taskId)
@@ -64,7 +64,7 @@ function UpdateButton({
   originalName: string
   router: any
 }) {
-  const taskT = useDict('Tasks')
+  const taskT = useTranslations('Tasks')
 
   const handleUpdate = async () => {
     try {
@@ -105,7 +105,7 @@ export default function TaskClientPage({
 }) {
   const [body, setBody] = useState(taskConfigData)
   const router = useRouter()
-  const taskT = useDict('Tasks')
+  const taskT = useTranslations('Tasks')
 
   return (
     <div>
