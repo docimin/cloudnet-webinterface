@@ -370,5 +370,19 @@
     "getModuleConfiguration": "Modulkonfiguration abrufen",
     "updateModuleConfiguration": "Modulkonfiguration aktualisieren",
     "modules": "Module"
+  },
+  "Console": {
+    "commandPlaceholder": "Gib deinen Befehl ein...",
+    "headsUp": "Kopf hoch!",
+    "protocolMismatch": "Das WebSocket-Protokoll entspricht nicht dem Domain-Protokoll. Beide müssen entweder HTTP/WS oder HTTPS/WSS verwenden.",
+    "fetchError": "Ein Fehler ist aufgetreten, während die Logzeilen abgerufen wurden.",
+    "connectionError": "Ein Fehler ist aufgetreten, während eine Verbindung zur Konsole hergestellt wurde.",
+    "filter": "Filter",
+    "filterAll": "Alle",
+    "filterInfo": "Info",
+    "filterWarn": "Warnung",
+    "filterError": "Fehler",
+    "clearLogs": "Logs löschen",
+    "downloadLogs": "Logs herunterladen"
   }
 }

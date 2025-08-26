@@ -48,7 +48,7 @@ export default function SendToService({ player }: { player: OnlinePlayer }) {
         serverSelector,
         type
       )
-      toast.success(playersT('playerSentToType', { variables: { type } }))
+      toast.success(playersT('playerSentToType', { type }))
     }
     setDialogOpen(false)
   }
@@ -61,14 +61,10 @@ export default function SendToService({ player }: { player: OnlinePlayer }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {playersT('sendPlayerToServer', {
-              variables: { playerName: player?.name }
-            })}
+            {playersT('sendPlayerToServer', { playerName: player?.name })}
           </DialogTitle>
           <DialogDescription className={'pb-4'}>
-            {playersT('confirmSendPlayer', {
-              variables: { playerName: player?.name }
-            })}
+            {playersT('confirmSendPlayer', { playerName: player?.name })}
           </DialogDescription>
           <div>
             <Label htmlFor={'target'}>{playersT('selectService')}</Label>

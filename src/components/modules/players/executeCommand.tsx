@@ -54,14 +54,10 @@ export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {playersT('executeCommandTitle', {
-              variables: { playerName: player?.name }
-            })}
+            {playersT('executeCommandTitle', { playerName: player?.name })}
           </DialogTitle>
           <DialogDescription className={'pb-4'}>
-            {playersT('confirmExecuteCommand', {
-              variables: { playerName: player?.name }
-            })}
+            {playersT('confirmExecuteCommand', { playerName: player?.name })}
           </DialogDescription>
           <div className={'pb-4'}>
             <Label htmlFor={'command'}>{playersT('command')}:</Label>

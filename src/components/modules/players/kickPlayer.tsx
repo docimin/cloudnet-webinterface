@@ -46,14 +46,10 @@ export default function KickPlayer({ player }: { player: OnlinePlayer }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {playersT('kickPlayerTitle', {
-              variables: { playerName: player?.name }
-            })}
+            {playersT('kickPlayerTitle', { playerName: player?.name })}
           </DialogTitle>
           <DialogDescription className={'pb-4'}>
-            {playersT('confirmKickPlayer', {
-              variables: { playerName: player?.name }
-            })}
+            {playersT('confirmKickPlayer', { playerName: player?.name })}
           </DialogDescription>
           <Label htmlFor={'kickReason'}>{playersT('kickReason')}</Label>
           <Input

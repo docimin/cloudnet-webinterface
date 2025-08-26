@@ -63,7 +63,7 @@ export default async function UserPage(props) {
   const taskConfigData = JSON.stringify(task, null, 2)
 
   return (
-    <PageLayout title={taskT('editTitle', { variables: { name: task?.name } })}>
+    <PageLayout title={taskT('editTitle', { name: task?.name })}>
       <TaskClientPage
         taskName={task?.name}
         taskId={taskId}

@@ -376,6 +376,13 @@
     "headsUp": "Heads up!",
     "protocolMismatch": "The WebSocket protocol does not match the domain protocol. Both must use either HTTP/WS or HTTPS/WSS.",
     "fetchError": "An error occurred while fetching the log lines.",
-    "connectionError": "An error occurred while connecting to the console."
+    "connectionError": "An error occurred while connecting to the console.",
+    "filter": "Filter",
+    "filterAll": "All",
+    "filterInfo": "Info",
+    "filterWarn": "Warn",
+    "filterError": "Error",
+    "clearLogs": "Clear logs",
+    "downloadLogs": "Download logs"
   }
 }

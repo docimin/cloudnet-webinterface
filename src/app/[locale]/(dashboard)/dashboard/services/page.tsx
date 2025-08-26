@@ -105,22 +105,18 @@ export default async function ServicesPage() {
                       }
                     >
                       {servicesT('ramUsageFormat', {
-                        variables: {
-                          used: formatBytes(
-                            service?.processSnapshot?.heapUsageMemory
-                          ),
-                          max: formatBytes(
-                            service?.processSnapshot?.maxHeapMemory
-                          )
-                        }
+                        used: formatBytes(
+                          service?.processSnapshot?.heapUsageMemory
+                        ),
+                        max: formatBytes(
+                          service?.processSnapshot?.maxHeapMemory
+                        )
                       })}
                     </TableCell>
                     <TableCell>
                       {servicesT('onlineCount', {
-                        variables: {
-                          current: service?.properties['Online-Count'] || '0',
-                          max: service?.properties['Max-Players'] || '0'
-                        }
+                        current: service?.properties['Online-Count'] || '0',
+                        max: service?.properties['Max-Players'] || '0'
                       })}
                     </TableCell>
                     {requiredPermissions.some((permission) =>

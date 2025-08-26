@@ -49,14 +49,10 @@ export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
-            {playersT('messagePlayer', {
-              variables: { playerName: player?.name }
-            })}
+            {playersT('messagePlayer', { playerName: player?.name })}
           </DialogTitle>
           <DialogDescription className={'pb-4'}>
-            {playersT('confirmMessagePlayer', {
-              variables: { playerName: player?.name }
-            })}
+            {playersT('confirmMessagePlayer', { playerName: player?.name })}
           </DialogDescription>
           <Label htmlFor={'message'}>{playersT('message')}:</Label>
           <Input

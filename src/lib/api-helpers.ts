@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import { getCookies } from '@/lib/server-calls'
 import { cookies } from 'next/headers'
+import { captureException } from '@sentry/nextjs'
 
 export type ApiResponse<T = any> = {
   success?: boolean
@@ -76,6 +77,7 @@ export async function makeApiRequest<T = any>(
       }
     }
   } catch (error) {
+    captureException(error)
     throw error
   }
 }

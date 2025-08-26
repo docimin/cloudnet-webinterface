@@ -370,5 +370,19 @@
     "getModuleConfiguration": "Get module configuration",
     "updateModuleConfiguration": "Update module configuration",
     "modules": "Modules"
+  },
+  "Console": {
+    "commandPlaceholder": "Voer je commando in...",
+    "headsUp": "Kopf hoog!",
+    "protocolMismatch": "Het WebSocket-protocol komt niet overeen met het domeinprotocol. Beide moeten gebruiken ofwel HTTP/WS of HTTPS/WSS.",
+    "fetchError": "Er is een fout opgetreden bij het ophalen van de logregels.",
+    "connectionError": "Er is een fout opgetreden bij het verbinden met de console.",
+    "filter": "Filter",
+    "filterAll": "Alle",
+    "filterInfo": "Info",
+    "filterWarn": "Waarschuwing",
+    "filterError": "Fout",
+    "clearLogs": "Logs wissen",
+    "downloadLogs": "Logs downloaden"
   }
 }

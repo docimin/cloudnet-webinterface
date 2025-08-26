@@ -123,8 +123,8 @@ importers:
         specifier: ^8.6.0
         version: 8.6.0(react@19.1.1)
       gt-next:
-        specifier: ^6.2.2
-        version: 6.2.2(next@15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+        specifier: 6.2.5
+        version: 6.2.5(next@15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       import-in-the-middle:
         specifier: ^1.14.2
         version: 1.14.2
@@ -3135,8 +3135,8 @@ packages:
   functions-have-names@1.2.3:
     resolution: {integrity: sha512-xckBUXyTIqT97tq2x2AMb+g163b5JFysYk0x4qxNFwbfQkmNZoiRHb6sPzI9/QV33WeuvVYBUIiD4NzNIyqaRQ==}
 
-  generaltranslation@7.4.0:
-    resolution: {integrity: sha512-aep9bTNpgrepEY8AbCxUZ6nhp3+fJI9ezaYSDiSA03zmv83JtGq7mGxb65kqOYeVW8oxT+E9Ba5oXskkCjRk8g==}
+  generaltranslation@7.4.1:
+    resolution: {integrity: sha512-dwavW+DW2ZJ9irEEkWu369sCcmEHy7aUIvKDUyE/8GQPzYKXnBJzEdYoSHRJxIzuVbGBoQOZ6oJKn/tgZSlntQ==}
 
   gensync@1.0.0-beta.2:
     resolution: {integrity: sha512-3hN7NaskYvMDLQY55gnW3NQ+mesEAepTqlg+VEbj7zzqEMBVNhzcGYYeqFo/TlYz6eQiFcp1HcsCZO+nGgS8zg==}
@@ -3214,15 +3214,15 @@ packages:
   graphemer@1.4.0:
     resolution: {integrity: sha512-EtKwoO6kxCL9WO5xipiHTZlSzBm7WLT627TqC/uVRd0HKmq8NXyebnNYxDoBi7wt8eTWrUrKXCOVaFq9x1kgag==}
 
-  gt-next@6.2.2:
-    resolution: {integrity: sha512-Em72iaZMHr5WhAzhFr+YfYZTCtAMWnQbbwQ6D5IKSAMKM4YGa38qetQl4zmhYI6Xd7ozfBFCFqFZfeuVZk9gBg==}
+  gt-next@6.2.5:
+    resolution: {integrity: sha512-ykPzu3ioA3PWC2MM6CcBufwN3Xga1wEATXjiaIq1+x6mXT1Rxxj8VXVvQlTyLXswsigwtbfDd1fYbL6pmxAinA==}
     peerDependencies:
       next: '>=13.0.0 <15.2.1 || >15.2.2'
       react: '>=16.8.0 <20.0.0'
       react-dom: '>=16.8.0 <20.0.0'
 
-  gt-react@10.3.0:
-    resolution: {integrity: sha512-JMwCpHxPf70U8LH5DlE/ZRWcRKdfIFEaQLwzKWAAP6bmHBnZcvWeE2DvqypSUi1h1xnZv69DYF/K+2Y4yz4dXw==}
+  gt-react@10.3.1:
+    resolution: {integrity: sha512-E+Ib1Mxasc6ZJw8lF3Cbnfrg7z4H4OXuxxLc81PE4UEwOAS1CHxUSW8944NEkr3sbTA6+Y5sqKD1Zxg0pzrNaA==}
     peerDependencies:
       react: '>=16.8.0'
       react-dom: '>=16.8.0'
@@ -5378,7 +5378,7 @@ snapshots:
 
   '@generaltranslation/supported-locales@2.0.13':
     dependencies:
-      generaltranslation: 7.4.0
+      generaltranslation: 7.4.1
 
   '@hookform/resolvers@4.1.3(react-hook-form@7.62.0(react@19.1.1))':
     dependencies:
@@ -8341,7 +8341,7 @@ snapshots:
 
   functions-have-names@1.2.3: {}
 
-  generaltranslation@7.4.0:
+  generaltranslation@7.4.1:
     dependencies:
       crypto-js: 4.2.0
       fast-json-stable-stringify: 2.1.0
@@ -8433,19 +8433,19 @@ snapshots:
 
   graphemer@1.4.0: {}
 
-  gt-next@6.2.2(next@15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+  gt-next@6.2.5(next@15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1))(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
       '@generaltranslation/supported-locales': 2.0.13
-      generaltranslation: 7.4.0
-      gt-react: 10.3.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
+      generaltranslation: 7.4.1
+      gt-react: 10.3.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       next: 15.5.0(@babel/core@7.28.3)(@opentelemetry/api@1.9.0)(react-dom@19.1.1(react@19.1.1))(react@19.1.1)
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
 
-  gt-react@10.3.0(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
+  gt-react@10.3.1(react-dom@19.1.1(react@19.1.1))(react@19.1.1):
     dependencies:
       '@generaltranslation/supported-locales': 2.0.13
-      generaltranslation: 7.4.0
+      generaltranslation: 7.4.1
       react: 19.1.1
       react-dom: 19.1.1(react@19.1.1)
 
