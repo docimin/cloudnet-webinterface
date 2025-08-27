@@ -38,7 +38,7 @@ export default async function UserPage(props) {
   return (
     <PageLayout
       title={usersT('editTitle', {
-        name: user?.username
+        username: user?.username
       })}
     >
       <UserClientPage user={user} />

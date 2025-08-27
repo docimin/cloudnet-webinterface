@@ -24,10 +24,11 @@ class ApiError extends Error {
 
 async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
   if (!response.ok) {
+    const responseText = await response.text()
     throw new ApiError(
       response.status,
       response.statusText,
-      response.statusText
+      responseText || response.statusText
     )
   }
 

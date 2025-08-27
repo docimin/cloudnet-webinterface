@@ -51,7 +51,9 @@ export async function makeApiRequest<T = any>(
   }
 
   try {
-    const response = await fetch(`${decodeURIComponent(address)}${url}`, {
+    const fullUrl = `${decodeURIComponent(address)}${url}`
+    
+    const response = await fetch(fullUrl, {
       method,
       headers: {
         'Content-Type': 'application/json',
@@ -62,10 +64,12 @@ export async function makeApiRequest<T = any>(
         revalidate: 0
       }
     })
+    
     const responseText = await response.text()
 
     try {
       const data = JSON.parse(responseText)
+      
       return {
         data: data.data || data,
         status: response.status
