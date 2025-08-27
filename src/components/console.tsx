@@ -112,7 +112,6 @@ export default function ServiceConsole({
       } catch (error) {
         console.error('WebSocket construction error:', error)
         setSocketBlocked(true)
-        toast.error(consoleT('connectionError'))
         return
       }
 
