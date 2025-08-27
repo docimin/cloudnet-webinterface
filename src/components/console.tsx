@@ -83,20 +83,7 @@ export default function ServiceConsole({
       }
       
       // Handle different response formats
-      let ticket
-      if (typeof ticketResponse === 'string') {
-        ticket = ticketResponse
-      } else if (ticketResponse && typeof ticketResponse === 'object') {
-        if ('data' in ticketResponse) {
-          ticket = ticketResponse.data
-        } else if ('secret' in ticketResponse) {
-          ticket = ticketResponse.secret
-        } else {
-          ticket = ticketResponse
-        }
-      } else {
-        ticket = ticketResponse
-      }
+      const ticket = ticketResponse.secret
       
       // Validate ticket
       if (!ticket || typeof ticket !== 'string') {
@@ -131,6 +118,7 @@ export default function ServiceConsole({
 
       socketRef.current.onopen = (event) => {
         // Reset reconnect state on successful open
+        console.log('WebSocket connection opened')
         reconnectAttempt.current = 0
         if (reconnectTimer.current) {
           clearTimeout(reconnectTimer.current)
@@ -143,10 +131,6 @@ export default function ServiceConsole({
           output: event.data
         }
         setHistory((prev) => [...prev, newEntry])
-      }
-      
-      socketRef.current.onerror = (event) => {
-        toast.error(consoleT('connectionError'))
       }
       
       socketRef.current.onclose = (event) => {
@@ -165,14 +149,7 @@ export default function ServiceConsole({
         }
       }
     } catch (error) {
-      console.error('Socket initialization error:', {
-        error: error.message,
-        stack: error.stack,
-        type: type,
-        webSocketPath: webSocketPath
-      })
       setSocketBlocked(true)
-      toast.error(`${consoleT('connectionError')}: ${error.message}`)
     }
   }
 

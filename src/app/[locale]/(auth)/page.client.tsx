@@ -46,8 +46,6 @@ export default function Client() {
         })
       })
 
-      console.log('Tried to login')
-
       const dataResponse = await response.json()
 
       if (dataResponse.accessToken) {

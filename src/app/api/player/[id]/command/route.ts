@@ -26,6 +26,5 @@ export const POST = createApiRoute(async (req, { params }) => {
     'POST',
     { command: command }
   )
-  console.log(response.status, response.data)
   return NextResponse.json(response)
 })

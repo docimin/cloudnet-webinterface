@@ -110,8 +110,7 @@ export const serverUserApi = {
 // Auth API
 export const serverAuthApi = {
   checkToken: () => serverApiPost('/api/auth/jwt', {}),
-  createTicket: (type: 'service' | 'node') =>
-    serverApiPost('/api/auth/ticket', { type }),
+  createTicket: (type: 'service' | 'node') => serverApiPost<{ secret: string }>('/api/auth/ticket', { type }),
   getCookies: () => serverApiGet('/api/auth/getCookies'),
   getPermissions: () => serverApiGet<string[]>('/api/auth/getPermissions')
 }

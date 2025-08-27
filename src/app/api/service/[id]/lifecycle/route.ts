@@ -22,11 +22,9 @@ export const PATCH = createApiRoute(async (req, { params }) => {
     })
   }
 
-  console.log(target)
   const response = await makeApiRequest(
     `/service/${id}/lifecycle?target=${target}`,
     'PATCH'
   )
-  console.log(response)
   return NextResponse.json(response)
 })

@@ -22,6 +22,5 @@ export const POST = createApiRoute(async (req, { params }) => {
   }
 
   const response = await makeApiRequest(`/user/${id}`, 'DELETE')
-  console.log(response)
   return NextResponse.json(response)
 })
