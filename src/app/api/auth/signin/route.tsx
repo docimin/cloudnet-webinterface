@@ -55,10 +55,11 @@ export async function POST(request: NextRequest) {
   }
 
   try {
+    const basicAuth = Buffer.from(`${username}:${password}`).toString('base64')
     const response = await fetch(`${address}/auth`, {
       method: 'POST',
       headers: {
-        Authorization: `Basic ${btoa(`${username}:${password}`)}`,
+        Authorization: `Basic ${basicAuth}`,
         'Content-Type': 'application/json'
       }
     })
@@ -67,6 +68,10 @@ export async function POST(request: NextRequest) {
 
     if (dataResponse.name === 'SyntaxError') {
       return NextResponse.json({ error: 'Invalid response', status: 404 })
+    }
+
+    if (dataResponse.status === 401) {
+      return NextResponse.json({ error: 'Invalid credentials', status: 401 })
     }
 
     const expirationAccessTime = Number(
