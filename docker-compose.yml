@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  cloudnet-webinterface:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: cloudnet-webinterface
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - PORT=3000
+      - HOSTNAME=0.0.0.0
+      # Configure these environment variables according to your setup
+      - NEXT_PUBLIC_LOGO_PATH=${NEXT_PUBLIC_LOGO_PATH:-/logos/logo.svg}
+      - NEXT_PUBLIC_NAME=${NEXT_PUBLIC_NAME:-CloudNet}
+      - NEXT_PUBLIC_DOMAIN=${NEXT_PUBLIC_DOMAIN:-http://localhost:3000}
+      - NEXT_PUBLIC_CLOUDNET_ADDRESS=${NEXT_PUBLIC_CLOUDNET_ADDRESS}
+      - NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN=${NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN}
+      # Sentry configuration (optional)
+      - SENTRY_DSN=${SENTRY_DSN}
+      - SENTRY_ORG=${SENTRY_ORG}
+      - SENTRY_PROJECT=${SENTRY_PROJECT}
+      - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
+      - SENTRY_URL=${SENTRY_URL}
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health", "||", "exit", "1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - cloudnet-network
+
+networks:
+  cloudnet-network:
+    driver: bridge
+
+# Note: This docker-compose only includes the web interface.
+# The CloudNet backend should be running separately and accessible at the address
+# specified in NEXT_PUBLIC_CLOUDNET_ADDRESS (typically port 2812).
+# If you want to run CloudNet in Docker as well, you can add it as another service.
