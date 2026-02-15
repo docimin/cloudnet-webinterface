@@ -10,6 +10,8 @@ The current supported cloudnet versions. If your version is not supported, pleas
 
 | Version | Supported          |
 | ------- | ------------------ |
+| RC-16   | :white_check_mark: |
+| RC-15   | :white_check_mark: |
 | RC-14   | :white_check_mark: |
 | RC-13   | :white_check_mark: |
 | RC-12   | :white_check_mark: |
