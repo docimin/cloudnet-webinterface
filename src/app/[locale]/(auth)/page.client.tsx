@@ -9,6 +9,8 @@ import * as Sentry from '@sentry/nextjs'
 import { toast } from 'sonner'
 import { authApi } from '@/lib/client-api'
 import { useTranslations } from 'gt-next/client'
+import { cn } from '@/lib/utils'
+import { Loader2 } from 'lucide-react'
 
 export default function Client() {
   const [data, setData] = useState({
@@ -16,6 +18,7 @@ export default function Client() {
     username: '',
     password: ''
   })
+  const [loading, setLoading] = useState(false)
   const router = useRouter()
   const authT = useTranslations('Auth')
 
@@ -27,13 +30,14 @@ export default function Client() {
           router.push('/dashboard')
         }
       })
-      .catch(() => {})
+      .catch(() => { })
   }, [router])
 
-  const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {
+  const handleEmailLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
     e.preventDefault()
 
     try {
+      setLoading(true)
       const response = await fetch(`/api/auth/signin`, {
         method: 'POST',
         headers: {
@@ -59,18 +63,23 @@ export default function Client() {
 
         router.push('/dashboard')
       } else if (dataResponse.cause) {
+        setLoading(false)
         toast.error(authT('connectionError'))
       } else if (dataResponse.status === 401) {
+        setLoading(false)
         toast.error(authT('invalidCredentials'))
       } else if (dataResponse.status === 404) {
+        setLoading(false)
         toast.error(authT('incorrectAddress'))
       } else {
+        setLoading(false)
         toast.error(authT('loginError'))
         Sentry.captureException('An error occurred while logging in', {
           extra: dataResponse
         })
       }
     } catch (error) {
+      setLoading(false)
       console.error(error)
     }
   }
@@ -133,7 +142,8 @@ export default function Client() {
                     value={data.password}
                   />
                 </div>
-                <Button type="submit" className="w-full">
+                <Button type="submit" className="w-full" disabled={!data.username || !data.password || loading}>
+                  {loading && <Loader2 className={cn("mr-2 h-4 w-4 animate-spin", loading ? "opacity-100" : "opacity-0")} />}
                   {authT('loginButton')}
                 </Button>
               </div>
