@@ -43,8 +43,10 @@ export async function POST(request: NextRequest) {
     let addr = rawAddress.trim()
 
     // Ensure a scheme is present so URL parsing is reliable
+    // IP addresses default to http (CloudNet REST API), domains to https
     if (!addr.startsWith('http://') && !addr.startsWith('https://')) {
-      addr = 'https://' + addr
+      const hostPart = addr.split('/')[0].split(':')[0]
+      addr = net.isIP(hostPart) ? `http://${addr}` : `https://${addr}`
     }
 
     let url: URL

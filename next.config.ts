@@ -4,6 +4,21 @@ import { withGTConfig } from 'gt-next/config'
 import { SentryBuildOptions, withSentryConfig } from '@sentry/nextjs'
 import { NextConfig } from 'next'
 
+const remotePatterns: NextConfig['images']['remotePatterns'] = [
+  {
+    protocol: 'http',
+    hostname: 'localhost'
+  }
+]
+
+if (process.env.NEXT_PUBLIC_DOMAIN) {
+  const url = new URL(process.env.NEXT_PUBLIC_DOMAIN)
+  remotePatterns.push({
+    protocol: url.protocol.replace(':', '') as 'http' | 'https',
+    hostname: url.hostname
+  })
+}
+
 const nextConfig: NextConfig = {
   reactStrictMode: true,
   compress: false,
@@ -28,12 +43,7 @@ const nextConfig: NextConfig = {
     position: 'bottom-right'
   },
   images: {
-    remotePatterns: [
-      {
-        protocol: 'http',
-        hostname: 'localhost'
-      }
-    ]
+    remotePatterns
   },
   allowedDevOrigins: ['localhost', '127.0.0.1'],
   poweredByHeader: false,
