@@ -13,11 +13,6 @@ import { authApi } from '@/lib/client-api'
 import { cn } from '@/lib/utils'
 
 export default function Client() {
-	const [data, setData] = useState({
-		address: process.env.NEXT_PUBLIC_CLOUDNET_ADDRESS || '',
-		username: '',
-		password: ''
-	})
 	const [loading, setLoading] = useState(false)
 	const router = useRouter()
 	const authT = useTranslations('Auth')
@@ -33,8 +28,16 @@ export default function Client() {
 			.catch(() => {})
 	}, [router])
 
-	const handleEmailLogin = async (e: React.SubmitEvent<HTMLFormElement>) => {
+	const handleEmailLogin = async (e: React.FormEvent<HTMLFormElement>) => {
 		e.preventDefault()
+
+		const formData = new FormData(e.currentTarget)
+		const address =
+			(formData.get('address') as string | null) ||
+			process.env.NEXT_PUBLIC_CLOUDNET_ADDRESS ||
+			''
+		const username = (formData.get('username') as string) ?? ''
+		const password = (formData.get('password') as string) ?? ''
 
 		try {
 			setLoading(true)
@@ -44,9 +47,9 @@ export default function Client() {
 					'Content-Type': 'application/json'
 				},
 				body: JSON.stringify({
-					address: data.address,
-					username: data.username,
-					password: data.password
+					address,
+					username,
+					password
 				})
 			})
 
@@ -106,26 +109,25 @@ export default function Client() {
 									<Label htmlFor="address">{authT('address')}</Label>
 									<Input
 										id="address"
+										name="address"
 										type="text"
 										placeholder={'127.0.0.1:2812'}
-										onChange={(e) =>
-											setData({ ...data, address: e.target.value })
+										defaultValue={
+											process.env.NEXT_PUBLIC_CLOUDNET_ADDRESS || ''
 										}
-										value={data.address}
+										autoComplete="url"
 										required
 									/>
 								</div>
 							)}
 							<div className="grid gap-2">
-								<Label htmlFor="email">{authT('username')}</Label>
+								<Label htmlFor="username">{authT('username')}</Label>
 								<Input
 									id="username"
+									name="username"
 									type="text"
 									placeholder={'derklaro'}
-									onChange={(e) =>
-										setData({ ...data, username: e.target.value })
-									}
-									value={data.username}
+									autoComplete="username"
 									required
 								/>
 							</div>
@@ -133,18 +135,16 @@ export default function Client() {
 								<Label htmlFor="password">{authT('password')}</Label>
 								<Input
 									id="password"
+									name="password"
 									type="password"
+									autoComplete="current-password"
 									required
-									onChange={(e) =>
-										setData({ ...data, password: e.target.value })
-									}
-									value={data.password}
 								/>
 							</div>
 							<Button
 								type="submit"
 								className="w-full"
-								disabled={!data.username || !data.password || loading}
+								disabled={loading}
 							>
 								{loading && (
 									<Loader2
