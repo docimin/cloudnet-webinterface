@@ -1,30 +1,34 @@
-import React from 'react'
+import { Info } from 'lucide-react'
+import type {
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues
+} from 'react-hook-form'
 import {
   FormControl,
+  FormItem,
   FormLabel,
-  FormMessage,
-  FormItem
+  FormMessage
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Info } from 'lucide-react'
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger
 } from '@/components/ui/hover-card'
+import { Input } from '@/components/ui/input'
 
-interface InputFieldProps {
+interface InputFieldProps<T extends FieldValues, N extends FieldPath<T>> {
   label: string
   description: string
   placeholder: string
-  field: any
+  field: ControllerRenderProps<T, N>
   type?: string
   maxLength?: number
   className?: string
   disabled?: boolean
 }
 
-const InputField: React.FC<InputFieldProps> = ({
+const InputField = <T extends FieldValues, N extends FieldPath<T>>({
   label,
   description,
   placeholder,
@@ -33,7 +37,7 @@ const InputField: React.FC<InputFieldProps> = ({
   maxLength,
   className,
   disabled
-}) => {
+}: InputFieldProps<T, N>) => {
   return (
     <FormItem className={className}>
       {label && (
@@ -42,7 +46,7 @@ const InputField: React.FC<InputFieldProps> = ({
           {description && (
             <HoverCard openDelay={100} closeDelay={50}>
               <HoverCardTrigger>
-                <span className="ml-2 text-gray-500">
+                <span className="ml-2 text-muted-foreground">
                   <Info className="inline-block h-4 w-4" />
                 </span>
               </HoverCardTrigger>

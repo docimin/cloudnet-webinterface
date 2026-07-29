@@ -1,17 +1,17 @@
-import React from 'react'
+import { Info } from 'lucide-react'
+import type React from 'react'
 import {
   FormControl,
   FormItem,
   FormLabel,
   FormMessage
 } from '@/components/ui/form'
-import { Input } from '@/components/ui/input'
-import { Info } from 'lucide-react'
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger
 } from '@/components/ui/hover-card'
+import { Input } from '@/components/ui/input'
 
 interface NumberFieldProps {
   label: string
@@ -19,7 +19,7 @@ interface NumberFieldProps {
   placeholder: string
   field: {
     value: number
-    onChange: (value: any) => void
+    onChange: (value: number) => void
   }
 }
 
@@ -31,7 +31,7 @@ const NumberField: React.FC<NumberFieldProps> = ({
 }) => {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const value = Number(e.target.value)
-    if (!isNaN(value)) {
+    if (!Number.isNaN(value)) {
       field.onChange(value) // Directly update the form value
     } else if (e.target.value === '') {
       field.onChange(0) // Optionally clear the field value
@@ -45,7 +45,7 @@ const NumberField: React.FC<NumberFieldProps> = ({
         {description && (
           <HoverCard openDelay={100} closeDelay={50}>
             <HoverCardTrigger>
-              <span className="ml-2 text-gray-500">
+              <span className="ml-2 text-muted-foreground">
                 <Info className="inline-block h-4 w-4" />
               </span>
             </HoverCardTrigger>

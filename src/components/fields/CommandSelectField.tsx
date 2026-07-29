@@ -1,29 +1,30 @@
-import React from 'react'
-import {
-  FormControl,
-  FormLabel,
-  FormMessage,
-  FormItem
-} from '@/components/ui/form'
-import {
-  Popover,
-  PopoverTrigger,
-  PopoverContent
-} from '@/components/ui/popover'
+import { useTranslations } from 'gt-tanstack-start'
+import { Check, ChevronsUpDown, Info } from 'lucide-react'
+import type React from 'react'
+import { Button } from '@/components/ui/button'
 import {
   Command,
+  CommandGroup,
   CommandInput,
-  CommandList,
   CommandItem,
-  CommandGroup
+  CommandList
 } from '@/components/ui/command'
+import {
+  FormControl,
+  FormItem,
+  FormLabel,
+  FormMessage
+} from '@/components/ui/form'
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger
 } from '@/components/ui/hover-card'
-import { Check, ChevronsUpDown, Info } from 'lucide-react'
-import { Button } from '@/components/ui/button'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover'
 import { cn } from '@/lib/utils'
 
 interface CommandSelectFieldProps {
@@ -42,6 +43,8 @@ const CommandSelectField: React.FC<CommandSelectFieldProps> = ({
   options,
   field
 }) => {
+  const mainT = useTranslations('Main')
+
   return (
     <FormItem>
       <div className="flex flex-col gap-3">
@@ -50,7 +53,7 @@ const CommandSelectField: React.FC<CommandSelectFieldProps> = ({
           {description && (
             <HoverCard openDelay={100} closeDelay={50}>
               <HoverCardTrigger>
-                <span className="ml-2 text-gray-500">
+                <span className="ml-2 text-muted-foreground">
                   <Info className="inline-block h-4 w-4" />
                 </span>
               </HoverCardTrigger>
@@ -61,17 +64,17 @@ const CommandSelectField: React.FC<CommandSelectFieldProps> = ({
         <FormControl>
           <Popover>
             <PopoverTrigger asChild>
-              <Button variant="outline" className="w-[300px] justify-between">
+              <Button variant="outline" className="w-75 justify-between">
                 {field.value.length > 0
-                  ? `${field.value.length} languages selected`
-                  : 'Select languages...'}
+                  ? mainT('selectedCount', { count: field.value.length })
+                  : mainT('selectOptions')}
                 <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
               </Button>
             </PopoverTrigger>
-            <PopoverContent className="w-[300px] p-0">
+            <PopoverContent className="w-75 p-0">
               <Command>
                 <CommandInput
-                  placeholder="Search options..."
+                  placeholder={mainT('search')}
                   className={'focus:ring-0 focus:border-0 border-0'}
                 />
                 <CommandList>

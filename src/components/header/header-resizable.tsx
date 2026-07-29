@@ -1,18 +1,16 @@
-'use client'
-
-import { cn } from '@/lib/utils'
+import { useState } from 'react'
+import { type Layout, usePanelRef } from 'react-resizable-panels'
+import { Nav1, Nav2, Nav3, NavFooter } from '@/components/header/data'
+import { Nav } from '@/components/header/header-nav'
 import {
   ResizableHandle,
   ResizablePanel,
   ResizablePanelGroup
 } from '@/components/ui/resizable'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Separator } from '@/components/ui/separator'
 import { TooltipProvider } from '@/components/ui/tooltip'
-import { Nav } from '@/components/header/header-nav'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import { Nav1, Nav2, Nav3, NavFooter } from '@/components/header/data'
-import { useState } from 'react'
-import Image from 'next/image'
+import { cn } from '@/lib/utils'
 
 export default function SidebarResizable({
   defaultLayout = [265, 440, 655],
@@ -22,6 +20,7 @@ export default function SidebarResizable({
   children
 }) {
   const [isCollapsed, setIsCollapsed] = useState<boolean>(defaultCollapsed)
+  const navPanel = usePanelRef()
 
   const filteredNav1 = Nav1().filter((link) =>
     link.permission.some(
@@ -42,32 +41,33 @@ export default function SidebarResizable({
   return (
     <TooltipProvider delayDuration={0}>
       <ResizablePanelGroup
-        direction="horizontal"
-        onLayout={(sizes: number[]) => {
+        orientation="horizontal"
+        onLayoutChanged={(layout: Layout) => {
+          // biome-ignore lint/suspicious/noDocumentCookie: SSR reads this in _authed.tsx, so it has to be a browser-written cookie; setCookie() is server-only and cookieStore is not in Safari yet
           document.cookie = `react-resizable-panels:layout=${JSON.stringify(
-            sizes
+            Object.values(layout)
           )}; path=/`
         }}
-        className="h-full max-h-[full] items-stretch flex fixed"
+        className="h-full max-h-full items-stretch flex fixed"
       >
         <ResizablePanel
-          defaultSize={defaultLayout[0]}
-          collapsedSize={navCollapsedSize}
+          panelRef={navPanel}
+          defaultSize={`${defaultLayout[0]}%`}
+          collapsedSize={`${navCollapsedSize}%`}
           collapsible={true}
-          minSize={15}
-          maxSize={20}
-          onCollapse={() => {
-            setIsCollapsed(true)
-            document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(true)}; path=/`
-          }}
-          onExpand={() => {
-            setIsCollapsed(false)
-            document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(false)}; path=/`
+          minSize="15%"
+          maxSize="20%"
+          onResize={() => {
+            const collapsed = navPanel.current?.isCollapsed() ?? false
+            if (collapsed === isCollapsed) return
+            setIsCollapsed(collapsed)
+            // biome-ignore lint/suspicious/noDocumentCookie: same as the layout cookie above - written client-side because SSR reads it
+            document.cookie = `react-resizable-panels:collapsed=${JSON.stringify(collapsed)}; path=/`
           }}
           className={cn(
             'h-screen', // Add this class
             isCollapsed &&
-              'min-w-[50px] max-w-[50px] transition-all duration-300 ease-in-out'
+              'min-w-12.5 max-w-12.5 transition-all duration-300 ease-in-out'
           )}
         >
           <div
@@ -80,19 +80,19 @@ export default function SidebarResizable({
             <div>
               <div
                 className={cn(
-                  'flex h-[52px] items-center',
-                  isCollapsed ? 'h-[52px] justify-center' : 'px-2 ml-2'
+                  'flex h-13 items-center',
+                  isCollapsed ? 'h-13 justify-center' : 'px-2 ml-2'
                 )}
               >
-                <Image
-                  src={process.env.NEXT_PUBLIC_LOGO_PATH || '/logos/logo.svg'}
+                <img
+                  src={import.meta.env.VITE_LOGO_PATH || '/logos/logo.svg'}
                   width={32}
                   height={32}
-                  alt={`${process.env.NEXT_PUBLIC_NAME || 'CloudNet'} logo`}
+                  alt={`${import.meta.env.VITE_NAME || 'CloudNet'} logo`}
                   className={'rounded-full'}
                 />
                 <span className={cn('ml-2', isCollapsed && 'hidden')}>
-                  {process.env.NEXT_PUBLIC_NAME || 'CloudNet'}
+                  {import.meta.env.VITE_NAME || 'CloudNet'}
                 </span>
               </div>
               <Separator />
@@ -123,7 +123,7 @@ export default function SidebarResizable({
           </div>
         </ResizablePanel>
         <ResizableHandle withHandle />
-        <ResizablePanel defaultSize={defaultLayout[1]} minSize={30}>
+        <ResizablePanel defaultSize={`${defaultLayout[1]}%`} minSize="30%">
           <ScrollArea className={'h-full w-full'}>{children}</ScrollArea>
         </ResizablePanel>
       </ResizablePanelGroup>

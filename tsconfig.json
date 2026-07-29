@@ -10,9 +10,14 @@
       "dom.iterable",
       "esnext"
     ],
+    "types": [
+      "vite/client",
+      "vitest/globals"
+    ],
     "allowJs": true,
     "skipLibCheck": true,
     "strict": false,
+    "strictNullChecks": true,
     "noEmit": true,
     "incremental": true,
     "esModuleInterop": true,
@@ -21,21 +26,16 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "jsx": "react-jsx",
-    "plugins": [
-      {
-        "name": "next"
-      }
-    ],
-    "target": "ES2017"
+    "target": "ES2022"
   },
   "include": [
-    "next-env.d.ts",
-    ".next/types/**/*.ts",
     "**/*.ts",
-    "**/*.tsx",
-    ".next/dev/types/**/*.ts"
+    "**/*.tsx"
   ],
   "exclude": [
-    "node_modules"
+    "node_modules",
+    ".output",
+    ".nitro",
+    "src/_app_old"
   ]
 }

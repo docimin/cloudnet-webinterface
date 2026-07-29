@@ -1,7 +1,11 @@
+// NetworkClusterNode and NodeInfoSnapshot are allOf over the free-form
+// JsonDocPropertyable and the 0.5.1 spec marks no field required. src/server/
+// node.ts guarantees only `uniqueId` and `listeners`; the entry is PUT back to
+// /cluster on update, so nothing else is invented for it.
 export interface Node {
-  properties: Record<string, unknown>
   uniqueId: string
   listeners: Array<{ host: string; port: number }>
+  properties?: Record<string, unknown>
 }
 
 export interface Version {
@@ -70,28 +74,30 @@ export interface Module {
   properties: Record<string, unknown>
 }
 
+// asNode only proves this is an object, so every field stays optional
 export interface NodeInfoSnapshot {
-  properties: Record<string, unknown>
-  creationTime: number
-  startupMillis: number
-  maxMemory: number
-  usedMemory: number
-  reservedMemory: number
-  currentServicesCount: number
-  drain: boolean
-  node: Node
-  version: Version
-  processSnapshot: ProcessSnapshot
-  maxCPUUsageToStartServices: number
-  modules: Module[]
+  properties?: Record<string, unknown>
+  creationTime?: number
+  startupMillis?: number
+  maxMemory?: number
+  usedMemory?: number
+  reservedMemory?: number
+  currentServicesCount?: number
+  drain?: boolean
+  node?: Node
+  version?: Version
+  processSnapshot?: ProcessSnapshot
+  maxCPUUsageToStartServices?: number
+  modules?: Module[]
 }
 
 export interface Nodes {
   node: Node
-  state: 'UNAVAILABLE' | 'SYNCING' | 'READY' | 'DISCONNECTED'
-  head: boolean
-  local: boolean
-  nodeInfoSnapshot: NodeInfoSnapshot
+  state?: 'UNAVAILABLE' | 'SYNCING' | 'READY' | 'DISCONNECTED'
+  head?: boolean
+  local?: boolean
+  // null while the node is registered but not connected
+  nodeInfoSnapshot: NodeInfoSnapshot | null
 }
 
 export interface NodesType {

@@ -1,17 +1,14 @@
-'use client'
-
-import { LucideIcon } from 'lucide-react'
-
-import { cn } from '@/lib/utils'
+import { Link, useLocation } from '@tanstack/react-router'
+import { useTranslations } from 'gt-tanstack-start'
+import type { LucideIcon } from 'lucide-react'
+import type { Dispatch, SetStateAction } from 'react'
 import { buttonVariants } from '@/components/ui/button'
 import {
   Tooltip,
   TooltipContent,
   TooltipTrigger
 } from '@/components/ui/tooltip'
-import { usePathname } from 'next/navigation'
-import Link from 'next/link'
-import { useTranslations } from 'gt-next/client'
+import { cn } from '@/lib/utils'
 
 interface NavProps {
   isCollapsed: boolean
@@ -22,12 +19,15 @@ interface NavProps {
     variant: 'default' | 'ghost'
     href: string
   }[]
-  setIsOpen?: any
+  setIsOpen?: Dispatch<SetStateAction<boolean>>
 }
 
 export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {
-  const currentPath = usePathname()
+  const { pathname } = useLocation()
   const navigationT = useTranslations('Navigation')
+
+  // pathname keeps the optional locale segment (/nl/dashboard), hrefs never do
+  const currentPath = pathname.replace(/^\/(?:en|de|nl)(?=\/|$)/, '')
 
   return (
     <div
@@ -35,31 +35,34 @@ export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {
       className="group flex flex-col gap-4 py-2 data-[collapsed=true]:py-2"
     >
       <nav className="grid gap-1 px-2 group-[[data-collapsed=true]]:justify-center group-[[data-collapsed=true]]:px-2">
-        {links.map((link, index) => {
+        {links.map((link) => {
           const isActive =
             link.title === navigationT('dashboard')
               ? currentPath === link.href.replace(/\/$/, '')
               : currentPath.startsWith(link.href)
 
           const variant = isActive ? 'default' : 'ghost'
+          // every generated route sits under the optional locale segment
+          const to = `/{-$locale}${link.href}`
 
           return isCollapsed ? (
-            <Tooltip key={index} delayDuration={0}>
+            <Tooltip key={link.href} delayDuration={0}>
               <TooltipTrigger asChild>
                 <Link
-                  // @ts-ignore
-                  href={link.href}
-                  onClick={(e) => {
+                  to={to}
+                  onClick={() => {
                     if (window.innerWidth <= 768) {
                       // 768px is a common breakpoint for mobile devices
-                      setIsOpen(false)
+                      setIsOpen?.(false)
                     }
                   }}
                   className={cn(
                     buttonVariants({ variant, size: 'icon' }),
+                    'border-l-2 border-l-transparent',
+                    isActive && 'border-l-accent-bar',
                     'h-9 w-9',
                     variant === 'default' &&
-                      'dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-white'
+                      'dark:bg-muted dark:text-muted-foreground dark:hover:bg-muted dark:hover:text-foreground'
                   )}
                 >
                   <link.icon className="h-4 w-4" />
@@ -77,19 +80,20 @@ export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {
             </Tooltip>
           ) : (
             <Link
-              key={index}
-              // @ts-ignore
-              href={link.href}
-              onClick={(e) => {
+              key={link.href}
+              to={to}
+              onClick={() => {
                 if (window.innerWidth <= 768) {
                   // 768px is a common breakpoint for mobile devices
-                  setIsOpen(false)
+                  setIsOpen?.(false)
                 }
               }}
               className={cn(
                 buttonVariants({ variant, size: 'sm' }),
+                'border-l-2 border-l-transparent',
+                isActive && 'border-l-accent-bar',
                 variant === 'default' &&
-                  'dark:bg-muted dark:text-white dark:hover:bg-muted dark:hover:text-white',
+                  'dark:bg-muted dark:text-foreground dark:hover:bg-muted dark:hover:text-foreground',
                 'justify-start'
               )}
             >
@@ -99,7 +103,8 @@ export function Nav({ isCollapsed, links, setIsOpen }: NavProps) {
                 <span
                   className={cn(
                     'ml-auto',
-                    variant === 'default' && 'text-background dark:text-white'
+                    variant === 'default' &&
+                      'text-background dark:text-foreground'
                   )}
                 >
                   {link.label}

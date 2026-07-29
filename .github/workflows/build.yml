@@ -13,10 +13,26 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v4
 
+      - name: Set up pnpm
+        uses: pnpm/action-setup@v4
+
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 22
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+
+      - name: Typecheck
+        run: pnpm exec tsc --noEmit
+
+      - name: Test
+        run: pnpm exec vitest run
+
+      - name: Lint
+        run: pnpm exec biome check src css
 
       - name: Extract version from package.json
         id: get_version
@@ -34,12 +50,12 @@ jobs:
       - name: Build and push Docker image
         run: |
           docker build \
-            --build-arg NEXT_PUBLIC_LOGO_PATH=${{ secrets.NEXT_PUBLIC_LOGO_PATH }} \
-            --build-arg NEXT_PUBLIC_NAME=${{ secrets.NEXT_PUBLIC_NAME }} \
-            --build-arg NEXT_PUBLIC_DOMAIN=${{ secrets.NEXT_PUBLIC_DOMAIN }} \
-            --build-arg NEXT_PUBLIC_CLOUDNET_ADDRESS=${{ secrets.NEXT_PUBLIC_CLOUDNET_ADDRESS }} \
-            --build-arg NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN=${{ secrets.NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN }} \
-            --build-arg SENTRY_DSN=${{ secrets.SENTRY_DSN }} \
+            --build-arg VITE_LOGO_PATH=${{ secrets.VITE_LOGO_PATH }} \
+            --build-arg VITE_NAME=${{ secrets.VITE_NAME }} \
+            --build-arg VITE_DOMAIN=${{ secrets.VITE_DOMAIN }} \
+            --build-arg VITE_CLOUDNET_ADDRESS=${{ secrets.VITE_CLOUDNET_ADDRESS }} \
+            --build-arg VITE_CLOUDNET_ADDRESS_HIDDEN=${{ secrets.VITE_CLOUDNET_ADDRESS_HIDDEN }} \
+            --build-arg VITE_SENTRY_DSN=${{ secrets.VITE_SENTRY_DSN }} \
             -t ${{ secrets.HARBOR_REGISTRY }}/fleet/cloudnet-webinterface:${{ steps.get_version.outputs.version }} \
             -t ${{ secrets.HARBOR_REGISTRY }}/fleet/cloudnet-webinterface:latest \
             -f Dockerfile .

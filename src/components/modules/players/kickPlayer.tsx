@@ -1,38 +1,41 @@
-'use client'
-import { useState } from 'react'
+import { useNavigate } from '@tanstack/react-router'
+import { useTranslations } from 'gt-tanstack-start'
+import { type MouseEvent, useState } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
-import { playerApi } from '@/lib/client-api'
-import { useTranslations } from 'gt-next/client'
+import { Label } from '@/components/ui/label'
+import { playerKick } from '@/server/player'
 
 export default function KickPlayer({ player }: { player: OnlinePlayer }) {
   const playersT = useTranslations('Players')
   const [kickReason, setKickReason] = useState('')
   const [dialogOpen, setDialogOpen] = useState(false)
 
-  const router = useRouter()
-  const handleKick = async (event: any) => {
+  const navigate = useNavigate()
+  const handleKick = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
-    const response = await playerApi.kick(
-      player.networkPlayerProxyInfo.uniqueId,
-      kickReason ? kickReason : 'Bye!'
-    )
 
-    if (response.status === 204) {
-      router.push('/dashboard/players')
+    try {
+      await playerKick({
+        data: {
+          id: player.networkPlayerProxyInfo.uniqueId,
+          message: kickReason ? kickReason : 'Bye!'
+        }
+      })
+      navigate({ to: '/{-$locale}/dashboard/players' })
       toast.success(playersT('playerKicked'))
-    } else {
+    } catch {
       toast.error(playersT('kickFailed'))
     }
     setDialogOpen(false)
@@ -41,16 +44,20 @@ export default function KickPlayer({ player }: { player: OnlinePlayer }) {
   return (
     <Dialog open={dialogOpen} onOpenChange={(open) => setDialogOpen(open)}>
       <DialogTrigger asChild>
-        <Button variant={'destructive'}>{playersT('kickPlayer')}</Button>
+        <Button variant={'destructive'} size={'sm'}>
+          {playersT('kickPlayer')}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
             {playersT('kickPlayerTitle', { playerName: player?.name })}
           </DialogTitle>
-          <DialogDescription className={'pb-4'}>
+          <DialogDescription>
             {playersT('confirmKickPlayer', { playerName: player?.name })}
           </DialogDescription>
+        </DialogHeader>
+        <div className="space-y-2">
           <Label htmlFor={'kickReason'}>{playersT('kickReason')}</Label>
           <Input
             id={'kickReason'}
@@ -58,10 +65,15 @@ export default function KickPlayer({ player }: { player: OnlinePlayer }) {
             onChange={(e) => setKickReason(e.target.value)}
             type={'text'}
           />
-        </DialogHeader>
-        <Button variant={'destructive'} onClick={handleKick}>
-          {playersT('kickPlayer')}
-        </Button>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant={'outline'}>{playersT('cancel')}</Button>
+          </DialogClose>
+          <Button variant={'destructive'} onClick={handleKick}>
+            {playersT('kickPlayer')}
+          </Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

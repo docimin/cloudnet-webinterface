@@ -3,24 +3,20 @@
 FROM node:22-alpine AS base
 
 # Add build-time arguments
-ARG NEXT_PUBLIC_LOGO_PATH
-ARG NEXT_PUBLIC_NAME
-ARG NEXT_PUBLIC_DOMAIN
-ARG NEXT_PUBLIC_CLOUDNET_ADDRESS
-ARG NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN
-ARG SENTRY_URL
-ARG SENTRY_ORG
-ARG SENTRY_PROJECT
-ARG SENTRY_DSN
-ARG SENTRY_AUTH_TOKEN
+ARG VITE_LOGO_PATH
+ARG VITE_NAME
+ARG VITE_DOMAIN
+ARG VITE_CLOUDNET_ADDRESS
+ARG VITE_CLOUDNET_ADDRESS_HIDDEN
+ARG VITE_SENTRY_DSN
 
 # Set them as environment variables for later stages
-ENV NEXT_PUBLIC_LOGO_PATH=${NEXT_PUBLIC_LOGO_PATH}
-ENV NEXT_PUBLIC_NAME=${NEXT_PUBLIC_NAME}
-ENV NEXT_PUBLIC_DOMAIN=${NEXT_PUBLIC_DOMAIN}
-ENV NEXT_PUBLIC_CLOUDNET_ADDRESS=${NEXT_PUBLIC_CLOUDNET_ADDRESS}
-ENV NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN=${NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN}
-ENV SENTRY_DSN=${SENTRY_DSN}
+ENV VITE_LOGO_PATH=${VITE_LOGO_PATH}
+ENV VITE_NAME=${VITE_NAME}
+ENV VITE_DOMAIN=${VITE_DOMAIN}
+ENV VITE_CLOUDNET_ADDRESS=${VITE_CLOUDNET_ADDRESS}
+ENV VITE_CLOUDNET_ADDRESS_HIDDEN=${VITE_CLOUDNET_ADDRESS_HIDDEN}
+ENV VITE_SENTRY_DSN=${VITE_SENTRY_DSN}
 
 # Install dependencies only when needed
 FROM base AS deps
@@ -44,10 +40,16 @@ WORKDIR /app
 COPY --from=deps /app/node_modules ./node_modules
 COPY . .
 
-# Next.js collects completely anonymous telemetry data about general usage.
-# Learn more here: https://nextjs.org/telemetry
-# Uncomment the following line in case you want to disable telemetry during the build.
-# ENV NEXT_TELEMETRY_DISABLED=1
+# Source map upload only. Scoped to this stage so the auth token stays out of the
+# final image.
+ARG SENTRY_URL
+ARG SENTRY_ORG
+ARG SENTRY_PROJECT
+ARG SENTRY_AUTH_TOKEN
+ENV SENTRY_URL=${SENTRY_URL}
+ENV SENTRY_ORG=${SENTRY_ORG}
+ENV SENTRY_PROJECT=${SENTRY_PROJECT}
+ENV SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
 
 RUN \
   if [ -f yarn.lock ]; then yarn run build; \
@@ -56,31 +58,25 @@ RUN \
   else echo "Lockfile not found." && exit 1; \
   fi
 
-# Production image, copy all the files and run next
+# Production image, copy the Nitro output and run it
 FROM base AS runner
 WORKDIR /app
 
 ENV NODE_ENV=production
-# Uncomment the following line in case you want to disable telemetry during runtime.
-# ENV NEXT_TELEMETRY_DISABLED=1
+# Read at runtime on sign in; override with -e to enable SSRF protection
+ENV BLOCK_PRIVATE_ADDRESSES=false
 
 RUN addgroup --system --gid 1001 nodejs
-RUN adduser --system --uid 1001 nextjs
+RUN adduser --system --uid 1001 cloudnet
 
-COPY --from=builder /app/public ./public
+# .output is self-contained: bundled server plus the public assets it serves
+COPY --from=builder --chown=cloudnet:nodejs /app/.output ./.output
 
-# Automatically leverage output traces to reduce image size
-# https://nextjs.org/docs/advanced-features/output-file-tracing
-COPY --from=builder --chown=nextjs:nodejs /app/.next/standalone ./
-COPY --from=builder --chown=nextjs:nodejs /app/.next/static ./.next/static
-
-USER nextjs
+USER cloudnet
 
 EXPOSE 3000
 
 ENV PORT=3000
+ENV HOST="0.0.0.0"
 
-# server.js is created by next build from the standalone output
-# https://nextjs.org/docs/pages/api-reference/config/next-config-js/output
-ENV HOSTNAME="0.0.0.0"
-CMD ["node", "server.js"]
+CMD ["node", ".output/server/index.mjs"]

@@ -1,5 +1,6 @@
 import { formatBytes } from '../components/formatBytes'
 import { formatDate } from '../components/formatDate'
+import { cn } from '../lib/utils'
 
 describe('formatBytes', () => {
   test('formats bytes correctly', () => {
@@ -28,5 +29,27 @@ describe('formatDate', () => {
   test('pads single digits correctly', () => {
     const testDate = new Date('2023-01-05T09:05:00')
     expect(formatDate(testDate)).toBe('05.01.2023 @ 09:05')
+  })
+})
+
+describe('cn', () => {
+  test('keeps custom text sizes from eating the text colour', () => {
+    expect(cn('text-muted-foreground', 'text-caption')).toBe(
+      'text-muted-foreground text-caption'
+    )
+    expect(cn('text-muted-foreground', 'text-status-code')).toBe(
+      'text-muted-foreground text-status-code'
+    )
+  })
+
+  test('still treats them as font sizes', () => {
+    expect(cn('text-xs', 'text-caption')).toBe('text-caption')
+    expect(cn('text-caption', 'text-status-code')).toBe('text-status-code')
+  })
+
+  test('still merges plain conflicts', () => {
+    expect(cn('text-red-500', 'text-muted-foreground')).toBe(
+      'text-muted-foreground'
+    )
   })
 })

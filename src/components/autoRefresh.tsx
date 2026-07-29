@@ -1,6 +1,6 @@
-'use client'
-import React, { useEffect } from 'react'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@tanstack/react-router'
+import type React from 'react'
+import { useEffect } from 'react'
 
 export default function AutoRefresh({
   timer = 10000,
@@ -12,7 +12,7 @@ export default function AutoRefresh({
   const router = useRouter()
   useEffect(() => {
     const autoRefresh = setInterval(() => {
-      router.refresh()
+      router.invalidate()
     }, timer) // 10000 milliseconds = 10 seconds
 
     // Clear interval on component unmount

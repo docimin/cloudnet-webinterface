@@ -1,0 +1,5 @@
+{
+  "defaultLocale": "en",
+  "locales": ["nl", "de", "en"],
+  "localeRouting": true
+}

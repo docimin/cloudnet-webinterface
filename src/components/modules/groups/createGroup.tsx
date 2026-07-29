@@ -1,42 +1,52 @@
-'use client'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useRouter } from '@tanstack/react-router'
+import { useTranslations } from 'gt-tanstack-start'
+import { PlusIcon } from 'lucide-react'
 import { useState } from 'react'
+import { useForm } from 'react-hook-form'
+import { toast } from 'sonner'
+import { z } from 'zod'
+import InputField from '@/components/fields/InputField'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { Button } from '@/components/ui/button'
-import { useForm } from 'react-hook-form'
-import { zodResolver } from '@hookform/resolvers/zod'
-import { z } from 'zod'
-import { useRouter } from 'next/navigation'
-import { toast } from 'sonner'
-import { groupApi } from '@/lib/client-api'
-import { Form } from '@/components/ui/form'
-import InputField from '@/components/fields/InputField'
+import { Form, FormField } from '@/components/ui/form'
+import { groupUpdate } from '@/server/group'
 
-const groupSchema = z.object({
-  name: z.string().min(1, 'Name is required'),
-  jvmOptions: z.array(z.string()).default([]),
-  processParameters: z.array(z.string()).default([]),
-  environmentVariables: z.record(z.string()).default({}),
-  targetEnvironments: z.array(z.string()).default([]),
-  templates: z.array(z.string()).default([]),
-  deployments: z.array(z.string()).default([]),
-  includes: z.array(z.string()).default([]),
-  properties: z.record(z.string()).default({})
-})
+const buildGroupSchema = (nameRequired: string) =>
+  z.object({
+    name: z.string().min(1, nameRequired),
+    jvmOptions: z.array(z.string()).default([]),
+    processParameters: z.array(z.string()).default([]),
+    environmentVariables: z.record(z.string(), z.string()).default({}),
+    targetEnvironments: z.array(z.string()).default([]),
+    templates: z.array(z.string()).default([]),
+    deployments: z.array(z.string()).default([]),
+    includes: z.array(z.string()).default([]),
+    properties: z.record(z.string(), z.string()).default({})
+  })
 
-type GroupFormData = z.infer<typeof groupSchema>
+type GroupSchema = ReturnType<typeof buildGroupSchema>
+type GroupFormData = z.infer<GroupSchema>
 
 export default function CreateGroup() {
   const router = useRouter()
+  const groupsT = useTranslations('Groups')
+  const mainT = useTranslations('Main')
   const [dialogOpen, setDialogOpen] = useState(false)
+  const groupSchema = buildGroupSchema(
+    mainT('required', { field: groupsT('name') })
+  )
 
-  const form = useForm<GroupFormData>({
+  // zod v4 defaults make the schema input differ from its output
+  const form = useForm<z.input<GroupSchema>, unknown, GroupFormData>({
     resolver: zodResolver(groupSchema),
     defaultValues: {
       name: '',
@@ -53,43 +63,54 @@ export default function CreateGroup() {
 
   const onSubmit = async (data: GroupFormData) => {
     try {
-      const response = await groupApi.update(data)
+      const response = await groupUpdate({ data })
       if (response) {
-        toast.success('Group has been created')
+        toast.success(groupsT('groupCreated'))
         form.reset()
         setDialogOpen(false)
-        router.refresh()
+        router.invalidate()
       } else {
-        toast.error('Failed to create group')
+        toast.error(groupsT('groupCreateFailed'))
       }
-    } catch (error) {
-      toast.error('Failed to create group')
+    } catch {
+      toast.error(groupsT('groupCreateFailed'))
     }
   }
 
   return (
     <Dialog open={dialogOpen} onOpenChange={(open) => setDialogOpen(open)}>
       <DialogTrigger asChild>
-        <Button>Add new</Button>
+        <Button size="sm">
+          <PlusIcon className="mr-2 size-4" />
+          {groupsT('addNew')}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Add group</DialogTitle>
-          <DialogDescription className={'pb-4'}>
-            Are you sure you want to add a new group?
+          <DialogTitle>{groupsT('addGroup')}</DialogTitle>
+          <DialogDescription>
+            {groupsT('addGroupDescription')}
           </DialogDescription>
-          <Form {...form}>
-            <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-              <InputField
-                label="Name"
-                description="Enter the name of the group"
-                placeholder="Enter group name"
-                field={form.register('name')}
-              />
-              <Button type="submit">Create</Button>
-            </form>
-          </Form>
         </DialogHeader>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
+            <FormField
+              control={form.control}
+              name="name"
+              render={({ field }) => (
+                <InputField
+                  label={groupsT('name')}
+                  description={groupsT('nameDescription')}
+                  placeholder={groupsT('namePlaceholder')}
+                  field={field}
+                />
+              )}
+            />
+            <DialogFooter>
+              <Button type="submit">{mainT('create')}</Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )

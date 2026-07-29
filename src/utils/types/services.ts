@@ -1,22 +1,15 @@
+// ServiceInfoSnapshot is an allOf over the free-form JsonDocPropertyable and the
+// 0.5.1 spec marks no field required. What is still typed as present here is
+// filled in by src/server/service.ts before any route sees it; what a route
+// never reads is left optional rather than faked.
 interface Service {
   properties: Properties
-  creationTime: number
+  creationTime?: number
   address: Address
-  connectAddress: Address
+  connectAddress?: Address
   processSnapshot: ProcessSnapshot
   configuration: Configuration
-  processConfig: ProcessConfig
-  runtime: string
-  javaCommand: string
-  autoDeleteOnStop: boolean
-  staticService: boolean
-  groups: string[]
-  deletedFilesAfterStop: string[]
-  templates: Template[]
-  deployments: Deployment[]
-  includes: Include[]
-  port: number
-  connectedTime: number
+  connectedTime?: number
   lifeCycle: LifeCycle
 }
 
@@ -57,9 +50,19 @@ enum ThreadState {
 
 interface Configuration {
   properties: Record<string, unknown>
-  retryConfiguration: RetryConfiguration
+  retryConfiguration?: RetryConfiguration
   serviceId: ServiceId
-  eventReceivers: Record<string, unknown>
+  processConfig?: ProcessConfig
+  runtime: string
+  javaCommand?: string
+  autoDeleteOnStop?: boolean
+  staticService?: boolean
+  groups: string[]
+  deletedFilesAfterStop?: string[]
+  templates: Template[]
+  deployments: Deployment[]
+  includes: Include[]
+  port?: number
 }
 
 interface RetryConfiguration {
@@ -85,15 +88,17 @@ interface Environment {
   defaultProcessArguments: string[]
 }
 
+// the bridge module writes these keys; on a node without it the whole document
+// is empty, so nothing in here can be assumed present
 interface Properties {
-  Online: boolean
-  Motd: string
-  Extra: string
-  State: string
-  'Max-Players': number
-  Version: string
-  'Online-Count': number
-  Players: string[]
+  Online?: boolean
+  Motd?: string
+  Extra?: string
+  State?: string
+  'Max-Players'?: number
+  Version?: string
+  'Online-Count'?: number
+  Players?: string[]
 }
 
 interface ProcessConfig {
@@ -124,14 +129,14 @@ interface Include {
   destination: string
 }
 
-type ServiceLifeCycleUpdate = 'start' | 'restart' | 'stop'
-
 type LifeCycle = 'PREPARED' | 'RUNNING' | 'STOPPED' | 'DELETED'
 
+// biome-ignore lint/correctness/noUnusedVariables: ambient global type, read by src/server/service.ts
 interface Services {
   services: Service[]
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: ambient global type, read by src/server/service.ts
 interface ServiceLogCache {
   lines: string[]
 }

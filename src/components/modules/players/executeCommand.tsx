@@ -1,16 +1,19 @@
-'use client'
-import { useState } from 'react'
+import { useTranslations } from 'gt-tanstack-start'
+import { type MouseEvent, useState } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
+import { Label } from '@/components/ui/label'
 import {
   Select,
   SelectContent,
@@ -18,9 +21,7 @@ import {
   SelectTrigger,
   SelectValue
 } from '@/components/ui/select'
-import { playerApi } from '@/lib/client-api'
-import { toast } from 'sonner'
-import { useTranslations } from 'gt-next/client'
+import { playerCommand } from '@/server/player'
 
 export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
   const playersT = useTranslations('Players')
@@ -28,18 +29,19 @@ export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
   const [isProxy, setIsProxy] = useState<boolean>(false)
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 
-  const handleSend = async (event: any) => {
+  const handleSend = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
 
-    const data = await playerApi.execute(
-      player.networkPlayerProxyInfo.uniqueId,
-      command,
-      isProxy
-    )
-
-    if (data) {
+    try {
+      await playerCommand({
+        data: {
+          id: player.networkPlayerProxyInfo.uniqueId,
+          command,
+          isProxy
+        }
+      })
       toast.success(playersT('commandExecuted'))
-    } else {
+    } catch {
       toast.error(playersT('commandFailed'))
     }
     setDialogOpen(false)
@@ -49,20 +51,24 @@ export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
   return (
     <Dialog open={dialogOpen} onOpenChange={(open) => setDialogOpen(open)}>
       <DialogTrigger asChild>
-        <Button>{playersT('executeCommand')}</Button>
+        <Button variant={'outline'} size={'sm'}>
+          {playersT('executeCommand')}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
             {playersT('executeCommandTitle', { playerName: player?.name })}
           </DialogTitle>
-          <DialogDescription className={'pb-4'}>
+          <DialogDescription>
             {playersT('confirmExecuteCommand', { playerName: player?.name })}
           </DialogDescription>
-          <div className={'pb-4'}>
-            <Label htmlFor={'command'}>{playersT('command')}:</Label>
-            <div className="flex rounded-md bg-background ring-1 ring-offset-background ring-inset focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ring-black/10 focus-within:ring-2 focus-within:ring-inset focus-within:ring-indigo-500 dark:ring-white/10">
-              <span className="flex select-none items-center pl-3 text-gray-400 sm:text-sm">
+        </DialogHeader>
+        <div className="space-y-4">
+          <div className="space-y-2">
+            <Label htmlFor={'command'}>{playersT('command')}</Label>
+            <div className="flex items-center rounded-md border border-input bg-background ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+              <span className="select-none pl-3 font-mono text-sm text-muted-foreground">
                 /
               </span>
               <Input
@@ -70,17 +76,17 @@ export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
                 value={command}
                 onChange={(e) => setCommand(e.target.value)}
                 type={'text'}
-                className="border-0 pl-0 align-middle bg-transparent ml-1 focus:ring-0 focus:outline-none focus:border-0 focus-visible:ring-0 focus-visible:outline-none focus-visible:border-0 focus-visible:ring-offset-0"
+                className="border-0 bg-transparent pl-1 font-mono focus-visible:ring-0 focus-visible:ring-offset-0"
               />
             </div>
           </div>
-          <div>
-            <Label htmlFor={'command'}>{playersT('proxyCommand')}</Label>
+          <div className="space-y-2">
+            <Label htmlFor={'proxyCommand'}>{playersT('proxyCommand')}</Label>
             <Select
               defaultValue={'false'}
               onValueChange={(value) => setIsProxy(value === 'true')}
             >
-              <SelectTrigger>
+              <SelectTrigger id={'proxyCommand'} className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -89,10 +95,13 @@ export default function ExecuteCommand({ player }: { player: OnlinePlayer }) {
               </SelectContent>
             </Select>
           </div>
-        </DialogHeader>
-        <Button variant={'destructive'} onClick={handleSend}>
-          {playersT('execute')}
-        </Button>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant={'outline'}>{playersT('cancel')}</Button>
+          </DialogClose>
+          <Button onClick={handleSend}>{playersT('execute')}</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

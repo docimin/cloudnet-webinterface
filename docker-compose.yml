@@ -6,12 +6,12 @@ services:
       context: .
       dockerfile: Dockerfile
       args:
-        - NEXT_PUBLIC_LOGO_PATH=${NEXT_PUBLIC_LOGO_PATH:-/logos/logo.svg}
-        - NEXT_PUBLIC_NAME=${NEXT_PUBLIC_NAME:-CloudNet}
-        - NEXT_PUBLIC_DOMAIN=${NEXT_PUBLIC_DOMAIN:-http://localhost:3000}
-        - NEXT_PUBLIC_CLOUDNET_ADDRESS=${NEXT_PUBLIC_CLOUDNET_ADDRESS}
-        - NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN=${NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN}
-        - SENTRY_DSN=${SENTRY_DSN}
+        - VITE_LOGO_PATH=${VITE_LOGO_PATH:-/logos/logo.svg}
+        - VITE_NAME=${VITE_NAME:-CloudNet}
+        - VITE_DOMAIN=${VITE_DOMAIN:-http://localhost:3000}
+        - VITE_CLOUDNET_ADDRESS=${VITE_CLOUDNET_ADDRESS}
+        - VITE_CLOUDNET_ADDRESS_HIDDEN=${VITE_CLOUDNET_ADDRESS_HIDDEN}
+        - VITE_SENTRY_DSN=${VITE_SENTRY_DSN}
         - SENTRY_ORG=${SENTRY_ORG}
         - SENTRY_PROJECT=${SENTRY_PROJECT}
         - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
@@ -22,22 +22,21 @@ services:
     environment:
       - NODE_ENV=production
       - PORT=3000
-      - HOSTNAME=0.0.0.0
+      - HOST=0.0.0.0
       # Configure these environment variables according to your setup
-      - NEXT_PUBLIC_LOGO_PATH=${NEXT_PUBLIC_LOGO_PATH:-/logos/logo.svg}
-      - NEXT_PUBLIC_NAME=${NEXT_PUBLIC_NAME:-CloudNet}
-      - NEXT_PUBLIC_DOMAIN=${NEXT_PUBLIC_DOMAIN:-http://localhost:3000}
-      - NEXT_PUBLIC_CLOUDNET_ADDRESS=${NEXT_PUBLIC_CLOUDNET_ADDRESS}
-      - NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN=${NEXT_PUBLIC_CLOUDNET_ADDRESS_HIDDEN}
+      - VITE_LOGO_PATH=${VITE_LOGO_PATH:-/logos/logo.svg}
+      - VITE_NAME=${VITE_NAME:-CloudNet}
+      - VITE_DOMAIN=${VITE_DOMAIN:-http://localhost:3000}
+      - VITE_CLOUDNET_ADDRESS=${VITE_CLOUDNET_ADDRESS}
+      - VITE_CLOUDNET_ADDRESS_HIDDEN=${VITE_CLOUDNET_ADDRESS_HIDDEN}
+      # Reject loopback/private addresses on sign in (SSRF protection)
+      - BLOCK_PRIVATE_ADDRESSES=${BLOCK_PRIVATE_ADDRESSES:-false}
       # Sentry configuration (optional)
-      - SENTRY_DSN=${SENTRY_DSN}
-      - SENTRY_ORG=${SENTRY_ORG}
-      - SENTRY_PROJECT=${SENTRY_PROJECT}
-      - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
-      - SENTRY_URL=${SENTRY_URL}
+      - VITE_SENTRY_DSN=${VITE_SENTRY_DSN}
+      - SENTRY_SPOTLIGHT=${SENTRY_SPOTLIGHT:-false}
     restart: unless-stopped
     healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/api/health", "||", "exit", "1"]
+      test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -51,5 +50,5 @@ networks:
 
 # Note: This docker-compose only includes the web interface.
 # The CloudNet backend should be running separately and accessible at the address
-# specified in NEXT_PUBLIC_CLOUDNET_ADDRESS (typically port 2812).
+# specified in VITE_CLOUDNET_ADDRESS (typically port 2812).
 # If you want to run CloudNet in Docker as well, you can add it as another service.

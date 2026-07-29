@@ -1,24 +1,32 @@
-import React from 'react'
+import { useTranslations } from 'gt-tanstack-start'
+import { Info } from 'lucide-react'
+import type React from 'react'
+import {
+  Controller,
+  type ControllerRenderProps,
+  type FieldPath,
+  type FieldValues
+} from 'react-hook-form'
+import MultipleSelector, {
+  type Option
+} from '@/components/ui/custom/multi-select'
 import {
   FormControl,
+  FormItem,
   FormLabel,
-  FormMessage,
-  FormItem
+  FormMessage
 } from '@/components/ui/form'
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger
 } from '@/components/ui/hover-card'
-import { Info } from 'lucide-react'
-import { Controller } from 'react-hook-form'
-import MultipleSelector, { Option } from '@/components/ui/custom/multi-select'
 
-interface MultiSelectFieldProps {
+interface MultiSelectFieldProps<T extends FieldValues, N extends FieldPath<T>> {
   label: string
   description: string
   options: Option[]
-  field: any
+  field: ControllerRenderProps<T, N>
   placeholder?: string
   maxSelected?: number
   onMaxSelected?: (maxLimit: number) => void
@@ -30,25 +38,23 @@ interface MultiSelectFieldProps {
   className?: string
 }
 
-const defaultEmptyIndicator = (
-  <p className="text-center text-lg leading-10">No results found.</p>
-)
-
-const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
+const MultiSelectField = <T extends FieldValues, N extends FieldPath<T>>({
   label,
   description,
   options,
   field,
-  placeholder = 'Select options',
+  placeholder,
   maxSelected,
   onMaxSelected,
   groupBy,
-  emptyIndicator = defaultEmptyIndicator,
+  emptyIndicator,
   defaultOptions,
   loadingIndicator,
   disabled,
   className
-}) => {
+}: MultiSelectFieldProps<T, N>) => {
+  const mainT = useTranslations('Main')
+
   return (
     <FormItem>
       <FormLabel>
@@ -56,7 +62,7 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
         {description && (
           <HoverCard openDelay={100} closeDelay={50}>
             <HoverCardTrigger>
-              <span className="ml-2 text-gray-500">
+              <span className="ml-2 text-muted-foreground">
                 <Info className="inline-block h-4 w-4" />
               </span>
             </HoverCardTrigger>
@@ -66,18 +72,23 @@ const MultiSelectField: React.FC<MultiSelectFieldProps> = ({
       </FormLabel>
       <FormControl>
         <Controller
-          control={field.control}
           name={field.name}
           render={({ field: controllerField }) => (
             <MultipleSelector
               value={controllerField.value || []}
               onChange={controllerField.onChange}
               options={options}
-              placeholder={placeholder}
+              placeholder={placeholder ?? mainT('selectOptions')}
               maxSelected={maxSelected}
               onMaxSelected={onMaxSelected}
               groupBy={groupBy}
-              emptyIndicator={emptyIndicator}
+              emptyIndicator={
+                emptyIndicator ?? (
+                  <p className="text-center text-lg leading-10">
+                    {mainT('noResults')}
+                  </p>
+                )
+              }
               defaultOptions={defaultOptions}
               loadingIndicator={loadingIndicator}
               disabled={disabled}

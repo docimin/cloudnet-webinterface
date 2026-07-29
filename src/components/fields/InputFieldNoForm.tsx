@@ -1,11 +1,11 @@
-import React from 'react'
-import { Input } from '@/components/ui/input'
 import { Info } from 'lucide-react'
+import type React from 'react'
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger
 } from '@/components/ui/hover-card'
+import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 
 interface InputFieldProps {
@@ -24,11 +24,11 @@ const InputFieldNoForm: React.FC<InputFieldProps> = ({
   return (
     <div className={'text-start'}>
       <Label>
-        {label || 'No Label'}
+        {label}
         {description && (
           <HoverCard openDelay={100} closeDelay={50}>
             <HoverCardTrigger>
-              <span className="ml-2 text-gray-500">
+              <span className="ml-2 text-muted-foreground">
                 <Info className="inline-block h-4 w-4" />
               </span>
             </HoverCardTrigger>
