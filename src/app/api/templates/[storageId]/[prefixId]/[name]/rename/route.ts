@@ -1,11 +1,18 @@
 import { NextResponse } from 'next/server'
 import { checkPermissions, createApiRoute } from '@/lib/api-helpers'
 import { getCookies } from '@/lib/server-calls'
+import { safeTemplatePath, safeTemplateTriple } from '@/lib/pathSafe'
 
 // Emulates rename by download → upload with new path → delete old.
 // Body: { from: string, to: string, isDirectory?: boolean }
 export const POST = createApiRoute(async (req, { params }) => {
-  const { storageId, prefixId, name } = await params
+  const p = await params
+  let storageId: string, prefixId: string, name: string
+  try {
+    ;({ storageId, prefixId, name } = safeTemplateTriple(p.storageId, p.prefixId, p.name))
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message }, { status: 400 })
+  }
 
   const requiredPermissions = [
     'cloudnet_rest:template_write',
@@ -28,7 +35,15 @@ export const POST = createApiRoute(async (req, { params }) => {
     return NextResponse.json({ error: 'Unauthorized' }, { status: 401 })
   }
 
-  const { from, to, isDirectory } = await req.json()
+  const body = await req.json()
+  const isDirectory = !!body.isDirectory
+  let from: string, to: string
+  try {
+    from = safeTemplatePath(body.from)
+    to = safeTemplatePath(body.to)
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message }, { status: 400 })
+  }
 
   if (!from || !to || from === to) {
     return NextResponse.json({ error: 'Invalid from/to' }, { status: 400 })

@@ -1,11 +1,21 @@
 import { NextResponse } from 'next/server'
 import { checkPermissions, createApiRoute } from '@/lib/api-helpers'
 import { getCookies } from '@/lib/server-calls'
+import { safeTemplatePath, safeTemplateTriple, contentDispositionAttachment } from '@/lib/pathSafe'
 
 export const GET = createApiRoute(async (req, { params }) => {
-  const { storageId, prefixId, name } = await params
-  const { searchParams } = new URL(req.url)
-  const path = searchParams.get('path') || ''
+  const p = await params
+  let storageId: string, prefixId: string, name: string, path: string
+  try {
+    ;({ storageId, prefixId, name } = safeTemplateTriple(p.storageId, p.prefixId, p.name))
+    const { searchParams } = new URL(req.url)
+    path = safeTemplatePath(searchParams.get('path'))
+  } catch (e: any) {
+    return NextResponse.json({ error: e.message }, { status: 400 })
+  }
+  if (!path) {
+    return NextResponse.json({ error: 'path required' }, { status: 400 })
+  }
 
   const requiredPermissions = [
     'cloudnet_rest:template_read',
@@ -46,7 +56,7 @@ export const GET = createApiRoute(async (req, { params }) => {
     status: 200,
     headers: {
       'Content-Type': upstream.headers.get('content-type') || 'application/octet-stream',
-      'Content-Disposition': `attachment; filename="${filename}"`
+      'Content-Disposition': contentDispositionAttachment(filename)
     }
   })
 })
