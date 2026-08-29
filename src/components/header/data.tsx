@@ -89,8 +89,7 @@ export const Nav2 = () => {
         'cloudnet_rest:service_read',
         'cloudnet_rest:service_list'
       ]
-    }
-    /*
+    },
     {
       title: navigationT('templates'),
       label: '',
@@ -100,10 +99,9 @@ export const Nav2 = () => {
       permission: [
         'global:admin',
         'cloudnet_rest:template_storage_read',
-        'cloudnet_rest:template_storage_list',
-      ],
-    },
-     */
+        'cloudnet_rest:template_storage_list'
+      ]
+    }
   ]
 }
 

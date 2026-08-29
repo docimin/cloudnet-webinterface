@@ -14,6 +14,7 @@ import NoAccess from '@/components/static/noAccess'
 import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 import { serverStorageApi } from '@/lib/server-api'
+import CreateTemplateDialog from '@/components/templates/createTemplateDialog'
 
 export default async function ServicesPage() {
   let storages: Storages = { storages: [] }
@@ -48,6 +49,9 @@ export default async function ServicesPage() {
 
   return (
     <PageLayout title={'Templates'}>
+      <div className="mb-4 flex justify-end">
+        <CreateTemplateDialog />
+      </div>
       <Table>
         <TableCaption>A list of your storages.</TableCaption>
         <TableHeader>

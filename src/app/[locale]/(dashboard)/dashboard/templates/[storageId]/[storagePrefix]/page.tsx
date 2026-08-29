@@ -14,6 +14,7 @@ import NoAccess from '@/components/static/noAccess'
 import { serverStorageApi } from '@/lib/server-api'
 import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
+import CreateTemplateDialog from '@/components/templates/createTemplateDialog'
 
 export default async function TemplatesPage(props) {
   const params = await props.params
@@ -72,6 +73,9 @@ export default async function TemplatesPage(props) {
 
   return (
     <PageLayout title={`${storageId} - ${storagePrefix}` || 'Templates'}>
+      <div className="mb-4 flex justify-end">
+        <CreateTemplateDialog storage={storageId} prefix={storagePrefix} />
+      </div>
       <Table>
         <TableCaption>A list of your templates.</TableCaption>
         <TableHeader>

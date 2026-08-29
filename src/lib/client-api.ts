@@ -284,5 +284,77 @@ export const templateStorageApi = {
         filePath,
         content
       }
-    )
+    ),
+  createTemplate: (storageId: string, prefixId: string, templateId: string) =>
+    apiPost(`/api/templates/${storageId}/${prefixId}/${templateId}/create`, {}),
+  createDirectory: (
+    storageId: string,
+    prefixId: string,
+    templateId: string,
+    path: string
+  ) =>
+    apiPost(
+      `/api/templates/${storageId}/${prefixId}/${templateId}/directory/create`,
+      {},
+      { path }
+    ),
+  uploadFile: async (
+    storageId: string,
+    prefixId: string,
+    templateId: string,
+    path: string,
+    file: File | Blob
+  ) => {
+    const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
+    const url = `${baseUrl}/api/templates/${storageId}/${prefixId}/${templateId}/file/upload?path=${encodeURIComponent(path)}`
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': (file as any).type || 'application/octet-stream'
+      },
+      body: file
+    })
+    return { status: res.status }
+  },
+  deployZip: async (
+    storageId: string,
+    prefixId: string,
+    templateId: string,
+    zip: File | Blob
+  ) => {
+    const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
+    const url = `${baseUrl}/api/templates/${storageId}/${prefixId}/${templateId}/deploy`
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/zip' },
+      body: zip
+    })
+    return { status: res.status }
+  },
+  downloadFileUrl: (
+    storageId: string,
+    prefixId: string,
+    templateId: string,
+    path: string
+  ) =>
+    `${process.env.NEXT_PUBLIC_DOMAIN}/api/templates/${storageId}/${prefixId}/${templateId}/file/download?path=${encodeURIComponent(path)}`,
+  downloadTemplateUrl: (
+    storageId: string,
+    prefixId: string,
+    templateId: string
+  ) =>
+    `${process.env.NEXT_PUBLIC_DOMAIN}/api/templates/${storageId}/${prefixId}/${templateId}/download`,
+  rename: (
+    storageId: string,
+    prefixId: string,
+    templateId: string,
+    from: string,
+    to: string,
+    isDirectory: boolean
+  ) =>
+    apiPost(`/api/templates/${storageId}/${prefixId}/${templateId}/rename`, {
+      from,
+      to,
+      isDirectory
+    })
 }
