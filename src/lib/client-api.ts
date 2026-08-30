@@ -436,3 +436,18 @@ export const blueprintApi = {
     bootstrap: boolean
   }) => apiPost('/api/blueprint', body)
 }
+
+// Live-service actions: attach template/deployment/inclusion, flush deploys,
+// wipe files. Each one is a thin passthrough to a CloudNet REST action.
+export const serviceActionsApi = {
+  addTemplate: (id: string, prefix: string, name: string, storage: string = 'local', flush: boolean = false) =>
+    apiPost(`/api/services/${id}/actions/add-template`, { prefix, name, storage, flush }),
+  addDeployment: (id: string, prefix: string, name: string, storage: string = 'local', flush: boolean = false) =>
+    apiPost(`/api/services/${id}/actions/add-deployment`, { prefix, name, storage, flush }),
+  addInclusion: (id: string, url: string, destination: string, flush: boolean = false) =>
+    apiPost(`/api/services/${id}/actions/add-inclusion`, { url, destination, flush }),
+  deployResources: (id: string, remove: boolean = true) =>
+    apiPost(`/api/services/${id}/actions/deploy-resources`, {}, { remove: String(remove) }),
+  wipeFiles: (id: string) =>
+    apiPost(`/api/services/${id}/actions/delete-files`, {})
+}

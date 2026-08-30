@@ -19,6 +19,7 @@ import DoesNotExist from '@/components/static/doesNotExist'
 import { getTranslations } from 'gt-next/server'
 import ServiceFileBrowser from '@/components/services/serviceFileBrowser'
 import { isEnabled as serviceFilesEnabled } from '@/lib/serviceFs'
+import ServiceActionsTab from '@/components/services/serviceActionsTab'
 
 export default async function UserPage(props) {
   const params = await props.params
@@ -145,6 +146,9 @@ export default async function UserPage(props) {
           ) && (
             <TabsTrigger value={'console'}>{serviceT('console')}</TabsTrigger>
           )}
+          {hasEditPermissions && (
+            <TabsTrigger value={'actions'}>Actions</TabsTrigger>
+          )}
           {showFilesTab && (
             <TabsTrigger value={'files'}>Files</TabsTrigger>
           )}
@@ -239,6 +243,11 @@ export default async function UserPage(props) {
               webSocketPath={`/service/${name}/liveLog`}
               type={'service'}
             />
+          </TabsContent>
+        )}
+        {hasEditPermissions && (
+          <TabsContent value={'actions'}>
+            <ServiceActionsTab serviceId={serviceId} serviceName={name} />
           </TabsContent>
         )}
         {showFilesTab && (
