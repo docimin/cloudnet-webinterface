@@ -35,6 +35,16 @@ services:
       - SENTRY_PROJECT=${SENTRY_PROJECT}
       - SENTRY_AUTH_TOKEN=${SENTRY_AUTH_TOKEN}
       - SENTRY_URL=${SENTRY_URL}
+      # Runtime service files browser (feature-flagged). When set, the panel
+      # exposes a Files tab on each service that reads/writes the files of
+      # the running service directly on the filesystem. Requires panel and
+      # CloudNet node to share the same host (bind-mount the node's
+      # temp/services directory into the container at this path).
+      - CLOUDNET_SERVICES_PATH=${CLOUDNET_SERVICES_PATH:-}
+    # volumes:
+    #   # Uncomment when running the panel on the same host as the CloudNet
+    #   # node. Target path must match CLOUDNET_SERVICES_PATH in .env.
+    #   - /opt/netcloud/node/temp/services:/services:rw
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:3000/api/health", "||", "exit", "1"]

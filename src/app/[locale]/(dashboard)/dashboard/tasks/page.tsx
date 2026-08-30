@@ -15,6 +15,7 @@ import NoRecords from '@/components/static/noRecords'
 import Link from 'next/link'
 import { serverTaskApi } from '@/lib/server-api'
 import { getTranslations } from 'gt-next/server'
+import BlueprintDialog from '@/components/blueprint/blueprintDialog'
 
 export default async function TasksPage() {
   const tasks = await serverTaskApi.list()
@@ -46,11 +47,21 @@ export default async function TasksPage() {
   }
 
   if (!tasks?.tasks || tasks.tasks.length === 0) {
-    return <NoRecords />
+    return (
+      <PageLayout title={taskT('title')}>
+        <div className="mb-4 flex justify-end">
+          <BlueprintDialog />
+        </div>
+        <NoRecords />
+      </PageLayout>
+    )
   }
 
   return (
     <PageLayout title={taskT('title')}>
+      <div className="mb-4 flex justify-end">
+        <BlueprintDialog />
+      </div>
       <Table>
         <TableCaption>{taskT('tableCaption')}</TableCaption>
         <TableHeader>

@@ -17,6 +17,8 @@ import { getPermissions } from '@/utils/server-api/getPermissions'
 import { serverServiceApi } from '@/lib/server-api'
 import DoesNotExist from '@/components/static/doesNotExist'
 import { getTranslations } from 'gt-next/server'
+import ServiceFileBrowser from '@/components/services/serviceFileBrowser'
+import { isEnabled as serviceFilesEnabled } from '@/lib/serviceFs'
 
 export default async function UserPage(props) {
   const params = await props.params
@@ -129,6 +131,8 @@ export default async function UserPage(props) {
       service?.configuration.serviceId.nameSplitter +
       service?.configuration.serviceId.taskServiceId || serviceT('name')
 
+  const showFilesTab = serviceFilesEnabled() && hasEditPermissions
+
   return (
     <PageLayout title={name}>
       <Tabs defaultValue={'config'}>
@@ -140,6 +144,9 @@ export default async function UserPage(props) {
             permissions.includes(permission)
           ) && (
             <TabsTrigger value={'console'}>{serviceT('console')}</TabsTrigger>
+          )}
+          {showFilesTab && (
+            <TabsTrigger value={'files'}>Files</TabsTrigger>
           )}
         </TabsList>
         <TabsContent value={'config'}>
@@ -232,6 +239,11 @@ export default async function UserPage(props) {
               webSocketPath={`/service/${name}/liveLog`}
               type={'service'}
             />
+          </TabsContent>
+        )}
+        {showFilesTab && (
+          <TabsContent value={'files'}>
+            <ServiceFileBrowser serviceId={serviceId} />
           </TabsContent>
         )}
       </Tabs>

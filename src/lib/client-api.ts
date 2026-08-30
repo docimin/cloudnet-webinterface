@@ -33,22 +33,17 @@ async function handleResponse<T>(response: Response): Promise<ApiResponse<T>> {
   }
 
   const text = await response.text()
+  // 2xx with empty body (204 No Content, etc.) is a valid success — return
+  // just the status so callers can differentiate. Do NOT throw here.
   if (!text) {
-    throw new ApiError(
-      response.status,
-      response.statusText,
-      response.statusText
-    )
+    return { status: response.status } as ApiResponse<T>
   }
 
   try {
     return JSON.parse(text)
-  } catch (e) {
-    throw new ApiError(
-      response.status,
-      response.statusText,
-      response.statusText
-    )
+  } catch {
+    // 2xx with non-JSON body: also a valid success (raw text). Wrap it.
+    return { status: response.status, data: text as unknown as T } as ApiResponse<T>
   }
 }
 
@@ -357,4 +352,87 @@ export const templateStorageApi = {
       to,
       isDirectory
     })
+}
+
+// Live filesystem browser for RUNNING services. Enabled only when the panel
+// is deployed alongside the CloudNet node and CLOUDNET_SERVICES_PATH is set
+// server-side; the /enabled endpoint tells the UI whether to render the tab.
+export const serviceFilesApi = {
+  enabled: (id: string) =>
+    apiGet<{ enabled: boolean }>(`/api/services/${id}/files/enabled`),
+  list: (id: string, directory: string = '') =>
+    apiGet<{ files: any[] }>(
+      `/api/services/${id}/files/directory/list`,
+      { directory }
+    ),
+  getText: async (id: string, filePath: string) => {
+    const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
+    const url = `${baseUrl}/api/services/${id}/files/file/get?path=${encodeURIComponent(filePath)}`
+    const res = await fetch(url)
+    const text = await res.text()
+    return { status: res.status, text }
+  },
+  updateText: (id: string, filePath: string, content: string) =>
+    apiPost(`/api/services/${id}/files/file/update`, { path: filePath, content }),
+  uploadFile: async (id: string, filePath: string, file: File | Blob) => {
+    const baseUrl = process.env.NEXT_PUBLIC_DOMAIN
+    const url = `${baseUrl}/api/services/${id}/files/file/upload?path=${encodeURIComponent(filePath)}`
+    const res = await fetch(url, {
+      method: 'POST',
+      headers: { 'Content-Type': (file as any).type || 'application/octet-stream' },
+      body: file
+    })
+    return { status: res.status }
+  },
+  downloadUrl: (id: string, filePath: string) =>
+    `${process.env.NEXT_PUBLIC_DOMAIN}/api/services/${id}/files/file/download?path=${encodeURIComponent(filePath)}`,
+  createDirectory: (id: string, filePath: string) =>
+    apiPost(
+      `/api/services/${id}/files/directory/create`,
+      {},
+      { path: filePath }
+    ),
+  deleteFile: (id: string, filePath: string) =>
+    apiPost(
+      `/api/services/${id}/files/file/delete`,
+      {},
+      { path: filePath }
+    ),
+  deleteDirectory: (id: string, filePath: string) =>
+    apiPost(
+      `/api/services/${id}/files/directory/delete`,
+      {},
+      { path: filePath }
+    ),
+  rename: (id: string, from: string, to: string) =>
+    apiPost(`/api/services/${id}/files/rename`, { from, to })
+}
+
+// Extra creation helpers wired to the panel's proxy routes.
+export const serviceCreateApi = {
+  create: (taskName: string, start: boolean = true) =>
+    apiPost('/api/service/create', { taskName, start }),
+  saveAsTemplate: (id: string, prefix: string, name: string, storage: string = 'local') =>
+    apiPost(`/api/services/${id}/save-as-template`, { prefix, name, storage })
+}
+
+export const versionApi = {
+  list: () => apiGet('/api/serviceVersion/list')
+}
+
+export const blueprintApi = {
+  create: (body: {
+    taskName: string
+    preset: string
+    environment: string
+    groups: string[]
+    static: boolean
+    memory: number
+    minServiceCount: number
+    startPort: number
+    serviceVersionType?: string
+    serviceVersion?: string
+    javaCommand?: string
+    bootstrap: boolean
+  }) => apiPost('/api/blueprint', body)
 }

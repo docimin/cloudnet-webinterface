@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 import { getPermissions } from '@/utils/server-api/getPermissions'
 import NoAccess from '@/components/static/noAccess'
 import NoRecords from '@/components/static/noRecords'
-import CreateGroup from '@/components/modules/groups/createGroup'
+import CreateGroup from '@/components/blueprint/createGroupDialog'
 import Link from 'next/link'
 import { serverGroupApi } from '@/lib/server-api'
 import { getTranslations } from 'gt-next/server'
@@ -48,12 +48,21 @@ export default async function GroupsPage() {
   }
 
   if (!groups.groups) {
-    return <NoRecords />
+    return (
+      <PageLayout title={groupsT('title')}>
+        <div className="mb-4 flex justify-end">
+          <CreateGroup />
+        </div>
+        <NoRecords />
+      </PageLayout>
+    )
   }
 
   return (
     <PageLayout title={groupsT('title')}>
-      <CreateGroup />
+      <div className="mb-4 flex justify-end">
+        <CreateGroup />
+      </div>
       <Table className={'mt-4'}>
         <TableCaption>{groupsT('tableCaption')}</TableCaption>
         <TableHeader>

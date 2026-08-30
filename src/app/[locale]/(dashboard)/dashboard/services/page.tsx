@@ -17,6 +17,7 @@ import AutoRefresh from '@/components/autoRefresh'
 import Link from 'next/link'
 import { serverServiceApi } from '@/lib/server-api'
 import { getTranslations } from 'gt-next/server'
+import CreateServiceDialog from '@/components/blueprint/createServiceDialog'
 
 export default async function ServicesPage() {
   const servicesT = await getTranslations('Services')
@@ -38,11 +39,21 @@ export default async function ServicesPage() {
   }
 
   if (!services.services) {
-    return <NoRecords />
+    return (
+      <PageLayout title={servicesT('title')}>
+        <div className="mb-4 flex justify-end">
+          <CreateServiceDialog />
+        </div>
+        <NoRecords />
+      </PageLayout>
+    )
   }
 
   return (
     <PageLayout title={servicesT('title')}>
+      <div className="mb-4 flex justify-end">
+        <CreateServiceDialog />
+      </div>
       <AutoRefresh>
         <Table>
           <TableCaption>{servicesT('tableCaption')}</TableCaption>
