@@ -9,6 +9,8 @@ import { Terminal } from 'lucide-react'
 import { toast } from 'sonner'
 import { groupApi } from '@/lib/client-api'
 import { useTranslations } from 'gt-next/client'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import GroupFormEditor from '@/components/editors/groupFormEditor'
 
 export default function GroupClientPage({
   group,
@@ -85,17 +87,26 @@ export default function GroupClientPage({
 
       {groupConfigData && (
         <div className="w-full mt-8">
-          <Label htmlFor="json">JSON</Label>
-          <div className="mt-2">
-            <Textarea
-              name="json"
-              id="json"
-              className={'h-96'}
-              required
-              value={groupConfigData}
-              onChange={(event) => setGroupConfigData(event.target.value)}
-            />
-          </div>
+          <Tabs defaultValue="form">
+            <TabsList>
+              <TabsTrigger value="form">Form</TabsTrigger>
+              <TabsTrigger value="json">JSON</TabsTrigger>
+            </TabsList>
+            <TabsContent value="form" className="mt-4">
+              <GroupFormEditor group={group} groupName={group.name} />
+            </TabsContent>
+            <TabsContent value="json" className="mt-4">
+              <Label htmlFor="json">JSON</Label>
+              <Textarea
+                name="json"
+                id="json"
+                className={'h-96 font-mono text-xs mt-2'}
+                required
+                value={groupConfigData}
+                onChange={(event) => setGroupConfigData(event.target.value)}
+              />
+            </TabsContent>
+          </Tabs>
         </div>
       )}
     </>

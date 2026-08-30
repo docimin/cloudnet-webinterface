@@ -20,6 +20,8 @@ import { Terminal } from 'lucide-react'
 import { toast } from 'sonner'
 import { taskApi } from '@/lib/client-api'
 import { useTranslations } from 'gt-next/client'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import TaskFormEditor from '@/components/editors/taskFormEditor'
 
 function DeleteButton({ taskId }: { taskId: string }) {
   const router = useRouter()
@@ -122,16 +124,25 @@ export default function TaskClientPage({
       </Alert>
       {children}
       <div className="w-full mt-8">
-        <Label htmlFor="json">{taskT('json')}</Label>
-        <div className="mt-2">
-          <Textarea
-            name="json"
-            id="json"
-            className={'h-96'}
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
-          />
-        </div>
+        <Tabs defaultValue="form">
+          <TabsList>
+            <TabsTrigger value="form">Form</TabsTrigger>
+            <TabsTrigger value="json">{taskT('json')}</TabsTrigger>
+          </TabsList>
+          <TabsContent value="form" className="mt-4">
+            <TaskFormEditor task={JSON.parse(taskConfigData)} taskName={taskName} />
+          </TabsContent>
+          <TabsContent value="json" className="mt-4">
+            <Label htmlFor="json">{taskT('json')}</Label>
+            <Textarea
+              name="json"
+              id="json"
+              className={'h-96 font-mono text-xs mt-2'}
+              value={body}
+              onChange={(e) => setBody(e.target.value)}
+            />
+          </TabsContent>
+        </Tabs>
       </div>
     </div>
   )
