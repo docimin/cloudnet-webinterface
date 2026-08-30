@@ -79,6 +79,29 @@ Fill in `NEXT_PUBLIC_CLOUDNET_ADDRESS` in your .env file, like for example: `NEX
 
 If you want to use a domain: `NEXT_PUBLIC_CLOUDNET_ADDRESS=https://cloudnet.example.com`.
 
+## Panel workflows
+
+See [`docs/PANEL_FEATURES.md`](docs/PANEL_FEATURES.md) for how the panel's
+task / group / template / service editors compose, when a change is picked
+up by a running server vs. only by future ones, and an end-to-end
+walkthrough of a minigame network using slime worlds.
+
+## Runtime service files (opt-in)
+
+The panel can expose a **Files** tab on each service that reads and writes
+the files of the running service in real time. This only makes sense when
+the panel is deployed **on the same host** as the CloudNet node, and it is
+disabled by default. To enable:
+
+1. In `docker-compose.yml` (or a `docker-compose.override.yml`) uncomment
+   the `volumes:` block that bind-mounts the node's `temp/services`
+   directory into `/services` inside the container.
+2. Set `CLOUDNET_SERVICES_PATH=/services` in your `.env`.
+3. Rebuild the container.
+
+The Files tab appears automatically when the endpoint reports it enabled
+and the user has `cloudnet_rest:service_write` (or `global:admin`).
+
 ## Bugs may occur
 
 Meaning if you encounter any issues, please open up an issue. You are welcome to contribute to this project and create a PR.
