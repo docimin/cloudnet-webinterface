@@ -1,9 +1,10 @@
+import { useTranslations } from 'gt-tanstack-start'
 import {
   BlendIcon,
-  BookDashedIcon,
-  CircleUserIcon,
   DatabaseZapIcon,
+  FolderTreeIcon,
   GroupIcon,
+  LayersIcon,
   LayoutDashboardIcon,
   LogOutIcon,
   PackageIcon,
@@ -11,7 +12,6 @@ import {
   UsersIcon,
   WorkflowIcon
 } from 'lucide-react'
-import { useTranslations } from 'gt-next/client'
 
 export const Nav1 = () => {
   const navigationT = useTranslations('Navigation')
@@ -60,7 +60,11 @@ export const Nav2 = () => {
       icon: BlendIcon,
       variant: 'ghost' as const,
       href: `/dashboard/players`,
-      permission: ['global:admin', 'owner', 'social-read']
+      permission: [
+        'global:admin',
+        'cloudnet_bridge:player_read',
+        'cloudnet_bridge:player_get_bulk'
+      ]
     },
     {
       title: navigationT('tasks'),
@@ -68,7 +72,11 @@ export const Nav2 = () => {
       icon: UngroupIcon,
       variant: 'ghost' as const,
       href: `/dashboard/tasks`,
-      permission: ['global:admin', 'owner', 'social-read']
+      permission: [
+        'global:admin',
+        'cloudnet_rest:task_read',
+        'cloudnet_rest:task_list'
+      ]
     },
     {
       title: navigationT('groups'),
@@ -76,7 +84,11 @@ export const Nav2 = () => {
       icon: GroupIcon,
       variant: 'ghost' as const,
       href: `/dashboard/groups`,
-      permission: ['global:admin', 'owner', 'social-read']
+      permission: [
+        'global:admin',
+        'cloudnet_rest:group_read',
+        'cloudnet_rest:group_list'
+      ]
     },
     {
       title: navigationT('services'),
@@ -89,21 +101,31 @@ export const Nav2 = () => {
         'cloudnet_rest:service_read',
         'cloudnet_rest:service_list'
       ]
-    }
-    /*
+    },
+    {
+      title: navigationT('versions'),
+      label: '',
+      icon: LayersIcon,
+      variant: 'ghost' as const,
+      href: `/dashboard/versions`,
+      permission: [
+        'global:admin',
+        'cloudnet_rest:service_version_read',
+        'cloudnet_rest:service_version_list'
+      ]
+    },
     {
       title: navigationT('templates'),
       label: '',
-      icon: BookDashedIcon,
+      icon: FolderTreeIcon,
       variant: 'ghost' as const,
       href: `/dashboard/templates`,
       permission: [
         'global:admin',
         'cloudnet_rest:template_storage_read',
-        'cloudnet_rest:template_storage_list',
-      ],
-    },
-     */
+        'cloudnet_rest:template_storage_list'
+      ]
+    }
   ]
 }
 

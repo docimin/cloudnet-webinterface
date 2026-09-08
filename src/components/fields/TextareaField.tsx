@@ -1,34 +1,39 @@
-import React from 'react'
+import { GlobeIcon, Info } from 'lucide-react'
+import type React from 'react'
+import type {
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues
+} from 'react-hook-form'
 import {
   FormControl,
   FormItem,
   FormLabel,
   FormMessage
 } from '@/components/ui/form'
-import { Textarea } from '@/components/ui/textarea'
-import { GlobeIcon, Info } from 'lucide-react'
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger
 } from '@/components/ui/hover-card'
+import { Textarea } from '@/components/ui/textarea'
 
-interface TextareaFieldProps {
+interface TextareaFieldProps<T extends FieldValues, N extends FieldPath<T>> {
   label: string
   description: string
   placeholder: string
-  field: any
+  field: ControllerRenderProps<T, N>
   resizable?: boolean
   rightIcon?: React.ReactNode
 }
 
-const TextareaField: React.FC<TextareaFieldProps> = ({
+const TextareaField = <T extends FieldValues, N extends FieldPath<T>>({
   label,
   description,
   placeholder,
   field,
   resizable
-}) => {
+}: TextareaFieldProps<T, N>) => {
   return (
     <FormItem>
       <div className={'flex items-center justify-between'}>
@@ -37,7 +42,7 @@ const TextareaField: React.FC<TextareaFieldProps> = ({
           {description && (
             <HoverCard openDelay={100} closeDelay={50}>
               <HoverCardTrigger>
-                <span className="ml-2 text-gray-500">
+                <span className="ml-2 text-muted-foreground">
                   <Info className="inline-block h-4 w-4" />
                 </span>
               </HoverCardTrigger>

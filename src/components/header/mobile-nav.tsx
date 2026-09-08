@@ -1,5 +1,11 @@
-'use client'
+import { useTranslations } from 'gt-tanstack-start'
+import { MenuIcon } from 'lucide-react'
+import * as React from 'react'
+import { Nav1, Nav2, Nav3, NavFooter } from '@/components/header/data'
+import { Nav } from '@/components/header/header-nav'
+import { ScrollArea } from '@/components/ui/scroll-area'
 import { Button } from '../ui/button'
+import { Separator } from '../ui/separator'
 import {
   Sheet,
   SheetContent,
@@ -8,14 +14,6 @@ import {
   SheetTitle,
   SheetTrigger
 } from '../ui/sheet'
-import { MenuIcon } from 'lucide-react'
-import * as React from 'react'
-import { Separator } from '../ui/separator'
-import { Nav1, Nav2, Nav3, NavFooter } from '@/components/header/data'
-import { Nav } from '@/components/header/header-nav'
-import { ScrollArea } from '@/components/ui/scroll-area'
-import Image from 'next/image'
-import { useTranslations } from 'gt-next/client'
 
 export default function MobileNav({
   permissions,
@@ -44,16 +42,16 @@ export default function MobileNav({
     <>
       <header className={'border-b'}>
         <div className={'flex align-middle justify-between items-center px-2'}>
-          <div className={'flex h-[52px] items-center ml-2'}>
-            <Image
-              src={process.env.NEXT_PUBLIC_LOGO_PATH || '/logos/logo.svg'}
+          <div className={'flex h-13 items-center ml-2'}>
+            <img
+              src={import.meta.env.VITE_LOGO_PATH || '/logos/logo.svg'}
               width={32}
               height={32}
-              alt={`${process.env.NEXT_PUBLIC_NAME || 'CloudNet'} logo`}
+              alt={`${import.meta.env.VITE_NAME || 'CloudNet'} logo`}
               className={'rounded-full'}
             />
             <span className={'ml-2'}>
-              {process.env.NEXT_PUBLIC_NAME || 'CloudNet'}
+              {import.meta.env.VITE_NAME || 'CloudNet'}
             </span>
           </div>
           <Sheet onOpenChange={(open) => setIsOpen(open)} open={isOpen}>
@@ -64,7 +62,7 @@ export default function MobileNav({
             </SheetTrigger>
             <SheetContent
               side={'left'}
-              className={'min-w-full lg:min-w-[800px] flex flex-col'}
+              className={'min-w-full lg:min-w-200 flex flex-col'}
             >
               <SheetHeader>
                 <SheetTitle>{mainT('menu')}</SheetTitle>
@@ -73,7 +71,7 @@ export default function MobileNav({
 
               <Separator className={'mt-2'} />
 
-              <ScrollArea className={'flex-grow'}>
+              <ScrollArea className={'grow'}>
                 <div
                   className={
                     'mt-8 w-full h-full justify-items-center text-center'

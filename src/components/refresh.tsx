@@ -1,16 +1,14 @@
-'use client'
-
-import { Button } from '@/components/ui/button'
-import { useRouter } from 'next/navigation'
+import { useRouter } from '@tanstack/react-router'
+import { useTranslations } from 'gt-tanstack-start'
 import { toast } from 'sonner'
-import { useTranslations } from 'gt-next/client'
+import { Button } from '@/components/ui/button'
 
 export default function RefreshButton() {
   const router = useRouter()
   const mainT = useTranslations('Main')
 
   const refresh = () => {
-    router.refresh()
+    router.invalidate()
     toast.info(mainT('refreshing'))
   }
 

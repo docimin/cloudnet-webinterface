@@ -8,11 +8,11 @@
 # testing
 /coverage
 
-# next.js
-/.next/
-/out/
-
-# production
+# build output
+/.output
+/.nitro
+/.tanstack
+/dist
 /build
 
 # misc
@@ -33,7 +33,6 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
-next-env.d.ts
 
 # IDEA Jetbrains
 .idea
@@ -49,3 +48,4 @@ next-env.d.ts
 
 # Open-Next
 .open-next
+.superpowers/

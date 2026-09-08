@@ -1,29 +1,33 @@
-import React from 'react'
+import { Info } from 'lucide-react'
+import type {
+  ControllerRenderProps,
+  FieldPath,
+  FieldValues
+} from 'react-hook-form'
+import { Checkbox } from '@/components/ui/checkbox'
 import {
   FormControl,
+  FormItem,
   FormLabel,
-  FormMessage,
-  FormItem
+  FormMessage
 } from '@/components/ui/form'
-import { Checkbox } from '@/components/ui/checkbox'
-import { Info } from 'lucide-react'
 import {
   HoverCard,
   HoverCardContent,
   HoverCardTrigger
 } from '@/components/ui/hover-card'
 
-interface CheckboxFieldProps {
+interface CheckboxFieldProps<T extends FieldValues, N extends FieldPath<T>> {
   label: string
   description: string
-  field: any
+  field: ControllerRenderProps<T, N>
 }
 
-const CheckboxField: React.FC<CheckboxFieldProps> = ({
+const CheckboxField = <T extends FieldValues, N extends FieldPath<T>>({
   label,
   description,
   field
-}) => {
+}: CheckboxFieldProps<T, N>) => {
   return (
     <FormItem>
       <div className="flex flex-col gap-3">
@@ -32,7 +36,7 @@ const CheckboxField: React.FC<CheckboxFieldProps> = ({
           {description && (
             <HoverCard openDelay={100} closeDelay={50}>
               <HoverCardTrigger>
-                <span className="ml-2 text-gray-500">
+                <span className="ml-2 text-muted-foreground">
                   <Info className="inline-block h-4 w-4" />
                 </span>
               </HoverCardTrigger>

@@ -1,34 +1,34 @@
-'use client'
-import { useEffect, useState } from 'react'
+import { useTranslations } from 'gt-tanstack-start'
+import { type MouseEvent, useEffect, useState } from 'react'
+import { toast } from 'sonner'
+import { Button } from '@/components/ui/button'
 import {
   Dialog,
+  DialogClose,
   DialogContent,
   DialogDescription,
+  DialogFooter,
   DialogHeader,
   DialogTitle,
   DialogTrigger
 } from '@/components/ui/dialog'
-import { Label } from '@/components/ui/label'
 import { Input } from '@/components/ui/input'
-import { Button } from '@/components/ui/button'
-import { toast } from 'sonner'
-import { playerApi } from '@/lib/client-api'
-import { useTranslations } from 'gt-next/client'
+import { Label } from '@/components/ui/label'
+import { playerMessage } from '@/server/player'
 
 export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
   const playersT = useTranslations('Players')
   const [message, setMessage] = useState<string>('')
   const [dialogOpen, setDialogOpen] = useState<boolean>(false)
 
-  const handleSend = async (event: any) => {
+  const handleSend = async (event: MouseEvent<HTMLButtonElement>) => {
     event.preventDefault()
     try {
-      await playerApi.sendMessage(
-        player.networkPlayerProxyInfo.uniqueId,
-        message
-      )
+      await playerMessage({
+        data: { id: player.networkPlayerProxyInfo.uniqueId, message }
+      })
       toast.success(playersT('messageSent'))
-    } catch (error) {
+    } catch {
       toast.error(playersT('messageFailed'))
     }
     setDialogOpen(false)
@@ -44,27 +44,34 @@ export default function SendChatMessage({ player }: { player: OnlinePlayer }) {
   return (
     <Dialog open={dialogOpen} onOpenChange={(open) => setDialogOpen(open)}>
       <DialogTrigger asChild>
-        <Button>{playersT('sendChatMessage')}</Button>
+        <Button variant={'outline'} size={'sm'}>
+          {playersT('sendChatMessage')}
+        </Button>
       </DialogTrigger>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>
             {playersT('messagePlayer', { playerName: player?.name })}
           </DialogTitle>
-          <DialogDescription className={'pb-4'}>
+          <DialogDescription>
             {playersT('confirmMessagePlayer', { playerName: player?.name })}
           </DialogDescription>
-          <Label htmlFor={'message'}>{playersT('message')}:</Label>
+        </DialogHeader>
+        <div className="space-y-2">
+          <Label htmlFor={'message'}>{playersT('message')}</Label>
           <Input
             id={'message'}
             value={message}
             onChange={(e) => setMessage(e.target.value)}
             type={'text'}
           />
-        </DialogHeader>
-        <Button variant={'destructive'} onClick={handleSend}>
-          {playersT('send')}
-        </Button>
+        </div>
+        <DialogFooter>
+          <DialogClose asChild>
+            <Button variant={'outline'}>{playersT('cancel')}</Button>
+          </DialogClose>
+          <Button onClick={handleSend}>{playersT('send')}</Button>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

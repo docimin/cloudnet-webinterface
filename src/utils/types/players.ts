@@ -44,7 +44,7 @@ interface labyModOptions {
 }
 
 interface OnlinePlayer {
-  properties: { labyModOptions: labyModOptions }
+  properties: { labyModOptions?: labyModOptions }
   name: string
   firstLoginTimeMillis: number
   lastLoginTimeMillis: number
@@ -55,17 +55,17 @@ interface OnlinePlayer {
   networkPlayerServerInfo: NetworkPlayerProxyInfo
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: ambient global type, read by src/server/player.ts
 interface OnlinePlayersSchema {
   onlinePlayers: OnlinePlayer[]
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: ambient global type, read by src/server/player.ts
 interface RegisteredPlayersCount {
   registeredCount: number
 }
 
+// biome-ignore lint/correctness/noUnusedVariables: ambient global type, read by src/server/player.ts
 interface OnlinePlayersCount {
   onlineCount: number
 }
-
-type Type = 'service' | 'task' | 'group'
-type ServerSelector = 'HIGHEST_PLAYERS' | 'LOWEST_PLAYERS' | 'RANDOM'

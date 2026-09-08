@@ -1,6 +1,12 @@
-import React from 'react'
+import { useTranslations } from 'gt-tanstack-start'
 import { Check, ChevronsUpDown, Info } from 'lucide-react'
-import { cn } from '@/lib/utils'
+import React from 'react'
+import {
+  Controller,
+  type ControllerRenderProps,
+  type FieldPath,
+  type FieldValues
+} from 'react-hook-form'
 import { Button } from '@/components/ui/button'
 import {
   Command,
@@ -10,11 +16,6 @@ import {
   CommandItem,
   CommandList
 } from '@/components/ui/command'
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger
-} from '@/components/ui/popover'
 import {
   FormControl,
   FormItem,
@@ -26,21 +27,27 @@ import {
   HoverCardContent,
   HoverCardTrigger
 } from '@/components/ui/hover-card'
-import { Controller } from 'react-hook-form'
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger
+} from '@/components/ui/popover'
+import { cn } from '@/lib/utils'
 
-interface ComboBoxFieldProps {
+interface ComboBoxFieldProps<T extends FieldValues, N extends FieldPath<T>> {
   label: string
   description: string
   options: { value: string; label: string }[]
-  field: any
+  field: ControllerRenderProps<T, N>
 }
 
-const ComboBoxField: React.FC<ComboBoxFieldProps> = ({
+const ComboBoxField = <T extends FieldValues, N extends FieldPath<T>>({
   label,
   description,
   options,
   field
-}) => {
+}: ComboBoxFieldProps<T, N>) => {
+  const mainT = useTranslations('Main')
   const [open, setOpen] = React.useState(false)
   const [selectedValue, setSelectedValue] = React.useState<string>(
     field.value || ''
@@ -61,7 +68,7 @@ const ComboBoxField: React.FC<ComboBoxFieldProps> = ({
           {description && (
             <HoverCard openDelay={100} closeDelay={50}>
               <HoverCardTrigger>
-                <span className="ml-2 text-gray-500">
+                <span className="ml-2 text-muted-foreground">
                   <Info className="inline-block h-4 w-4" />
                 </span>
               </HoverCardTrigger>
@@ -71,32 +78,31 @@ const ComboBoxField: React.FC<ComboBoxFieldProps> = ({
         </FormLabel>
         <FormControl>
           <Controller
-            control={field.control}
             name={field.name}
-            render={({ field: controllerField }) => (
+            render={() => (
               <Popover open={open} onOpenChange={setOpen}>
                 <PopoverTrigger asChild>
                   <Button
                     variant="outline"
                     role="combobox"
                     aria-expanded={open}
-                    className="w-[200px] justify-between"
+                    className="w-50 justify-between"
                   >
                     {selectedValue
                       ? options.find((option) => option.value === selectedValue)
                           ?.label
-                      : 'Select an option...'}
+                      : mainT('selectOption')}
                     <ChevronsUpDown className="opacity-50" />
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-[200px] p-0">
+                <PopoverContent className="w-50 p-0">
                   <Command>
                     <CommandInput
-                      placeholder="Search option..."
+                      placeholder={mainT('search')}
                       className={'focus:ring-0 focus:border-0'}
                     />
                     <CommandList>
-                      <CommandEmpty>No option found.</CommandEmpty>
+                      <CommandEmpty>{mainT('noResults')}</CommandEmpty>
                       <CommandGroup>
                         {options.map((option) => (
                           <CommandItem

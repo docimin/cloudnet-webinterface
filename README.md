@@ -49,9 +49,22 @@ pnpm run dev
 
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
+To build and run a production server:
+
+```bash
+pnpm build
+```
+
+```bash
+pnpm start
+```
+
+The build output lands in `.output/` and is self-contained — that directory plus a Node runtime is
+everything the Docker image needs.
+
 ## Testing
 
-This project includes Jest and React Testing Library for testing. To run tests:
+This project includes Vitest and React Testing Library for testing. To run tests:
 
 ```bash
 pnpm test
@@ -69,15 +82,29 @@ Tests are located in the `src/__tests__` directory.
 
 Want to host the website yourself?
 
-Copy .env.example to .env and change `NEXT_PUBLIC_DOMAIN` to your own domain (including http or https).
+Copy .env.example to .env and change `VITE_DOMAIN` to your own domain (including http or https).
+
+### Upgrading from 0.8.x or earlier
+
+Every `NEXT_PUBLIC_*` variable is now `VITE_*`. If you have any of them, rename them in your
+`.env`, your docker-compose environment and your CI secrets — the prefix is the only thing that
+changes, so `NEXT_PUBLIC_DOMAIN` becomes `VITE_DOMAIN`.
+
+`SENTRY_DSN` is now `VITE_SENTRY_DSN` and covers both the server and the browser, so rename that
+one too. Browser error reporting was never actually running before, and this turns it on — leave
+the value empty if you only want server-side reporting. The remaining `SENTRY_*` variables are
+only read at build time to upload source maps.
+
+The app will not start without `VITE_DOMAIN`, and an unrenamed `NEXT_PUBLIC_CLOUDNET_ADDRESS`
+silently stops pre-filling the address field rather than erroring.
 
 ## Pre-fill CloudNet address
 
 So you want to fill in your user/pass without the address every single time?
 
-Fill in `NEXT_PUBLIC_CLOUDNET_ADDRESS` in your .env file, like for example: `NEXT_PUBLIC_CLOUDNET_ADDRESS=127.0.0.1:2812`, this will autofill it for you.
+Fill in `VITE_CLOUDNET_ADDRESS` in your .env file, like for example: `VITE_CLOUDNET_ADDRESS=127.0.0.1:2812`, this will autofill it for you.
 
-If you want to use a domain: `NEXT_PUBLIC_CLOUDNET_ADDRESS=https://cloudnet.example.com`.
+If you want to use a domain: `VITE_CLOUDNET_ADDRESS=https://cloudnet.example.com`.
 
 ## Bugs may occur
 

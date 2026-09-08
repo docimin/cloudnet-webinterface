@@ -1,55 +1,272 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import 'tailwindcss';
+@import 'tw-animate-css';
+@import '@fontsource-variable/inter';
 
+@plugin '@tailwindcss/forms';
+
+@source '../src';
+
+@custom-variant dark (&:is(.dark *));
+
+/* v4 gates hover behind (hover: hover); v3 did not. Keeps touch parity. */
+@custom-variant hover (&:hover);
+
+:root {
+  --background: 0 0% 100%;
+  --foreground: 240 10% 3.9%;
+  --muted: 240 4.8% 95.9%;
+  --muted-foreground: 240 3.8% 46.1%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 10% 3.9%;
+  --card: 0 0% 100%;
+  --card-foreground: 240 10% 3.9%;
+  --border: 240 5.9% 90%;
+  --input: 240 5.9% 90%;
+  --primary: 240 5.9% 10%;
+  --primary-foreground: 0 0% 98%;
+  --secondary: 240 4.8% 95.9%;
+  --secondary-foreground: 240 5.9% 10%;
+  --accent: 240 4.8% 95.9%;
+  --accent-foreground: 240 5.9% 10%;
+  --destructive: 0 84.2% 60.2%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 240 5.9% 10%;
+  /* Separate from --ring: the active nav bar sits on bg-primary, which in light
+     theme is the same colour as --ring. */
+  --accent-bar: 199 89% 48%;
+  --radius: 0.5rem;
+  --success: 160 100% 25%;
+  --loading: 240 3.7% 40.9%;
+  /* A scrim reads as black in both themes on purpose — it is dimming the page,
+     not tinting it. Opacity stays at the call site. */
+  --scrim: 0 0% 0%;
+  --status-running: 142 71% 45%;
+  --status-starting: 38 92% 50%;
+  --status-stopped: 240 4% 46%;
+  --status-error: 0 84% 60%;
+  --status-draining: 199 89% 48%;
+  /* Load pressure is its own vocabulary: an amber CPU figure means the box is
+     busy, not that the service is starting. */
+  --load-normal: 199 89% 48%;
+  --load-high: 30 90% 38%;
+  --load-critical: 0 74% 42%;
+  /* A terminal stays a terminal: the console keeps its own dark surface in both
+     themes, so it cannot borrow --card/--background. In light theme it sits a
+     little above black to soften the edge against a white page. */
+  --console: 240 8% 12%;
+  --console-chrome: 240 9% 8%;
+  --console-foreground: 240 9% 88%;
+  --console-muted: 240 6% 70%;
+  --console-prompt: 142 71% 55%;
+  /* Log levels are read against --console, never against --background, so these
+     stay light-on-dark in both themes. */
+  --log-info: 199 90% 64%;
+  --log-warn: 38 95% 62%;
+  --log-error: 0 90% 70%;
+}
+
+.dark {
+  --background: 230 43% 3%;
+  --foreground: 0 0% 98%;
+  --muted: 240 3.7% 15.9%;
+  --muted-foreground: 240 5% 64.9%;
+  --popover: 240 10% 3.9%;
+  --popover-foreground: 0 0% 98%;
+  --card: 240 10% 3.9%;
+  --card-foreground: 0 0% 98%;
+  --border: 240 3.7% 15.9%;
+  --input: 240 3.7% 15.9%;
+  --primary: 0 0% 98%;
+  --primary-foreground: 240 5.9% 10%;
+  --secondary: 240 3.7% 15.9%;
+  --secondary-foreground: 0 0% 98%;
+  --accent: 240 3.7% 15.9%;
+  --accent-foreground: 0 0% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 0 0% 98%;
+  --ring: 199 89% 60%;
+  --accent-bar: 199 95% 64%;
+  --success: 160 100% 25%;
+  --loading: 240 3.7% 15.9%;
+  --scrim: 0 0% 0%;
+  --status-running: 142 69% 58%;
+  --status-starting: 38 95% 62%;
+  --status-stopped: 240 5% 55%;
+  --status-error: 0 91% 71%;
+  --status-draining: 199 95% 64%;
+  --load-normal: 199 95% 64%;
+  --load-high: 33 95% 62%;
+  --load-critical: 0 91% 71%;
+  --console: 240 10% 6%;
+  --console-chrome: 240 12% 4%;
+  --console-foreground: 0 0% 92%;
+  --console-muted: 240 5% 66%;
+  --console-prompt: 142 69% 58%;
+  --log-info: 199 95% 70%;
+  --log-warn: 40 96% 66%;
+  --log-error: 0 93% 74%;
+}
+
+@theme inline {
+  --font-sans: 'Inter Variable', ui-sans-serif, system-ui, sans-serif;
+  --font-mono:
+    ui-monospace, SFMono-Regular, 'SF Mono', Menlo, Consolas, monospace;
+
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+  --color-accent-bar: hsl(var(--accent-bar));
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-success: hsl(var(--success));
+  --color-loading: hsl(var(--loading));
+  --color-scrim: hsl(var(--scrim));
+  --color-status-running: hsl(var(--status-running));
+  --color-status-starting: hsl(var(--status-starting));
+  --color-status-stopped: hsl(var(--status-stopped));
+  --color-status-error: hsl(var(--status-error));
+  --color-status-draining: hsl(var(--status-draining));
+  --color-load-normal: hsl(var(--load-normal));
+  --color-load-high: hsl(var(--load-high));
+  --color-load-critical: hsl(var(--load-critical));
+  --color-console: hsl(var(--console));
+  --color-console-chrome: hsl(var(--console-chrome));
+  --color-console-foreground: hsl(var(--console-foreground));
+  --color-console-muted: hsl(var(--console-muted));
+  --color-console-prompt: hsl(var(--console-prompt));
+  --color-log-info: hsl(var(--log-info));
+  --color-log-warn: hsl(var(--log-warn));
+  --color-log-error: hsl(var(--log-error));
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-drawer: calc(var(--radius) + 2px);
+
+  /* Oversized numeral on the 401/404/500/503 screens. */
+  --text-status-code: 7rem;
+  --text-caption: 0.8rem;
+
+  --spacing-icon: 1.2rem;
+
+  --grid-template-columns-panel: 22rem 1fr;
+  --grid-template-columns-browser: 16rem 20rem 1fr;
+
+  --animate-accordion-down: accordion-down 0.2s ease-out;
+  --animate-accordion-up: accordion-up 0.2s ease-out;
+  --animate-caret-blink: caret-blink 1.25s ease-out infinite;
+}
+
+/* The only data-driven part of a meter is its length. The component sets
+   --meter-value (0-100) on the fill; the geometry stays here. */
+@utility meter-fill {
+  width: calc(var(--meter-value, 0) * 1%);
+}
+
+@utility rounded-inherit {
+  border-radius: inherit;
+}
+
+/* The console is a viewport-sized log window; it must not grow with the stream. */
+@utility h-console {
+  height: 80vh;
+}
+
+/* The three template panes scroll inside a fixed frame; without it, opening a
+   file grows the editor and shoves the whole grid down. */
+@utility h-browser {
+  height: 70vh;
+}
+
+/* Radix publishes trigger and viewport geometry as custom properties on the
+   element itself, so these only make sense as utilities. */
+@utility h-nav-viewport {
+  height: var(--radix-navigation-menu-viewport-height);
+}
+
+@utility w-nav-viewport {
+  width: var(--radix-navigation-menu-viewport-width);
+}
+
+@utility h-select-trigger {
+  height: var(--radix-select-trigger-height);
+}
+
+@utility min-w-select-trigger {
+  min-width: var(--radix-select-trigger-width);
+}
+
+@utility toast-swipe-end-x {
+  translate: var(--radix-toast-swipe-end-x) 0;
+}
+
+@utility toast-swipe-move-x {
+  translate: var(--radix-toast-swipe-move-x) 0;
+}
+
+@keyframes accordion-down {
+  from {
+    height: 0;
+  }
+  to {
+    height: var(--radix-accordion-content-height);
+  }
+}
+
+@keyframes accordion-up {
+  from {
+    height: var(--radix-accordion-content-height);
+  }
+  to {
+    height: 0;
+  }
+}
+
+@keyframes caret-blink {
+  0%,
+  70%,
+  100% {
+    opacity: 1;
+  }
+  20%,
+  50% {
+    opacity: 0;
+  }
+}
+
+/* v4 preflight drops these v3 defaults: bare borders fall back to currentColor,
+   placeholders to 50% currentColor, and buttons to cursor:default. */
 @layer base {
-  :root {
-    --background: 0 0% 100%;
-    --foreground: 240 10% 3.9%;
-    --muted: 240 4.8% 95.9%;
-    --muted-foreground: 240 3.8% 46.1%;
-    --popover: 0 0% 100%;
-    --popover-foreground: 240 10% 3.9%;
-    --card: 0 0% 100%;
-    --card-foreground: 240 10% 3.9%;
-    --border: 240 5.9% 90%;
-    --input: 240 5.9% 90%;
-    --primary: 240 5.9% 10%;
-    --primary-foreground: 0 0% 98%;
-    --secondary: 240 4.8% 95.9%;
-    --secondary-foreground: 240 5.9% 10%;
-    --accent: 240 4.8% 95.9%;
-    --accent-foreground: 240 5.9% 10%;
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-    --ring: 240 5.9% 10%;
-    --radius: 0.5rem;
-    --success: 160 100% 25%;
-    --loading: 240 3.7% 40.9%;
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: hsl(var(--border));
   }
 
-  .dark {
-    --background: 230 43% 3%;
-    --foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --primary: 0 0% 98%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --ring: 240 4.9% 83.9%;
-    --success: 160 100% 25%;
-    --loading: 240 3.7% 15.9%;
+  input::placeholder,
+  textarea::placeholder {
+    color: hsl(var(--muted-foreground));
+  }
+
+  button:not(:disabled),
+  [role='button']:not(:disabled) {
+    cursor: pointer;
   }
 }
 
@@ -76,7 +293,7 @@
   top: 0;
   left: 50%;
   overflow: hidden;
-  @apply dark:bg-gray-800 bg-gray-200;
+  @apply bg-border;
 }
 
 .line::after {
@@ -90,7 +307,21 @@
   animation: drop 7s 0s infinite;
   animation-fill-mode: forwards;
   animation-timing-function: cubic-bezier(0.4, 0.26, 0, 0.97);
-  @apply dark:bg-gradient-to-b bg-gradient-to-t from-transparent dark:to-black to-white;
+  background-image: linear-gradient(
+    to top,
+    rgba(0, 0, 0, 0) 0%,
+    #000000 75%,
+    #000000 100%
+  );
+}
+
+.dark .line::after {
+  background-image: linear-gradient(
+    to bottom,
+    rgba(255, 255, 255, 0) 0%,
+    #ffffff 75%,
+    #ffffff 100%
+  );
 }
 
 .line:nth-child(1) {
@@ -118,9 +349,15 @@
   }
 }
 
+/* sonner injects `.sonner-loader{position:absolute;top:50%;left:50%;transform:translate(-50%,-50%)}`
+   into <head> at runtime, which rips the custom loading icon out of the toast's flex row.
+   Its stylesheet lands after ours, and its `[data-visible=false]` rule re-applies the transform,
+   so !important is the only override that holds. */
 .sonner-loader {
+  /* biome-ignore-start lint/complexity/noImportantStyles: beats sonner's runtime-injected stylesheet, see above */
   position: static !important;
   transform: none !important;
   top: auto !important;
   left: auto !important;
+  /* biome-ignore-end lint/complexity/noImportantStyles: beats sonner's runtime-injected stylesheet, see above */
 }
