@@ -4,6 +4,7 @@ import { Button } from '@/components/ui/button'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogFooter,
   DialogHeader,
   DialogTitle
@@ -14,6 +15,7 @@ import { Label } from '@/components/ui/label'
 export function PromptDialog({
   open,
   title,
+  description,
   label,
   defaultValue,
   confirmLabel,
@@ -22,6 +24,7 @@ export function PromptDialog({
 }: {
   open: boolean
   title: string
+  description?: string
   label: string
   defaultValue?: string
   confirmLabel: string
@@ -38,7 +41,10 @@ export function PromptDialog({
         if (!next) onCancel()
       }}
     >
-      <DialogContent aria-describedby={undefined}>
+      {/* an explicit undefined would override the id Radix wires up itself */}
+      <DialogContent
+        {...(description ? {} : { 'aria-describedby': undefined })}
+      >
         <form
           onSubmit={(event) => {
             event.preventDefault()
@@ -48,6 +54,9 @@ export function PromptDialog({
         >
           <DialogHeader>
             <DialogTitle>{title}</DialogTitle>
+            {description && (
+              <DialogDescription>{description}</DialogDescription>
+            )}
           </DialogHeader>
           <div className="space-y-2 py-4">
             <Label htmlFor="prompt-dialog-value">{label}</Label>

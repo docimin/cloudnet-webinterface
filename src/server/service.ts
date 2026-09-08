@@ -1,6 +1,12 @@
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
-import { cloudnetFetch, query, requirePermissions } from './cloudnet'
+import {
+  cloudnetFetch,
+  query,
+  requirePermissions,
+  stepFailed
+} from './cloudnet'
+import { templateCreate } from './templates'
 
 export type ServiceCreateResult = {
   state: 'CREATED' | 'DEFERRED' | 'FAILED'
@@ -380,6 +386,71 @@ export const serviceDeleteFiles = createServerFn({ method: 'POST' })
       'DELETE'
     )
     return true
+  })
+
+// a slash would be percent-encoded into the template path and end up as a
+// literal directory name rather than the nesting the user meant
+const templateSegment = z
+  .string()
+  .min(1)
+  .regex(/^[^/\\]+$/)
+
+export type SaveAsTemplateStep =
+  | 'createTemplate'
+  | 'addDeployment'
+  | 'deployResources'
+
+// Snapshots what the service has on disk right now into a template: create the
+// target, attach a one-shot deployment pointing at it, then flush every pending
+// deployment and drop them again (remove=true) so the one-shot is not left
+// behind in the service configuration.
+export const serviceSaveAsTemplate = createServerFn({ method: 'POST' })
+  .validator(
+    z.object({
+      id: z.string(),
+      storage: templateSegment,
+      prefix: templateSegment,
+      name: templateSegment
+    })
+  )
+  .handler(async ({ data }) => {
+    requirePermissions([
+      'cloudnet_rest:service_write',
+      'cloudnet_rest:service_deploy_resources',
+      'global:admin'
+    ])
+
+    const template = {
+      storage: data.storage,
+      prefix: data.prefix,
+      name: data.name,
+      priority: 0,
+      alwaysCopyToStaticServices: false
+    }
+
+    try {
+      await templateCreate({
+        data: { storage: data.storage, prefix: data.prefix, name: data.name }
+      })
+    } catch (error) {
+      return stepFailed<SaveAsTemplateStep>('createTemplate', error)
+    }
+
+    try {
+      await serviceAddDeployment({
+        data: { id: data.id, flush: false, template, excludes: [] }
+      })
+    } catch (error) {
+      return stepFailed<SaveAsTemplateStep>('addDeployment', error)
+    }
+
+    try {
+      await serviceDeployResources({ data: { id: data.id, remove: true } })
+    } catch (error) {
+      return stepFailed<SaveAsTemplateStep>('deployResources', error)
+    }
+
+    return { ok: true as const, template }
   })
 
 export const serviceLogLines = createServerFn({ method: 'GET' })

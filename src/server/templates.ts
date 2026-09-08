@@ -1,11 +1,17 @@
 import { createServerFn } from '@tanstack/react-start'
 import { z } from 'zod'
+import { isSafeSegment, isSafeTemplatePath } from '@/lib/templatePath'
 import { cloudnetFetch, query, requirePermissions } from './cloudnet'
 
+// CloudNet resolves these straight against the template directory, so the
+// traversal check belongs on the schema rather than on each call site
+const templateSegment = z.string().refine(isSafeSegment, 'unsafe segment')
+const templatePath = z.string().refine(isSafeTemplatePath, 'unsafe path')
+
 const templateParams = z.object({
-  storage: z.string(),
-  prefix: z.string(),
-  name: z.string()
+  storage: templateSegment,
+  prefix: templateSegment,
+  name: templateSegment
 })
 
 const base = (d: z.infer<typeof templateParams>) =>
@@ -107,7 +113,7 @@ export const storageTemplateList = createServerFn({ method: 'GET' })
 export const templateDirectoryList = createServerFn({ method: 'GET' })
   .validator(
     templateParams.extend({
-      directory: z.string().default(''),
+      directory: templatePath.default(''),
       deep: z.boolean().default(false)
     })
   )
@@ -128,7 +134,7 @@ export const templateDirectoryList = createServerFn({ method: 'GET' })
   })
 
 export const templateFileRead = createServerFn({ method: 'GET' })
-  .validator(templateParams.extend({ path: z.string() }))
+  .validator(templateParams.extend({ path: templatePath }))
   .handler(async ({ data }) => {
     requirePermissions([
       'cloudnet_rest:template_read',
@@ -146,7 +152,7 @@ export const templateFileRead = createServerFn({ method: 'GET' })
 export const templateFileWrite = createServerFn({ method: 'POST' })
   .validator(
     templateParams.extend({
-      path: z.string(),
+      path: templatePath,
       content: z.string(),
       encoding: z.enum(['utf8', 'base64']).optional()
     })
@@ -157,7 +163,7 @@ export const templateFileWrite = createServerFn({ method: 'POST' })
       'cloudnet_rest:template_file_create',
       'global:admin'
     ])
-    // base64 lets rename move binary files byte-for-byte
+    // base64 lets uploads carry binary files byte-for-byte
     const body =
       data.encoding === 'base64'
         ? Buffer.from(data.content, 'base64')
@@ -177,7 +183,7 @@ export const templateFileWrite = createServerFn({ method: 'POST' })
   })
 
 export const templateFileDownload = createServerFn({ method: 'POST' })
-  .validator(templateParams.extend({ path: z.string() }))
+  .validator(templateParams.extend({ path: templatePath }))
   .handler(async ({ data }) => {
     requirePermissions([
       'cloudnet_rest:template_read',
@@ -194,7 +200,7 @@ export const templateFileDownload = createServerFn({ method: 'POST' })
   })
 
 export const templateFileDelete = createServerFn({ method: 'POST' })
-  .validator(templateParams.extend({ path: z.string() }))
+  .validator(templateParams.extend({ path: templatePath }))
   .handler(async ({ data }) => {
     requirePermissions([
       'cloudnet_rest:template_write',
@@ -208,7 +214,7 @@ export const templateFileDelete = createServerFn({ method: 'POST' })
   })
 
 export const templateDirectoryCreate = createServerFn({ method: 'POST' })
-  .validator(templateParams.extend({ path: z.string() }))
+  .validator(templateParams.extend({ path: templatePath }))
   .handler(async ({ data }) => {
     requirePermissions([
       'cloudnet_rest:template_write',
@@ -219,6 +225,151 @@ export const templateDirectoryCreate = createServerFn({ method: 'POST' })
       `${base(data)}/directory/create${query({ path: data.path })}`,
       'POST'
     )
+  })
+
+type TemplateParams = z.infer<typeof templateParams>
+
+const listDirectory = (p: TemplateParams, directory: string, deep: boolean) =>
+  cloudnetFetch<unknown>(
+    `${base(p)}/directory/list${query({ directory, deep })}`
+  )
+
+const makeDirectory = (p: TemplateParams, path: string) =>
+  cloudnetFetch<void>(`${base(p)}/directory/create${query({ path })}`, 'POST')
+
+const removeEntry = (p: TemplateParams, path: string) =>
+  cloudnetFetch<void>(`${base(p)}/file${query({ path })}`, 'DELETE')
+
+// octet-stream both ways so a jar survives the copy byte-for-byte
+const copyFile = async (p: TemplateParams, from: string, to: string) => {
+  const buffer = await cloudnetFetch<ArrayBuffer>(
+    `${base(p)}/file/download${query({ path: from })}`,
+    'GET',
+    undefined,
+    { response: 'binary' }
+  )
+  await cloudnetFetch<void>(
+    `${base(p)}/file/create${query({ path: to })}`,
+    'POST',
+    Buffer.from(buffer),
+    { rawBody: true, contentType: 'application/octet-stream' }
+  )
+}
+
+const depth = (path: string) => path.split('/').length
+
+const parentOf = (path: string) => path.split('/').slice(0, -1).join('/')
+
+// `failed` names the entry that stopped the copy, and nothing was removed then;
+// `notRemoved` lists sources that survived an otherwise complete rename
+type RenameResult = { failed: string | null; notRemoved: string[] }
+
+// CloudNet has no move endpoint, so a rename is copy-then-delete. Directories
+// take one request per entry, which is why this runs here rather than in the
+// browser, and the source is only touched once every copy has landed.
+export const templateRename = createServerFn({ method: 'POST' })
+  .validator(
+    templateParams
+      .extend({
+        from: z.string().min(1).refine(isSafeTemplatePath, 'unsafe path'),
+        to: z.string().min(1).refine(isSafeTemplatePath, 'unsafe path')
+      })
+      .refine(
+        (d) => d.from !== d.to && !d.to.startsWith(`${d.from}/`),
+        'a directory cannot be renamed into itself'
+      )
+  )
+  .handler(async ({ data }): Promise<RenameResult> => {
+    requirePermissions([
+      'cloudnet_rest:template_read',
+      'cloudnet_rest:template_directory_list',
+      'global:admin'
+    ])
+    requirePermissions([
+      'cloudnet_rest:template_read',
+      'cloudnet_rest:template_file_download',
+      'global:admin'
+    ])
+    requirePermissions([
+      'cloudnet_rest:template_write',
+      'cloudnet_rest:template_file_create',
+      'global:admin'
+    ])
+    requirePermissions([
+      'cloudnet_rest:template_write',
+      'cloudnet_rest:template_delete_file',
+      'global:admin'
+    ])
+
+    const { from, to } = data
+
+    // a caller that mislabels a directory as a file would delete it unread, so
+    // ask the listing rather than trusting a flag from the browser
+    const source = withFiles(
+      await listDirectory(data, parentOf(from), false)
+    ).find((entry) => entry.path === from)
+    if (!source) return { failed: from, notRemoved: [] }
+
+    // only a folder rename creates directories, so gate that scope separately
+    if (source.directory) {
+      requirePermissions([
+        'cloudnet_rest:template_write',
+        'cloudnet_rest:template_directory_create',
+        'global:admin'
+      ])
+    }
+
+    const entries = source.directory
+      ? withFiles(await listDirectory(data, from, true))
+      : []
+
+    const escaped = entries.find((entry) => !entry.path.startsWith(`${from}/`))
+    if (escaped) return { failed: escaped.path, notRemoved: [] }
+
+    const target = (path: string) => `${to}${path.slice(from.length)}`
+
+    const copies: { path: string; run: () => Promise<unknown> }[] =
+      source.directory
+        ? [
+            { path: to, run: () => makeDirectory(data, to) },
+            ...entries
+              .filter((entry) => entry.directory)
+              .sort((a, b) => depth(a.path) - depth(b.path))
+              .map((entry) => ({
+                path: entry.path,
+                run: () => makeDirectory(data, target(entry.path))
+              })),
+            ...entries
+              .filter((entry) => !entry.directory)
+              .map((entry) => ({
+                path: entry.path,
+                run: () => copyFile(data, entry.path, target(entry.path))
+              }))
+          ]
+        : [{ path: from, run: () => copyFile(data, from, to) }]
+
+    for (const copy of copies) {
+      try {
+        await copy.run()
+      } catch {
+        return { failed: copy.path, notRemoved: [] }
+      }
+    }
+
+    const notRemoved: string[] = []
+    const removals = [
+      ...entries.map((entry) => entry.path).sort((a, b) => depth(b) - depth(a)),
+      from
+    ]
+    for (const path of removals) {
+      try {
+        await removeEntry(data, path)
+      } catch {
+        notRemoved.push(path)
+      }
+    }
+
+    return { failed: null, notRemoved }
   })
 
 export const templateCreate = createServerFn({ method: 'POST' })

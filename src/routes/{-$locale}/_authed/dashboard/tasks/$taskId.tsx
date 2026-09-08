@@ -1,14 +1,8 @@
-import {
-  createFileRoute,
-  Link,
-  useNavigate,
-  useRouter
-} from '@tanstack/react-router'
+import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useTranslations } from 'gt-tanstack-start'
 import { ChevronLeftIcon, TerminalIcon } from 'lucide-react'
-import { useState } from 'react'
-import { toast } from 'sonner'
 import DetailField from '@/components/detailField'
+import TaskFormEditor from '@/components/editors/taskFormEditor'
 import PageLayout from '@/components/pageLayout'
 import DoesNotExist from '@/components/static/doesNotExist'
 import NoAccess from '@/components/static/noAccess'
@@ -27,10 +21,10 @@ import {
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { currentPermissions } from '@/server/auth'
-import { taskDelete, taskGet, taskUpdate } from '@/server/task'
+import { serviceEnvironmentList } from '@/server/serviceVersion'
+import { taskDelete, taskGet } from '@/server/task'
+import type { ServiceEnvironmentType } from '@/utils/types/serviceVersions'
 import type { Task } from '@/utils/types/tasks'
 
 const requiredPermissions = [
@@ -61,14 +55,38 @@ export const Route = createFileRoute(
     )
 
     if (!hasPermissions) {
-      return { permissions, hasPermissions, task: null, taskExists: false }
+      return {
+        permissions,
+        hasPermissions,
+        task: null,
+        taskExists: false,
+        environments: []
+      }
     }
+
+    // the environment list needs its own scopes, so the editor falls back to the
+    // value the task already carries rather than failing the whole route
+    const environments = await serviceEnvironmentList()
+      .then((payload) => payload.environments)
+      .catch(() => [] as ServiceEnvironmentType[])
 
     try {
       const task = await taskGet({ data: { id: params.taskId } })
-      return { permissions, hasPermissions, task, taskExists: true }
+      return {
+        permissions,
+        hasPermissions,
+        task,
+        taskExists: true,
+        environments
+      }
     } catch {
-      return { permissions, hasPermissions, task: null, taskExists: false }
+      return {
+        permissions,
+        hasPermissions,
+        task: null,
+        taskExists: false,
+        environments
+      }
     }
   },
   component: TaskPage
@@ -108,59 +126,19 @@ function DeleteButton({ taskId }: { taskId: string }) {
   )
 }
 
-function UpdateButton({
-  body,
-  originalName,
-  router
-}: {
-  body: string
-  originalName: string
-  router: ReturnType<typeof useRouter>
-}) {
-  const taskT = useTranslations('Tasks')
-
-  const handleUpdate = async () => {
-    try {
-      const updatedTask = JSON.parse(body)
-      if (updatedTask.name !== originalName) {
-        toast.warning(taskT('taskNameChanged'))
-        return
-      }
-      try {
-        await taskUpdate({ data: { task: updatedTask } })
-      } catch {
-        toast.error(taskT('updateFailed'))
-        return
-      }
-      toast.success(taskT('taskUpdated'))
-      router.invalidate()
-    } catch {
-      toast.error(taskT('invalidJson'))
-    }
-  }
-
-  return (
-    <Button size={'sm'} onClick={handleUpdate}>
-      {taskT('updateTask')}
-    </Button>
-  )
-}
-
 function TaskClientPage({
   task,
   taskId,
   hasEditPermissions,
   hasDeletePermissions,
-  taskConfigData
+  environments
 }: {
   task: Task
   taskId: string
   hasEditPermissions: boolean
   hasDeletePermissions: boolean
-  taskConfigData: string
+  environments: ServiceEnvironmentType[]
 }) {
-  const [body, setBody] = useState(taskConfigData)
-  const router = useRouter()
   const taskT = useTranslations('Tasks')
 
   return (
@@ -184,13 +162,6 @@ function TaskClientPage({
           </div>
         </div>
         <div className="flex items-center gap-2">
-          {hasEditPermissions && (
-            <UpdateButton
-              body={body}
-              originalName={task?.name}
-              router={router}
-            />
-          )}
           {hasDeletePermissions && <DeleteButton taskId={taskId} />}
         </div>
       </div>
@@ -255,15 +226,11 @@ function TaskClientPage({
           </Alert>
         </div>
 
-        <div className="flex flex-col gap-2 lg:col-span-2">
-          <Label htmlFor="json">{taskT('json')}</Label>
-          <Textarea
-            name="json"
-            id="json"
-            spellCheck={false}
-            className="min-h-96 flex-1 resize-y font-mono text-xs"
-            value={body}
-            onChange={(e) => setBody(e.target.value)}
+        <div className="lg:col-span-2">
+          <TaskFormEditor
+            task={task}
+            environments={environments}
+            canEdit={hasEditPermissions}
           />
         </div>
       </div>
@@ -273,7 +240,7 @@ function TaskClientPage({
 
 function TaskPage() {
   const { taskId } = Route.useParams()
-  const { permissions, hasPermissions, task, taskExists } =
+  const { permissions, hasPermissions, task, taskExists, environments } =
     Route.useLoaderData()
   const taskT = useTranslations('Tasks')
 
@@ -293,8 +260,6 @@ function TaskPage() {
     return <DoesNotExist name={taskT('name')} />
   }
 
-  const taskConfigData = JSON.stringify(task, null, 2)
-
   return (
     <PageLayout title={taskT('editTitle', { name: task?.name })}>
       <TaskClientPage
@@ -302,7 +267,7 @@ function TaskPage() {
         taskId={taskId}
         hasEditPermissions={hasEditPermissions}
         hasDeletePermissions={hasDeletePermissions}
-        taskConfigData={taskConfigData}
+        environments={environments}
       />
     </PageLayout>
   )

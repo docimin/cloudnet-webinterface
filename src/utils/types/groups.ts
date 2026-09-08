@@ -10,6 +10,7 @@ interface Group {
   includes?: Include[]
   jvmOptions?: string[]
   processParameters?: string[]
+  environmentVariables?: Record<string, string>
   targetEnvironments?: string[]
 }
 

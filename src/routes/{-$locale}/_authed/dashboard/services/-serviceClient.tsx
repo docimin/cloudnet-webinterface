@@ -3,6 +3,7 @@ import { useTranslations } from 'gt-tanstack-start'
 import { PlayIcon, RotateCwIcon, SquareIcon, Trash2Icon } from 'lucide-react'
 import { useState } from 'react'
 import { toast } from 'sonner'
+import SaveAsTemplate from '@/components/blueprint/saveAsTemplate'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -132,15 +133,19 @@ function StopButton({ serviceId }: { serviceId: string }) {
 export default function ServiceActions({
   serviceId,
   name,
+  taskName,
   lifeCycle,
   hasLifecyclePermissions,
-  hasDeletePermissions
+  hasDeletePermissions,
+  hasSnapshotPermissions
 }: {
   serviceId: string
   name: string
+  taskName: string
   lifeCycle: LifeCycle
   hasLifecyclePermissions: boolean
   hasDeletePermissions: boolean
+  hasSnapshotPermissions: boolean
 }) {
   return (
     <div className={'flex flex-wrap items-center gap-2'}>
@@ -150,6 +155,9 @@ export default function ServiceActions({
           <RestartButton serviceId={serviceId} />
           <StopButton serviceId={serviceId} />
         </>
+      )}
+      {hasSnapshotPermissions && (
+        <SaveAsTemplate serviceId={serviceId} taskName={taskName} />
       )}
       {hasDeletePermissions && (
         <DeleteButton serviceId={serviceId} name={name} />

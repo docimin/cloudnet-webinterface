@@ -41,6 +41,12 @@ const requiredDeletePermissions = [
   'global:admin'
 ]
 
+const requiredSnapshotPermissions = [
+  'cloudnet_rest:service_write',
+  'cloudnet_rest:service_deploy_resources',
+  'global:admin'
+]
+
 const requiredConsolePermissions = [
   'cloudnet_rest:service_read',
   'cloudnet_rest:service_live_log',
@@ -133,6 +139,9 @@ function ServicePage() {
   const hasDeletePermissions = requiredDeletePermissions.some((permission) =>
     permissions.includes(permission)
   )
+  const hasSnapshotPermissions = requiredSnapshotPermissions.some(
+    (permission) => permissions.includes(permission)
+  )
 
   if (!hasPermissions) {
     return <NoAccess />
@@ -176,9 +185,11 @@ function ServicePage() {
           <ServiceActions
             serviceId={serviceId}
             name={name}
+            taskName={identity.taskName}
             lifeCycle={service.lifeCycle}
             hasLifecyclePermissions={hasEditPermissions}
             hasDeletePermissions={hasDeletePermissions}
+            hasSnapshotPermissions={hasSnapshotPermissions}
           />
         </div>
 

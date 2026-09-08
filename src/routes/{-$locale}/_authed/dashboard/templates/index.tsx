@@ -14,7 +14,6 @@ import {
 } from 'lucide-react'
 import { Fragment, useRef, useState } from 'react'
 import { toast } from 'sonner'
-import { formatBytes } from '@/components/formatBytes'
 import PageLayout from '@/components/pageLayout'
 import NoAccess from '@/components/static/noAccess'
 import { ConfirmDelete } from '@/components/templates/confirmDelete'
@@ -44,12 +43,7 @@ import {
   SelectValue
 } from '@/components/ui/select'
 import { Separator } from '@/components/ui/separator'
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger
-} from '@/components/ui/tooltip'
-import { EDITOR_MAX_BYTES, fileKind } from '@/lib/fileKind'
+import { fileKind } from '@/lib/fileKind'
 import { type TemplateSearch, templateSearchSchema } from '@/lib/templateSearch'
 import { cn } from '@/lib/utils'
 import { currentPermissions } from '@/server/auth'
@@ -62,9 +56,9 @@ import {
   templateDirectoryList,
   templateDownload,
   templateFileDelete,
-  templateFileDownload,
   templateFileRead,
-  templateFileWrite
+  templateFileWrite,
+  templateRename
 } from '@/server/templates'
 
 type Prompt =
@@ -83,6 +77,10 @@ const requiredPermissions = [
   'cloudnet_rest:template_storage_list',
   'global:admin'
 ]
+
+// renaming a folder moves the open file with it, so the editor has to let go
+const covers = (file: FileType, open: string | undefined) =>
+  open === file.path || (file.directory && !!open?.startsWith(`${file.path}/`))
 
 export const Route = createFileRoute(
   '/{-$locale}/_authed/dashboard/templates/'
@@ -372,28 +370,36 @@ function TemplatesPage() {
     const next = [search.path, value].filter(Boolean).join('/')
     // copy-then-delete would delete the file it just wrote
     if (next === file.path) return
+    // the copy overwrites whatever sits at the target, so a collision would
+    // destroy the sibling instead of renaming onto a free name
+    if (files.some((sibling) => sibling.path === next)) {
+      toast.error(templatesT('renameExists', { name: value }))
+      return
+    }
+    let result: Awaited<ReturnType<typeof templateRename>>
     try {
-      const base64 = await templateFileDownload({
-        data: { ...params, path: file.path }
-      })
-      await templateFileWrite({
-        data: { ...params, path: next, content: base64, encoding: 'base64' }
+      result = await templateRename({
+        data: { ...params, from: file.path, to: next }
       })
     } catch (error) {
       Sentry.captureException(error)
       toast.error(templatesT('renameFailed'))
       return
     }
-    try {
-      await templateFileDelete({ data: { ...params, path: file.path } })
-    } catch (error) {
-      Sentry.captureException(error)
+    if (result.failed) {
+      toast.error(templatesT('renameEntryFailed', { path: result.failed }))
+      return
+    }
+    if (result.notRemoved.length > 0) {
       // the copy landed, so the user now has both paths and needs to know
       toast.error(
-        templatesT('renameCopiedNotRemoved', { from: file.path, to: next })
+        templatesT('renameCopiedNotRemoved', {
+          from: result.notRemoved.join(', '),
+          to: next
+        })
       )
     }
-    if (search.file === file.path) closeFile()
+    if (covers(file, search.file)) closeFile()
     router.invalidate()
   }
 
@@ -482,38 +488,6 @@ function TemplatesPage() {
     if (current.kind === 'folder') return templatesT('newFolder')
     if (current.kind === 'template') return templatesT('newTemplate')
     return templatesT('rename')
-  }
-
-  const renameAction = (file: FileType) => {
-    const button = (disabled: boolean) => (
-      <Button
-        size="sm"
-        variant="ghost"
-        className="px-2"
-        disabled={disabled}
-        aria-label={`${templatesT('rename')} ${file.name}`}
-        onClick={() => {
-          if (file.path === search.file && !mayLeave()) return
-          setPrompt({ kind: 'rename', file })
-        }}
-      >
-        <PencilIcon className="size-4" />
-      </Button>
-    )
-
-    if (fileKind(file.name, file.size) !== 'too-large') return button(false)
-    return (
-      <Tooltip>
-        <TooltipTrigger asChild>
-          <span>{button(true)}</span>
-        </TooltipTrigger>
-        <TooltipContent>
-          {templatesT('renameTooLarge', {
-            limit: formatBytes(EDITOR_MAX_BYTES)
-          })}
-        </TooltipContent>
-      </Tooltip>
-    )
   }
 
   if (!hasPermissions) {
@@ -721,7 +695,26 @@ function TemplatesPage() {
                     mayRename || mayDeleteEntry
                       ? (file) => (
                           <div className="flex justify-end gap-1">
-                            {mayRename && !file.directory && renameAction(file)}
+                            {mayRename &&
+                              (!file.directory || mayCreateDirectory) && (
+                                <Button
+                                  size="sm"
+                                  variant="ghost"
+                                  className="px-2"
+                                  aria-label={`${templatesT('rename')} ${file.name}`}
+                                  onClick={() => {
+                                    if (
+                                      covers(file, search.file) &&
+                                      !mayLeave()
+                                    ) {
+                                      return
+                                    }
+                                    setPrompt({ kind: 'rename', file })
+                                  }}
+                                >
+                                  <PencilIcon className="size-4" />
+                                </Button>
+                              )}
                             {mayDeleteEntry && (
                               <Button
                                 size="sm"
@@ -803,6 +796,11 @@ function TemplatesPage() {
         <PromptDialog
           open={true}
           title={promptTitle(prompt)}
+          description={
+            prompt.kind === 'rename' && prompt.file.directory
+              ? templatesT('renameFolderWarning')
+              : undefined
+          }
           label={
             prompt.kind === 'template'
               ? templatesT('template')

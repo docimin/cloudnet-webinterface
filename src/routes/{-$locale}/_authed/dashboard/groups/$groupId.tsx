@@ -7,18 +7,18 @@ import {
   UploadIcon,
   WorkflowIcon
 } from 'lucide-react'
-import { type FormEvent, useState } from 'react'
 import { toast } from 'sonner'
 import { DashboardCard } from '@/components/dashboardCard'
+import GroupFormEditor from '@/components/editors/groupFormEditor'
 import PageLayout from '@/components/pageLayout'
 import DoesNotExist from '@/components/static/doesNotExist'
 import NoAccess from '@/components/static/noAccess'
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert'
 import { Button } from '@/components/ui/button'
-import { Label } from '@/components/ui/label'
-import { Textarea } from '@/components/ui/textarea'
 import { currentPermissions } from '@/server/auth'
-import { groupDelete, groupGet, groupUpdate } from '@/server/group'
+import { groupDelete, groupGet } from '@/server/group'
+import { serviceEnvironmentList } from '@/server/serviceVersion'
+import type { ServiceEnvironmentType } from '@/utils/types/serviceVersions'
 
 const requiredPermissions = [
   'cloudnet_rest:group_read',
@@ -34,8 +34,17 @@ export const Route = createFileRoute(
     const hasPermissions = requiredPermissions.some((permission) =>
       permissions.includes(permission)
     )
+    // the environment list needs its own scopes, so the editor falls back to the
+    // values the group already carries rather than failing the whole route
+    const environments = hasPermissions
+      ? await serviceEnvironmentList()
+          .then((payload) => payload.environments)
+          .catch(() => [] as ServiceEnvironmentType[])
+      : []
+
     return {
       hasPermissions,
+      environments,
       group: hasPermissions
         ? await groupGet({ data: { id: params.groupId } })
         : null
@@ -46,37 +55,17 @@ export const Route = createFileRoute(
 
 function GroupClientPage({
   group,
-  groupId
+  groupId,
+  environments
 }: {
   group: Group
   groupId: string
+  environments: ServiceEnvironmentType[]
 }) {
   const groupsT = useTranslations('Groups')
   const mainT = useTranslations('Main')
 
   const navigate = useNavigate()
-  const [groupConfigData, setGroupConfigData] = useState(
-    JSON.stringify(group, null, 2)
-  )
-  const handleModuleConfigSave = async (event: FormEvent) => {
-    event.preventDefault()
-
-    try {
-      const updatedGroup = JSON.parse(groupConfigData)
-      if (updatedGroup.name !== group.name) {
-        toast.warning(groupsT('groupNameChanged'))
-        return
-      }
-
-      const response = await groupUpdate({ data: updatedGroup })
-
-      if (response) {
-        toast.success(groupsT('groupConfigUpdated'))
-      }
-    } catch {
-      toast.error(mainT('invalidJson'))
-    }
-  }
 
   const handleUninstall = async () => {
     await groupDelete({ data: { id: groupId } })
@@ -89,11 +78,6 @@ function GroupClientPage({
       <div className="flex flex-wrap items-start justify-between gap-4">
         <span className="font-mono text-lg font-semibold">{group.name}</span>
         <div className="flex flex-wrap items-center gap-2">
-          {groupConfigData && (
-            <Button type="button" size="sm" onClick={handleModuleConfigSave}>
-              {mainT('save')}
-            </Button>
-          )}
           <Button
             type="button"
             size="sm"
@@ -138,28 +122,16 @@ function GroupClientPage({
         <AlertDescription>{groupsT('editingGroupName')}</AlertDescription>
       </Alert>
 
-      {groupConfigData && (
-        <div className="mt-6 w-full">
-          <Label htmlFor="json">{groupsT('configuration')}</Label>
-          <div className="mt-2">
-            <Textarea
-              name="json"
-              id="json"
-              className="h-96 font-mono text-xs"
-              required
-              value={groupConfigData}
-              onChange={(event) => setGroupConfigData(event.target.value)}
-            />
-          </div>
-        </div>
-      )}
+      <div className="mt-6 w-full">
+        <GroupFormEditor group={group} environments={environments} />
+      </div>
     </>
   )
 }
 
 function GroupPage() {
   const { groupId } = Route.useParams()
-  const { hasPermissions, group } = Route.useLoaderData()
+  const { hasPermissions, group, environments } = Route.useLoaderData()
   const navigationT = useTranslations('Navigation')
 
   if (!hasPermissions) {
@@ -172,7 +144,11 @@ function GroupPage() {
 
   return (
     <PageLayout title={group?.name}>
-      <GroupClientPage groupId={groupId} group={group} />
+      <GroupClientPage
+        groupId={groupId}
+        group={group}
+        environments={environments}
+      />
     </PageLayout>
   )
 }

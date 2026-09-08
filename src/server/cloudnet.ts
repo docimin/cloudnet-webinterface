@@ -65,6 +65,24 @@ export function requirePermissions(required: string[]) {
   }
 }
 
+export type StepFailure<S extends string> = {
+  ok: false
+  step: S
+  message: string
+}
+
+export const errorMessage = (error: unknown) =>
+  error instanceof Error ? error.message : String(error)
+
+// flows that chain several node calls report which call failed rather than
+// collapsing into one opaque rejection the caller cannot act on
+export function stepFailed<S extends string>(
+  step: S,
+  error: unknown
+): StepFailure<S> {
+  return { ok: false, step, message: errorMessage(error) }
+}
+
 export type FetchOptions = {
   rawBody?: boolean
   contentType?: string

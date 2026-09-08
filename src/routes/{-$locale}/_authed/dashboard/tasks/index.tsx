@@ -1,5 +1,6 @@
 import { createFileRoute, Link, useNavigate } from '@tanstack/react-router'
 import { useTranslations } from 'gt-tanstack-start'
+import BlueprintDialog from '@/components/blueprint/blueprintDialog'
 import PageHeader from '@/components/pageHeader'
 import PageLayout from '@/components/pageLayout'
 import NoAccess from '@/components/static/noAccess'
@@ -29,6 +30,12 @@ const requiredEditPermissions = [
   'global:admin'
 ]
 
+const requiredCreatePermissions = [
+  'cloudnet_rest:task_write',
+  'cloudnet_rest:task_create',
+  'global:admin'
+]
+
 export const Route = createFileRoute('/{-$locale}/_authed/dashboard/tasks/')({
   loader: async () => {
     const permissions = await currentPermissions()
@@ -52,6 +59,9 @@ function TasksPage() {
   const hasEditPermissions = requiredEditPermissions.some((permission) =>
     permissions.includes(permission)
   )
+  const hasCreatePermissions = requiredCreatePermissions.some((permission) =>
+    permissions.includes(permission)
+  )
 
   if (!hasPermissions) {
     return <NoAccess />
@@ -68,7 +78,9 @@ function TasksPage() {
   return (
     <PageLayout title={taskT('title')}>
       <div className="flex flex-col gap-4">
-        <PageHeader count={rows.length} caption={taskT('tableCaption')} />
+        <PageHeader count={rows.length} caption={taskT('tableCaption')}>
+          {hasCreatePermissions && <BlueprintDialog />}
+        </PageHeader>
 
         <div className="overflow-hidden rounded-lg border">
           <Table>
