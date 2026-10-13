@@ -8,6 +8,7 @@ import {
   LayoutDashboardIcon,
   LogOutIcon,
   PackageIcon,
+  PaletteIcon,
   UngroupIcon,
   UsersIcon,
   WorkflowIcon
@@ -150,6 +151,13 @@ export const Nav3 = () => {
 export const NavFooter = () => {
   const navigationT = useTranslations('Navigation')
   return [
+    {
+      title: navigationT('appearance'),
+      label: '',
+      icon: PaletteIcon,
+      variant: 'ghost' as const,
+      href: `/dashboard/appearance`
+    },
     {
       title: navigationT('logout'),
       label: '',

@@ -5,7 +5,7 @@ import { cloudnetFetch, requirePermissions } from './cloudnet'
 // the spec marks no field of GroupConfiguration required, so anything without a
 // usable name is dropped here: `name` keys the table, addresses the detail route
 // and is compared against the edited JSON before an update is sent. Everything
-// else is passed through verbatim — the detail page round-trips the document
+// else is passed through verbatim - the detail page round-trips the document
 // back to POST /group, so invented defaults would be written to the node.
 function asGroup(raw: unknown): Group | null {
   if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return null

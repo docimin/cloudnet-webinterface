@@ -54,7 +54,7 @@ export const Route = createFileRoute(
       }
     }
 
-    // null means "not loaded" — never seed the editor with a fabricated config
+    // null means "not loaded" - never seed the editor with a fabricated config
     let moduleConfig: Record<string, unknown> | null = null
     if (hasConfigPermissions) {
       try {
@@ -84,7 +84,7 @@ function Detail({
     <div className={cn('space-y-1', className)}>
       <dt className="text-xs text-muted-foreground">{label}</dt>
       <dd className={cn('text-sm break-words', mono && 'font-mono')}>
-        {value || '—'}
+        {value || '-'}
       </dd>
     </div>
   )

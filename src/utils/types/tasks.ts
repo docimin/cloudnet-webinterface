@@ -1,5 +1,5 @@
 // ServiceTask is an allOf over the free-form JsonDocPropertyable and the 0.5.1
-// spec marks no field required, so only `name` is guaranteed here — and only
+// spec marks no field required, so only `name` is guaranteed here - and only
 // because src/server/task.ts drops nameless entries. A task is handed straight
 // back to POST /task and POST /service/create/task, so the server layer must not
 // invent values for the rest either.

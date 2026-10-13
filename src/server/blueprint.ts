@@ -50,7 +50,7 @@ const templateRef = z.object({
 // `Online` is written by the bridge module once the platform finished booting,
 // which is the point its default configuration files exist on disk. Without the
 // bridge the only observable signal left is the wrapper attaching to the node,
-// which happens earlier than that — the caller is told which of the two it got.
+// which happens earlier than that - the caller is told which of the two it got.
 async function waitForReady(id: string) {
   const deadline = Date.now() + READY_TIMEOUT_MS
   let seen: ReadyState | null = null

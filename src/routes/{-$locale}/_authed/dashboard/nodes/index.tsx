@@ -177,7 +177,7 @@ function NodesPage() {
                           </span>
                         </>
                       ) : (
-                        <span className="text-muted-foreground">—</span>
+                        <span className="text-muted-foreground">-</span>
                       )}
                     </TableCell>
                     <TableCell className="text-right font-mono tabular-nums">
@@ -185,7 +185,7 @@ function NodesPage() {
                     </TableCell>
                     <TableCell className="font-mono tabular-nums">
                       {version ?? (
-                        <span className="text-muted-foreground">—</span>
+                        <span className="text-muted-foreground">-</span>
                       )}
                       {snapshot?.version?.versionType && (
                         <span className="ml-2 font-sans text-xs text-muted-foreground">

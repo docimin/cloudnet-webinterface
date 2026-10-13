@@ -11,7 +11,8 @@
     "modules": "Modules",
     "players": "Spieler",
     "account": "Account",
-    "logout": "Ausloggen"
+    "logout": "Ausloggen",
+    "appearance": "Darstellung"
   },
   "Main": {
     "invalidJson": "Ungültiges JSON-Format.",
@@ -110,8 +111,8 @@
     "processParametersPlaceholder": "--nogui",
     "environmentVariables": "Umgebungsvariablen",
     "environmentVariablesDescription": "Werden in der Umgebung gesetzt, in der der Service-Prozess läuft.",
-    "deploymentsDescription": "Wird als rohes JSON bearbeitet — ein Deployment enthält ein Template und dessen Excludes.",
-    "includesDescription": "Wird als rohes JSON bearbeitet — jeder Include besteht aus einer URL und dem Ziel, in das geschrieben wird."
+    "deploymentsDescription": "Wird als rohes JSON bearbeitet - ein Deployment enthält ein Template und dessen Excludes.",
+    "includesDescription": "Wird als rohes JSON bearbeitet - jeder Include besteht aus einer URL und dem Ziel, in das geschrieben wird."
   },
   "Modules": {
     "title": "Modules",
@@ -268,7 +269,7 @@
     "all": "Alle",
     "previous": "Zurück",
     "next": "Weiter",
-    "range": "{from}–{to}",
+    "range": "{from}-{to}",
     "playersShown": "{amount} Spieler angezeigt",
     "noPlayersOnline": "Keine Spieler online",
     "noPlayersOnlineDescription": "Spieler erscheinen hier, sobald sie sich mit dem Netzwerk verbinden."
@@ -451,9 +452,9 @@
     "environmentVariables": "Umgebungsvariablen",
     "environmentVariablesDescription": "Werden in der Umgebung gesetzt, in der der Service-Prozess läuft.",
     "deployments": "Deployments",
-    "deploymentsDescription": "Wird als rohes JSON bearbeitet — ein Deployment enthält ein Template und dessen Excludes.",
+    "deploymentsDescription": "Wird als rohes JSON bearbeitet - ein Deployment enthält ein Template und dessen Excludes.",
     "includes": "Includes",
-    "includesDescription": "Wird als rohes JSON bearbeitet — jeder Include besteht aus einer URL und dem Ziel, in das geschrieben wird."
+    "includesDescription": "Wird als rohes JSON bearbeitet - jeder Include besteht aus einer URL und dem Ziel, in das geschrieben wird."
   },
   "Users": {
     "title": "Benutzer",
@@ -715,7 +716,10 @@
     "renameExists": "{name} existiert in diesem Ordner bereits",
     "renameCopiedNotRemoved": "Nach {to} kopiert, aber {from} konnte nicht entfernt werden",
     "renameEntryFailed": "Umbenennen bei {path} abgebrochen. Es wurde nichts entfernt.",
-    "renameFolderWarning": "Beim Umbenennen eines Ordners wird sein Inhalt unter den neuen Namen kopiert und der alte entfernt. Bei großen Ordnern kann das eine Weile dauern.",
+    "renameFolderWarning": "Beim Umbenennen eines Ordners wird sein Inhalt unter den neuen Namen kopiert. Der alte Ordner bleibt leer zurück, weil CloudNet keine Ordner entfernen kann. Bei großen Ordnern kann das eine Weile dauern.",
+    "deleteFolderContents": "Gesamten Inhalt löschen",
+    "folderCleared": "Alles in {name} wurde gelöscht. Der leere Ordner bleibt bestehen, weil CloudNet keine Ordner entfernen kann.",
+    "folderRenamed": "Alles wurde nach {to} verschoben. Der leere Ordner {from} bleibt bestehen, weil CloudNet keine Ordner entfernen kann.",
     "deleteFailed": "Löschen fehlgeschlagen: {files}",
     "createFailed": "Erstellen fehlgeschlagen",
     "invalidTemplateName": "Template als prefix/name angeben",
@@ -844,5 +848,49 @@
     "alwaysCopyToStaticServices": "Immer auf statische Services kopieren",
     "addTemplate": "Template hinzufügen",
     "removeTemplate": "Template entfernen"
+  },
+  "Appearance": {
+    "title": "Darstellung",
+    "description": "Lege fest, wie die Oberfläche für dich aussieht. Deine Auswahl wird in diesem Browser gespeichert, die Standardwerte legt der Host fest.",
+    "mode": "Modus",
+    "accent": "Akzentfarbe",
+    "accentPalette": "Standard der Palette",
+    "accentBlue": "Blau",
+    "accentViolet": "Violett",
+    "accentGreen": "Grün",
+    "accentOrange": "Orange",
+    "accentPink": "Pink",
+    "accentRed": "Rot",
+    "accentAmber": "Bernstein",
+    "accentTeal": "Petrol",
+    "customColour": "Eigene Farbe",
+    "customHex": "Hex-Farbe",
+    "useColour": "Diese Farbe verwenden",
+    "hexInvalid": "Gib eine Farbe wie #3b82f6 ein",
+    "palette": "Palette",
+    "paletteDefault": "Standard",
+    "radius": "Eckenradius",
+    "radiusNone": "Keiner",
+    "radiusSmall": "Klein",
+    "radiusMedium": "Mittel",
+    "radiusLarge": "Groß",
+    "status": "Statusfarben",
+    "statusPalette": "Passend zur Palette",
+    "statusColorBlind": "Für Farbenblinde",
+    "instanceDefault": "Standard der Instanz",
+    "reset": "Auf Standard zurücksetzen",
+    "saveFailed": "Deine Darstellung konnte nicht gespeichert werden",
+    "preview": "Vorschau",
+    "previewPrimary": "Speichern",
+    "previewSecondary": "Details",
+    "previewOutline": "Abbrechen",
+    "previewDestructive": "Löschen",
+    "previewInput": "Services durchsuchen",
+    "previewCheckbox": "Autostart",
+    "previewSwitch": "Wartung",
+    "previewLoad": "CPU {value}%",
+    "previewLogInfo": "[INFO] Lobby-1 gestartet",
+    "previewLogWarn": "[WARN] Proxy-1 nutzt 80% seines Speichers",
+    "previewLogError": "[ERROR] Lobby-2 ist abgestürzt"
   }
 }

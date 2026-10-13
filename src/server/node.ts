@@ -104,7 +104,7 @@ export const nodeClusterGet = createServerFn({
     )
   })
 
-// draining is a required query flag, not a toggle — the caller sends the value
+// draining is a required query flag, not a toggle - the caller sends the value
 // it wants the node to end up in.
 export const nodeDrain = createServerFn({ method: 'POST' })
   .validator(z.object({ id: z.string(), draining: z.boolean() }))

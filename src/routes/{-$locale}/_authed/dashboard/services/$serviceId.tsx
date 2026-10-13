@@ -232,7 +232,7 @@ function ServicePage() {
                   value={
                     snapshot.heapUsageMemory
                       ? formatBytes(snapshot.heapUsageMemory)
-                      : '—'
+                      : '-'
                   }
                 />
                 <DetailField
@@ -240,7 +240,7 @@ function ServicePage() {
                   value={
                     snapshot.maxHeapMemory
                       ? formatBytes(snapshot.maxHeapMemory)
-                      : '—'
+                      : '-'
                   }
                 />
               </Section>
@@ -259,7 +259,7 @@ function ServicePage() {
                 />
                 <DetailField
                   label={serviceT('version')}
-                  value={service.properties.Version || '—'}
+                  value={service.properties.Version || '-'}
                 />
               </Section>
 
@@ -269,11 +269,11 @@ function ServicePage() {
               >
                 <DetailField
                   label={serviceT('node')}
-                  value={identity.nodeUniqueId || '—'}
+                  value={identity.nodeUniqueId || '-'}
                 />
                 <DetailField
                   label={serviceT('environment')}
-                  value={identity.environmentName || '—'}
+                  value={identity.environmentName || '-'}
                 />
                 <DetailField
                   label={serviceT('address')}
@@ -284,7 +284,7 @@ function ServicePage() {
                   value={
                     service.connectedTime
                       ? new Date(service.connectedTime).toLocaleString()
-                      : '—'
+                      : '-'
                   }
                 />
               </Section>
@@ -312,7 +312,7 @@ function ServicePage() {
                 />
                 <DetailField
                   label={serviceT('runtime')}
-                  value={service.configuration.runtime || '—'}
+                  value={service.configuration.runtime || '-'}
                 />
               </Section>
             </div>

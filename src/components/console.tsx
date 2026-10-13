@@ -251,7 +251,7 @@ export default function ServiceConsole({
     }
   }
 
-  // biome-ignore lint/correctness/useExhaustiveDependencies: history is the trigger — every new batch of lines must re-scroll, even though the body only reads a ref.
+  // biome-ignore lint/correctness/useExhaustiveDependencies: history is the trigger - every new batch of lines must re-scroll, even though the body only reads a ref.
   useEffect(() => {
     consoleEndRef.current?.scrollIntoView({ behavior: 'smooth' })
   }, [history])

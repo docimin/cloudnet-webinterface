@@ -17,6 +17,8 @@ const templateParams = z.object({
 const base = (d: z.infer<typeof templateParams>) =>
   `/template/${encodeURIComponent(d.storage)}/${encodeURIComponent(d.prefix)}/${encodeURIComponent(d.name)}`
 
+const parentOf = (path: string) => path.split('/').slice(0, -1).join('/')
+
 const asRecord = (value: unknown): Record<string, unknown> =>
   value && typeof value === 'object' ? (value as Record<string, unknown>) : {}
 
@@ -123,14 +125,19 @@ export const templateDirectoryList = createServerFn({ method: 'GET' })
       'cloudnet_rest:template_directory_list',
       'global:admin'
     ])
-    return withFiles(
+    // a shallow listing leaves directories out entirely, so list deep and keep
+    // the direct children
+    const entries = withFiles(
       await cloudnetFetch<unknown>(
         `${base(data)}/directory/list${query({
           directory: data.directory,
-          deep: data.deep
+          deep: true
         })}`
       )
     )
+    return data.deep
+      ? entries
+      : entries.filter((entry) => parentOf(entry.path) === data.directory)
   })
 
 export const templateFileRead = createServerFn({ method: 'GET' })
@@ -258,8 +265,6 @@ const copyFile = async (p: TemplateParams, from: string, to: string) => {
 
 const depth = (path: string) => path.split('/').length
 
-const parentOf = (path: string) => path.split('/').slice(0, -1).join('/')
-
 // `failed` names the entry that stopped the copy, and nothing was removed then;
 // `notRemoved` lists sources that survived an otherwise complete rename
 type RenameResult = { failed: string | null; notRemoved: string[] }
@@ -306,7 +311,7 @@ export const templateRename = createServerFn({ method: 'POST' })
     // a caller that mislabels a directory as a file would delete it unread, so
     // ask the listing rather than trusting a flag from the browser
     const source = withFiles(
-      await listDirectory(data, parentOf(from), false)
+      await listDirectory(data, parentOf(from), true)
     ).find((entry) => entry.path === from)
     if (!source) return { failed: from, notRemoved: [] }
 
@@ -357,10 +362,11 @@ export const templateRename = createServerFn({ method: 'POST' })
     }
 
     const notRemoved: string[] = []
-    const removals = [
-      ...entries.map((entry) => entry.path).sort((a, b) => depth(b) - depth(a)),
-      from
-    ]
+    // the API refuses to delete directories, so a folder rename leaves the
+    // emptied source tree behind
+    const removals = source.directory
+      ? entries.filter((entry) => !entry.directory).map((entry) => entry.path)
+      : [from]
     for (const path of removals) {
       try {
         await removeEntry(data, path)
@@ -370,6 +376,43 @@ export const templateRename = createServerFn({ method: 'POST' })
     }
 
     return { failed: null, notRemoved }
+  })
+
+// the API cannot delete a directory, so clearing one removes every file inside
+// and leaves the empty tree; `failed` lists the files that survived
+export const templateDirectoryClear = createServerFn({ method: 'POST' })
+  .validator(
+    templateParams.extend({
+      path: z.string().min(1).refine(isSafeTemplatePath, 'unsafe path')
+    })
+  )
+  .handler(async ({ data }): Promise<{ failed: string[] }> => {
+    requirePermissions([
+      'cloudnet_rest:template_read',
+      'cloudnet_rest:template_directory_list',
+      'global:admin'
+    ])
+    requirePermissions([
+      'cloudnet_rest:template_write',
+      'cloudnet_rest:template_delete_file',
+      'global:admin'
+    ])
+
+    const entries = withFiles(await listDirectory(data, data.path, true))
+    const escaped = entries.find(
+      (entry) => !entry.path.startsWith(`${data.path}/`)
+    )
+    if (escaped) return { failed: [escaped.path] }
+
+    const failed: string[] = []
+    for (const entry of entries.filter((entry) => !entry.directory)) {
+      try {
+        await removeEntry(data, entry.path)
+      } catch {
+        failed.push(entry.path)
+      }
+    }
+    return { failed }
   })
 
 export const templateCreate = createServerFn({ method: 'POST' })

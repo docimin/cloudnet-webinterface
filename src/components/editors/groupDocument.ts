@@ -26,8 +26,8 @@ export function toGroupFormValues(group: Group): GroupFormValues {
   }
 }
 
-// the stored document is spread first so keys the form does not model —
-// properties and anything a module added — survive the save
+// the stored document is spread first so keys the form does not model -
+// properties and anything a module added - survive the save
 export function mergeGroup(
   group: Group,
   values: GroupFormValues

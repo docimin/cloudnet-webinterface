@@ -11,6 +11,8 @@ import { Toaster } from 'sonner'
 import ErrorScreen from '@/components/static/errorScreen'
 import Loading from '@/components/static/loading'
 import NotFound from '@/components/static/notFound'
+import { ACCENT_STYLE_ID, appearanceAttributes } from '@/lib/appearance'
+import { getAppearance } from '@/server/appearance'
 import appCss from '../../css/globals.css?url'
 import { loadDictionary } from '../gt'
 
@@ -19,12 +21,22 @@ const name = import.meta.env.VITE_NAME || 'CloudNet'
 export const Route = createRootRoute({
   loader: async () => {
     const locale = getLocale()
-    const [translations, dictionary] = await Promise.all([
+    const [translations, dictionary, appearance] = await Promise.all([
       getTranslationsSnapshot(locale),
-      loadDictionary(locale)
+      loadDictionary(locale),
+      getAppearance()
     ])
-    return { locale, translations, dictionaries: { [locale]: dictionary } }
+    return {
+      locale,
+      translations,
+      dictionaries: { [locale]: dictionary },
+      appearance
+    }
   },
+  // Everything loaded here is fixed for the document: gt switches locale with a
+  // full page load and the Appearance page invalidates after a change, so a
+  // same-URL navigation has no reason to fetch the appearance again.
+  staleTime: Infinity,
   head: async () => {
     const t = await getTranslations('Meta')
     const title = t('title', { name })
@@ -58,12 +70,19 @@ export const Route = createRootRoute({
 })
 
 function RootDocument({ children }: { children: React.ReactNode }) {
-  const { locale, translations, dictionaries } = Route.useLoaderData()
+  const { locale, translations, dictionaries, appearance } =
+    Route.useLoaderData()
 
   return (
-    <html lang={locale} className="h-full" suppressHydrationWarning>
+    <html
+      lang={locale}
+      className="h-full"
+      suppressHydrationWarning
+      {...appearanceAttributes(appearance.resolved)}
+    >
       <head>
         <HeadContent />
+        <style id={ACCENT_STYLE_ID}>{appearance.accentCss}</style>
       </head>
       <body className="flex min-h-screen font-sans antialiased bg-background">
         <ThemeProvider

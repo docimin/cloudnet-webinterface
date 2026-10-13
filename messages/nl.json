@@ -11,7 +11,8 @@
     "modules": "Modules",
     "players": "Spelers",
     "account": "Account",
-    "logout": "Uitloggen"
+    "logout": "Uitloggen",
+    "appearance": "Weergave"
   },
   "Main": {
     "invalidJson": "Ongeldig JSON-formaat.",
@@ -110,8 +111,8 @@
     "processParametersPlaceholder": "--nogui",
     "environmentVariables": "Omgevingsvariabelen",
     "environmentVariablesDescription": "Worden gezet in de omgeving waarin het serviceproces draait.",
-    "deploymentsDescription": "Wordt als ruwe JSON bewerkt — een deployment bevat een template en de bijbehorende excludes.",
-    "includesDescription": "Wordt als ruwe JSON bewerkt — elke include is een url en de bestemming waarnaar die wordt geschreven."
+    "deploymentsDescription": "Wordt als ruwe JSON bewerkt - een deployment bevat een template en de bijbehorende excludes.",
+    "includesDescription": "Wordt als ruwe JSON bewerkt - elke include is een url en de bestemming waarnaar die wordt geschreven."
   },
   "Modules": {
     "title": "Modules",
@@ -268,7 +269,7 @@
     "all": "Alle",
     "previous": "Vorige",
     "next": "Volgende",
-    "range": "{from}–{to}",
+    "range": "{from}-{to}",
     "playersShown": "{amount} spelers weergegeven",
     "noPlayersOnline": "Geen spelers online",
     "noPlayersOnlineDescription": "Spelers verschijnen hier zodra ze verbinding maken met het netwerk."
@@ -451,9 +452,9 @@
     "environmentVariables": "Omgevingsvariabelen",
     "environmentVariablesDescription": "Worden gezet in de omgeving waarin het serviceproces draait.",
     "deployments": "Deployments",
-    "deploymentsDescription": "Wordt als ruwe JSON bewerkt — een deployment bevat een template en de bijbehorende excludes.",
+    "deploymentsDescription": "Wordt als ruwe JSON bewerkt - een deployment bevat een template en de bijbehorende excludes.",
     "includes": "Includes",
-    "includesDescription": "Wordt als ruwe JSON bewerkt — elke include is een url en de bestemming waarnaar die wordt geschreven."
+    "includesDescription": "Wordt als ruwe JSON bewerkt - elke include is een url en de bestemming waarnaar die wordt geschreven."
   },
   "Users": {
     "title": "Gebruikers",
@@ -715,7 +716,10 @@
     "renameExists": "{name} bestaat al in deze map",
     "renameCopiedNotRemoved": "Gekopieerd naar {to}, maar {from} kon niet verwijderd worden",
     "renameEntryFailed": "Hernoemen gestopt bij {path}. Er is niets verwijderd.",
-    "renameFolderWarning": "Bij het hernoemen van een map wordt de inhoud naar de nieuwe naam gekopieerd en de oude verwijderd. Bij grote mappen kan dit even duren.",
+    "renameFolderWarning": "Bij het hernoemen van een map wordt de inhoud naar de nieuwe naam gekopieerd. De oude map blijft leeg achter, omdat CloudNet geen mappen kan verwijderen. Bij grote mappen kan dit even duren.",
+    "deleteFolderContents": "Alle inhoud verwijderen",
+    "folderCleared": "Alles in {name} is verwijderd. De lege map blijft staan, omdat CloudNet geen mappen kan verwijderen.",
+    "folderRenamed": "Alles is verplaatst naar {to}. De lege map {from} blijft staan, omdat CloudNet geen mappen kan verwijderen.",
     "deleteFailed": "Verwijderen mislukt: {files}",
     "createFailed": "Aanmaken mislukt",
     "invalidTemplateName": "Geef de template op als prefix/name",
@@ -844,5 +848,49 @@
     "alwaysCopyToStaticServices": "Altijd naar statische services kopiëren",
     "addTemplate": "Template toevoegen",
     "removeTemplate": "Template verwijderen"
+  },
+  "Appearance": {
+    "title": "Weergave",
+    "description": "Kies hoe de interface er voor jou uitziet. Je keuze wordt in deze browser opgeslagen, de standaardwaarden bepaalt de host.",
+    "mode": "Modus",
+    "accent": "Accentkleur",
+    "accentPalette": "Standaard van het palet",
+    "accentBlue": "Blauw",
+    "accentViolet": "Violet",
+    "accentGreen": "Groen",
+    "accentOrange": "Oranje",
+    "accentPink": "Roze",
+    "accentRed": "Rood",
+    "accentAmber": "Amber",
+    "accentTeal": "Blauwgroen",
+    "customColour": "Eigen kleur",
+    "customHex": "Hexkleur",
+    "useColour": "Deze kleur gebruiken",
+    "hexInvalid": "Voer een kleur in zoals #3b82f6",
+    "palette": "Palet",
+    "paletteDefault": "Standaard",
+    "radius": "Hoekafronding",
+    "radiusNone": "Geen",
+    "radiusSmall": "Klein",
+    "radiusMedium": "Middel",
+    "radiusLarge": "Groot",
+    "status": "Statuskleuren",
+    "statusPalette": "Passend bij het palet",
+    "statusColorBlind": "Geschikt voor kleurenblinden",
+    "instanceDefault": "Standaard van de instantie",
+    "reset": "Terugzetten naar standaard",
+    "saveFailed": "Je weergave kon niet worden opgeslagen",
+    "preview": "Voorbeeld",
+    "previewPrimary": "Opslaan",
+    "previewSecondary": "Details",
+    "previewOutline": "Annuleren",
+    "previewDestructive": "Verwijderen",
+    "previewInput": "Services zoeken",
+    "previewCheckbox": "Automatisch starten",
+    "previewSwitch": "Onderhoud",
+    "previewLoad": "CPU {value}%",
+    "previewLogInfo": "[INFO] Lobby-1 gestart",
+    "previewLogWarn": "[WARN] Proxy-1 gebruikt 80% van zijn geheugen",
+    "previewLogError": "[ERROR] Lobby-2 is gecrasht"
   }
 }

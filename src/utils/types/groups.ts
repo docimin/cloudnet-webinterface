@@ -1,5 +1,5 @@
 // GroupConfiguration is an allOf over the free-form JsonDocPropertyable and the
-// 0.5.1 spec marks no field required, so only `name` is guaranteed here — and
+// 0.5.1 spec marks no field required, so only `name` is guaranteed here - and
 // only because src/server/group.ts drops nameless entries. A group is handed
 // straight back to POST /group, so the rest is passed through untouched.
 interface Group {

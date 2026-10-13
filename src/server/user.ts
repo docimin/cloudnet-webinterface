@@ -75,7 +75,7 @@ export const userCreate = createServerFn({ method: 'POST' })
       'global:admin'
     ])
     // the 201 echoes the created user, but a node answering with an empty body
-    // must not read as a failure — cloudnetFetch already threw if it went wrong
+    // must not read as a failure - cloudnetFetch already threw if it went wrong
     await cloudnetFetch<unknown>('/user', 'POST', data)
     return { ok: true }
   })
@@ -94,7 +94,7 @@ export const userUpdate = createServerFn({ method: 'POST' })
       'cloudnet_rest:user_update',
       'global:admin'
     ])
-    // id stays in the body — the old client sent it there as well
+    // id stays in the body - the old client sent it there as well
     await cloudnetFetch<unknown>(
       `/user/${encodeURIComponent(data.id)}`,
       'PUT',

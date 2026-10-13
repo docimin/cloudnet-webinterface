@@ -34,6 +34,11 @@ services:
       # Sentry configuration (optional)
       - VITE_SENTRY_DSN=${VITE_SENTRY_DSN}
       - SENTRY_SPOTLIGHT=${SENTRY_SPOTLIGHT:-false}
+      # Appearance defaults (optional, see the README)
+      - THEME_PALETTE=${THEME_PALETTE:-}
+      - THEME_ACCENT=${THEME_ACCENT:-}
+      - THEME_RADIUS=${THEME_RADIUS:-}
+      - THEME_STATUS_COLORS=${THEME_STATUS_COLORS:-}
     restart: unless-stopped
     healthcheck:
       test: ["CMD", "wget", "-qO-", "http://localhost:3000/api/health"]

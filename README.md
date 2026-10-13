@@ -10,6 +10,7 @@ The current supported cloudnet versions. If your version is not supported, pleas
 
 | Version | Supported          |
 | ------- | ------------------ |
+| RC-17   | :white_check_mark: |
 | RC-16   | :white_check_mark: |
 | RC-15   | :white_check_mark: |
 | RC-14   | :white_check_mark: |
@@ -59,7 +60,7 @@ pnpm build
 pnpm start
 ```
 
-The build output lands in `.output/` and is self-contained — that directory plus a Node runtime is
+The build output lands in `.output/` and is self-contained - that directory plus a Node runtime is
 everything the Docker image needs.
 
 ## Testing
@@ -87,11 +88,11 @@ Copy .env.example to .env and change `VITE_DOMAIN` to your own domain (including
 ### Upgrading from 0.8.x or earlier
 
 Every `NEXT_PUBLIC_*` variable is now `VITE_*`. If you have any of them, rename them in your
-`.env`, your docker-compose environment and your CI secrets — the prefix is the only thing that
+`.env`, your docker-compose environment and your CI secrets - the prefix is the only thing that
 changes, so `NEXT_PUBLIC_DOMAIN` becomes `VITE_DOMAIN`.
 
 `SENTRY_DSN` is now `VITE_SENTRY_DSN` and covers both the server and the browser, so rename that
-one too. Browser error reporting was never actually running before, and this turns it on — leave
+one too. Browser error reporting was never actually running before, and this turns it on - leave
 the value empty if you only want server-side reporting. The remaining `SENTRY_*` variables are
 only read at build time to upload source maps.
 
@@ -105,6 +106,26 @@ So you want to fill in your user/pass without the address every single time?
 Fill in `VITE_CLOUDNET_ADDRESS` in your .env file, like for example: `VITE_CLOUDNET_ADDRESS=127.0.0.1:2812`, this will autofill it for you.
 
 If you want to use a domain: `VITE_CLOUDNET_ADDRESS=https://cloudnet.example.com`.
+
+## Appearance
+
+Everyone can pick their own look under **Appearance** in the sidebar: accent colour, palette, corner
+radius and status colours. The choice is saved in a cookie in their browser.
+
+As the host you set the defaults for your instance with these environment variables. They are read at
+runtime, so changing them does not need a rebuild of the image:
+
+| Variable | Values | Default |
+| --- | --- | --- |
+| `THEME_PALETTE` | `default`, `catppuccin`, `nord`, `gruvbox`, `rose-pine`, `tokyo-night` | `default` |
+| `THEME_ACCENT` | `palette`, `blue`, `violet`, `green`, `orange`, `pink`, `red`, `amber`, `teal`, or a six-digit hex colour like `#3b82f6` | `palette` |
+| `THEME_RADIUS` | `none`, `small`, `medium`, `large` | `medium` |
+| `THEME_STATUS_COLORS` | `palette`, `color-blind` | `palette` |
+
+A custom accent is adjusted for contrast in light and dark mode, so text on it stays readable. In a `.env`
+file, quote a hex colour (`THEME_ACCENT="#3b82f6"`), because an unquoted `#` starts a comment there. With
+an invalid value every page fails and the server log names the variable and its valid values, so a typo
+shows up right away.
 
 ## Bugs may occur
 

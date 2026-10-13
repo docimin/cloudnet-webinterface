@@ -33,7 +33,7 @@ interface Dependency {
 }
 
 // /module/available answers these, not the loaded Module shape. Only `name` is
-// guaranteed — src/server/module.ts drops entries without one and passes the
+// guaranteed - src/server/module.ts drops entries without one and passes the
 // rest through untouched.
 export interface ModuleEntry {
   name: string
@@ -49,8 +49,8 @@ export interface ModuleEntry {
 }
 
 // ModuleInfo is an allOf over the free-form JsonDocPropertyable and the 0.5.1
-// spec marks no field required, so only `configuration.name` is guaranteed here
-// — and only because src/server/module.ts drops entries without one. The rest is
+// spec marks no field required, so only `configuration.name` is guaranteed here,
+// and only because src/server/module.ts drops entries without one. The rest is
 // passed through verbatim, so it stays optional rather than being faked.
 export interface Module {
   lifecycle?: Lifecycle

@@ -15,6 +15,7 @@ import { Route as Char123LocaleChar125IndexRouteImport } from './routes/{-$local
 import { Route as Char123LocaleChar125AuthedRouteImport } from './routes/{-$locale}/_authed'
 import { Route as Char123LocaleChar125LogoutRouteImport } from './routes/{-$locale}/logout'
 import { Route as Char123LocaleChar125AuthedDashboardIndexRouteImport } from './routes/{-$locale}/_authed/dashboard/index'
+import { Route as Char123LocaleChar125AuthedDashboardAppearanceIndexRouteImport } from './routes/{-$locale}/_authed/dashboard/appearance/index'
 import { Route as Char123LocaleChar125AuthedDashboardGroupsIndexRouteImport } from './routes/{-$locale}/_authed/dashboard/groups/index'
 import { Route as Char123LocaleChar125AuthedDashboardGroupsGroupIdRouteImport } from './routes/{-$locale}/_authed/dashboard/groups/$groupId'
 import { Route as Char123LocaleChar125AuthedDashboardModulesIndexRouteImport } from './routes/{-$locale}/_authed/dashboard/modules/index'
@@ -66,6 +67,12 @@ const Char123LocaleChar125AuthedDashboardIndexRoute =
   Char123LocaleChar125AuthedDashboardIndexRouteImport.update({
     id: '/dashboard/',
     path: '/dashboard/',
+    getParentRoute: () => Char123LocaleChar125AuthedRoute,
+  } as any)
+const Char123LocaleChar125AuthedDashboardAppearanceIndexRoute =
+  Char123LocaleChar125AuthedDashboardAppearanceIndexRouteImport.update({
+    id: '/dashboard/appearance/',
+    path: '/dashboard/appearance/',
     getParentRoute: () => Char123LocaleChar125AuthedRoute,
   } as any)
 const Char123LocaleChar125AuthedDashboardGroupsIndexRoute =
@@ -199,6 +206,7 @@ export interface FileRoutesByFullPath {
   '/{-$locale}/dashboard/services/create': typeof Char123LocaleChar125AuthedDashboardServicesCreateRoute
   '/{-$locale}/dashboard/tasks/$taskId': typeof Char123LocaleChar125AuthedDashboardTasksTaskIdRoute
   '/{-$locale}/dashboard/users/$userId': typeof Char123LocaleChar125AuthedDashboardUsersUserIdRoute
+  '/{-$locale}/dashboard/appearance/': typeof Char123LocaleChar125AuthedDashboardAppearanceIndexRoute
   '/{-$locale}/dashboard/groups/': typeof Char123LocaleChar125AuthedDashboardGroupsIndexRoute
   '/{-$locale}/dashboard/modules/': typeof Char123LocaleChar125AuthedDashboardModulesIndexRoute
   '/{-$locale}/dashboard/nodes/': typeof Char123LocaleChar125AuthedDashboardNodesIndexRoute
@@ -224,6 +232,7 @@ export interface FileRoutesByTo {
   '/{-$locale}/dashboard/services/create': typeof Char123LocaleChar125AuthedDashboardServicesCreateRoute
   '/{-$locale}/dashboard/tasks/$taskId': typeof Char123LocaleChar125AuthedDashboardTasksTaskIdRoute
   '/{-$locale}/dashboard/users/$userId': typeof Char123LocaleChar125AuthedDashboardUsersUserIdRoute
+  '/{-$locale}/dashboard/appearance': typeof Char123LocaleChar125AuthedDashboardAppearanceIndexRoute
   '/{-$locale}/dashboard/groups': typeof Char123LocaleChar125AuthedDashboardGroupsIndexRoute
   '/{-$locale}/dashboard/modules': typeof Char123LocaleChar125AuthedDashboardModulesIndexRoute
   '/{-$locale}/dashboard/nodes': typeof Char123LocaleChar125AuthedDashboardNodesIndexRoute
@@ -252,6 +261,7 @@ export interface FileRoutesById {
   '/{-$locale}/_authed/dashboard/services/create': typeof Char123LocaleChar125AuthedDashboardServicesCreateRoute
   '/{-$locale}/_authed/dashboard/tasks/$taskId': typeof Char123LocaleChar125AuthedDashboardTasksTaskIdRoute
   '/{-$locale}/_authed/dashboard/users/$userId': typeof Char123LocaleChar125AuthedDashboardUsersUserIdRoute
+  '/{-$locale}/_authed/dashboard/appearance/': typeof Char123LocaleChar125AuthedDashboardAppearanceIndexRoute
   '/{-$locale}/_authed/dashboard/groups/': typeof Char123LocaleChar125AuthedDashboardGroupsIndexRoute
   '/{-$locale}/_authed/dashboard/modules/': typeof Char123LocaleChar125AuthedDashboardModulesIndexRoute
   '/{-$locale}/_authed/dashboard/nodes/': typeof Char123LocaleChar125AuthedDashboardNodesIndexRoute
@@ -280,6 +290,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/dashboard/services/create'
     | '/{-$locale}/dashboard/tasks/$taskId'
     | '/{-$locale}/dashboard/users/$userId'
+    | '/{-$locale}/dashboard/appearance/'
     | '/{-$locale}/dashboard/groups/'
     | '/{-$locale}/dashboard/modules/'
     | '/{-$locale}/dashboard/nodes/'
@@ -305,6 +316,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/dashboard/services/create'
     | '/{-$locale}/dashboard/tasks/$taskId'
     | '/{-$locale}/dashboard/users/$userId'
+    | '/{-$locale}/dashboard/appearance'
     | '/{-$locale}/dashboard/groups'
     | '/{-$locale}/dashboard/modules'
     | '/{-$locale}/dashboard/nodes'
@@ -332,6 +344,7 @@ export interface FileRouteTypes {
     | '/{-$locale}/_authed/dashboard/services/create'
     | '/{-$locale}/_authed/dashboard/tasks/$taskId'
     | '/{-$locale}/_authed/dashboard/users/$userId'
+    | '/{-$locale}/_authed/dashboard/appearance/'
     | '/{-$locale}/_authed/dashboard/groups/'
     | '/{-$locale}/_authed/dashboard/modules/'
     | '/{-$locale}/_authed/dashboard/nodes/'
@@ -390,6 +403,13 @@ declare module '@tanstack/react-router' {
       path: '/dashboard'
       fullPath: '/{-$locale}/dashboard/'
       preLoaderRoute: typeof Char123LocaleChar125AuthedDashboardIndexRouteImport
+      parentRoute: typeof Char123LocaleChar125AuthedRoute
+    }
+    '/{-$locale}/_authed/dashboard/appearance/': {
+      id: '/{-$locale}/_authed/dashboard/appearance/'
+      path: '/dashboard/appearance'
+      fullPath: '/{-$locale}/dashboard/appearance/'
+      preLoaderRoute: typeof Char123LocaleChar125AuthedDashboardAppearanceIndexRouteImport
       parentRoute: typeof Char123LocaleChar125AuthedRoute
     }
     '/{-$locale}/_authed/dashboard/groups/': {
@@ -540,6 +560,7 @@ interface Char123LocaleChar125AuthedRouteChildren {
   Char123LocaleChar125AuthedDashboardServicesCreateRoute: typeof Char123LocaleChar125AuthedDashboardServicesCreateRoute
   Char123LocaleChar125AuthedDashboardTasksTaskIdRoute: typeof Char123LocaleChar125AuthedDashboardTasksTaskIdRoute
   Char123LocaleChar125AuthedDashboardUsersUserIdRoute: typeof Char123LocaleChar125AuthedDashboardUsersUserIdRoute
+  Char123LocaleChar125AuthedDashboardAppearanceIndexRoute: typeof Char123LocaleChar125AuthedDashboardAppearanceIndexRoute
   Char123LocaleChar125AuthedDashboardGroupsIndexRoute: typeof Char123LocaleChar125AuthedDashboardGroupsIndexRoute
   Char123LocaleChar125AuthedDashboardModulesIndexRoute: typeof Char123LocaleChar125AuthedDashboardModulesIndexRoute
   Char123LocaleChar125AuthedDashboardNodesIndexRoute: typeof Char123LocaleChar125AuthedDashboardNodesIndexRoute
@@ -575,6 +596,8 @@ const Char123LocaleChar125AuthedRouteChildren: Char123LocaleChar125AuthedRouteCh
       Char123LocaleChar125AuthedDashboardTasksTaskIdRoute,
     Char123LocaleChar125AuthedDashboardUsersUserIdRoute:
       Char123LocaleChar125AuthedDashboardUsersUserIdRoute,
+    Char123LocaleChar125AuthedDashboardAppearanceIndexRoute:
+      Char123LocaleChar125AuthedDashboardAppearanceIndexRoute,
     Char123LocaleChar125AuthedDashboardGroupsIndexRoute:
       Char123LocaleChar125AuthedDashboardGroupsIndexRoute,
     Char123LocaleChar125AuthedDashboardModulesIndexRoute:

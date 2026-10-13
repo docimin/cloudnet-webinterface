@@ -52,6 +52,7 @@ import {
   storageTemplateList,
   templateCreate,
   templateDelete,
+  templateDirectoryClear,
   templateDirectoryCreate,
   templateDirectoryList,
   templateDownload,
@@ -398,6 +399,8 @@ function TemplatesPage() {
           to: next
         })
       )
+    } else if (file.directory) {
+      toast.success(templatesT('folderRenamed', { from: file.name, to: value }))
     }
     if (covers(file, search.file)) closeFile()
     router.invalidate()
@@ -412,34 +415,60 @@ function TemplatesPage() {
     else void create(current.kind, value)
   }
 
+  // the API cannot delete a directory, so a folder only loses what is inside it;
+  // resolves to the paths that could not be removed
+  const removeFile = async (file: FileType) => {
+    if (!file.directory) {
+      await templateFileDelete({ data: { ...params, path: file.path } })
+      return []
+    }
+    const { failed } = await templateDirectoryClear({
+      data: { ...params, path: file.path }
+    })
+    return failed
+  }
+
   const deleteEntry = async (file: FileType) => {
     setConfirm(null)
+    let failed: string[]
     try {
-      await templateFileDelete({ data: { ...params, path: file.path } })
+      failed = await removeFile(file)
     } catch (error) {
       Sentry.captureException(error)
       toast.error(templatesT('deleteFailed', { files: file.path }))
       return
     }
-    if (search.file === file.path) closeFile()
+    if (failed.length > 0) {
+      toast.error(templatesT('deleteFailed', { files: failed.join(', ') }))
+    } else if (file.directory) {
+      toast.success(templatesT('folderCleared', { name: file.name }))
+    }
+    if (covers(file, search.file)) closeFile()
     router.invalidate()
   }
 
   const deleteSelection = async () => {
     setConfirm(null)
+    const removed = files.filter((file) => selection.includes(file.path))
     const failed: string[] = []
-    for (const path of selection) {
+    const cleared: string[] = []
+    for (const file of removed) {
       try {
-        await templateFileDelete({ data: { ...params, path } })
+        const left = await removeFile(file)
+        failed.push(...left)
+        if (file.directory && left.length === 0) cleared.push(file.name)
       } catch (error) {
         Sentry.captureException(error)
-        failed.push(path)
+        failed.push(file.path)
       }
     }
     if (failed.length > 0) {
       toast.error(templatesT('deleteFailed', { files: failed.join(', ') }))
     }
-    if (search.file && selection.includes(search.file)) closeFile()
+    if (cleared.length > 0) {
+      toast.success(templatesT('folderCleared', { name: cleared.join(', ') }))
+    }
+    if (removed.some((file) => covers(file, search.file))) closeFile()
     setSelection([])
     router.invalidate()
   }
@@ -843,7 +872,9 @@ function TemplatesPage() {
               ? templatesT('deleteTemplate')
               : confirm.kind === 'selection'
                 ? templatesT('deleteSelected')
-                : templatesT('deleteFile')
+                : confirm.file.directory
+                  ? templatesT('deleteFolderContents')
+                  : templatesT('deleteFile')
           }
           onConfirm={() => {
             if (confirm.kind === 'template') void removeTemplate()

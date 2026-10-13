@@ -132,12 +132,12 @@ function UsersPage() {
                   <TableCell className="font-mono tabular-nums text-muted-foreground">
                     {user.createdAt
                       ? formatDate(new Date(user.createdAt))
-                      : '—'}
+                      : '-'}
                   </TableCell>
                   <TableCell className="font-mono tabular-nums text-muted-foreground">
                     {user.modifiedAt
                       ? formatDate(new Date(user.modifiedAt))
-                      : '—'}
+                      : '-'}
                   </TableCell>
                 </TableRow>
               ))}

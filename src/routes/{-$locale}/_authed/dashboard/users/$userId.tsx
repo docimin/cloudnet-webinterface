@@ -176,13 +176,13 @@ function UserClientPage({ user }: { user: User }) {
             <div>
               <dt className="text-muted-foreground">{usersT('createdAt')}</dt>
               <dd className="font-mono tabular-nums">
-                {user.createdAt ? formatDate(new Date(user.createdAt)) : '—'}
+                {user.createdAt ? formatDate(new Date(user.createdAt)) : '-'}
               </dd>
             </div>
             <div>
               <dt className="text-muted-foreground">{usersT('modifiedAt')}</dt>
               <dd className="font-mono tabular-nums">
-                {user.modifiedAt ? formatDate(new Date(user.modifiedAt)) : '—'}
+                {user.modifiedAt ? formatDate(new Date(user.modifiedAt)) : '-'}
               </dd>
             </div>
           </dl>

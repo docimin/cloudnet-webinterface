@@ -330,7 +330,7 @@ function NodeClientPage({
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3">
         <StatCard title={nodesT('cpuUsage')} icon={CpuIcon}>
           <div className="font-mono text-2xl font-semibold tabular-nums">
-            {process?.cpuUsage ? `${process.cpuUsage.toFixed(2)}%` : '—'}
+            {process?.cpuUsage ? `${process.cpuUsage.toFixed(2)}%` : '-'}
           </div>
           <p className="text-xs text-muted-foreground">
             {nodesT('systemUsage')}
@@ -338,7 +338,7 @@ function NodeClientPage({
             <span className="font-mono tabular-nums">
               {process?.systemCpuUsage
                 ? `${process.systemCpuUsage.toFixed(2)}%`
-                : '—'}
+                : '-'}
             </span>
           </p>
         </StatCard>
@@ -401,7 +401,7 @@ function NodeClientPage({
               ? [version.major, version.minor, version.patch]
                   .filter((part) => part !== undefined && part !== null)
                   .join('.')
-              : '—'}
+              : '-'}
           </div>
           {version?.versionType && (
             <p className="text-xs text-muted-foreground">

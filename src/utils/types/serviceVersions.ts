@@ -1,5 +1,5 @@
 // the 0.5.1 spec marks no field required and builds the environment type on the
-// free-form JsonDocPropertyable, so only `name` is guaranteed here — and only
+// free-form JsonDocPropertyable, so only `name` is guaranteed here - and only
 // because the server layer normalises the payload and drops nameless entries
 export interface ServiceVersion {
   name: string

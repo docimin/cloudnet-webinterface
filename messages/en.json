@@ -11,7 +11,8 @@
     "modules": "Modules",
     "players": "Players",
     "account": "Account",
-    "logout": "Logout"
+    "logout": "Logout",
+    "appearance": "Appearance"
   },
   "Main": {
     "invalidJson": "Invalid JSON format.",
@@ -110,8 +111,8 @@
     "processParametersPlaceholder": "--nogui",
     "environmentVariables": "Environment variables",
     "environmentVariablesDescription": "Set in the environment the service process runs in.",
-    "deploymentsDescription": "Edited as raw JSON — a deployment nests a template and its excludes.",
-    "includesDescription": "Edited as raw JSON — each include is a url and the destination it is written to."
+    "deploymentsDescription": "Edited as raw JSON - a deployment nests a template and its excludes.",
+    "includesDescription": "Edited as raw JSON - each include is a url and the destination it is written to."
   },
   "Modules": {
     "title": "Modules",
@@ -268,7 +269,7 @@
     "all": "All",
     "previous": "Previous",
     "next": "Next",
-    "range": "{from}–{to}",
+    "range": "{from}-{to}",
     "playersShown": "{amount} players shown",
     "noPlayersOnline": "No players online",
     "noPlayersOnlineDescription": "Players appear here as soon as they connect to the network."
@@ -451,9 +452,9 @@
     "environmentVariables": "Environment variables",
     "environmentVariablesDescription": "Set in the environment the service process runs in.",
     "deployments": "Deployments",
-    "deploymentsDescription": "Edited as raw JSON — a deployment nests a template and its excludes.",
+    "deploymentsDescription": "Edited as raw JSON - a deployment nests a template and its excludes.",
     "includes": "Includes",
-    "includesDescription": "Edited as raw JSON — each include is a url and the destination it is written to."
+    "includesDescription": "Edited as raw JSON - each include is a url and the destination it is written to."
   },
   "Users": {
     "title": "Users",
@@ -715,7 +716,10 @@
     "renameExists": "{name} already exists in this folder",
     "renameCopiedNotRemoved": "Copied to {to}, but {from} could not be removed",
     "renameEntryFailed": "Rename stopped at {path}. Nothing was removed.",
-    "renameFolderWarning": "Renaming a folder copies its contents to the new name and removes the old one. This can take a while on large folders.",
+    "renameFolderWarning": "Renaming a folder copies its contents to the new name. The old folder stays behind empty, because CloudNet can't remove folders. This can take a while on large folders.",
+    "deleteFolderContents": "Delete everything inside",
+    "folderCleared": "Deleted everything in {name}. The empty folder stays, because CloudNet can't remove folders.",
+    "folderRenamed": "Moved everything to {to}. The empty {from} folder stays, because CloudNet can't remove folders.",
     "deleteFailed": "Failed to delete: {files}",
     "createFailed": "Failed to create",
     "invalidTemplateName": "Enter a template as prefix/name",
@@ -844,5 +848,49 @@
     "alwaysCopyToStaticServices": "Always copy to static services",
     "addTemplate": "Add template",
     "removeTemplate": "Remove template"
+  },
+  "Appearance": {
+    "title": "Appearance",
+    "description": "Choose how the interface looks for you. Your choice is saved in this browser, and the host sets the defaults.",
+    "mode": "Mode",
+    "accent": "Accent colour",
+    "accentPalette": "Palette default",
+    "accentBlue": "Blue",
+    "accentViolet": "Violet",
+    "accentGreen": "Green",
+    "accentOrange": "Orange",
+    "accentPink": "Pink",
+    "accentRed": "Red",
+    "accentAmber": "Amber",
+    "accentTeal": "Teal",
+    "customColour": "Custom colour",
+    "customHex": "Hex colour",
+    "useColour": "Use this colour",
+    "hexInvalid": "Enter a colour like #3b82f6",
+    "palette": "Palette",
+    "paletteDefault": "Default",
+    "radius": "Corner radius",
+    "radiusNone": "None",
+    "radiusSmall": "Small",
+    "radiusMedium": "Medium",
+    "radiusLarge": "Large",
+    "status": "Status colours",
+    "statusPalette": "Match palette",
+    "statusColorBlind": "Colour-blind safe",
+    "instanceDefault": "Instance default",
+    "reset": "Reset to defaults",
+    "saveFailed": "Could not save your appearance",
+    "preview": "Preview",
+    "previewPrimary": "Save",
+    "previewSecondary": "Details",
+    "previewOutline": "Cancel",
+    "previewDestructive": "Delete",
+    "previewInput": "Search services",
+    "previewCheckbox": "Auto start",
+    "previewSwitch": "Maintenance",
+    "previewLoad": "CPU {value}%",
+    "previewLogInfo": "[INFO] Lobby-1 started",
+    "previewLogWarn": "[WARN] Proxy-1 is using 80% of its memory",
+    "previewLogError": "[ERROR] Lobby-2 crashed"
   }
 }

@@ -6,7 +6,7 @@ import { cloudnetFetch, requirePermissions } from './cloudnet'
 // the spec marks no field of ServiceTask required, so anything without a usable
 // name is dropped here: `name` keys the table, addresses the detail route and
 // feeds the Radix SelectItem on the create-service page, which throws on an
-// empty value. Everything else is passed through verbatim — both the detail page
+// empty value. Everything else is passed through verbatim - both the detail page
 // and the create-service page hand the document straight back to the node, so
 // invented defaults would be written into a real task.
 function asTask(raw: unknown): Task | null {

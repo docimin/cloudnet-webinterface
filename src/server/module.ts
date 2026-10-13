@@ -134,7 +134,7 @@ export const moduleLifecycle = createServerFn({ method: 'POST' })
     )
   })
 
-// upstream is PUT /module/${id}/config — matches the old route
+// upstream is PUT /module/${id}/config - matches the old route
 export const moduleUpdate = createServerFn({ method: 'POST' })
   .validator(
     z.object({ id: z.string(), config: z.record(z.string(), z.unknown()) })

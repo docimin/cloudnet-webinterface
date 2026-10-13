@@ -11,7 +11,8 @@
 /* v4 gates hover behind (hover: hover); v3 did not. Keeps touch parity. */
 @custom-variant hover (&:hover);
 
-:root {
+:root,
+[data-palette='default'] {
   --background: 0 0% 100%;
   --foreground: 240 10% 3.9%;
   --muted: 240 4.8% 95.9%;
@@ -34,10 +35,9 @@
   /* Separate from --ring: the active nav bar sits on bg-primary, which in light
      theme is the same colour as --ring. */
   --accent-bar: 199 89% 48%;
-  --radius: 0.5rem;
   --success: 160 100% 25%;
   --loading: 240 3.7% 40.9%;
-  /* A scrim reads as black in both themes on purpose — it is dimming the page,
+  /* A scrim reads as black in both themes on purpose - it is dimming the page,
      not tinting it. Opacity stays at the call site. */
   --scrim: 0 0% 0%;
   --status-running: 142 71% 45%;
@@ -65,7 +65,8 @@
   --log-error: 0 90% 70%;
 }
 
-.dark {
+.dark,
+[data-palette='default'].dark {
   --background: 230 43% 3%;
   --foreground: 0 0% 98%;
   --muted: 240 3.7% 15.9%;
@@ -105,6 +106,564 @@
   --log-info: 199 95% 70%;
   --log-warn: 40 96% 66%;
   --log-error: 0 93% 74%;
+}
+
+[data-palette='catppuccin'] {
+  --background: 220 23.1% 94.9%;
+  --foreground: 234 16% 35.5%;
+  --muted: 223 15.9% 82.7%;
+  --muted-foreground: 233 10.4% 37.3%;
+  --popover: 220 22% 92%;
+  --popover-foreground: 234 16% 35.5%;
+  --card: 220 22% 92%;
+  --card-foreground: 234 16% 35.5%;
+  --border: 225 13.6% 76.9%;
+  --input: 225 13.6% 76.9%;
+  --primary: 220 91.5% 53.9%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 223 15.9% 82.7%;
+  --secondary-foreground: 234 16% 35.5%;
+  --accent: 223 15.9% 82.7%;
+  --accent-foreground: 234 16% 35.5%;
+  --destructive: 347 86.7% 43.1%;
+  --destructive-foreground: 220 23.1% 94.9%;
+  --ring: 220 91.5% 53.9%;
+  --accent-bar: 220 91.5% 53.9%;
+  --success: 109 57.6% 28%;
+  --loading: 233 10.4% 37.3%;
+  --status-running: 109 57.6% 29.8%;
+  --status-starting: 35 77% 32.4%;
+  --status-stopped: 231 10% 44%;
+  --status-error: 347 86.7% 43.6%;
+  --status-draining: 220 91.5% 50.4%;
+  --load-normal: 220 91.5% 53.9%;
+  --load-high: 22 99.2% 36%;
+  --load-critical: 347 86.7% 43.6%;
+  --console: 240 22.7% 8.6%;
+  --console-chrome: 240 24.1% 5.7%;
+  --console-foreground: 226 63.9% 88%;
+  --console-muted: 228 23.6% 71.8%;
+  --console-prompt: 115 54.1% 76.1%;
+  --log-info: 217 91.9% 75.9%;
+  --log-warn: 41 86% 83.1%;
+  --log-error: 343 81.2% 74.9%;
+}
+
+[data-palette='catppuccin'].dark {
+  --background: 240 21.1% 14.9%;
+  --foreground: 226 63.9% 88%;
+  --muted: 237 16.2% 22.9%;
+  --muted-foreground: 228 23.6% 71.8%;
+  --popover: 240 21.3% 12%;
+  --popover-foreground: 226 63.9% 88%;
+  --card: 240 21.3% 12%;
+  --card-foreground: 226 63.9% 88%;
+  --border: 234 13.2% 31.2%;
+  --input: 234 13.2% 31.2%;
+  --primary: 217 91.9% 75.9%;
+  --primary-foreground: 240 21.1% 14.9%;
+  --secondary: 237 16.2% 22.9%;
+  --secondary-foreground: 226 63.9% 88%;
+  --accent: 237 16.2% 22.9%;
+  --accent-foreground: 226 63.9% 88%;
+  --destructive: 343 81.2% 74.9%;
+  --destructive-foreground: 240 21.1% 14.9%;
+  --ring: 217 91.9% 75.9%;
+  --accent-bar: 217 91.9% 75.9%;
+  --success: 115 54.1% 28%;
+  --loading: 237 16.2% 22.9%;
+  --status-running: 115 54.1% 76.1%;
+  --status-starting: 41 86% 83.1%;
+  --status-stopped: 230 12.8% 56%;
+  --status-error: 343 81.2% 74.9%;
+  --status-draining: 217 91.9% 75.9%;
+  --load-normal: 217 91.9% 75.9%;
+  --load-high: 23 92% 75.5%;
+  --load-critical: 343 81.2% 74.9%;
+  --console: 240 22.7% 8.6%;
+  --console-chrome: 240 24.1% 5.7%;
+  --console-foreground: 226 63.9% 88%;
+  --console-muted: 228 23.6% 71.8%;
+  --console-prompt: 115 54.1% 76.1%;
+  --log-info: 217 91.9% 75.9%;
+  --log-warn: 41 86% 83.1%;
+  --log-error: 343 81.2% 74.9%;
+}
+
+[data-palette='nord'] {
+  --background: 218 26.7% 94.1%;
+  --foreground: 220 16.4% 21.6%;
+  --muted: 219 27.9% 88%;
+  --muted-foreground: 220 16.5% 35.7%;
+  --popover: 218 26.8% 92%;
+  --popover-foreground: 220 16.4% 21.6%;
+  --card: 218 26.8% 92%;
+  --card-foreground: 220 16.4% 21.6%;
+  --border: 219 27.9% 88%;
+  --input: 219 27.9% 88%;
+  --primary: 213 32% 51.7%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 219 27.9% 88%;
+  --secondary-foreground: 220 16.4% 21.6%;
+  --accent: 219 27.9% 88%;
+  --accent-foreground: 220 16.4% 21.6%;
+  --destructive: 354 42.3% 44%;
+  --destructive-foreground: 218 26.7% 94.1%;
+  --ring: 213 32% 51.7%;
+  --accent-bar: 213 32% 51.7%;
+  --success: 92 27.8% 28%;
+  --loading: 220 16.5% 35.7%;
+  --status-running: 92 27.8% 34.2%;
+  --status-starting: 40 70.6% 31.3%;
+  --status-stopped: 220 16.5% 35.7%;
+  --status-error: 354 42.3% 48%;
+  --status-draining: 213 32% 43.2%;
+  --load-normal: 213 32% 52.2%;
+  --load-high: 14 50.5% 43.2%;
+  --load-critical: 354 42.3% 48%;
+  --console: 220 17.2% 17.1%;
+  --console-chrome: 220 17.1% 13.7%;
+  --console-foreground: 218 26.7% 94.1%;
+  --console-muted: 219 27.9% 88%;
+  --console-prompt: 92 27.8% 64.7%;
+  --log-info: 193 43.4% 67.5%;
+  --log-warn: 40 70.6% 73.3%;
+  --log-error: 354 47.2% 68.8%;
+}
+
+[data-palette='nord'].dark {
+  --background: 220 16.4% 21.6%;
+  --foreground: 218 26.7% 94.1%;
+  --muted: 220 16.8% 31.6%;
+  --muted-foreground: 219 27.9% 88%;
+  --popover: 222 16.3% 27.6%;
+  --popover-foreground: 218 26.7% 94.1%;
+  --card: 222 16.3% 27.6%;
+  --card-foreground: 218 26.7% 94.1%;
+  --border: 220 16.5% 35.7%;
+  --input: 220 16.5% 35.7%;
+  --primary: 193 43.4% 67.5%;
+  --primary-foreground: 220 16.4% 21.6%;
+  --secondary: 220 16.8% 31.6%;
+  --secondary-foreground: 218 26.7% 94.1%;
+  --accent: 220 16.8% 31.6%;
+  --accent-foreground: 218 26.7% 94.1%;
+  --destructive: 354 42.3% 73.5%;
+  --destructive-foreground: 220 16.4% 21.6%;
+  --ring: 193 43.4% 67.5%;
+  --accent-bar: 193 43.4% 67.5%;
+  --success: 92 27.8% 28%;
+  --loading: 220 16.8% 31.6%;
+  --status-running: 92 27.8% 64.7%;
+  --status-starting: 40 70.6% 73.3%;
+  --status-stopped: 219 27.9% 88%;
+  --status-error: 354 42.3% 73.5%;
+  --status-draining: 210 34% 69.1%;
+  --load-normal: 210 34% 63.1%;
+  --load-high: 14 50.5% 70.7%;
+  --load-critical: 354 42.3% 73.5%;
+  --console: 220 17.2% 17.1%;
+  --console-chrome: 220 17.1% 13.7%;
+  --console-foreground: 218 26.7% 94.1%;
+  --console-muted: 219 27.9% 88%;
+  --console-prompt: 92 27.8% 64.7%;
+  --log-info: 193 43.4% 67.5%;
+  --log-warn: 40 70.6% 73.3%;
+  --log-error: 354 47.2% 68.8%;
+}
+
+[data-palette='gruvbox'] {
+  --background: 48 86.7% 88.2%;
+  --foreground: 20 5.3% 22.4%;
+  --muted: 43 58.8% 81%;
+  --muted-foreground: 28 10.7% 37.4%;
+  --popover: 46 67.5% 84.3%;
+  --popover-foreground: 20 5.3% 22.4%;
+  --card: 46 67.5% 84.3%;
+  --card-foreground: 20 5.3% 22.4%;
+  --border: 40 38.2% 73.3%;
+  --input: 40 38.2% 73.3%;
+  --primary: 190 89% 24.9%;
+  --primary-foreground: 48 86.7% 88.2%;
+  --secondary: 43 58.8% 81%;
+  --secondary-foreground: 20 5.3% 22.4%;
+  --accent: 43 58.8% 81%;
+  --accent-foreground: 20 5.3% 22.4%;
+  --destructive: 358 100% 30.8%;
+  --destructive-foreground: 48 86.7% 88.2%;
+  --ring: 190 89% 24.9%;
+  --accent-bar: 190 89% 24.9%;
+  --success: 57 79.3% 28%;
+  --loading: 28 10.7% 37.4%;
+  --status-running: 57 79.3% 24%;
+  --status-starting: 37 80.1% 30.4%;
+  --status-stopped: 28 10.7% 39.9%;
+  --status-error: 358 100% 30.8%;
+  --status-draining: 190 89% 24.9%;
+  --load-normal: 190 89% 24.9%;
+  --load-high: 19 96.6% 34.9%;
+  --load-critical: 358 100% 30.8%;
+  --console: 195 6.5% 12.2%;
+  --console-chrome: 180 4.5% 8.6%;
+  --console-foreground: 43 58.8% 81%;
+  --console-muted: 35 17.1% 58.8%;
+  --console-prompt: 61 66.2% 44.1%;
+  --log-info: 157 15.9% 58%;
+  --log-warn: 42 95.3% 58.2%;
+  --log-error: 6 96.1% 59.4%;
+}
+
+[data-palette='gruvbox'].dark {
+  --background: 0 0% 15.7%;
+  --foreground: 43 58.8% 81%;
+  --muted: 20 5.3% 22.4%;
+  --muted-foreground: 35 17.1% 61.8%;
+  --popover: 20 3.1% 19%;
+  --popover-foreground: 43 58.8% 81%;
+  --card: 20 3.1% 19%;
+  --card-foreground: 43 58.8% 81%;
+  --border: 22 7.4% 29.2%;
+  --input: 22 7.4% 29.2%;
+  --primary: 157 15.9% 58%;
+  --primary-foreground: 0 0% 15.7%;
+  --secondary: 20 5.3% 22.4%;
+  --secondary-foreground: 43 58.8% 81%;
+  --accent: 20 5.3% 22.4%;
+  --accent-foreground: 43 58.8% 81%;
+  --destructive: 6 96.1% 67.9%;
+  --destructive-foreground: 0 0% 15.7%;
+  --ring: 157 15.9% 58%;
+  --accent-bar: 157 15.9% 58%;
+  --success: 61 66.2% 28%;
+  --loading: 20 5.3% 22.4%;
+  --status-running: 61 66.2% 44.1%;
+  --status-starting: 42 95.3% 58.2%;
+  --status-stopped: 35 17.1% 58.8%;
+  --status-error: 6 96.1% 66.4%;
+  --status-draining: 157 15.9% 58%;
+  --load-normal: 157 15.9% 58%;
+  --load-high: 27 99.1% 54.7%;
+  --load-critical: 6 96.1% 66.4%;
+  --console: 195 6.5% 12.2%;
+  --console-chrome: 180 4.5% 8.6%;
+  --console-foreground: 43 58.8% 81%;
+  --console-muted: 35 17.1% 58.8%;
+  --console-prompt: 61 66.2% 44.1%;
+  --log-info: 157 15.9% 58%;
+  --log-warn: 42 95.3% 58.2%;
+  --log-error: 6 96.1% 59.4%;
+}
+
+[data-palette='rose-pine'] {
+  --background: 32 56.5% 95.5%;
+  --foreground: 248 19.2% 39.8%;
+  --muted: 28 39.5% 91.6%;
+  --muted-foreground: 248 12.2% 45.8%;
+  --popover: 35 100% 97.6%;
+  --popover-foreground: 248 19.2% 39.8%;
+  --card: 35 100% 97.6%;
+  --card-foreground: 248 19.2% 39.8%;
+  --border: 10 8.6% 86.3%;
+  --input: 10 8.6% 86.3%;
+  --primary: 268 21.5% 57.1%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 28 39.5% 91.6%;
+  --secondary-foreground: 248 19.2% 39.8%;
+  --accent: 28 39.5% 91.6%;
+  --accent-foreground: 248 19.2% 39.8%;
+  --destructive: 343 35.1% 43.7%;
+  --destructive-foreground: 32 56.5% 95.5%;
+  --ring: 268 21.5% 57.1%;
+  --accent-bar: 268 21.5% 57.1%;
+  --success: 197 53.2% 28%;
+  --loading: 248 12.2% 40%;
+  --status-running: 197 53.2% 33.5%;
+  --status-starting: 35 81.2% 34.1%;
+  --status-stopped: 257 9.1% 47.2%;
+  --status-error: 343 35.1% 50.2%;
+  --status-draining: 189 29.8% 38.5%;
+  --load-normal: 189 29.8% 48%;
+  --load-high: 3 52.7% 50.4%;
+  --load-critical: 343 35.1% 50.2%;
+  --console: 248 30.6% 9.6%;
+  --console-chrome: 250 33.3% 7.1%;
+  --console-foreground: 245 50% 91.4%;
+  --console-muted: 248 15% 60.8%;
+  --console-prompt: 189 43.5% 72.9%;
+  --log-info: 267 57.1% 78%;
+  --log-warn: 35 87.6% 71.6%;
+  --log-error: 343 75.6% 67.8%;
+}
+
+[data-palette='rose-pine'].dark {
+  --background: 249 22% 11.6%;
+  --foreground: 245 50% 91.4%;
+  --muted: 248 24.7% 18.2%;
+  --muted-foreground: 248 15% 60.8%;
+  --popover: 247 22.7% 14.7%;
+  --popover-foreground: 245 50% 91.4%;
+  --card: 247 22.7% 14.7%;
+  --card-foreground: 245 50% 91.4%;
+  --border: 249 14.7% 28%;
+  --input: 249 14.7% 28%;
+  --primary: 267 57.1% 78%;
+  --primary-foreground: 249 22% 11.6%;
+  --secondary: 248 24.7% 18.2%;
+  --secondary-foreground: 245 50% 91.4%;
+  --accent: 248 24.7% 18.2%;
+  --accent-foreground: 245 50% 91.4%;
+  --destructive: 343 75.6% 67.8%;
+  --destructive-foreground: 249 22% 11.6%;
+  --ring: 267 57.1% 78%;
+  --accent-bar: 267 57.1% 78%;
+  --success: 189 43.5% 28%;
+  --loading: 248 24.7% 18.2%;
+  --status-running: 189 43.5% 72.9%;
+  --status-starting: 35 87.6% 71.6%;
+  --status-stopped: 249 11.7% 56.6%;
+  --status-error: 343 75.6% 67.8%;
+  --status-draining: 267 57.1% 78%;
+  --load-normal: 267 57.1% 78%;
+  --load-high: 2 55.1% 82.5%;
+  --load-critical: 343 75.6% 67.8%;
+  --console: 248 30.6% 9.6%;
+  --console-chrome: 250 33.3% 7.1%;
+  --console-foreground: 245 50% 91.4%;
+  --console-muted: 248 15% 60.8%;
+  --console-prompt: 189 43.5% 72.9%;
+  --log-info: 267 57.1% 78%;
+  --log-warn: 35 87.6% 71.6%;
+  --log-error: 343 75.6% 67.8%;
+}
+
+[data-palette='tokyo-night'] {
+  --background: 230 11.1% 89.4%;
+  --foreground: 222 55.3% 44.2%;
+  --muted: 224 25.3% 85.3%;
+  --muted-foreground: 227 33.3% 43.5%;
+  --popover: 240 10% 92.2%;
+  --popover-foreground: 222 55.3% 44.2%;
+  --card: 240 10% 92.2%;
+  --card-foreground: 222 55.3% 44.2%;
+  --border: 229 22.9% 81.2%;
+  --input: 229 22.9% 81.2%;
+  --primary: 215 81% 52.2%;
+  --primary-foreground: 0 0% 0%;
+  --secondary: 224 25.3% 85.3%;
+  --secondary-foreground: 222 55.3% 44.2%;
+  --accent: 224 25.3% 85.3%;
+  --accent-foreground: 222 55.3% 44.2%;
+  --destructive: 343 91% 38.8%;
+  --destructive-foreground: 230 11.1% 89.4%;
+  --ring: 215 81% 52.2%;
+  --accent-bar: 215 81% 52.2%;
+  --success: 89 34.5% 28%;
+  --loading: 227 33.3% 40%;
+  --status-running: 89 34.5% 31.6%;
+  --status-starting: 35 38.6% 35.1%;
+  --status-stopped: 230 24.9% 45.9%;
+  --status-error: 343 91% 41.3%;
+  --status-draining: 215 81% 43.7%;
+  --load-normal: 215 81% 54.7%;
+  --load-high: 31 100% 30.7%;
+  --load-critical: 343 91% 41.3%;
+  --console: 240 15.4% 10.2%;
+  --console-chrome: 240 11.1% 7.1%;
+  --console-foreground: 229 72.6% 85.7%;
+  --console-muted: 229 35.4% 75.1%;
+  --console-prompt: 89 50.5% 61.2%;
+  --log-info: 221 88.7% 72.4%;
+  --log-warn: 36 65.9% 64.3%;
+  --log-error: 349 89% 71.6%;
+}
+
+[data-palette='tokyo-night'].dark {
+  --background: 235 18.8% 12.5%;
+  --foreground: 229 72.6% 85.7%;
+  --muted: 228 23.4% 21%;
+  --muted-foreground: 229 35.4% 75.1%;
+  --popover: 240 15.4% 10.2%;
+  --popover-foreground: 229 72.6% 85.7%;
+  --card: 240 15.4% 10.2%;
+  --card-foreground: 229 72.6% 85.7%;
+  --border: 229 23.1% 33.1%;
+  --input: 229 23.1% 33.1%;
+  --primary: 221 88.7% 72.4%;
+  --primary-foreground: 235 18.8% 12.5%;
+  --secondary: 228 23.4% 21%;
+  --secondary-foreground: 229 72.6% 85.7%;
+  --accent: 228 23.4% 21%;
+  --accent-foreground: 229 72.6% 85.7%;
+  --destructive: 349 89% 71.6%;
+  --destructive-foreground: 235 18.8% 12.5%;
+  --ring: 221 88.7% 72.4%;
+  --accent-bar: 221 88.7% 72.4%;
+  --success: 89 50.5% 28%;
+  --loading: 228 23.4% 21%;
+  --status-running: 89 50.5% 61.2%;
+  --status-starting: 36 65.9% 64.3%;
+  --status-stopped: 229 22.9% 57.2%;
+  --status-error: 349 89% 71.6%;
+  --status-draining: 221 88.7% 72.4%;
+  --load-normal: 221 88.7% 72.4%;
+  --load-high: 22 100% 69.6%;
+  --load-critical: 349 89% 71.6%;
+  --console: 240 15.4% 10.2%;
+  --console-chrome: 240 11.1% 7.1%;
+  --console-foreground: 229 72.6% 85.7%;
+  --console-muted: 229 35.4% 75.1%;
+  --console-prompt: 89 50.5% 61.2%;
+  --log-info: 221 88.7% 72.4%;
+  --log-warn: 36 65.9% 64.3%;
+  --log-error: 349 89% 71.6%;
+}
+
+[data-accent='blue'] {
+  --primary: 217 91.2% 52.3%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 217 91.2% 52.3%;
+  --accent-bar: 217 91.2% 52.3%;
+}
+
+[data-accent='blue'].dark {
+  --primary: 217 91.2% 66.8%;
+  --primary-foreground: 0 0% 0%;
+  --ring: 217 91.2% 66.8%;
+  --accent-bar: 217 91.2% 66.8%;
+}
+
+[data-accent='violet'] {
+  --primary: 258 89.5% 64.3%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 258 89.5% 64.3%;
+  --accent-bar: 258 89.5% 64.3%;
+}
+
+[data-accent='violet'].dark {
+  --primary: 258 89.5% 74.8%;
+  --primary-foreground: 0 0% 0%;
+  --ring: 258 89.5% 74.8%;
+  --accent-bar: 258 89.5% 74.8%;
+}
+
+[data-accent='green'] {
+  --primary: 142 70.6% 30.8%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 142 70.6% 30.8%;
+  --accent-bar: 142 70.6% 30.8%;
+}
+
+[data-accent='green'].dark {
+  --primary: 142 70.6% 45.3%;
+  --primary-foreground: 0 0% 0%;
+  --ring: 142 70.6% 45.3%;
+  --accent-bar: 142 70.6% 45.3%;
+}
+
+[data-accent='orange'] {
+  --primary: 25 95% 38.6%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 25 95% 38.6%;
+  --accent-bar: 25 95% 38.6%;
+}
+
+[data-accent='orange'].dark {
+  --primary: 25 95% 53.1%;
+  --primary-foreground: 0 0% 0%;
+  --ring: 25 95% 53.1%;
+  --accent-bar: 25 95% 53.1%;
+}
+
+[data-accent='pink'] {
+  --primary: 330 81.2% 47.9%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 330 81.2% 47.9%;
+  --accent-bar: 330 81.2% 47.9%;
+}
+
+[data-accent='pink'].dark {
+  --primary: 330 81.2% 67.9%;
+  --primary-foreground: 0 0% 0%;
+  --ring: 330 81.2% 67.9%;
+  --accent-bar: 330 81.2% 67.9%;
+}
+
+[data-accent='red'] {
+  --primary: 0 84.2% 49.2%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 0 84.2% 49.2%;
+  --accent-bar: 0 84.2% 49.2%;
+}
+
+[data-accent='red'].dark {
+  --primary: 0 84.2% 69.7%;
+  --primary-foreground: 0 0% 0%;
+  --ring: 0 84.2% 69.7%;
+  --accent-bar: 0 84.2% 69.7%;
+}
+
+[data-accent='amber'] {
+  --primary: 38 92.1% 32.7%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 38 92.1% 32.7%;
+  --accent-bar: 38 92.1% 32.7%;
+}
+
+[data-accent='amber'].dark {
+  --primary: 38 92.1% 50.2%;
+  --primary-foreground: 0 0% 0%;
+  --ring: 38 92.1% 50.2%;
+  --accent-bar: 38 92.1% 50.2%;
+}
+
+[data-accent='teal'] {
+  --primary: 173 80.4% 28%;
+  --primary-foreground: 0 0% 100%;
+  --ring: 173 80.4% 28%;
+  --accent-bar: 173 80.4% 28%;
+}
+
+[data-accent='teal'].dark {
+  --primary: 173 80.4% 40%;
+  --primary-foreground: 0 0% 0%;
+  --ring: 173 80.4% 40%;
+  --accent-bar: 173 80.4% 40%;
+}
+
+[data-status='color-blind'] {
+  --status-running: 202 100% 32.4%;
+  --status-starting: 41 100% 26.6%;
+  --status-stopped: 0 0% 39.6%;
+  --status-error: 26 100% 32.8%;
+  --status-draining: 327 44.9% 44.7%;
+}
+
+[data-status='color-blind'].dark {
+  --status-running: 202 100% 61.4%;
+  --status-starting: 41 100% 45.6%;
+  --status-stopped: 0 0% 68.1%;
+  --status-error: 26 100% 62.3%;
+  --status-draining: 327 44.9% 73.2%;
+}
+
+:root {
+  --radius: 0.5rem;
+}
+
+[data-radius='none'] {
+  --radius: 0rem;
+}
+
+[data-radius='small'] {
+  --radius: 0.25rem;
+}
+
+[data-radius='medium'] {
+  --radius: 0.5rem;
+}
+
+[data-radius='large'] {
+  --radius: 0.75rem;
 }
 
 @theme inline {
@@ -153,8 +712,8 @@
   --color-log-error: hsl(var(--log-error));
 
   --radius-lg: var(--radius);
-  --radius-md: calc(var(--radius) - 2px);
-  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: max(0px, calc(var(--radius) - 2px));
+  --radius-sm: max(0px, calc(var(--radius) - 4px));
   --radius-drawer: calc(var(--radius) + 2px);
 
   /* Oversized numeral on the 401/404/500/503 screens. */

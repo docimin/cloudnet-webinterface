@@ -63,8 +63,8 @@ export function toTaskFormValues(task: Task): TaskFormValues {
   }
 }
 
-// the stored document is spread first so keys the form does not model —
-// hostAddress, associatedNodes, properties, anything a module added — survive
+// the stored document is spread first so keys the form does not model -
+// hostAddress, associatedNodes, properties, anything a module added - survive
 // the save
 export function mergeTask(task: Task, values: TaskFormValues): Task {
   const merged: Task = {
