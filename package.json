@@ -95,7 +95,6 @@
 		"overrides": {
 			"brace-expansion@<5.0.12": "^5.0.12",
 			"seroval@<1.6.3": "^1.6.3",
-			"shell-quote@<1.11.0": "^1.11.0",
 			"source-map-js@<1.2.2": "^1.2.2",
 			"undici@<8.10.2": "^8.10.2"
 		}
