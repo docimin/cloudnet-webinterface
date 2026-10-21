@@ -10,7 +10,7 @@
 	"scripts": {
 		"dev": "vite dev --port 3000",
 		"build": "vite build",
-		"start": "node .output/server/index.mjs",
+		"start": "node --env-file-if-exists=.env .output/server/index.mjs",
 		"generate-routes": "tsr generate",
 		"lint": "biome lint .",
 		"format": "biome format --write .",
