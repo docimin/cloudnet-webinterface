@@ -96,8 +96,9 @@ one too. Browser error reporting was never actually running before, and this tur
 the value empty if you only want server-side reporting. The remaining `SENTRY_*` variables are
 only read at build time to upload source maps.
 
-The app will not start without `VITE_DOMAIN`, and an unrenamed `NEXT_PUBLIC_CLOUDNET_ADDRESS`
-silently stops pre-filling the address field rather than erroring.
+`VITE_DOMAIN` is read when the server runs, not only at build time. Without it the app still
+starts, but every login fails with "VITE_DOMAIN is not set". An unrenamed
+`NEXT_PUBLIC_CLOUDNET_ADDRESS` silently stops pre-filling the address field rather than erroring.
 
 ## Pre-fill CloudNet address
 
