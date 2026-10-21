@@ -64,16 +64,19 @@ function LoginPage() {
         toast.error(authT('invalidCredentials'))
       } else if (dataResponse.status === 404) {
         setLoading(false)
-        toast.error(authT('incorrectAddress'))
+        toast.error(authT('incorrectAddress'), {
+          description: dataResponse.error
+        })
       } else {
         setLoading(false)
-        toast.error(authT('loginError'))
+        toast.error(authT('loginError'), { description: dataResponse.error })
         Sentry.captureException('An error occurred while logging in', {
           extra: dataResponse
         })
       }
     } catch (error) {
       setLoading(false)
+      toast.error(authT('loginError'), { description: error.message })
       console.error(error)
     }
   }

@@ -156,28 +156,50 @@ export const signin = createServerFn({ method: 'POST' })
       return { error: 'Incorrect address!', status: 400 }
     }
 
+    const basicAuth = Buffer.from(`${username}:${password}`).toString('base64')
+
+    let response: Response
     try {
-      const basicAuth = Buffer.from(`${username}:${password}`).toString(
-        'base64'
-      )
-      const response = await fetch(`${validatedAddress}/auth`, {
+      response = await fetch(`${validatedAddress}/auth`, {
         method: 'POST',
         headers: {
           Authorization: `Basic ${basicAuth}`,
           'Content-Type': 'application/json'
         }
       })
-
-      const dataResponse = await response.json()
-
-      if (dataResponse.name === 'SyntaxError') {
-        return { error: 'Invalid response', status: 404 }
+    } catch (error) {
+      // fetch only says "fetch failed"; the reason (ECONNREFUSED, ENOTFOUND, a
+      // TLS error) is on its cause
+      const reason = error.cause?.code ?? error.cause?.message ?? error.message
+      return {
+        error: `Could not reach ${validatedAddress}: ${reason}`,
+        status: 404
       }
+    }
 
-      if (dataResponse.status === 401) {
-        return { error: 'Invalid credentials', status: 401 }
+    if (response.status === 401) {
+      return { error: 'Invalid credentials', status: 401 }
+    }
+
+    // a proxy or a wrong port answers with HTML; that is reported below
+    const dataResponse = await response.json().catch(() => null)
+
+    if (!response.ok) {
+      const detail = dataResponse?.detail ? `: ${dataResponse.detail}` : ''
+      return {
+        error: `${validatedAddress} answered ${response.status}${detail}`,
+        status: response.status
       }
+    }
 
+    if (!dataResponse?.accessToken || !dataResponse?.refreshToken) {
+      return {
+        error: `${validatedAddress} did not answer like the CloudNet REST API`,
+        status: 502
+      }
+    }
+
+    try {
       const expirationAccessTime = Number(
         new Date(Date.now() + dataResponse.accessToken.expiresIn)
       )
@@ -204,13 +226,13 @@ export const signin = createServerFn({ method: 'POST' })
 
       // The tokens are already in httpOnly cookies; echoing the raw payload
       // would put both bearer tokens in the browser too. The client only tests
-      // for success and reads `cause`/`status` on failure.
+      // for success and reads `cause`/`status`/`error` on failure.
       return { ok: true, cause: dataResponse.cause, status: 200 }
     } catch (error) {
-      if (error.message === 'fetch failed') {
-        return { error: 'Incorrect address!', status: 404 }
-      }
-      return { error: error.message || 'Internal server error' }
+      // a broken panel setup (VITE_DOMAIN missing) lands here; the host needs
+      // it in the log, not only in the person's toast
+      console.error('Login failed', error)
+      return { error: error.message, status: 500 }
     }
   })
 
